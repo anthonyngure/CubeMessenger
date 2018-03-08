@@ -92,7 +92,7 @@
                     this.connecting = true
                     this.$auth.login({
                         data: {
-                            email: this.email,
+                            signInId: this.email,
                             password: this.password
                         },
                         rememberMe: true,
