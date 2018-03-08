@@ -647,6 +647,186 @@ class PermissionsTableSeeder extends Seeder
                 'updated_at' => '2018-02-14 16:17:33',
                 'permission_group_id' => NULL,
             ),
+            
+            array (
+                'id' => 71,
+                'key' => 'browse_client_subscriptions',
+                'table_name' => 'client_subscriptions',
+                'created_at' => '2018-03-02 11:43:46',
+                'updated_at' => '2018-03-02 11:43:46',
+                'permission_group_id' => NULL,
+            ),
+            
+            array (
+                'id' => 72,
+                'key' => 'read_client_subscriptions',
+                'table_name' => 'client_subscriptions',
+                'created_at' => '2018-03-02 11:43:46',
+                'updated_at' => '2018-03-02 11:43:46',
+                'permission_group_id' => NULL,
+            ),
+            
+            array (
+                'id' => 73,
+                'key' => 'edit_client_subscriptions',
+                'table_name' => 'client_subscriptions',
+                'created_at' => '2018-03-02 11:43:46',
+                'updated_at' => '2018-03-02 11:43:46',
+                'permission_group_id' => NULL,
+            ),
+            
+            array (
+                'id' => 74,
+                'key' => 'add_client_subscriptions',
+                'table_name' => 'client_subscriptions',
+                'created_at' => '2018-03-02 11:43:46',
+                'updated_at' => '2018-03-02 11:43:46',
+                'permission_group_id' => NULL,
+            ),
+            
+            array (
+                'id' => 75,
+                'key' => 'delete_client_subscriptions',
+                'table_name' => 'client_subscriptions',
+                'created_at' => '2018-03-02 11:43:46',
+                'updated_at' => '2018-03-02 11:43:46',
+                'permission_group_id' => NULL,
+            ),
+            
+            array (
+                'id' => 76,
+                'key' => 'browse_deliveries',
+                'table_name' => 'deliveries',
+                'created_at' => '2018-03-02 11:51:45',
+                'updated_at' => '2018-03-02 11:51:45',
+                'permission_group_id' => NULL,
+            ),
+            
+            array (
+                'id' => 77,
+                'key' => 'read_deliveries',
+                'table_name' => 'deliveries',
+                'created_at' => '2018-03-02 11:51:45',
+                'updated_at' => '2018-03-02 11:51:45',
+                'permission_group_id' => NULL,
+            ),
+            
+            array (
+                'id' => 78,
+                'key' => 'edit_deliveries',
+                'table_name' => 'deliveries',
+                'created_at' => '2018-03-02 11:51:45',
+                'updated_at' => '2018-03-02 11:51:45',
+                'permission_group_id' => NULL,
+            ),
+            
+            array (
+                'id' => 79,
+                'key' => 'add_deliveries',
+                'table_name' => 'deliveries',
+                'created_at' => '2018-03-02 11:51:45',
+                'updated_at' => '2018-03-02 11:51:45',
+                'permission_group_id' => NULL,
+            ),
+            
+            array (
+                'id' => 80,
+                'key' => 'delete_deliveries',
+                'table_name' => 'deliveries',
+                'created_at' => '2018-03-02 11:51:45',
+                'updated_at' => '2018-03-02 11:51:45',
+                'permission_group_id' => NULL,
+            ),
+            
+            array (
+                'id' => 81,
+                'key' => 'browse_subscription_items',
+                'table_name' => 'subscription_items',
+                'created_at' => '2018-03-05 09:20:40',
+                'updated_at' => '2018-03-05 09:20:40',
+                'permission_group_id' => NULL,
+            ),
+            
+            array (
+                'id' => 82,
+                'key' => 'read_subscription_items',
+                'table_name' => 'subscription_items',
+                'created_at' => '2018-03-05 09:20:40',
+                'updated_at' => '2018-03-05 09:20:40',
+                'permission_group_id' => NULL,
+            ),
+            
+            array (
+                'id' => 83,
+                'key' => 'edit_subscription_items',
+                'table_name' => 'subscription_items',
+                'created_at' => '2018-03-05 09:20:40',
+                'updated_at' => '2018-03-05 09:20:40',
+                'permission_group_id' => NULL,
+            ),
+            
+            array (
+                'id' => 84,
+                'key' => 'add_subscription_items',
+                'table_name' => 'subscription_items',
+                'created_at' => '2018-03-05 09:20:40',
+                'updated_at' => '2018-03-05 09:20:40',
+                'permission_group_id' => NULL,
+            ),
+            
+            array (
+                'id' => 85,
+                'key' => 'delete_subscription_items',
+                'table_name' => 'subscription_items',
+                'created_at' => '2018-03-05 09:20:40',
+                'updated_at' => '2018-03-05 09:20:40',
+                'permission_group_id' => NULL,
+            ),
+            
+            array (
+                'id' => 86,
+                'key' => 'browse_subscription_types',
+                'table_name' => 'subscription_types',
+                'created_at' => '2018-03-05 09:24:20',
+                'updated_at' => '2018-03-05 09:24:20',
+                'permission_group_id' => NULL,
+            ),
+            
+            array (
+                'id' => 87,
+                'key' => 'read_subscription_types',
+                'table_name' => 'subscription_types',
+                'created_at' => '2018-03-05 09:24:20',
+                'updated_at' => '2018-03-05 09:24:20',
+                'permission_group_id' => NULL,
+            ),
+            
+            array (
+                'id' => 88,
+                'key' => 'edit_subscription_types',
+                'table_name' => 'subscription_types',
+                'created_at' => '2018-03-05 09:24:20',
+                'updated_at' => '2018-03-05 09:24:20',
+                'permission_group_id' => NULL,
+            ),
+            
+            array (
+                'id' => 89,
+                'key' => 'add_subscription_types',
+                'table_name' => 'subscription_types',
+                'created_at' => '2018-03-05 09:24:20',
+                'updated_at' => '2018-03-05 09:24:20',
+                'permission_group_id' => NULL,
+            ),
+            
+            array (
+                'id' => 90,
+                'key' => 'delete_subscription_types',
+                'table_name' => 'subscription_types',
+                'created_at' => '2018-03-05 09:24:20',
+                'updated_at' => '2018-03-05 09:24:20',
+                'permission_group_id' => NULL,
+            ),
         ));
         
         
