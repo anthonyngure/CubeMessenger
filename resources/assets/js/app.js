@@ -11,7 +11,7 @@ import Vuetify from 'vuetify'
 import VueTimeago from 'vue-timeago'
 import formatCurrency from 'format-currency'
 
-const DEBUG = true
+const DEBUG = false
 
 const GOOGLE_MAPS_KEY = 'AIzaSyAS_9BsQpqTP8EVuMZ7rQ9gMCl0wmqhm7k'
 const PRIMARY_COLOR = '#486b00'
@@ -23,7 +23,7 @@ Vue.router = router
 
 Vue.use(VueAxios, axios)
 //Vue.axios.defaults.baseURL = DEBUG ? 'http://localhost:3000/api/v1' : 'https://cube-messenger.com/api/v1'
-Vue.axios.defaults.baseURL = DEBUG ? 'http://localhost:3000/api/v1' : 'http://35.224.116.115/api/v1'
+Vue.axios.defaults.baseURL = DEBUG ? 'http://localhost:3000/api/v1' : 'http://35.192.81.247/api/v1'
 Vue.axios.defaults.headers.common['X-CSRF-TOKEN'] = document.querySelector('meta[name="csrf-token"]').getAttribute('content')
 Vue.axios.defaults.headers.common['Accept'] = 'application/json'
 Vue.axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded'
@@ -101,7 +101,7 @@ Vue.config.productionTip = true
 Vue.prototype.$appName = 'CubeMessenger'
 Vue.prototype.$utils = {
   //url: DEBUG ? 'http://localhost:3000' : 'https://cube-messenger.com',
-  url: DEBUG ? 'http://localhost:3000' : 'http://35.224.116.115',
+  url: DEBUG ? 'http://localhost:3000' : 'http://35.192.81.247',
   googleMapsKey: GOOGLE_MAPS_KEY,
   googleGeocodeUrl: 'https://maps.googleapis.com/maps/api/geocode/json',
   googleDirectionsUrl: 'https://maps.googleapis.com/maps/api/directions/json',

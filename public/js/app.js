@@ -111261,7 +111261,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 
-var DEBUG = true;
+var DEBUG = false;
 
 var GOOGLE_MAPS_KEY = 'AIzaSyAS_9BsQpqTP8EVuMZ7rQ9gMCl0wmqhm7k';
 var PRIMARY_COLOR = '#486b00';
@@ -111271,7 +111271,7 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.router = __WEBPACK_IMPORTED_MODULE_4
 
 __WEBPACK_IMPORTED_MODULE_0_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_1_vue_axios___default.a, __WEBPACK_IMPORTED_MODULE_2_axios___default.a);
 //Vue.axios.defaults.baseURL = DEBUG ? 'http://localhost:3000/api/v1' : 'https://cube-messenger.com/api/v1'
-__WEBPACK_IMPORTED_MODULE_0_vue___default.a.axios.defaults.baseURL = DEBUG ? 'http://localhost:3000/api/v1' : 'http://35.224.116.115/api/v1';
+__WEBPACK_IMPORTED_MODULE_0_vue___default.a.axios.defaults.baseURL = DEBUG ? 'http://localhost:3000/api/v1' : 'http://35.192.81.247/api/v1';
 __WEBPACK_IMPORTED_MODULE_0_vue___default.a.axios.defaults.headers.common['X-CSRF-TOKEN'] = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 __WEBPACK_IMPORTED_MODULE_0_vue___default.a.axios.defaults.headers.common['Accept'] = 'application/json';
 __WEBPACK_IMPORTED_MODULE_0_vue___default.a.axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
@@ -111349,7 +111349,7 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.config.productionTip = true;
 __WEBPACK_IMPORTED_MODULE_0_vue___default.a.prototype.$appName = 'CubeMessenger';
 __WEBPACK_IMPORTED_MODULE_0_vue___default.a.prototype.$utils = {
   //url: DEBUG ? 'http://localhost:3000' : 'https://cube-messenger.com',
-  url: DEBUG ? 'http://localhost:3000' : 'http://35.224.116.115',
+  url: DEBUG ? 'http://localhost:3000' : 'http://35.192.81.247',
   googleMapsKey: GOOGLE_MAPS_KEY,
   googleGeocodeUrl: 'https://maps.googleapis.com/maps/api/geocode/json',
   googleDirectionsUrl: 'https://maps.googleapis.com/maps/api/directions/json',
