@@ -2,7 +2,7 @@
     <v-dialog v-model="dialog"
               lazy
               persistent
-              width="600px">
+              width="800px">
         <v-card v-if="dialog">
             <v-toolbar card dense dark color="primary">
                 <v-btn icon @click.native="onClose">
@@ -26,18 +26,19 @@
             <v-card-text>
                 <v-layout row wrap id="qr-code" align-center justify-center>
                     <template v-for="i in item.quantity">
-                        <v-flex xs12 sm6 md4 :key="i" style="border: thin black dashed;">
-                            <q-r-code class="ma-4"
-                                      :text="item.quantity > 1 ? JSON.stringify({id:item.id, count: i}) : JSON.stringify({id:item.id})"
-                                      :size="100">
+                        <v-flex md3 :key="i" style="border: thin black dashed;">
+                            <q-r-code
+                                    class="ma-4"
+                                    :text="item.quantity > 1 ? JSON.stringify({id:item.id, count: i}) : JSON.stringify({id:item.id})"
+                                    :size="135">
                             </q-r-code>
-                            <div class="primary py-1">
+                            <div class="primary py-1" v-if="item.quantity > 1">
                                 <p class="text-xs-center pt-1">{{item.courierOption.name+' '+i}}
-                                    <b>To: {{item.destinationName}}</b>
+                                    to <b>{{item.destinationName}}</b>
                                 </p>
                             </div>
                         </v-flex>
-                        <v-flex xs12 v-if="(i%15) === 0" :key="i+item.quantity">
+                        <v-flex xs12 v-if="(i%16) === 0" :key="i+item.quantity">
                             <div class="html2pdf__page-break"></div>
                         </v-flex>
                     </template>

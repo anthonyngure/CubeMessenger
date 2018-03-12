@@ -4637,7 +4637,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                     return !!value && ('' + value).length === 10 || 'Recipient contact must be 10 characters';
                 },
                 quantity: function quantity(value) {
-                    return !!value && parseInt(value) >= 1 && parseInt(value) <= 50 || 'Quantity cannot be less than 1 and greater than 5';
+                    return !!value && parseInt(value) >= 1 && parseInt(value) <= 100 || 'Quantity cannot be less than 1 and greater than 100';
                 }
             }
         };
@@ -4651,7 +4651,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             }
         },
         invalidForm: function invalidForm() {
-            return !this.courierOption || !this.addressData || !this.placeResultData || ('' + this.recipientContact).length !== 10 || !this.recipientName || this.quantity < 1 || this.quantity > 50;
+            return !this.courierOption || !this.addressData || !this.placeResultData || ('' + this.recipientContact).length !== 10 || !this.recipientName || this.quantity < 1 || this.quantity > 100;
         }
     },
     methods: {
@@ -4705,6 +4705,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_print_js___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_print_js__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_html2pdf_js__ = __webpack_require__("./node_modules/html2pdf.js/dist/html2pdf.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_html2pdf_js___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_html2pdf_js__);
+//
 //
 //
 //
@@ -38217,7 +38218,7 @@ exports = module.exports = __webpack_require__("./node_modules/css-loader/lib/cs
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -74479,7 +74480,7 @@ var render = function() {
   return _c(
     "v-dialog",
     {
-      attrs: { lazy: "", persistent: "", width: "600px" },
+      attrs: { lazy: "", persistent: "", width: "800px" },
       model: {
         value: _vm.dialog,
         callback: function($$v) {
@@ -74600,7 +74601,7 @@ var render = function() {
                             {
                               key: i,
                               staticStyle: { border: "thin black dashed" },
-                              attrs: { xs12: "", sm6: "", md4: "" }
+                              attrs: { md3: "" }
                             },
                             [
                               _c("q-r-code", {
@@ -74613,34 +74614,38 @@ var render = function() {
                                           count: i
                                         })
                                       : JSON.stringify({ id: _vm.item.id }),
-                                  size: 100
+                                  size: 135
                                 }
                               }),
                               _vm._v(" "),
-                              _c("div", { staticClass: "primary py-1" }, [
-                                _c(
-                                  "p",
-                                  { staticClass: "text-xs-center pt-1" },
-                                  [
-                                    _vm._v(
-                                      _vm._s(
-                                        _vm.item.courierOption.name + " " + i
-                                      ) + "\n                                "
-                                    ),
-                                    _c("b", [
-                                      _vm._v(
-                                        "To: " +
-                                          _vm._s(_vm.item.destinationName)
-                                      )
-                                    ])
-                                  ]
-                                )
-                              ])
+                              _vm.item.quantity > 1
+                                ? _c("div", { staticClass: "primary py-1" }, [
+                                    _c(
+                                      "p",
+                                      { staticClass: "text-xs-center pt-1" },
+                                      [
+                                        _vm._v(
+                                          _vm._s(
+                                            _vm.item.courierOption.name +
+                                              " " +
+                                              i
+                                          ) +
+                                            "\n                                to "
+                                        ),
+                                        _c("b", [
+                                          _vm._v(
+                                            _vm._s(_vm.item.destinationName)
+                                          )
+                                        ])
+                                      ]
+                                    )
+                                  ])
+                                : _vm._e()
                             ],
                             1
                           ),
                           _vm._v(" "),
-                          i % 15 === 0
+                          i % 16 === 0
                             ? _c(
                                 "v-flex",
                                 {
@@ -75244,7 +75249,7 @@ var render = function() {
               placeholder: _vm.quantityHint,
               rules: [_vm.rules.required, _vm.rules.quantity],
               required: "",
-              mask: "##",
+              mask: "###",
               "prepend-icon": "format_list_numbered"
             },
             model: {

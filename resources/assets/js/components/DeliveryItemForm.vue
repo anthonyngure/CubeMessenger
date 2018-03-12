@@ -73,7 +73,7 @@
                     v-model="quantity"
                     :rules="[rules.required, rules.quantity]"
                     required
-                    mask="##"
+                    mask="###"
                     prepend-icon="format_list_numbered">
             </v-text-field>
             <v-text-field
@@ -133,8 +133,8 @@
                 recipientContact: (value) => {
                     return !!value && ('' + value).length === 10 || 'Recipient contact must be 10 characters'
                 },
-                quantity: (value) => !!value && parseInt(value) >= 1 && parseInt(value) <= 50
-                    || 'Quantity cannot be less than 1 and greater than 5',
+                quantity: (value) => !!value && parseInt(value) >= 1 && parseInt(value) <= 100
+                    || 'Quantity cannot be less than 1 and greater than 100',
             },
         }),
         computed: {
@@ -148,7 +148,7 @@
             invalidForm: function () {
                 return !this.courierOption || !this.addressData || !this.placeResultData
                     || ('' + this.recipientContact).length !== 10 || !this.recipientName
-                    || this.quantity < 1 || this.quantity > 50
+                    || this.quantity < 1 || this.quantity > 100
             }
         },
         methods: {

@@ -6,7 +6,7 @@
 	use App\Delivery;
 	use App\DeliveryItem;
 	use App\Exceptions\WrappedException;
-	use App\Sms\SmsSender;
+	use App\Traits\Messages;
 	use App\Utils;
 	use Auth;
 	use Carbon\Carbon;
@@ -17,6 +17,7 @@
 	
 	class DeliveryController extends Controller
 	{
+		use Messages;
 		
 		/**
 		 * Display a listing of the resource.
@@ -174,14 +175,13 @@
 				
 				
 				//Send sms to the recipient of the item
-				$smsSender = new SmsSender('+' . Utils::normalizePhone($deliveryItem->recipient_contact));
 				$nameToUse = $deliveryItem->quantity > 1 ? $deliveryItem->courierOption->plural_name
 					: $deliveryItem->courierOption->name;
-				$sms = 'Hi ' . $deliveryItem->recipient_name . ', ' . $deliveryItem->quantity . ' ' . $nameToUse .
+				$smsText = 'Hi ' . $deliveryItem->recipient_name . ', ' . $deliveryItem->quantity . ' ' . $nameToUse .
 					' from ' . $delivery->client->name . ' will be delivered to you at '
 					. $deliveryItem->estimated_arrival_time . '. Use CODE: ' . $deliveryItem->received_confirmation_code .
 					' to confirm you have received.';
-				$smsSender->send($sms);
+				$this->sendSMS($smsText, $deliveryItem->recipient_contact);
 			}
 			
 			$delivery->setHidden(['client']);

@@ -20,6 +20,27 @@
 			return response('Cube Messenger API Version 1');
 		});
 		
+		Route::get('/sms', function () {
+			//http://107.20.199.106/api/v3/sendsms/plain?user=CubeCare&password=Rsmry2ve&sender=Cube-Movers&SMSText=text&GSM=254723203475
+			
+			$message = "I'm a lumberjack and its ok, I sleep all night and I work all day";
+			$number = \App\Utils::normalizePhone("0723203475");
+			$url = "http://107.20.199.106/api/v3/sendsms/plain";
+			$client = new GuzzleHttp\Client();
+			$res = $client->get($url, [
+				'query' => [
+					'user'     => 'CubeCare',
+					'password' => 'Rsmry2ve',
+					'sender'   => 'Cube-Movers',
+					'SMSText'  => $message,
+					'GSM'      => $number,
+				],
+			]);
+			
+			return $res->getStatusCode();
+			//return response('Cube Messenger API Version 1');
+		});
+		
 		Route::group(['prefix' => 'auth'], function () {
 			Route::post('signIn', 'AuthController@signIn');
 		});

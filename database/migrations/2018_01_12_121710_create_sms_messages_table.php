@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateVerificationMessagesTable extends Migration
+class CreateSmsMessagesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -12,12 +12,11 @@ class CreateVerificationMessagesTable extends Migration
      */
     public function up()
     {
-        Schema::create('verification_messages', function (Blueprint $table) {
+        Schema::create('sms_messages', function (Blueprint $table) {
 	        $table->increments('id');
-	        $table->string('number');
 	        $table->string('status');
 	        $table->string('message_id');
-	        $table->string('cost');
+	        $table->string('destination');
 	        $table->timestamps();
         });
     }
@@ -29,6 +28,6 @@ class CreateVerificationMessagesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('verification_messages');
+        Schema::dropIfExists('sms_messages');
     }
 }
