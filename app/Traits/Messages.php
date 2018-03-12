@@ -8,6 +8,7 @@
 	
 	namespace App\Traits;
 	
+	use App\Utils;
 	use GuzzleHttp;
 	
 	
@@ -27,7 +28,7 @@
 					'password' => 'Rsmry2ve',
 					'sender'   => 'Cube-Movers',
 					'SMSText'  => $smsText,
-					'GSM'      => $number,
+					'GSM'      => Utils::normalizePhone($number),
 				],
 			]);
 			

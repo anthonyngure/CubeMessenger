@@ -178,10 +178,11 @@
 				$nameToUse = $deliveryItem->quantity > 1 ? $deliveryItem->courierOption->plural_name
 					: $deliveryItem->courierOption->name;
 				$smsText = 'Hi ' . $deliveryItem->recipient_name . ', ' . $deliveryItem->quantity . ' ' . $nameToUse .
-					' from ' . $delivery->client->name . ' will be delivered to you at '
+					' from ' . $delivery->client->name . ' will be delivered to you around '
 					. $deliveryItem->estimated_arrival_time . '. Use CODE: ' . $deliveryItem->received_confirmation_code .
 					' to confirm you have received.';
 				$this->sendSMS($smsText, $deliveryItem->recipient_contact);
+				//dd($smsText);
 			}
 			
 			$delivery->setHidden(['client']);
