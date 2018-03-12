@@ -2,7 +2,7 @@
     <v-dialog v-model="dialog"
               lazy
               persistent
-              width="450px">
+              width="600px">
         <v-card v-if="dialog">
             <v-toolbar card dense dark color="primary">
                 <v-btn icon @click.native="onClose">
@@ -24,7 +24,25 @@
                 </v-menu>
             </v-toolbar>
             <v-card-text>
-                <q-r-code id="qr-code" :text="JSON.stringify(itemData)" :size="400"></q-r-code>
+                <v-layout row wrap id="qr-code" align-center justify-center>
+                    <template v-for="i in item.quantity">
+                        <v-flex xs12 sm6 md4 :key="i" style="border: thin black dashed;">
+                            <q-r-code class="ma-4"
+                                      :text="item.quantity > 1 ? JSON.stringify({id:item.id, count: i}) : JSON.stringify({id:item.id})"
+                                      :size="100">
+                            </q-r-code>
+                            <div class="primary py-1">
+                                <p class="text-xs-center pt-1">{{item.courierOption.name+' '+i}}
+                                    <b>To: {{item.destinationName}}</b>
+                                </p>
+                            </div>
+                        </v-flex>
+                        <v-flex xs12 v-if="(i%15) === 0" :key="i+item.quantity">
+                            <div class="html2pdf__page-break"></div>
+                        </v-flex>
+                    </template>
+
+                </v-layout>
                 <v-list three-line>
                     <v-list-tile avatar>
                         <v-list-tile-avatar>
@@ -32,8 +50,8 @@
                         </v-list-tile-avatar>
                         <v-list-tile-content>
                             <v-list-tile-title class="body-2">
-                                <b>{{item.quantity}} -
-                                    {{item.courierOption.name+ (item.quantity === 1 ? '': 's')}}
+                                <b>{{item.quantity > 1 ? item.courierOption.pluralName :
+                                    item.courierOption.name}}
                                 </b>
                             </v-list-tile-title>
                             <v-list-tile-sub-title class="caption primary--text">
@@ -53,6 +71,7 @@
 <script>
   import QRCode from 'vue-qrcode-component'
   import printJS from 'print-js'
+  import html2pdf from 'html2pdf.js'
 
   export default {
     components: {QRCode},
@@ -87,18 +106,39 @@
       },
       printQR () {
         //documentTitle
-        printJS(
+        let courierOptionName = this.item.quantity > 1 ? this.item.courierOption.pluralName : this.item.courierOption.name
+        let element = document.getElementById('qr-code')
+        html2pdf(element, {
+          margin: 1,
+          filename: this.item.quantity + ' ' + courierOptionName + ' to ' + this.item.destinationName + '.pdf',
+          image: {type: 'jpeg', quality: 0.99},
+          html2canvas: {dpi: 320, letterRendering: true},
+          jsPDF: {unit: 'cm', format: 'letter', orientation: 'portrait'}
+        })
+
+        let that = this
+        setTimeout(function () {
+          that.onClose()
+        }, 1000)
+
+        /*printJS(
           {
             printable: 'qr-code',
+            maxWidth: 400,
+            showModal: true,
             type: 'html',
-            header: this.item.quantity + ' - ' + this.item.courierOption.name,
-            documentTitle: 'Client QR Code (NAME: ' + this.$auth.user().client.name + ', ID: ' + this.$auth.user().client.id + ')'
-          })
+            header: this.item.quantity + ' ' + courierOptionName + ' to ' + this.item.destinationName,
+            documentTitle: 'Client QR Code (NAME: ' + this.$auth.user().client.name + ', ID: ' + this.$auth.user().client.id + ')',
+            onLoadingStart: () => {
+              this.onClose()
+            }
+          })*/
       }
     },
   }
 </script>
 
 <style scoped>
+
 
 </style>

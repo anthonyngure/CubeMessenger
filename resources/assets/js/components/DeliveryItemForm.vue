@@ -133,7 +133,7 @@
                 recipientContact: (value) => {
                     return !!value && ('' + value).length === 10 || 'Recipient contact must be 10 characters'
                 },
-                quantity: (value) => !!value && parseInt(value) >= 1 && parseInt(value) <= 5
+                quantity: (value) => !!value && parseInt(value) >= 1 && parseInt(value) <= 50
                     || 'Quantity cannot be less than 1 and greater than 5',
             },
         }),
@@ -148,7 +148,7 @@
             invalidForm: function () {
                 return !this.courierOption || !this.addressData || !this.placeResultData
                     || ('' + this.recipientContact).length !== 10 || !this.recipientName
-                    || this.quantity < 1 || this.quantity > 5
+                    || this.quantity < 1 || this.quantity > 50
             }
         },
         methods: {

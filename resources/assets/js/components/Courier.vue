@@ -87,8 +87,8 @@
                                                      :src="'/storage/'+stat.courierOption.icon"
                                                      :alt="stat.courierOption.name">
                                             </v-avatar>
-                                            <b>{{stat.count}} </b>{{stat.courierOption.name+ (stat.count === 1 ? '':
-                                            's')}}
+                                            <b>{{stat.count}} {{stat.count > 1 ? stat.courierOption.pluralName :
+                                                stat.courierOption.name}}</b>
                                         </v-chip>
                                     </div>
                                     <!--Content-->
@@ -101,8 +101,8 @@
                                                 </v-list-tile-avatar>
                                                 <v-list-tile-content>
                                                     <v-list-tile-title class="body-2">
-                                                        <b>{{item.quantity}} -
-                                                            {{item.courierOption.name+ (item.quantity === 1 ? '': 's')}}
+                                                        <b>{{item.quantity > 1 ? item.courierOption.pluralName :
+                                                            item.courierOption.name}}
                                                         </b>
                                                         - {{item.status}}
                                                     </v-list-tile-title>
@@ -119,7 +119,7 @@
                                                         Print QR
                                                     </v-btn>
                                                 </v-list-tile-action>
-                                                <v-list-tile-action v-if="item.status !=='AT_PICKUP'">
+                                                <v-list-tile-action v-if="item.status ==='EN_ROUTE_TO_DESTINATION'">
                                                     <v-btn slot="activator" @click="trackingItem = item"
                                                            flat outline color="primary">
                                                         Track
@@ -164,93 +164,93 @@
 </template>
 
 <script>
-    import PickPackMap from './PickPackMap'
-    import Base from './Base.vue'
-    import EventBus from '../event-bus'
-    import DeliveryForm from './DeliveryForm'
-    import moment from 'moment'
-    import TrackingDialogContent from './TrackingDialogContent'
-    import DeliveryItemQRDialog from './DeliveryItemQRDialog'
+  import PickPackMap from './PickPackMap'
+  import Base from './Base.vue'
+  import EventBus from '../event-bus'
+  import DeliveryForm from './DeliveryForm'
+  import moment from 'moment'
+  import TrackingDialogContent from './TrackingDialogContent'
+  import DeliveryItemQRDialog from './DeliveryItemQRDialog'
 
-    export default {
-        extends: Base,
-        components: {
-            DeliveryItemQRDialog,
-            TrackingDialogContent,
-            DeliveryForm,
-            PickPackMap
+  export default {
+    extends: Base,
+    components: {
+      DeliveryItemQRDialog,
+      TrackingDialogContent,
+      DeliveryForm,
+      PickPackMap
+    },
+    name: 'courier',
+    data () {
+      return {
+        addingDelivery: false,
+        items: [],
+        connecting: false,
+        trackingItem: null,
+        printingItem: null,
+        month: null,
+        minMonth: null,
+        maxMonth: null,
+        rowsPerPageItems: [2, 4, 8],
+        pagination: {
+          rowsPerPage: 4
         },
-        name: 'courier',
-        data () {
-            return {
-                addingDelivery: false,
-                items: [],
-                connecting: false,
-                trackingItem: null,
-                printingItem: null,
-                month: null,
-                minMonth: null,
-                maxMonth: null,
-                rowsPerPageItems: [2, 4, 8],
-                pagination: {
-                    rowsPerPage: 4
-                },
-                currentItem: null,
-            }
-        },
-        watch: {
-            month (month) {
-                if (month && this.currentItem && !this.connecting) {
-                    this.loadDeliveries()
-                }
-            },
-            currentItem (currentItem) {
-                if (this.month && currentItem && !this.connecting) {
-                    this.loadDeliveries()
-                }
-            }
-        },
-        methods: {
-            onCloseAddingDelivery (refresh) {
-                this.addingDelivery = false
-                if (refresh) {
-                    this.loadDeliveries()
-                }
-            },
-            loadDeliveries () {
-                this.connecting = true
-                let that = this
-                this.axios.get('/deliveries', {
-                    params: {
-                        filter: this.currentItem,
-                        month: this.month,
-                    }
-                }).then(response => {
-                    let deliveries = response.data.data
-                    that.items = []
-                    for (let delivery of deliveries) {
-                        that.items.push(delivery)
-                    }
-                    that.connecting = false
-                }).catch(e => {
-                    //console.error('Error ' + e);
-                    that.connecting = false
-                })
-            },
-        },
-        mounted () {
-            let dateClientJoined = moment(this.$auth.user().client.createdAt)
-            this.minMonth = dateClientJoined.year() + '-' + (dateClientJoined.month())
-            let today = moment()
-            this.maxMonth = today.year() + '-' + (today.month() + 2)
-            this.month = today.year() + '-' + today.month()
-            this.currentItem = 'pending'
-            let that = this
-            EventBus.$on('refreshDeliveryHistoryList', function () {
-                that.loadDeliveries()
-            })
+        currentItem: null,
+      }
+    },
+    watch: {
+      month (month) {
+        if (month && this.currentItem && !this.connecting) {
+          this.loadDeliveries()
         }
+      },
+      currentItem (currentItem) {
+        if (this.month && currentItem && !this.connecting) {
+          this.loadDeliveries()
+        }
+      }
+    },
+    methods: {
+      onCloseAddingDelivery (refresh) {
+        this.addingDelivery = false
+        if (refresh) {
+          this.loadDeliveries()
+        }
+      },
+      loadDeliveries () {
+        this.connecting = true
+        let that = this
+        this.axios.get('/deliveries', {
+          params: {
+            filter: this.currentItem,
+            month: this.month,
+          }
+        }).then(response => {
+          let deliveries = response.data.data
+          that.items = []
+          for (let delivery of deliveries) {
+            that.items.push(delivery)
+          }
+          that.connecting = false
+        }).catch(e => {
+          //console.error('Error ' + e);
+          that.connecting = false
+        })
+      },
+    },
+    mounted () {
+      let dateClientJoined = moment(this.$auth.user().client.createdAt)
+      this.minMonth = dateClientJoined.year() + '-' + (dateClientJoined.month())
+      let today = moment()
+      this.maxMonth = today.year() + '-' + (today.month() + 2)
+      this.month = today.year() + '-' + today.month()
+      this.currentItem = 'pending'
+      let that = this
+      EventBus.$on('refreshDeliveryHistoryList', function () {
+        that.loadDeliveries()
+      })
     }
+  }
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->

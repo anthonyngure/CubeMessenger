@@ -26,6 +26,7 @@
         "browser-sync": "^2.23.6",
         "chart.js": "^2.7.1",
         "format-currency": "^1.0.0",
+        "html2pdf.js": "^0.8.2",
         "moment": "^2.20.1",
         "print-js": "^1.0.31",
         "vue-axios": "^2.0.2",
