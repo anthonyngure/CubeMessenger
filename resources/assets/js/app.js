@@ -11,7 +11,7 @@ import Vuetify from 'vuetify'
 import VueTimeago from 'vue-timeago'
 import formatCurrency from 'format-currency'
 
-const DEBUG = false
+const DEBUG = true
 
 const GOOGLE_MAPS_KEY = 'AIzaSyAS_9BsQpqTP8EVuMZ7rQ9gMCl0wmqhm7k'
 const PRIMARY_COLOR = '#486b00'
@@ -19,6 +19,10 @@ const ACCENT_COLOR = '#F50057'
 
 
 Vue.router = router
+
+import 'vue-event-calendar/dist/style.css' //^1.1.10, CSS has been extracted as one file, so you can easily update it.
+import vueEventCalendar from 'vue-event-calendar'
+Vue.use(vueEventCalendar, {locale: 'en'}) //locale can be 'zh' , 'en' , 'es', 'pt-br', 'ja', 'ko', 'fr', 'it', 'ru', 'de', 'vi', 'ua'
 
 
 Vue.use(VueAxios, axios)

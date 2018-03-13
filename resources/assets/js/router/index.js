@@ -1,5 +1,6 @@
 import Courier from '../components/Courier.vue'
 import ComingSoon from '../components/ComingSoon.vue'
+import Appointments from '../components/Appointments.vue'
 import Subscriptions from '../components/Subscriptions.vue'
 import SignIn from '../components/SignIn.vue'
 import Dashboard from '../components/Dashboard.vue'
@@ -45,7 +46,7 @@ export default new Router({
 			meta: {auth: true},
 			path: '/appointments',
 			name: 'appointments',
-			component: ComingSoon
+			component: Appointments
 		},
 		{
 			meta: {auth: true},
