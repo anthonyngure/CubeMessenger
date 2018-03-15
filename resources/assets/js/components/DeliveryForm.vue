@@ -65,6 +65,7 @@
                                                     slot="activator"
                                                     label="Date in M/D/Y format"
                                                     v-model="dateFormatted"
+                                                    required
                                                     prepend-icon="event"
                                                     @blur="scheduleDate = parseDate(dateFormatted)">
                                             </v-text-field>
@@ -88,6 +89,7 @@
                                                 min-width="290px">
                                             <v-text-field
                                                     slot="activator"
+                                                    required
                                                     label="Picker in menu"
                                                     v-model="scheduleTime"
                                                     prepend-icon="access_time"
@@ -228,6 +230,7 @@
     import GooglePlaceInput from './GooglePlaceInput'
     import EventBus from '../event-bus'
     import formatCurrency from 'format-currency'
+    import moment from 'moment'
 
     export default {
         components: {
@@ -264,7 +267,7 @@
             dateFormatted: null,
             dateMenu: false,
             scheduleTime: null,
-            timeMenu: false,
+            menu: false,
             allowedTimes: {
                 hours: function (value) {
                     return value >= moment().hour()

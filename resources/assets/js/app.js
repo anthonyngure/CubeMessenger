@@ -11,7 +11,7 @@ import Vuetify from 'vuetify'
 import VueTimeago from 'vue-timeago'
 import formatCurrency from 'format-currency'
 
-const DEBUG = false
+const DEBUG = true
 
 const GOOGLE_MAPS_KEY = 'AIzaSyAS_9BsQpqTP8EVuMZ7rQ9gMCl0wmqhm7k'
 const PRIMARY_COLOR = '#486b00'

@@ -16,7 +16,8 @@
                         <tbody>
                         <tr v-for="hour in hoursOfDay">
                             <td>{{hour}}</td>
-                            <td v-for="day in daysOfWeek" :key="day.date" @click="onCellClicked(day)">
+                            <td v-for="day in daysOfWeek" :key="day.date"
+                                @click="onCellClicked({hourOfDay: hour, dayOfWeek:day})">
                             </td>
                         </tr>
                         </tbody>
@@ -41,10 +42,24 @@
         </v-flex>
 
         <v-flex xs12>
-            <add-appointment-dialog :day="selectedDay"
-                                    @onClose="selectedDay = null">
-            </add-appointment-dialog>
+            <add-appointment-full-dialog :appointmentFullDialog.sync="appointmentFullDialog"
+                                         :selectedCell="selectedCell"
+                                         @onClose="appointmentFullDialog = false">
+            </add-appointment-full-dialog>
         </v-flex>
+
+        <v-fab-transition>
+            <v-btn class="ma-3"
+                   color="accent"
+                   fab
+                   dark
+                   fixed
+                   bottom
+                   @click.native="appointmentFullDialog = true"
+                   right>
+                <v-icon>add</v-icon>
+            </v-btn>
+        </v-fab-transition>
 
     </v-layout>
 </template>
@@ -53,18 +68,19 @@
 
   import FullCalendar from 'vue-fullcalendar/src/fullCalendar'
   import moment from 'moment'
-  import AddAppointmentDialog from './AddAppointmentDialog'
+  import AddAppointmentFullDialog from './AddAppointmentFullDialog'
 
   export default {
     components: {
-      AddAppointmentDialog,
+      AddAppointmentFullDialog,
       FullCalendar
     },
     name: 'appointments',
     data () {
       return {
         date: '2018-03-02',
-        selectedDay: null,
+        appointmentFullDialog: false,
+        selectedCell: null,
         daysOfWeek: [],
         hoursOfDay: [],
         appointments: []
@@ -83,8 +99,9 @@
       moreClick (day, events, jsEvent) {
         console.log('moreCLick', day, events, jsEvent)
       },
-      onCellClicked (day) {
-        this.selectedDay = day
+      onCellClicked (cell) {
+        this.selectedCell = cell
+        this.appointmentFullDialog = true
       },
       weekdayName (i) {
         switch (i) {

@@ -3920,13 +3920,21 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 /***/ }),
 
-/***/ "./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}]],\"plugins\":[\"transform-object-rest-spread\",[\"transform-runtime\",{\"polyfill\":false,\"helpers\":false}]]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/js/components/AddAppointmentDialog.vue":
+/***/ "./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}]],\"plugins\":[\"transform-object-rest-spread\",[\"transform-runtime\",{\"polyfill\":false,\"helpers\":false}]]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/js/components/AddAppointmentFullDialog.vue":
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__GooglePlaceInput__ = __webpack_require__("./resources/assets/js/components/GooglePlaceInput.vue");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__GooglePlaceInput___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__GooglePlaceInput__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_moment__ = __webpack_require__("./node_modules/moment/moment.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_moment___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_moment__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__GooglePlaceInput__ = __webpack_require__("./resources/assets/js/components/GooglePlaceInput.vue");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__GooglePlaceInput___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__GooglePlaceInput__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__TimeInput__ = __webpack_require__("./resources/assets/js/components/TimeInput.vue");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__TimeInput___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__TimeInput__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__DateInput__ = __webpack_require__("./resources/assets/js/components/DateInput.vue");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__DateInput___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3__DateInput__);
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
 //
 //
 //
@@ -4037,26 +4045,178 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+
+
 
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-  components: { GooglePlaceInput: __WEBPACK_IMPORTED_MODULE_0__GooglePlaceInput___default.a },
-  name: 'add-appointment-dialog',
+  components: {
+    DateInput: __WEBPACK_IMPORTED_MODULE_3__DateInput___default.a,
+    TimeInput: __WEBPACK_IMPORTED_MODULE_2__TimeInput___default.a,
+    GooglePlaceInput: __WEBPACK_IMPORTED_MODULE_1__GooglePlaceInput___default.a
+  },
+  name: 'add-appointment-full-dialog',
   props: {
-    day: {
-      required: true
-    }
+    appointmentFullDialog: {
+      type: Boolean,
+      default: false
+    },
+    selectedCell: {}
   },
   data: function data() {
     return {
-      dialog: false,
-      participantEmail: null,
-      participantContact: null,
-      endTimeMenu: false,
-      startTimeMenu: false,
+
+      errors: {
+        venueType: [],
+        appointmentWith: [],
+        startDate: [],
+        startTime: [],
+        endDate: [],
+        endTime: [],
+        title: [],
+        venue: [],
+        participants: []
+      },
+
+      venueType: null,
+      appointmentWith: null,
+
+      startDate: null,
       startTime: null,
+
+      endDate: null,
       endTime: null,
+
+      title: null,
+      venue: null,
+
+      allDay: false,
+      connecting: false,
+
+      participants: [],
+      note: null,
+
+      venueTypes: [{
+        text: 'On site i.e In office, boardroom or a room',
+        value: 1
+      }, {
+        text: 'Off site i.e In a building or hotel',
+        value: 2
+      }],
+
       rules: {
         required: function required(value) {
           return !!value || 'Required.';
@@ -4065,23 +4225,151 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
           return !!value && ('' + value).length === 10 || 'Contact contact must be 10 characters';
         }
       },
+
       addressData: null,
-      placeResultData: null
+      placeResultData: null,
+
+      allowedDates: function allowedDates(date) {
+        //YYYY/MM/DD
+        var givenDate = __WEBPACK_IMPORTED_MODULE_0_moment___default()(date, 'YYYY/MM/DD');
+        return __WEBPACK_IMPORTED_MODULE_0_moment___default()().diff(givenDate, 'days') <= 0;
+        //const [, , day] = date.split('-')
+        //return parseInt(day, 10) % 2 === 0
+      },
+
+      allowedTimes: {
+        hours: function hours(value) {
+          return value >= __WEBPACK_IMPORTED_MODULE_0_moment___default()().hour();
+        },
+        minutes: function minutes(value) {
+          return value % 15 === 0;
+        }
+      }
     };
   },
 
   watch: {
-    day: function day(_day) {
-      this.dialog = !!_day;
+    startDate: function startDate(_startDate) {
+      this.$utils.log(_startDate);
     }
   },
   methods: {
-    onClose: function onClose() {
-      this.$emit('onClose');
+    removeParticipant: function removeParticipant(participant) {
+      this.participants.splice(this.participants.indexOf(participant), 1);
+      this.participants = [].concat(_toConsumableArray(this.participants));
+    },
+    addParticipant: function addParticipant() {
+      this.participants.push({
+        email: null,
+        phone: null,
+        errors: {
+          email: [],
+          phone: []
+        }
+      });
     },
     onLocationEntered: function onLocationEntered(addressData, placeResultData) {
       this.addressData = addressData;
       this.placeResultData = placeResultData;
+    },
+    validate: function validate() {
+      var pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
+      var validParticipants = 0;
+
+      var _iteratorNormalCompletion = true;
+      var _didIteratorError = false;
+      var _iteratorError = undefined;
+
+      try {
+        for (var _iterator = this.participants[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+          var participant = _step.value;
+
+
+          if (participant.email && !pattern.test(participant.email)) {
+            participant.errors.email = [];
+          } else {
+            participant.errors.email = ['Enter a valid email address'];
+          }
+
+          if (participant.phone && ('' + participant.phone).length === 10) {
+            participant.errors.phone = [];
+          } else {
+            participant.errors.phone = ['Enter a valid phone number'];
+          }
+
+          if (participant.email && !pattern.test(participant.email) && participant.phone && ('' + participant.phone).length === 10) {
+            validParticipants++;
+          }
+        }
+      } catch (err) {
+        _didIteratorError = true;
+        _iteratorError = err;
+      } finally {
+        try {
+          if (!_iteratorNormalCompletion && _iterator.return) {
+            _iterator.return();
+          }
+        } finally {
+          if (_didIteratorError) {
+            throw _iteratorError;
+          }
+        }
+      }
+
+      this.errors.venueType = !this.venueType ? ['Please select Appointment/Meeting venue type'] : [];
+      this.errors.venue = !this.venue ? ['Please select Appointment/Meeting venue type'] : [];
+      this.errors.appointmentWith = !this.appointmentWith ? ['Please select Appointment/Meeting with'] : [];
+      this.errors.title = !this.title ? ['Please select Appointment/Meeting with'] : [];
+      this.errors.startDate = !this.startDate ? ['Please specify Appointment/Meeting starting date'] : [];
+      this.errors.startTime = !this.startTime && !this.allDay ? ['Please specify Appointment/Meeting starting time'] : [];
+      this.errors.endDate = !this.endDate ? ['Please specify Appointment/Meeting ending date'] : [];
+      this.errors.endTime = !this.endTime && !this.allDay ? ['Please specify Appointment/Meeting ending time'] : [];
+
+      if (validParticipants === this.participants.length && this.venueType && this.venue && this.appointmentWith && this.title && this.startDate && (this.startTime || this.allDay) && this.endDate && (this.endTime || this.allDay)) {
+
+        var appointment = {
+          venue: this.venue,
+          with: this.appointmentWith,
+          title: this.title,
+          startDate: this.startDate,
+          startTime: this.startTime,
+          endDate: this.endDate,
+          endTime: this.endTime,
+          allDay: this.allDay,
+          participants: []
+        };
+
+        var _iteratorNormalCompletion2 = true;
+        var _didIteratorError2 = false;
+        var _iteratorError2 = undefined;
+
+        try {
+          for (var _iterator2 = this.participants[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+            var _participant = _step2.value;
+
+            appointment.push({
+              email: _participant.email,
+              phone: _participant.phone
+            });
+          }
+        } catch (err) {
+          _didIteratorError2 = true;
+          _iteratorError2 = err;
+        } finally {
+          try {
+            if (!_iteratorNormalCompletion2 && _iterator2.return) {
+              _iterator2.return();
+            }
+          } finally {
+            if (_didIteratorError2) {
+              throw _iteratorError2;
+            }
+          }
+        }
+
+        this.$utils.log(appointment);
+      }
     }
   }
 });
@@ -4097,8 +4385,23 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue_fullcalendar_src_fullCalendar___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_vue_fullcalendar_src_fullCalendar__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_moment__ = __webpack_require__("./node_modules/moment/moment.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_moment___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_moment__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__AddAppointmentDialog__ = __webpack_require__("./resources/assets/js/components/AddAppointmentDialog.vue");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__AddAppointmentDialog___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__AddAppointmentDialog__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__AddAppointmentFullDialog__ = __webpack_require__("./resources/assets/js/components/AddAppointmentFullDialog.vue");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__AddAppointmentFullDialog___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__AddAppointmentFullDialog__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -4158,14 +4461,15 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
-    AddAppointmentDialog: __WEBPACK_IMPORTED_MODULE_2__AddAppointmentDialog___default.a,
+    AddAppointmentFullDialog: __WEBPACK_IMPORTED_MODULE_2__AddAppointmentFullDialog___default.a,
     FullCalendar: __WEBPACK_IMPORTED_MODULE_0_vue_fullcalendar_src_fullCalendar___default.a
   },
   name: 'appointments',
   data: function data() {
     return {
       date: '2018-03-02',
-      selectedDay: null,
+      appointmentFullDialog: false,
+      selectedCell: null,
       daysOfWeek: [],
       hoursOfDay: [],
       appointments: []
@@ -4185,8 +4489,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     moreClick: function moreClick(day, events, jsEvent) {
       console.log('moreCLick', day, events, jsEvent);
     },
-    onCellClicked: function onCellClicked(day) {
-      this.selectedDay = day;
+    onCellClicked: function onCellClicked(cell) {
+      this.selectedCell = cell;
+      this.appointmentFullDialog = true;
     },
     weekdayName: function weekdayName(i) {
       switch (i) {
@@ -4712,6 +5017,98 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 /***/ }),
 
+/***/ "./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}]],\"plugins\":[\"transform-object-rest-spread\",[\"transform-runtime\",{\"polyfill\":false,\"helpers\":false}]]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/js/components/DateInput.vue":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_moment__ = __webpack_require__("./node_modules/moment/moment.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_moment___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_moment__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  name: 'date-input',
+  props: {
+    disabled: {
+      type: Boolean,
+      default: false
+    },
+    errorMessages: {
+      type: Array,
+      default: function _default() {
+        return [];
+      }
+    },
+    value: {},
+    placeholder: {
+      type: String,
+      required: true
+    },
+    allowedDates: {
+      type: Object,
+      default: function _default() {
+        return {
+          callback: function callback(date) {
+            //YYYY/MM/DD
+            var givenDate = __WEBPACK_IMPORTED_MODULE_0_moment___default()(date, 'YYYY/MM/DD');
+            return __WEBPACK_IMPORTED_MODULE_0_moment___default()().diff(givenDate, 'days') <= 0;
+            //const [, , day] = date.split('-')
+            //return parseInt(day, 10) % 2 === 0
+          }
+        };
+      }
+    }
+  },
+  data: function data() {
+    return {
+      menu: false,
+      date: null
+    };
+  },
+
+  methods: {
+    onChange: function onChange(date) {
+      this.$refs.menu.save(date);
+      this.$emit('input', date);
+    }
+  }
+});
+
+/***/ }),
+
 /***/ "./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}]],\"plugins\":[\"transform-object-rest-spread\",[\"transform-runtime\",{\"polyfill\":false,\"helpers\":false}]]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/js/components/DeliveryForm.vue":
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -4726,6 +5123,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__event_bus__ = __webpack_require__("./resources/assets/js/event-bus.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_format_currency__ = __webpack_require__("./node_modules/format-currency/index.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_format_currency___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_format_currency__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_moment__ = __webpack_require__("./node_modules/moment/moment.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_moment___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5_moment__);
 var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
 
 //
@@ -4952,6 +5351,9 @@ var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = [
 //
 //
 //
+//
+//
+
 
 
 
@@ -4987,18 +5389,18 @@ var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = [
             scheduleDate: null,
             allowedDates: function allowedDates(date) {
                 //YYYY/MM/DD
-                var givenDate = moment(date, 'YYYY/MM/DD');
-                return moment().diff(givenDate, 'days') <= 0;
+                var givenDate = __WEBPACK_IMPORTED_MODULE_5_moment___default()(date, 'YYYY/MM/DD');
+                return __WEBPACK_IMPORTED_MODULE_5_moment___default()().diff(givenDate, 'days') <= 0;
                 //const [, , day] = date.split('-')
                 //return parseInt(day, 10) % 2 === 0
             },
             dateFormatted: null,
             dateMenu: false,
             scheduleTime: null,
-            timeMenu: false,
+            menu: false,
             allowedTimes: {
                 hours: function hours(value) {
-                    return value >= moment().hour();
+                    return value >= __WEBPACK_IMPORTED_MODULE_5_moment___default()().hour();
                 },
                 minutes: function minutes(value) {
                     return value % 15 === 0;
@@ -7587,6 +7989,95 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
   },
   mounted: function mounted() {
     this.loadSubscriptions();
+  }
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}]],\"plugins\":[\"transform-object-rest-spread\",[\"transform-runtime\",{\"polyfill\":false,\"helpers\":false}]]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/js/components/TimeInput.vue":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  name: 'time-input',
+  props: {
+    disabled: {
+      type: Boolean,
+      default: false
+    },
+    errorMessages: {
+      type: Array,
+      default: function _default() {
+        return [];
+      }
+    },
+    value: {},
+    placeholder: {
+      type: String,
+      required: true
+    },
+    allowedTimes: {
+      type: Object,
+      default: function _default() {
+        return {
+          hours: function hours(value) {
+            return true;
+          },
+          minutes: function minutes(value) {
+            return true;
+          }
+        };
+      }
+    }
+  },
+  data: function data() {
+    return {
+      menu: false,
+      time: null
+    };
+  },
+
+  methods: {
+    onChange: function onChange(time) {
+      this.$refs.menu.save(time);
+      this.$emit('input', time);
+    }
   }
 });
 
@@ -38858,21 +39349,6 @@ exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\
 
 /***/ }),
 
-/***/ "./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-180bc7c6\",\"scoped\":true,\"hasInlineConfig\":true}!./node_modules/vue-loader/lib/selector.js?type=styles&index=0!./resources/assets/js/components/AddAppointmentDialog.vue":
-/***/ (function(module, exports, __webpack_require__) {
-
-exports = module.exports = __webpack_require__("./node_modules/css-loader/lib/css-base.js")(false);
-// imports
-
-
-// module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
-
-// exports
-
-
-/***/ }),
-
 /***/ "./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-1960320f\",\"scoped\":true,\"hasInlineConfig\":true}!./node_modules/vue-loader/lib/selector.js?type=styles&index=0!./resources/assets/js/components/Subscriptions.vue":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -38882,6 +39358,21 @@ exports = module.exports = __webpack_require__("./node_modules/css-loader/lib/cs
 
 // module
 exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+
+// exports
+
+
+/***/ }),
+
+/***/ "./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-1ea5e4e8\",\"scoped\":true,\"hasInlineConfig\":true}!./node_modules/vue-loader/lib/selector.js?type=styles&index=0!./resources/assets/js/components/AddAppointmentFullDialog.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__("./node_modules/css-loader/lib/css-base.js")(false);
+// imports
+
+
+// module
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -38971,7 +39462,7 @@ exports = module.exports = __webpack_require__("./node_modules/css-loader/lib/cs
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -39002,6 +39493,21 @@ exports = module.exports = __webpack_require__("./node_modules/css-loader/lib/cs
 
 // module
 exports.push([module.i, "\ntable[data-v-665084aa] {\n    border-collapse: collapse;\n    width: 100%;\n}\ntable[data-v-665084aa], th[data-v-665084aa], td[data-v-665084aa] {\n    border: 1px solid lightgray;\n}\nth[data-v-665084aa] {\n    height: 40px;\n    padding: 15px;\n    text-align: left;\n}\ntd[data-v-665084aa] {\n    height: 30px;\n    padding: 5px;\n    text-align: left;\n    vertical-align: center;\n}\ntd[data-v-665084aa]:nth-child(1) {\n    width: 75px;\n    vertical-align: bottom;\n}\n\n", ""]);
+
+// exports
+
+
+/***/ }),
+
+/***/ "./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-6dad1155\",\"scoped\":true,\"hasInlineConfig\":true}!./node_modules/vue-loader/lib/selector.js?type=styles&index=0!./resources/assets/js/components/DateInput.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__("./node_modules/css-loader/lib/css-base.js")(false);
+// imports
+
+
+// module
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -39212,6 +39718,21 @@ exports = module.exports = __webpack_require__("./node_modules/css-loader/lib/cs
 
 // module
 exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+
+// exports
+
+
+/***/ }),
+
+/***/ "./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-fdac7dd4\",\"scoped\":true,\"hasInlineConfig\":true}!./node_modules/vue-loader/lib/selector.js?type=styles&index=0!./resources/assets/js/components/TimeInput.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__("./node_modules/css-loader/lib/css-base.js")(false);
+// imports
+
+
+// module
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -74649,345 +75170,6 @@ if (false) {
 
 /***/ }),
 
-/***/ "./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-180bc7c6\",\"hasScoped\":true,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/components/AddAppointmentDialog.vue":
-/***/ (function(module, exports, __webpack_require__) {
-
-var render = function() {
-  var _vm = this
-  var _h = _vm.$createElement
-  var _c = _vm._self._c || _h
-  return _c(
-    "v-dialog",
-    {
-      attrs: { "max-width": "600px", width: "600px" },
-      model: {
-        value: _vm.dialog,
-        callback: function($$v) {
-          _vm.dialog = $$v
-        },
-        expression: "dialog"
-      }
-    },
-    [
-      _vm.day
-        ? _c(
-            "v-card",
-            [
-              _c(
-                "v-toolbar",
-                {
-                  attrs: {
-                    color: "primary",
-                    dense: "",
-                    dark: "",
-                    flat: "",
-                    card: ""
-                  }
-                },
-                [
-                  _c("v-toolbar-title", [
-                    _vm._v(_vm._s(_vm.day.name) + " - " + _vm._s(_vm.day.date))
-                  ])
-                ],
-                1
-              ),
-              _vm._v(" "),
-              _c(
-                "v-card-text",
-                [
-                  _c("google-place-input", {
-                    ref: "locationInput",
-                    attrs: {
-                      id: "destination",
-                      country: "KE",
-                      clearable: false,
-                      "enable-geolocation": true,
-                      label: "Enter location",
-                      placeholder: "Location",
-                      "prepend-icon": "edit_location",
-                      required: true,
-                      rules: [_vm.rules.required],
-                      "load-google-api": false,
-                      "google-api-key": _vm.$utils.googleMapsKey,
-                      hint: !_vm.placeResultData
-                        ? ""
-                        : _vm.placeResultData.formatted_address,
-                      "persistent-hint": "",
-                      "hide-details": false,
-                      types: "establishment"
-                    },
-                    on: { placechanged: _vm.onLocationEntered }
-                  }),
-                  _vm._v(" "),
-                  _c(
-                    "v-layout",
-                    { attrs: { row: "", wrap: "" } },
-                    [
-                      _c(
-                        "v-flex",
-                        { attrs: { xs6: "" } },
-                        [
-                          _c(
-                            "v-menu",
-                            {
-                              ref: "startTimeMenu",
-                              attrs: {
-                                lazy: "",
-                                "close-on-content-click": false,
-                                transition: "scale-transition",
-                                "offset-y": "",
-                                "full-width": "",
-                                "nudge-right": 40,
-                                "max-width": "290px",
-                                "min-width": "290px",
-                                "return-value": _vm.startTime
-                              },
-                              on: {
-                                "update:returnValue": function($event) {
-                                  _vm.startTime = $event
-                                }
-                              },
-                              model: {
-                                value: _vm.startTimeMenu,
-                                callback: function($$v) {
-                                  _vm.startTimeMenu = $$v
-                                },
-                                expression: "startTimeMenu"
-                              }
-                            },
-                            [
-                              _c("v-text-field", {
-                                attrs: {
-                                  slot: "activator",
-                                  label: "Starting",
-                                  "prepend-icon": "access_time",
-                                  readonly: ""
-                                },
-                                slot: "activator",
-                                model: {
-                                  value: _vm.startTime,
-                                  callback: function($$v) {
-                                    _vm.startTime = $$v
-                                  },
-                                  expression: "startTime"
-                                }
-                              }),
-                              _vm._v(" "),
-                              _c("v-time-picker", {
-                                attrs: { format: "24hr" },
-                                on: {
-                                  change: function($event) {
-                                    _vm.$refs.startTimeMenu.save(_vm.startTime)
-                                  }
-                                },
-                                model: {
-                                  value: _vm.startTime,
-                                  callback: function($$v) {
-                                    _vm.startTime = $$v
-                                  },
-                                  expression: "startTime"
-                                }
-                              })
-                            ],
-                            1
-                          )
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "v-flex",
-                        { attrs: { xs6: "" } },
-                        [
-                          _c(
-                            "v-menu",
-                            {
-                              ref: "endTimeMenu",
-                              attrs: {
-                                lazy: "",
-                                "close-on-content-click": false,
-                                transition: "scale-transition",
-                                "offset-y": "",
-                                "full-width": "",
-                                "nudge-right": 40,
-                                "max-width": "290px",
-                                "min-width": "290px",
-                                "return-value": _vm.endTime
-                              },
-                              on: {
-                                "update:returnValue": function($event) {
-                                  _vm.endTime = $event
-                                }
-                              },
-                              model: {
-                                value: _vm.endTimeMenu,
-                                callback: function($$v) {
-                                  _vm.endTimeMenu = $$v
-                                },
-                                expression: "endTimeMenu"
-                              }
-                            },
-                            [
-                              _c("v-text-field", {
-                                attrs: {
-                                  slot: "activator",
-                                  label: "Ending",
-                                  "prepend-icon": "access_time",
-                                  readonly: ""
-                                },
-                                slot: "activator",
-                                model: {
-                                  value: _vm.endTime,
-                                  callback: function($$v) {
-                                    _vm.endTime = $$v
-                                  },
-                                  expression: "endTime"
-                                }
-                              }),
-                              _vm._v(" "),
-                              _c("v-time-picker", {
-                                attrs: { format: "24hr" },
-                                on: {
-                                  change: function($event) {
-                                    _vm.$refs.endTimeMenu.save(_vm.endTime)
-                                  }
-                                },
-                                model: {
-                                  value: _vm.endTime,
-                                  callback: function($$v) {
-                                    _vm.endTime = $$v
-                                  },
-                                  expression: "endTime"
-                                }
-                              })
-                            ],
-                            1
-                          )
-                        ],
-                        1
-                      )
-                    ],
-                    1
-                  ),
-                  _vm._v(" "),
-                  _c("v-subheader", [_vm._v("Participants")]),
-                  _vm._v(" "),
-                  _c(
-                    "v-layout",
-                    { attrs: { row: "", wrap: "" } },
-                    [
-                      _c(
-                        "v-flex",
-                        { attrs: { xs7: "" } },
-                        [
-                          _c("v-text-field", {
-                            attrs: {
-                              label: "Enter participant email",
-                              placeholder: "Participant email",
-                              required: "",
-                              rules: [_vm.rules.required],
-                              "prepend-icon": "email"
-                            },
-                            model: {
-                              value: _vm.participantEmail,
-                              callback: function($$v) {
-                                _vm.participantEmail = $$v
-                              },
-                              expression: "participantEmail"
-                            }
-                          })
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "v-flex",
-                        { attrs: { xs5: "" } },
-                        [
-                          _c("v-text-field", {
-                            attrs: {
-                              label: "Enter Participant contact",
-                              placeholder: "Participant contact",
-                              required: "",
-                              rules: [_vm.rules.required, _vm.rules.contact],
-                              type: "phone",
-                              mask: "##########",
-                              counter: 10,
-                              "prepend-icon": "phone"
-                            },
-                            model: {
-                              value: _vm.participantContact,
-                              callback: function($$v) {
-                                _vm.participantContact = $$v
-                              },
-                              expression: "participantContact"
-                            }
-                          })
-                        ],
-                        1
-                      )
-                    ],
-                    1
-                  )
-                ],
-                1
-              ),
-              _vm._v(" "),
-              _c(
-                "v-card-actions",
-                [
-                  _c("v-spacer"),
-                  _vm._v(" "),
-                  _c(
-                    "v-btn",
-                    {
-                      attrs: { color: "red", flat: "" },
-                      on: {
-                        click: function($event) {
-                          $event.stopPropagation()
-                          _vm.onClose($event)
-                        }
-                      }
-                    },
-                    [_vm._v("Cancel")]
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "v-btn",
-                    {
-                      attrs: { color: "primary" },
-                      on: {
-                        click: function($event) {
-                          $event.stopPropagation()
-                          _vm.onClose($event)
-                        }
-                      }
-                    },
-                    [_vm._v("Submit")]
-                  )
-                ],
-                1
-              )
-            ],
-            1
-          )
-        : _vm._e()
-    ],
-    1
-  )
-}
-var staticRenderFns = []
-render._withStripped = true
-module.exports = { render: render, staticRenderFns: staticRenderFns }
-if (false) {
-  module.hot.accept()
-  if (module.hot.data) {
-    require("vue-hot-reload-api")      .rerender("data-v-180bc7c6", module.exports)
-  }
-}
-
-/***/ }),
-
 /***/ "./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-1960320f\",\"hasScoped\":true,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/components/Subscriptions.vue":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -75263,6 +75445,605 @@ if (false) {
   module.hot.accept()
   if (module.hot.data) {
     require("vue-hot-reload-api")      .rerender("data-v-1960320f", module.exports)
+  }
+}
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-1ea5e4e8\",\"hasScoped\":true,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/components/AddAppointmentFullDialog.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "v-dialog",
+    {
+      attrs: {
+        fullscreen: "",
+        transition: "dialog-bottom-transition",
+        overlay: false,
+        scrollable: ""
+      },
+      model: {
+        value: _vm.appointmentFullDialog,
+        callback: function($$v) {
+          _vm.appointmentFullDialog = $$v
+        },
+        expression: "appointmentFullDialog"
+      }
+    },
+    [
+      _c(
+        "v-card",
+        { attrs: { tile: "" } },
+        [
+          _c(
+            "v-toolbar",
+            { attrs: { card: "", dark: "", color: "primary" } },
+            [
+              _c(
+                "v-btn",
+                {
+                  attrs: { icon: "", dark: "" },
+                  nativeOn: {
+                    click: function($event) {
+                      _vm.$emit("onClose")
+                    }
+                  }
+                },
+                [_c("v-icon", [_vm._v("close")])],
+                1
+              ),
+              _vm._v(" "),
+              _c("v-toolbar-title", [_vm._v("Add an Appointment/Meeting")]),
+              _vm._v(" "),
+              _c("v-spacer"),
+              _vm._v(" "),
+              _c(
+                "v-toolbar-items",
+                [
+                  _c(
+                    "v-btn",
+                    {
+                      attrs: { dark: "", flat: "" },
+                      nativeOn: {
+                        click: function($event) {
+                          _vm.validate($event)
+                        }
+                      }
+                    },
+                    [_vm._v("Save")]
+                  )
+                ],
+                1
+              )
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c(
+            "v-card-text",
+            [
+              _c(
+                "v-layout",
+                {
+                  staticStyle: { width: "75%", margin: "0 auto" },
+                  attrs: { row: "", wrap: "" }
+                },
+                [
+                  _c(
+                    "v-flex",
+                    { attrs: { xs4: "" } },
+                    [
+                      _c("v-subheader", { staticClass: "mt-2" }, [
+                        _vm._v("Appointment/Meeting venue type")
+                      ])
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "v-flex",
+                    { attrs: { xs8: "" } },
+                    [
+                      _c("v-select", {
+                        attrs: {
+                          items: _vm.venueTypes,
+                          disabled: _vm.connecting,
+                          clearable: "",
+                          "item-text": "text",
+                          "item-value": "value",
+                          label: "Select venue type",
+                          "error-messages": _vm.errors.venueType,
+                          "validate-on-blur": "",
+                          "single-line": ""
+                        },
+                        model: {
+                          value: _vm.venueType,
+                          callback: function($$v) {
+                            _vm.venueType = $$v
+                          },
+                          expression: "venueType"
+                        }
+                      })
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "v-flex",
+                    { staticClass: "mb-3", attrs: { xs12: "" } },
+                    [
+                      _vm.venueType === 2
+                        ? _c("google-place-input", {
+                            ref: "locationInput",
+                            attrs: {
+                              disabled: _vm.connecting,
+                              id: "destination",
+                              country: "KE",
+                              clearable: false,
+                              "enable-geolocation": true,
+                              label: "Enter location",
+                              placeholder: "Location",
+                              "prepend-icon": "edit_location",
+                              required: true,
+                              rules: [_vm.rules.required],
+                              "load-google-api": false,
+                              "google-api-key": _vm.$utils.googleMapsKey,
+                              hint: !_vm.placeResultData
+                                ? ""
+                                : _vm.placeResultData.formatted_address,
+                              "persistent-hint": "",
+                              "hide-details": false,
+                              "error-messages": _vm.errors.venue,
+                              types: "establishment"
+                            },
+                            on: { placechanged: _vm.onLocationEntered }
+                          })
+                        : _vm._e(),
+                      _vm._v(" "),
+                      _vm.venueType === 1
+                        ? _c("v-text-field", {
+                            attrs: {
+                              disabled: _vm.connecting,
+                              required: "",
+                              label: "Enter appointment/Meeting venue",
+                              placeholder:
+                                "Appointment/Meeting venue e.g Office, Boardroom or Room 10",
+                              "error-messages": _vm.errors.venue,
+                              "prepend-icon": "edit_location"
+                            },
+                            model: {
+                              value: _vm.venue,
+                              callback: function($$v) {
+                                _vm.venue = $$v
+                              },
+                              expression: "venue"
+                            }
+                          })
+                        : _vm._e()
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "v-flex",
+                    { attrs: { xs4: "" } },
+                    [
+                      _c("v-subheader", { staticClass: "mt-2" }, [
+                        _vm._v("Appointment/Meeting with")
+                      ])
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "v-flex",
+                    { attrs: { xs8: "" } },
+                    [
+                      _c("v-select", {
+                        attrs: {
+                          items: _vm.$auth.user().client.users,
+                          "item-text": "name",
+                          "item-value": "id",
+                          label: "Select user",
+                          "deletable-chips": "",
+                          disabled: _vm.connecting,
+                          "error-messages": _vm.errors.appointmentWith,
+                          clearable: "",
+                          chips: ""
+                        },
+                        scopedSlots: _vm._u([
+                          {
+                            key: "selection",
+                            fn: function(data) {
+                              return [
+                                _c(
+                                  "v-chip",
+                                  {
+                                    key: JSON.stringify(data.item),
+                                    staticClass: "chip--select-multi",
+                                    attrs: {
+                                      close: "",
+                                      selected: data.selected
+                                    },
+                                    on: {
+                                      input: function($event) {
+                                        data.parent.selectItem(data.item)
+                                      }
+                                    }
+                                  },
+                                  [
+                                    _c("v-avatar", [
+                                      _c("img", {
+                                        attrs: {
+                                          src: "storage/" + data.item.avatar
+                                        }
+                                      })
+                                    ]),
+                                    _vm._v(
+                                      "\n                                " +
+                                        _vm._s(data.item.name) +
+                                        "\n                            "
+                                    )
+                                  ],
+                                  1
+                                )
+                              ]
+                            }
+                          },
+                          {
+                            key: "item",
+                            fn: function(data) {
+                              return [
+                                [
+                                  _c("v-list-tile-avatar", [
+                                    _c("img", {
+                                      attrs: {
+                                        src: "storage/" + data.item.avatar
+                                      }
+                                    })
+                                  ]),
+                                  _vm._v(" "),
+                                  _c(
+                                    "v-list-tile-content",
+                                    [
+                                      _c("v-list-tile-title", {
+                                        domProps: {
+                                          innerHTML: _vm._s(data.item.name)
+                                        }
+                                      }),
+                                      _vm._v(" "),
+                                      _c("v-list-tile-title", {
+                                        domProps: {
+                                          innerHTML: _vm._s(data.item.email)
+                                        }
+                                      })
+                                    ],
+                                    1
+                                  )
+                                ]
+                              ]
+                            }
+                          }
+                        ]),
+                        model: {
+                          value: _vm.appointmentWith,
+                          callback: function($$v) {
+                            _vm.appointmentWith = $$v
+                          },
+                          expression: "appointmentWith"
+                        }
+                      })
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "v-flex",
+                    { attrs: { xs12: "" } },
+                    [
+                      _c("v-text-field", {
+                        attrs: {
+                          label: "Enter a title",
+                          disabled: _vm.connecting,
+                          placeholder:
+                            "Title e.g Website development progress meeting",
+                          "error-messages": _vm.errors.title,
+                          required: "",
+                          "prepend-icon": "title"
+                        },
+                        model: {
+                          value: _vm.title,
+                          callback: function($$v) {
+                            _vm.title = $$v
+                          },
+                          expression: "title"
+                        }
+                      })
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "v-flex",
+                    _vm._b(
+                      {},
+                      "v-flex",
+                      ((_obj = {}),
+                      (_obj["xs" + (_vm.allDay ? 12 : 6)] = true),
+                      _obj),
+                      false
+                    ),
+                    [
+                      _c("date-input", {
+                        attrs: {
+                          disabled: _vm.connecting,
+                          placeholder: "Starting date",
+                          "error-messages": _vm.errors.startDate
+                        },
+                        model: {
+                          value: _vm.startDate,
+                          callback: function($$v) {
+                            _vm.startDate = $$v
+                          },
+                          expression: "startDate"
+                        }
+                      })
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  !_vm.allDay
+                    ? _c(
+                        "v-flex",
+                        { staticClass: "pl-5", attrs: { xs6: "" } },
+                        [
+                          _c("time-input", {
+                            attrs: {
+                              disabled: _vm.connecting,
+                              placeholder: "Starting time",
+                              "error-messages": _vm.errors.startTime
+                            },
+                            model: {
+                              value: _vm.startTime,
+                              callback: function($$v) {
+                                _vm.startTime = $$v
+                              },
+                              expression: "startTime"
+                            }
+                          })
+                        ],
+                        1
+                      )
+                    : _vm._e(),
+                  _vm._v(" "),
+                  _c(
+                    "v-flex",
+                    _vm._b(
+                      {},
+                      "v-flex",
+                      ((_obj$1 = {}),
+                      (_obj$1["xs" + (_vm.allDay ? 12 : 6)] = true),
+                      _obj$1),
+                      false
+                    ),
+                    [
+                      _c("date-input", {
+                        attrs: {
+                          disabled: _vm.connecting,
+                          placeholder: "Ending date",
+                          "error-messages": _vm.errors.endDate
+                        },
+                        model: {
+                          value: _vm.endDate,
+                          callback: function($$v) {
+                            _vm.endDate = $$v
+                          },
+                          expression: "endDate"
+                        }
+                      })
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  !_vm.allDay
+                    ? _c(
+                        "v-flex",
+                        { staticClass: "pl-5", attrs: { xs6: "" } },
+                        [
+                          _c("time-input", {
+                            attrs: {
+                              disabled: _vm.connecting,
+                              placeholder: "Ending time",
+                              "error-messages": _vm.errors.endTime
+                            },
+                            model: {
+                              value: _vm.endTime,
+                              callback: function($$v) {
+                                _vm.endTime = $$v
+                              },
+                              expression: "endTime"
+                            }
+                          })
+                        ],
+                        1
+                      )
+                    : _vm._e(),
+                  _vm._v(" "),
+                  _c(
+                    "v-flex",
+                    { attrs: { xs10: "", "offset-xs1": "" } },
+                    [
+                      _c("v-checkbox", {
+                        attrs: {
+                          label: "All day",
+                          "hide-details": "",
+                          disabled: _vm.connecting
+                        },
+                        model: {
+                          value: _vm.allDay,
+                          callback: function($$v) {
+                            _vm.allDay = $$v
+                          },
+                          expression: "allDay"
+                        }
+                      })
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "v-flex",
+                    { attrs: { xs12: "" } },
+                    [
+                      _c("v-subheader", [_vm._v("Appointment participants")]),
+                      _vm._v(" "),
+                      _vm._l(_vm.participants, function(participant, index) {
+                        return [
+                          _c(
+                            "v-layout",
+                            { key: index, attrs: { row: "", wrap: "" } },
+                            [
+                              _c(
+                                "v-flex",
+                                { attrs: { xs6: "" } },
+                                [
+                                  _c("v-text-field", {
+                                    attrs: {
+                                      disabled: _vm.connecting,
+                                      placeholder: "Participant email address",
+                                      label: "Enter participant email address",
+                                      "error-messages":
+                                        participant.errors.email,
+                                      "prepend-icon": "email"
+                                    }
+                                  })
+                                ],
+                                1
+                              ),
+                              _vm._v(" "),
+                              _c(
+                                "v-flex",
+                                { staticClass: "pl-5", attrs: { xs5: "" } },
+                                [
+                                  _c("v-text-field", {
+                                    attrs: {
+                                      disabled: _vm.connecting,
+                                      placeholder: "Participant phone number",
+                                      label: "Enter participant phone number",
+                                      "error-messages":
+                                        participant.errors.phone,
+                                      mask: "##########",
+                                      "prepend-icon": "phone"
+                                    }
+                                  })
+                                ],
+                                1
+                              ),
+                              _vm._v(" "),
+                              _c(
+                                "v-flex",
+                                { attrs: { xs1: "" } },
+                                [
+                                  _c(
+                                    "v-btn",
+                                    {
+                                      attrs: {
+                                        icon: "",
+                                        disabled: _vm.connecting
+                                      },
+                                      nativeOn: {
+                                        click: function($event) {
+                                          _vm.removeParticipant(participant)
+                                        }
+                                      }
+                                    },
+                                    [_c("v-icon", [_vm._v("close")])],
+                                    1
+                                  )
+                                ],
+                                1
+                              )
+                            ],
+                            1
+                          )
+                        ]
+                      }),
+                      _vm._v(" "),
+                      _c(
+                        "v-btn",
+                        {
+                          staticClass: "mb-3",
+                          attrs: {
+                            flat: "",
+                            color: "primary",
+                            disabled: _vm.connecting
+                          },
+                          nativeOn: {
+                            click: function($event) {
+                              _vm.addParticipant($event)
+                            }
+                          }
+                        },
+                        [
+                          _c("v-icon", { attrs: { left: "", dark: "" } }, [
+                            _vm._v("add")
+                          ]),
+                          _vm._v(
+                            "\n                        Add participant\n                    "
+                          )
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c("v-text-field", {
+                        attrs: {
+                          name: "note",
+                          rows: "2",
+                          "prepend-icon": "note",
+                          disabled: _vm.connecting,
+                          label: "Write a short note",
+                          placeholder: "Write a short note",
+                          "multi-line": ""
+                        },
+                        model: {
+                          value: _vm.note,
+                          callback: function($$v) {
+                            _vm.note = $$v
+                          },
+                          expression: "note"
+                        }
+                      })
+                    ],
+                    2
+                  )
+                ],
+                1
+              )
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c("div", { staticStyle: { flex: "1 1 auto" } })
+        ],
+        1
+      )
+    ],
+    1
+  )
+  var _obj
+  var _obj$1
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-1ea5e4e8", module.exports)
   }
 }
 
@@ -76150,6 +76931,7 @@ var render = function() {
                                             attrs: {
                                               slot: "activator",
                                               label: "Date in M/D/Y format",
+                                              required: "",
                                               "prepend-icon": "event"
                                             },
                                             on: {
@@ -76220,6 +77002,7 @@ var render = function() {
                                           _c("v-text-field", {
                                             attrs: {
                                               slot: "activator",
+                                              required: "",
                                               label: "Picker in menu",
                                               "prepend-icon": "access_time",
                                               readonly: ""
@@ -77141,7 +77924,10 @@ var render = function() {
                               key: day.date,
                               on: {
                                 click: function($event) {
-                                  _vm.onCellClicked(day)
+                                  _vm.onCellClicked({
+                                    hourOfDay: hour,
+                                    dayOfWeek: day
+                                  })
                                 }
                               }
                             })
@@ -77164,14 +77950,48 @@ var render = function() {
         "v-flex",
         { attrs: { xs12: "" } },
         [
-          _c("add-appointment-dialog", {
-            attrs: { day: _vm.selectedDay },
+          _c("add-appointment-full-dialog", {
+            attrs: {
+              appointmentFullDialog: _vm.appointmentFullDialog,
+              selectedCell: _vm.selectedCell
+            },
             on: {
+              "update:appointmentFullDialog": function($event) {
+                _vm.appointmentFullDialog = $event
+              },
               onClose: function($event) {
-                _vm.selectedDay = null
+                _vm.appointmentFullDialog = false
               }
             }
           })
+        ],
+        1
+      ),
+      _vm._v(" "),
+      _c(
+        "v-fab-transition",
+        [
+          _c(
+            "v-btn",
+            {
+              staticClass: "ma-3",
+              attrs: {
+                color: "accent",
+                fab: "",
+                dark: "",
+                fixed: "",
+                bottom: "",
+                right: ""
+              },
+              nativeOn: {
+                click: function($event) {
+                  _vm.appointmentFullDialog = true
+                }
+              }
+            },
+            [_c("v-icon", [_vm._v("add")])],
+            1
+          )
         ],
         1
       )
@@ -77186,6 +78006,91 @@ if (false) {
   module.hot.accept()
   if (module.hot.data) {
     require("vue-hot-reload-api")      .rerender("data-v-665084aa", module.exports)
+  }
+}
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-6dad1155\",\"hasScoped\":true,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/components/DateInput.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "v-menu",
+    {
+      ref: "menu",
+      attrs: {
+        lazy: "",
+        "close-on-content-click": false,
+        transition: "scale-transition",
+        "offset-y": "",
+        "full-width": "",
+        disabled: _vm.disabled,
+        "nudge-right": 40,
+        "max-width": "290px",
+        "min-width": "290px",
+        "return-value": _vm.date
+      },
+      on: {
+        "update:returnValue": function($event) {
+          _vm.date = $event
+        }
+      },
+      model: {
+        value: _vm.menu,
+        callback: function($$v) {
+          _vm.menu = $$v
+        },
+        expression: "menu"
+      }
+    },
+    [
+      _c("v-text-field", {
+        attrs: {
+          slot: "activator",
+          label: "Enter " + _vm.placeholder,
+          placeholder: _vm.placeholder,
+          "prepend-icon": "event",
+          "error-messages": _vm.errorMessages,
+          value: _vm.date,
+          disabled: _vm.disabled,
+          readonly: ""
+        },
+        slot: "activator",
+        model: {
+          value: _vm.date,
+          callback: function($$v) {
+            _vm.date = $$v
+          },
+          expression: "date"
+        }
+      }),
+      _vm._v(" "),
+      _c("v-date-picker", {
+        attrs: { format: "24hr", "allowed-dates": _vm.allowedDates.callback },
+        on: { change: _vm.onChange },
+        model: {
+          value: _vm.date,
+          callback: function($$v) {
+            _vm.date = $$v
+          },
+          expression: "date"
+        }
+      })
+    ],
+    1
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-6dad1155", module.exports)
   }
 }
 
@@ -78911,6 +79816,95 @@ if (false) {
   module.hot.accept()
   if (module.hot.data) {
     require("vue-hot-reload-api")      .rerender("data-v-f6d9c658", module.exports)
+  }
+}
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-fdac7dd4\",\"hasScoped\":true,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/components/TimeInput.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "v-menu",
+    {
+      ref: "menu",
+      attrs: {
+        lazy: "",
+        "close-on-content-click": false,
+        transition: "scale-transition",
+        "offset-y": "",
+        "full-width": "",
+        disabled: _vm.disabled,
+        "nudge-right": 40,
+        "max-width": "290px",
+        "min-width": "290px",
+        "return-value": _vm.time
+      },
+      on: {
+        "update:returnValue": function($event) {
+          _vm.time = $event
+        }
+      },
+      model: {
+        value: _vm.menu,
+        callback: function($$v) {
+          _vm.menu = $$v
+        },
+        expression: "menu"
+      }
+    },
+    [
+      _c("v-text-field", {
+        attrs: {
+          slot: "activator",
+          label: "Enter " + _vm.placeholder,
+          placeholder: _vm.placeholder,
+          disabled: _vm.disabled,
+          value: _vm.time,
+          "error-messages": _vm.errorMessages,
+          "prepend-icon": "access_time",
+          readonly: ""
+        },
+        slot: "activator",
+        model: {
+          value: _vm.time,
+          callback: function($$v) {
+            _vm.time = $$v
+          },
+          expression: "time"
+        }
+      }),
+      _vm._v(" "),
+      _c("v-time-picker", {
+        attrs: {
+          format: "24hr",
+          "allowed-hours": _vm.allowedTimes.hours,
+          "allowed-minutes": _vm.allowedTimes.minutes
+        },
+        on: { change: _vm.onChange },
+        model: {
+          value: _vm.time,
+          callback: function($$v) {
+            _vm.time = $$v
+          },
+          expression: "time"
+        }
+      })
+    ],
+    1
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-fdac7dd4", module.exports)
   }
 }
 
@@ -81649,33 +82643,6 @@ if(false) {
 
 /***/ }),
 
-/***/ "./node_modules/vue-style-loader/index.js!./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-180bc7c6\",\"scoped\":true,\"hasInlineConfig\":true}!./node_modules/vue-loader/lib/selector.js?type=styles&index=0!./resources/assets/js/components/AddAppointmentDialog.vue":
-/***/ (function(module, exports, __webpack_require__) {
-
-// style-loader: Adds some css to the DOM by adding a <style> tag
-
-// load the styles
-var content = __webpack_require__("./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-180bc7c6\",\"scoped\":true,\"hasInlineConfig\":true}!./node_modules/vue-loader/lib/selector.js?type=styles&index=0!./resources/assets/js/components/AddAppointmentDialog.vue");
-if(typeof content === 'string') content = [[module.i, content, '']];
-if(content.locals) module.exports = content.locals;
-// add the styles to the DOM
-var update = __webpack_require__("./node_modules/vue-style-loader/lib/addStylesClient.js")("719b5090", content, false, {});
-// Hot Module Replacement
-if(false) {
- // When the styles change, update the <style> tags
- if(!content.locals) {
-   module.hot.accept("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-180bc7c6\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./AddAppointmentDialog.vue", function() {
-     var newContent = require("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-180bc7c6\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./AddAppointmentDialog.vue");
-     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-     update(newContent);
-   });
- }
- // When the module is disposed, remove the <style> tags
- module.hot.dispose(function() { update(); });
-}
-
-/***/ }),
-
 /***/ "./node_modules/vue-style-loader/index.js!./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-1960320f\",\"scoped\":true,\"hasInlineConfig\":true}!./node_modules/vue-loader/lib/selector.js?type=styles&index=0!./resources/assets/js/components/Subscriptions.vue":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -81693,6 +82660,33 @@ if(false) {
  if(!content.locals) {
    module.hot.accept("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-1960320f\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Subscriptions.vue", function() {
      var newContent = require("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-1960320f\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Subscriptions.vue");
+     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+     update(newContent);
+   });
+ }
+ // When the module is disposed, remove the <style> tags
+ module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+
+/***/ "./node_modules/vue-style-loader/index.js!./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-1ea5e4e8\",\"scoped\":true,\"hasInlineConfig\":true}!./node_modules/vue-loader/lib/selector.js?type=styles&index=0!./resources/assets/js/components/AddAppointmentFullDialog.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__("./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-1ea5e4e8\",\"scoped\":true,\"hasInlineConfig\":true}!./node_modules/vue-loader/lib/selector.js?type=styles&index=0!./resources/assets/js/components/AddAppointmentFullDialog.vue");
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__("./node_modules/vue-style-loader/lib/addStylesClient.js")("8ffa7ca8", content, false, {});
+// Hot Module Replacement
+if(false) {
+ // When the styles change, update the <style> tags
+ if(!content.locals) {
+   module.hot.accept("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-1ea5e4e8\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./AddAppointmentFullDialog.vue", function() {
+     var newContent = require("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-1ea5e4e8\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./AddAppointmentFullDialog.vue");
      if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
      update(newContent);
    });
@@ -81909,6 +82903,33 @@ if(false) {
  if(!content.locals) {
    module.hot.accept("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-665084aa\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Appointments.vue", function() {
      var newContent = require("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-665084aa\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Appointments.vue");
+     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+     update(newContent);
+   });
+ }
+ // When the module is disposed, remove the <style> tags
+ module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+
+/***/ "./node_modules/vue-style-loader/index.js!./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-6dad1155\",\"scoped\":true,\"hasInlineConfig\":true}!./node_modules/vue-loader/lib/selector.js?type=styles&index=0!./resources/assets/js/components/DateInput.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__("./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-6dad1155\",\"scoped\":true,\"hasInlineConfig\":true}!./node_modules/vue-loader/lib/selector.js?type=styles&index=0!./resources/assets/js/components/DateInput.vue");
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__("./node_modules/vue-style-loader/lib/addStylesClient.js")("2d9bc605", content, false, {});
+// Hot Module Replacement
+if(false) {
+ // When the styles change, update the <style> tags
+ if(!content.locals) {
+   module.hot.accept("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-6dad1155\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./DateInput.vue", function() {
+     var newContent = require("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-6dad1155\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./DateInput.vue");
      if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
      update(newContent);
    });
@@ -82287,6 +83308,33 @@ if(false) {
  if(!content.locals) {
    module.hot.accept("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-f6d9c658\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Toolbar.vue", function() {
      var newContent = require("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-f6d9c658\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Toolbar.vue");
+     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+     update(newContent);
+   });
+ }
+ // When the module is disposed, remove the <style> tags
+ module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+
+/***/ "./node_modules/vue-style-loader/index.js!./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-fdac7dd4\",\"scoped\":true,\"hasInlineConfig\":true}!./node_modules/vue-loader/lib/selector.js?type=styles&index=0!./resources/assets/js/components/TimeInput.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__("./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-fdac7dd4\",\"scoped\":true,\"hasInlineConfig\":true}!./node_modules/vue-loader/lib/selector.js?type=styles&index=0!./resources/assets/js/components/TimeInput.vue");
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__("./node_modules/vue-style-loader/lib/addStylesClient.js")("2cad758e", content, false, {});
+// Hot Module Replacement
+if(false) {
+ // When the styles change, update the <style> tags
+ if(!content.locals) {
+   module.hot.accept("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-fdac7dd4\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./TimeInput.vue", function() {
+     var newContent = require("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-fdac7dd4\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./TimeInput.vue");
      if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
      update(newContent);
    });
@@ -114522,7 +115570,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 
-var DEBUG = false;
+var DEBUG = true;
 
 var GOOGLE_MAPS_KEY = 'AIzaSyAS_9BsQpqTP8EVuMZ7rQ9gMCl0wmqhm7k';
 var PRIMARY_COLOR = '#486b00';
@@ -114643,25 +115691,25 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.prototype.$utils = {
 
 /***/ }),
 
-/***/ "./resources/assets/js/components/AddAppointmentDialog.vue":
+/***/ "./resources/assets/js/components/AddAppointmentFullDialog.vue":
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 function injectStyle (ssrContext) {
   if (disposed) return
-  __webpack_require__("./node_modules/vue-style-loader/index.js!./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-180bc7c6\",\"scoped\":true,\"hasInlineConfig\":true}!./node_modules/vue-loader/lib/selector.js?type=styles&index=0!./resources/assets/js/components/AddAppointmentDialog.vue")
+  __webpack_require__("./node_modules/vue-style-loader/index.js!./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-1ea5e4e8\",\"scoped\":true,\"hasInlineConfig\":true}!./node_modules/vue-loader/lib/selector.js?type=styles&index=0!./resources/assets/js/components/AddAppointmentFullDialog.vue")
 }
 var normalizeComponent = __webpack_require__("./node_modules/vue-loader/lib/component-normalizer.js")
 /* script */
-var __vue_script__ = __webpack_require__("./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}]],\"plugins\":[\"transform-object-rest-spread\",[\"transform-runtime\",{\"polyfill\":false,\"helpers\":false}]]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/js/components/AddAppointmentDialog.vue")
+var __vue_script__ = __webpack_require__("./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}]],\"plugins\":[\"transform-object-rest-spread\",[\"transform-runtime\",{\"polyfill\":false,\"helpers\":false}]]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/js/components/AddAppointmentFullDialog.vue")
 /* template */
-var __vue_template__ = __webpack_require__("./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-180bc7c6\",\"hasScoped\":true,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/components/AddAppointmentDialog.vue")
+var __vue_template__ = __webpack_require__("./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-1ea5e4e8\",\"hasScoped\":true,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/components/AddAppointmentFullDialog.vue")
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
 var __vue_styles__ = injectStyle
 /* scopeId */
-var __vue_scopeId__ = "data-v-180bc7c6"
+var __vue_scopeId__ = "data-v-1ea5e4e8"
 /* moduleIdentifier (server only) */
 var __vue_module_identifier__ = null
 var Component = normalizeComponent(
@@ -114672,7 +115720,7 @@ var Component = normalizeComponent(
   __vue_scopeId__,
   __vue_module_identifier__
 )
-Component.options.__file = "resources\\assets\\js\\components\\AddAppointmentDialog.vue"
+Component.options.__file = "resources\\assets\\js\\components\\AddAppointmentFullDialog.vue"
 
 /* hot reload */
 if (false) {(function () {
@@ -114681,9 +115729,9 @@ if (false) {(function () {
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-180bc7c6", Component.options)
+    hotAPI.createRecord("data-v-1ea5e4e8", Component.options)
   } else {
-    hotAPI.reload("data-v-180bc7c6", Component.options)
+    hotAPI.reload("data-v-1ea5e4e8", Component.options)
   }
   module.hot.dispose(function (data) {
     disposed = true
@@ -114996,6 +116044,58 @@ if (false) {(function () {
     hotAPI.createRecord("data-v-2a24abfe", Component.options)
   } else {
     hotAPI.reload("data-v-2a24abfe", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+
+/***/ "./resources/assets/js/components/DateInput.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+function injectStyle (ssrContext) {
+  if (disposed) return
+  __webpack_require__("./node_modules/vue-style-loader/index.js!./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-6dad1155\",\"scoped\":true,\"hasInlineConfig\":true}!./node_modules/vue-loader/lib/selector.js?type=styles&index=0!./resources/assets/js/components/DateInput.vue")
+}
+var normalizeComponent = __webpack_require__("./node_modules/vue-loader/lib/component-normalizer.js")
+/* script */
+var __vue_script__ = __webpack_require__("./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}]],\"plugins\":[\"transform-object-rest-spread\",[\"transform-runtime\",{\"polyfill\":false,\"helpers\":false}]]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/js/components/DateInput.vue")
+/* template */
+var __vue_template__ = __webpack_require__("./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-6dad1155\",\"hasScoped\":true,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/components/DateInput.vue")
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = injectStyle
+/* scopeId */
+var __vue_scopeId__ = "data-v-6dad1155"
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources\\assets\\js\\components\\DateInput.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-6dad1155", Component.options)
+  } else {
+    hotAPI.reload("data-v-6dad1155", Component.options)
   }
   module.hot.dispose(function (data) {
     disposed = true
@@ -115616,6 +116716,58 @@ if (false) {(function () {
     hotAPI.createRecord("data-v-1960320f", Component.options)
   } else {
     hotAPI.reload("data-v-1960320f", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+
+/***/ "./resources/assets/js/components/TimeInput.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+function injectStyle (ssrContext) {
+  if (disposed) return
+  __webpack_require__("./node_modules/vue-style-loader/index.js!./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-fdac7dd4\",\"scoped\":true,\"hasInlineConfig\":true}!./node_modules/vue-loader/lib/selector.js?type=styles&index=0!./resources/assets/js/components/TimeInput.vue")
+}
+var normalizeComponent = __webpack_require__("./node_modules/vue-loader/lib/component-normalizer.js")
+/* script */
+var __vue_script__ = __webpack_require__("./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}]],\"plugins\":[\"transform-object-rest-spread\",[\"transform-runtime\",{\"polyfill\":false,\"helpers\":false}]]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/js/components/TimeInput.vue")
+/* template */
+var __vue_template__ = __webpack_require__("./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-fdac7dd4\",\"hasScoped\":true,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/components/TimeInput.vue")
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = injectStyle
+/* scopeId */
+var __vue_scopeId__ = "data-v-fdac7dd4"
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources\\assets\\js\\components\\TimeInput.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-fdac7dd4", Component.options)
+  } else {
+    hotAPI.reload("data-v-fdac7dd4", Component.options)
   }
   module.hot.dispose(function (data) {
     disposed = true
