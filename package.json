@@ -29,6 +29,7 @@
         "fullcalendar": "^3.9.0",
         "html2pdf.js": "^0.8.2",
         "moment": "^2.20.1",
+        "moment-range": "^3.1.1",
         "print-js": "^1.0.31",
         "vue-axios": "^2.0.2",
         "vue-chartjs": "^3.2.1",

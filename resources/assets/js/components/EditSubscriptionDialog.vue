@@ -169,7 +169,7 @@
           }
         }
         this.$utils.log(subscription)
-        this.axios.put('/subscriptions/' + this.subscriptionItem.id, {
+        this.axios.patch('/subscriptions/' + this.subscriptionItem.id, {
           subscriptionItemId: subscription.subscriptionItemId,
           schedules: subscription.schedules,
           quantity: subscription.quantity,

@@ -17,7 +17,8 @@
                         <tr v-for="hour in hoursOfDay">
                             <td>{{hour}}</td>
                             <td v-for="day in daysOfWeek" :key="day.date"
-                                @click="onCellClicked({hourOfDay: hour, dayOfWeek:day})">
+                                @click="onCellClicked({hourOfDay: hour, dayOfWeek:day})"
+                                :style="{'background-color': determineCelColor(day, hour)}">
                             </td>
                         </tr>
                         </tbody>
@@ -44,7 +45,7 @@
         <v-flex xs12>
             <add-appointment-full-dialog :appointmentFullDialog.sync="appointmentFullDialog"
                                          :selectedCell="selectedCell"
-                                         @onClose="appointmentFullDialog = false">
+                                         @onClose="onCloseDialog">
             </add-appointment-full-dialog>
         </v-flex>
 
@@ -67,8 +68,12 @@
 <script>
 
   import FullCalendar from 'vue-fullcalendar/src/fullCalendar'
-  import moment from 'moment'
+  import Moment from 'moment'
   import AddAppointmentFullDialog from './AddAppointmentFullDialog'
+
+  import {extendMoment} from 'moment-range'
+
+  const moment = extendMoment(Moment)
 
   export default {
     components: {
@@ -87,17 +92,56 @@
       }
     },
     methods: {
-      changeMonth (start, end, current) {
-        console.log('changeMonth', start.format(), end.format(), current.format())
+      onCloseDialog (addedAppointmentSuccessfully) {
+        this.appointmentFullDialog = false
+        if (addedAppointmentSuccessfully) {
+          this.loadAppointments()
+        }
       },
-      eventClick (event, jsEvent, pos) {
-        console.log('eventClick', event, jsEvent, pos)
+      loadAppointments () {
+        this.axios.get('appointments')
+          .then(response => {
+            for (let item of response.data.data) {
+              this.appointments.push(item)
+            }
+            //alert(this.appointments)
+          }).catch(error => {
+          this.$utils.log(error)
+        })
       },
-      dayClick (day, jsEvent) {
-        console.log('dayClick', day, jsEvent)
-      },
-      moreClick (day, events, jsEvent) {
-        console.log('moreCLick', day, events, jsEvent)
+      determineCelColor (day, hour) {
+        if (this.appointments.length === 0) {
+          return 'white'
+        }
+        let that = this
+        let appointment = this.appointments.find(function (a) {
+          that.$utils.log(a.startDate + ' === ' + day.fullDate)
+          return a.startDate === day.fullDate
+        })
+
+        this.$utils.log('+++++++++++++++++++++++++++++++++++++++++++')
+        this.$utils.log((appointment && appointment.allDay))
+
+        if (appointment && appointment.allDay) {
+          return 'red'
+        } else if (appointment && !appointment.allDay) {
+
+          let start = moment(appointment.startTime, 'HH:mm:ss')
+          let end = moment(appointment.endTime, 'HH:mm:ss')
+          let cellHour = moment(hour, 'HH:mm:ss')
+
+          let range = moment.range(start, end)
+
+          this.$utils.log(cellHour.within(range))
+
+          if (range.contains(cellHour)) {
+            return 'yellow'
+          } else {
+            return 'white'
+          }
+        } else {
+          return 'white'
+        }
       },
       onCellClicked (cell) {
         this.selectedCell = cell
@@ -125,26 +169,23 @@
       }
     },
     mounted () {
-      for (let i = 0; i < 200; i++) {
-        this.appointments.push({
-          title: 'Sunny Out of Office',
-          start: moment('YYYY-MM-DD'),
-          end: moment('YYYY-MM-DD')
-        })
-      }
       for (let i = 0; i <= 5; i++) {
         let weekday = moment().add(i, 'days')
         this.daysOfWeek.push({
-          name: this.weekdayName(weekday.weekday()), date: weekday.get('date')
+          name: this.weekdayName(weekday.weekday()),
+          date: weekday.get('date'),
+          fullDate: weekday.format('YYYY-MM-DD'),
         })
       }
       for (let h = 6; h <= 22; h++) {
         if (h < 10) {
-          this.hoursOfDay.push('0' + h + ':00')
+          this.hoursOfDay.push('0' + h + ':00:00')
         } else {
-          this.hoursOfDay.push(h + ':00')
+          this.hoursOfDay.push(h + ':00:00')
         }
       }
+
+      this.loadAppointments()
     }
   }
 </script>

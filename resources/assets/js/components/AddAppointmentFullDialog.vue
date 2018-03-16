@@ -20,6 +20,13 @@
 
                 <v-layout row wrap style="width: 75%; margin: 0 auto">
 
+                    <v-flex xs12>
+                        <connection-manager ref="connectionManager"
+                                            @onConnectionChange="onConnectionChange"
+                                            @onSuccess="$emit('onClose')">
+                        </connection-manager>
+                    </v-flex>
+
                     <v-flex xs4>
                         <v-subheader class="mt-2">Appointment/Meeting venue type</v-subheader>
                     </v-flex>
@@ -173,6 +180,7 @@
                                             :disabled="connecting"
                                             placeholder="Participant email address"
                                             label="Enter participant email address"
+                                            v-model="participant.email"
                                             :error-messages="participant.errors.email"
                                             prepend-icon="email">
                                     </v-text-field>
@@ -183,6 +191,7 @@
                                             placeholder="Participant phone number"
                                             label="Enter participant phone number"
                                             :error-messages="participant.errors.phone"
+                                            v-model="participant.phone"
                                             mask="##########"
                                             prepend-icon="phone">
                                     </v-text-field>
@@ -224,9 +233,11 @@
   import GooglePlaceInput from './GooglePlaceInput'
   import TimeInput from './TimeInput'
   import DateInput from './DateInput'
+  import ConnectionManager from './ConnectionManager'
 
   export default {
     components: {
+      ConnectionManager,
       DateInput,
       TimeInput,
       GooglePlaceInput
@@ -317,6 +328,9 @@
       }
     },
     methods: {
+      onConnectionChange (connecting) {
+        this.connecting = connecting
+      },
       removeParticipant (participant) {
         this.participants.splice(this.participants.indexOf(participant), 1)
         this.participants = [...this.participants]
@@ -334,6 +348,7 @@
       onLocationEntered (addressData, placeResultData) {
         this.addressData = addressData
         this.placeResultData = placeResultData
+        this.venue = placeResultData.formatted_address
       },
       validate () {
         let pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
@@ -342,7 +357,7 @@
 
         for (let participant of this.participants) {
 
-          if (participant.email && !pattern.test(participant.email)) {
+          if (participant.email && pattern.test(participant.email)) {
             participant.errors.email = []
           } else {
             participant.errors.email = ['Enter a valid email address']
@@ -354,7 +369,7 @@
             participant.errors.phone = ['Enter a valid phone number']
           }
 
-          if (participant.email && !pattern.test(participant.email)
+          if (participant.email && pattern.test(participant.email)
             && participant.phone
             && ('' + participant.phone).length === 10) {
             validParticipants++
@@ -390,16 +405,29 @@
             endDate: this.endDate,
             endTime: this.endTime,
             allDay: this.allDay,
+            note: this.allDay,
             participants: []
           }
 
           for (let participant of this.participants) {
-            appointment.push({
+            appointment.participants.push({
               email: participant.email,
               phone: participant.phone,
             })
           }
           this.$utils.log(appointment)
+
+          this.$refs.connectionManager.store('appointments', {
+            venue: appointment.venue,
+            with: appointment.with,
+            title: appointment.title,
+            startDate: appointment.startDate,
+            startTime: appointment.startTime,
+            endDate: appointment.endDate,
+            endTime: appointment.endTime,
+            allDay: appointment.allDay,
+            participants: appointment.participants
+          })
         }
       }
     }
