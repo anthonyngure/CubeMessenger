@@ -16,6 +16,12 @@
         </v-toolbar-items>-->
         <v-spacer></v-spacer>
         <v-toolbar-items v-if="$auth.check()">
+
+            <v-btn color="accent" small flat to="cart" v-if="$route.name === 'shopping'">
+                <v-icon color="accent">shopping_cart</v-icon>
+                0 items
+            </v-btn>
+
             <v-menu origin="center center"
                     transition="scale-transition"
                     bottom
@@ -46,23 +52,23 @@
 
 <script>
 
-    export default {
-        name: 'toolbar',
-        methods: {
-            signOut () {
-                this.$auth.logout({
-                    success () {
-                        console.log('SignOut success')
-                        this.$vuetify.theme.primary = this.$utils.primaryColor
-                        this.$vuetify.theme.accent = this.$utils.accentColor
-                    },
-                    error () {
-                        console.log('SignOut failed')
-                    }
-                })
-            },
-        }
+  export default {
+    name: 'toolbar',
+    methods: {
+      signOut () {
+        this.$auth.logout({
+          success () {
+            console.log('SignOut success')
+            this.$vuetify.theme.primary = this.$utils.primaryColor
+            this.$vuetify.theme.accent = this.$utils.accentColor
+          },
+          error () {
+            console.log('SignOut failed')
+          }
+        })
+      },
     }
+  }
 </script>
 
 <style scoped>

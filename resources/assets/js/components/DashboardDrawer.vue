@@ -59,34 +59,24 @@
 </template>
 
 <script>
-    export default {
-        name: 'dashboard-drawer',
-        data () {
-            return {
-                drawerOpen: true,
-                items: [
-                    {icon: 'dashboard', title: 'Dashboard', route: 'dashboard'},
-                    {icon: 'date_range', title: 'Subscriptions', route: 'subscriptions'},
-                    {icon: 'date_range', title: 'Appointments', route: 'appointments'},
-                    //{icon: 'folder', title: 'Documents', route: 'documents'},
-                    {icon: 'shopping_basket', title: 'Shopping', route: 'shopping'},
-                    {icon: 'computer', title: 'IT', route: 'it'},
-                    {icon: 'build', title: 'Repairs', route: 'repairs'},
-                    {
-                        icon: 'local_shipping',
-                        title: 'Courier',
-                        route: 'courier',
-                        /*model: false,
-                        children: [
-                            {icon: 'add', title: 'Add Delivery', route: 'courier'},
-                            {icon: 'history', title: 'Delivery History', route: 'deliveryHistory'}
-                        ]*/
-                    },
-                    {icon: 'settings', title: 'Settings', route: 'settings'},
-                ]
-            }
-        }
+  export default {
+    name: 'dashboard-drawer',
+    data () {
+      return {
+        drawerOpen: true,
+        items: [
+          {icon: 'dashboard', title: 'Dashboard', route: 'dashboard'},
+          {icon: 'date_range', title: 'Subscriptions', route: 'subscriptions'},
+          {icon: 'date_range', title: 'Appointments', route: 'appointments'},
+          //{icon: 'folder', title: 'Documents', route: 'documents'},
+          {icon: 'shopping_basket', title: 'Shopping', route: 'shopping'},
+          {icon: 'computer', title: 'IT', route: 'it'},
+          {icon: 'build', title: 'Repairs', route: 'repairs'},
+          {icon: 'local_shipping', title: 'Courier', route: 'courier'},
+        ]
+      }
     }
+  }
 </script>
 
 <style scoped>

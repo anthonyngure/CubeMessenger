@@ -4,6 +4,7 @@ import Appointments from '../components/Appointments.vue'
 import Subscriptions from '../components/Subscriptions.vue'
 import SignIn from '../components/SignIn.vue'
 import Dashboard from '../components/Dashboard.vue'
+import Shopping from '../components/Shopping.vue'
 import Vue from 'vue'
 import Router from 'vue-router'
 
@@ -40,7 +41,7 @@ export default new Router({
 			meta: {auth: true},
 			path: '/shopping',
 			name: 'shopping',
-			component: ComingSoon
+			component: Shopping
 		},
 		{
 			meta: {auth: true},

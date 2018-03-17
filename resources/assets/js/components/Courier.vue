@@ -1,60 +1,24 @@
 <template>
     <v-layout row wrap>
-        <v-flex xs12 class="pt-3">
-            <v-card tile flat>
-                <v-toolbar color="primary" flat dense dark tabs>
-                    <v-toolbar-side-icon></v-toolbar-side-icon>
-                    <v-toolbar-title>Deliveries</v-toolbar-title>
-                    <v-spacer></v-spacer>
-                    <v-toolbar-items>
-                        <v-btn flat @click.native="addingDelivery = true">
-                            <v-icon class="mr-3">add</v-icon>
-                            Add a Delivery
-                        </v-btn>
-                    </v-toolbar-items>
-                    <v-menu :nudge-width="100">
-                        <v-toolbar-title slot="activator">
-                            <span>{{month}}</span>
-                            <v-icon dark>arrow_drop_down</v-icon>
-                        </v-toolbar-title>
-                        <v-date-picker type="month"
-                                       color="green lighten-1"
-                                       header-color="primary"
-                                       :min="minMonth"
-                                       :max="maxMonth"
-                                       v-model="month">
-                        </v-date-picker>
-                    </v-menu>
-                    <v-btn icon @click="loadDeliveries">
-                        <v-icon>refresh</v-icon>
-                    </v-btn>
-                    <v-menu offset-y>
-                        <v-btn icon slot="activator">
-                            <v-icon>more_vert</v-icon>
-                        </v-btn>
-                        <v-list dense>
-                            <v-list-tile @click="loadDeliveries">Refresh</v-list-tile>
-                        </v-list>
-                    </v-menu>
+        <v-flex xs12>
+            <v-card>
+                <v-card-text>
                     <v-tabs
                             fixed-tabs
                             v-model="currentItem"
-                            color="transparent"
-                            slider-color="yellow"
-                            grow
-                            slot="extension">
+                            color="white"
+                            slider-color="accent"
+                            grow>
                         <v-tab href="#pending">Pending Deliveries</v-tab>
                         <v-tab href="#complete">Complete Deliveries</v-tab>
                     </v-tabs>
-                </v-toolbar>
-                <v-card-text>
-                    <v-layout v-if="connecting" row justify-center align-center>
+                    <v-layout v-if="connecting" mt-4 row justify-center align-center>
                         <v-progress-circular v-if="connecting" indeterminate v-bind:size="36" color="primary">
                         </v-progress-circular>
                         <v-subheader v-if="connecting" class="mt-2">Updating...</v-subheader>
                         <p v-if="!connecting && !items.length">Nothing found...</p>
                     </v-layout>
-                    <v-layout v-else row wrap>
+                    <v-layout v-else mt-4 row wrap>
                         <v-flex xs12>
                             <v-data-iterator
                                     content-tag="v-expansion-panel"
@@ -84,7 +48,7 @@
                                                 small color="primary" text-color="white">
                                             <v-avatar :size="24">
                                                 <img style="max-height: 24px; max-width: 24px"
-                                                     :src="'/storage/'+stat.courierOption.icon"
+                                                     :src="$utils.imageUrl(stat.courierOption.icon)"
                                                      :alt="stat.courierOption.name">
                                             </v-avatar>
                                             <b>{{stat.count}} {{stat.count > 1 ? stat.courierOption.pluralName :
@@ -159,6 +123,20 @@
             </v-dialog>
             <delivery-item-q-r-dialog :item="printingItem" @onClose="printingItem = null"></delivery-item-q-r-dialog>
         </v-flex>
+
+        <v-fab-transition>
+            <v-btn class="ma-3"
+                   color="accent"
+                   fab
+                   dark
+                   fixed
+                   bottom
+                   @click.native="addingDelivery = true"
+                   right>
+                <v-icon>add</v-icon>
+            </v-btn>
+        </v-fab-transition>
+
 
     </v-layout>
 </template>

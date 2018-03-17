@@ -54,6 +54,8 @@
 			Route::resource('deliveries.items', 'DeliveryItemController');
 			Route::resource('subscriptions', 'SubscriptionController');
 			Route::resource('appointments', 'AppointmentController');
+			Route::resource('shopProducts', 'ShopProductController');
+			Route::resource('shopCategories', 'ShopCategoryController');
 		});
 		
 	});

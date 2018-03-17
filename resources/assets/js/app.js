@@ -10,6 +10,8 @@ import router from './router'
 import Vuetify from 'vuetify'
 import VueTimeago from 'vue-timeago'
 import formatCurrency from 'format-currency'
+import 'vue-event-calendar/dist/style.css' //^1.1.10, CSS has been extracted as one file, so you can easily update it.
+import vueEventCalendar from 'vue-event-calendar'
 
 const DEBUG = false
 
@@ -20,8 +22,6 @@ const ACCENT_COLOR = '#F50057'
 
 Vue.router = router
 
-import 'vue-event-calendar/dist/style.css' //^1.1.10, CSS has been extracted as one file, so you can easily update it.
-import vueEventCalendar from 'vue-event-calendar'
 Vue.use(vueEventCalendar, {locale: 'en'}) //locale can be 'zh' , 'en' , 'es', 'pt-br', 'ja', 'ko', 'fr', 'it', 'ru', 'de', 'vi', 'ua'
 
 
@@ -111,6 +111,12 @@ Vue.prototype.$utils = {
   googleDirectionsUrl: 'https://maps.googleapis.com/maps/api/directions/json',
   log: function (logData) {
     console.info(logData)
+  },
+  imageUrl (relativePath) {
+    return '/storage/' + relativePath
+  },
+  dummyImage () {
+    return `https://unsplash.it/150/300?image=${Math.floor(Math.random() * 100) + 1}`
   },
   formatMoney: function (estimatedCost) {
     let opts = {format: '%s%v', symbol: 'KES '}

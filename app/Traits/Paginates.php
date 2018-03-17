@@ -9,6 +9,7 @@
 	namespace App\Traits;
 	
 	
+	use Fractal;
 	use Illuminate\Database\Eloquent\Collection;
 	use Illuminate\Http\Request;
 	use League\Fractal\TransformerAbstract;
@@ -35,6 +36,31 @@
 		 */
 		private $recent;
 		
+		/**
+		 * @param \Illuminate\Http\Request                 $request
+		 * @param                                          $builder
+		 * @param \League\Fractal\TransformerAbstract|null $transformer
+		 * @return \Illuminate\Http\Response
+		 */
+		protected function paginate(Request $request, $builder, TransformerAbstract $transformer = null)
+		{
+			$this->readCursors($request);
+			$this->addCursors($builder);
+			
+			$data = $builder->take($this->perPage)->get();
+			
+			$nextCursors = $this->buildNextCursors($data);
+			
+			if (!is_null($transformer)) {
+				$data = Fractal::collection($data, $transformer)->toArray()['data'];
+			} else {
+				$data = $data->toArray();
+			}
+			
+			
+			return response()->json(array('cursors' => $nextCursors, 'data' => $data), 200);
+			
+		}
 		
 		private function readCursors(Request $request)
 		{
@@ -68,7 +94,8 @@
 					$builder->orderBy('id', 'desc');
 				}
 				
-			} /*
+			}
+			/*
              * Loading data added before what the user is seeing
              */
 			else {
@@ -104,26 +131,5 @@
 				'before' => (is_null($minId) ? (int)$this->before : (int)$minId),
 				'after'  => (is_null($maxId) ? (int)$this->after : (int)$maxId),
 			);
-		}
-		
-		/**
-		 * @param \Illuminate\Http\Request            $request
-		 * @param                                     $builder
-		 * @param \League\Fractal\TransformerAbstract $transformerAbstract
-		 * @return \Illuminate\Http\Response
-		 */
-		protected function paginate(Request $request, $builder, TransformerAbstract $transformerAbstract)
-		{
-			$this->readCursors($request);
-			$this->addCursors($builder);
-			
-			$data = $builder->take($this->perPage)->get();
-			
-			$nextCursors = $this->buildNextCursors($data);
-			
-			$meta = ['cursors' => $nextCursors];
-			
-			return $this->collectionResponse($data, $transformerAbstract, $meta);
-			
 		}
 	}

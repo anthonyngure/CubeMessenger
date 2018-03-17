@@ -1,74 +1,83 @@
 <template>
     <v-layout row wrap>
         <v-flex xs12>
-            <v-tabs fixed-tabs
-                    dark
-                    v-model="currentItem"
-                    color="primary"
-                    grow>
-                <v-tab v-for="(subscriptionType, index) in subscriptionTypes"
-                       :key="index"
-                       :href="`#${subscriptionType.name}`">
-                    {{subscriptionType.name}}
-                </v-tab>
-            </v-tabs>
-            <v-data-table
-                    :headers="headers"
-                    :items="subscriptionItems"
-                    hide-actions
-                    class="elevation-2">
-                <template slot="items" slot-scope="props">
-                    <td>{{ props.item.name }}</td>
-                    <td class="text-xs-center">{{ props.item.clientSubscription ? props.item.clientSubscription.quantity
-                        : 0 }}
-                    </td>
-                    <td class="text-xs-center">
-                        <div v-if="props.item.clientSubscription">
-                            <template v-for="(schedule, index) in props.item.clientSubscription.subscriptionSchedules">
-                                <span :key="index">{{schedule.name}}</span>
-                                <span v-if="index !== (props.item.clientSubscription.subscriptionSchedules.length - 1)"
-                                      :key="index+props.item.clientSubscription.subscriptionSchedules.length">,</span>
-                            </template>
-                        </div>
-                        <div v-else>N/A</div>
-                    </td>
-                    <td class="text-xs-center">{{ props.item.clientSubscription ?
-                        props.item.clientSubscription.createdAt
-                        : 'N/A' }}
-                    </td>
-                    <td class="text-xs-center">{{ props.item.clientSubscription ? 0
-                        : 0 }}
-                    </td>
-                    <td class="text-xs-center">KES. {{ props.item.clientSubscription ? 0
-                        : 0 }}
-                    </td>
-                    <td class="text-xs-center">
-                        <v-layout row wrap>
-                            <v-flex d-inline xs12 v-if="props.item.clientSubscription">
-                                <v-btn flat icon color="red"
-                                       @click.native="unsubscribe(props.item)"
-                                       :loading="unSubscribing === props.item.id"
-                                       :disabled="unSubscribing > 0">
-                                    <span slot="loader">Removing...</span>
-                                    <v-icon>delete_forever</v-icon>
-                                </v-btn>
-                                <v-btn @click.native="editItem = props.item"
-                                       :disabled="unSubscribing > 0"
-                                       flat icon color="primary">
-                                    <v-icon>edit</v-icon>
-                                </v-btn>
-                            </v-flex>
-                            <v-flex xs12 v-if="!props.item.clientSubscription">
-                                <v-btn @click.native="subscribeItem = props.item"
-                                       :disabled="unSubscribing > 0"
-                                       small outline color="primary">
-                                    Subscribe
-                                </v-btn>
-                            </v-flex>
-                        </v-layout>
-                    </td>
-                </template>
-            </v-data-table>
+            <v-card>
+                <v-card-text>
+                    <connection-manager ref="connectionManager"
+                                        @onSuccess="onConnectionManagerSuccess">
+                    </connection-manager>
+                    <v-tabs fixed-tabs
+                            v-model="currentItem"
+                            color="white"
+                            slider-color="accent"
+                            lazy
+                            grow>
+                        <v-tab v-for="(subscriptionType, index) in subscriptionTypes"
+                               :key="index"
+                               :href="`#${subscriptionType.name}`">
+                            {{subscriptionType.name}}
+                        </v-tab>
+                    </v-tabs>
+                    <v-data-table
+                            :headers="headers"
+                            :items="subscriptionItems"
+                            hide-actions>
+                        <template slot="items" slot-scope="props">
+                            <td>{{ props.item.name }}</td>
+                            <td class="text-xs-center">{{ props.item.clientSubscription ?
+                                props.item.clientSubscription.quantity
+                                : 0 }}
+                            </td>
+                            <td class="text-xs-center">
+                                <div v-if="props.item.clientSubscription">
+                                    <template
+                                            v-for="(schedule, index) in props.item.clientSubscription.subscriptionSchedules">
+                                        <span :key="index">{{schedule.name}}</span>
+                                        <span v-if="index !== (props.item.clientSubscription.subscriptionSchedules.length - 1)"
+                                              :key="index+props.item.clientSubscription.subscriptionSchedules.length">,</span>
+                                    </template>
+                                </div>
+                                <div v-else>N/A</div>
+                            </td>
+                            <td class="text-xs-center">{{ props.item.clientSubscription ?
+                                props.item.clientSubscription.createdAt
+                                : 'N/A' }}
+                            </td>
+                            <td class="text-xs-center">{{ props.item.clientSubscription ? 0
+                                : 0 }}
+                            </td>
+                            <td class="text-xs-center">KES. {{ props.item.clientSubscription ? 0
+                                : 0 }}
+                            </td>
+                            <td class="text-xs-center">
+                                <v-layout row wrap>
+                                    <v-flex d-inline xs12 v-if="props.item.clientSubscription">
+                                        <v-btn flat icon color="red"
+                                               @click.native="unsubscribe(props.item)"
+                                               :loading="unSubscribing === props.item.id"
+                                               :disabled="unSubscribing > 0">
+                                            <span slot="loader">Removing...</span>
+                                            <v-icon>delete_forever</v-icon>
+                                        </v-btn>
+                                        <v-btn @click.native="editItem = props.item"
+                                               :disabled="unSubscribing > 0"
+                                               flat icon color="primary">
+                                            <v-icon>edit</v-icon>
+                                        </v-btn>
+                                    </v-flex>
+                                    <v-flex xs12 v-if="!props.item.clientSubscription">
+                                        <v-btn @click.native="subscribeItem = props.item"
+                                               :disabled="unSubscribing > 0"
+                                               small outline color="primary">
+                                            Subscribe
+                                        </v-btn>
+                                    </v-flex>
+                                </v-layout>
+                            </td>
+                        </template>
+                    </v-data-table>
+                </v-card-text>
+            </v-card>
         </v-flex>
         <v-flex xs12>
             <subscription-dialog :subscribeItem="subscribeItem"
@@ -86,9 +95,11 @@
 <script>
   import SubscriptionDialog from './SubscriptionDialog'
   import EditSubscriptionDialog from './EditSubscriptionDialog'
+  import ConnectionManager from './ConnectionManager'
 
   export default {
     components: {
+      ConnectionManager,
       EditSubscriptionDialog,
       SubscriptionDialog
     },
@@ -166,20 +177,12 @@
             this.unSubscribing = 0
           })
       },
-      loadSubscriptions () {
-        this.connecting = true
-        this.axios.get('/subscriptions').then(response => {
-          this.connecting = false
-          this.$utils.log(response)
-          this.subscriptionTypes = []
-          for (let item of response.data.data.subscriptionTypes) {
-            this.subscriptionTypes.push(item)
-          }
-          this.subscriptionSchedules = response.data.data.subscriptionSchedules
-          this.currentItem = this.subscriptionTypes[0].name
-        }).catch(error => {
-          this.connecting = false
-        })
+      onConnectionManagerSuccess (response) {
+        this.$utils.log(response)
+        this.subscriptionTypes = []
+        this.subscriptionTypes = this.subscriptionTypes.concat(response.data.data.subscriptionTypes)
+        this.subscriptionSchedules = response.data.data.subscriptionSchedules
+        this.currentItem = this.subscriptionTypes[0].name
       },
       updateSubscriptionItem (subscriptionItem) {
         if (subscriptionItem) {
@@ -208,7 +211,7 @@
       }
     },
     mounted () {
-      this.loadSubscriptions()
+      this.$refs.connectionManager.index('subscriptions')
     }
   }
 </script>

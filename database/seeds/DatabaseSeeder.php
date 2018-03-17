@@ -37,6 +37,8 @@
 			$this->call(SubscriptionTypesTableSeeder::class);
 			$this->call(SubscriptionSchedulesTableSeeder::class);
 			$this->call(SubscriptionItemsTableSeeder::class);
+			$this->call(ShopCategoriesTableSeeder::class);
+			$this->call(ShopProductsTableSeeder::class);
 			
 		}
 	}
