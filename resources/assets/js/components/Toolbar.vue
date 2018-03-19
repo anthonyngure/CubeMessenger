@@ -7,6 +7,12 @@
         <v-toolbar-title>
             <span>{{$auth.check() && $auth.user().client ? $auth.user().client.name : $appName}}</span>
         </v-toolbar-title>
+        <v-toolbar-items v-if="$auth.check()">
+            <v-btn flat to="documents">
+                <v-icon left>circle_check</v-icon>
+                {{$route.name}}
+            </v-btn>
+        </v-toolbar-items>
         <!--<v-toolbar-items v-if="$auth.check() && $auth.user().client">
             <v-btn flat to="dashboard">Dashboard</v-btn>
             <v-btn flat to="courier">Courier</v-btn>

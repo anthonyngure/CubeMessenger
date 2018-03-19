@@ -11,8 +11,6 @@ import Vuetify from 'vuetify'
 import VueTimeago from 'vue-timeago'
 import formatCurrency from 'format-currency'
 import 'vue-event-calendar/dist/style.css' //^1.1.10, CSS has been extracted as one file, so you can easily update it.
-import vueEventCalendar from 'vue-event-calendar'
-
 const DEBUG = false
 
 const GOOGLE_MAPS_KEY = 'AIzaSyAS_9BsQpqTP8EVuMZ7rQ9gMCl0wmqhm7k'
@@ -21,9 +19,6 @@ const ACCENT_COLOR = '#F50057'
 
 
 Vue.router = router
-
-Vue.use(vueEventCalendar, {locale: 'en'}) //locale can be 'zh' , 'en' , 'es', 'pt-br', 'ja', 'ko', 'fr', 'it', 'ru', 'de', 'vi', 'ua'
-
 
 Vue.use(VueAxios, axios)
 //Vue.axios.defaults.baseURL = DEBUG ? 'http://localhost:3000/api/v1' : 'https://cube-messenger.com/api/v1'

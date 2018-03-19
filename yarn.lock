@@ -7824,12 +7824,6 @@ vue-chartjs@^3.2.1:
   version "3.2.1"
   resolved "https://registry.yarnpkg.com/vue-chartjs/-/vue-chartjs-3.2.1.tgz#8fd207e7f09a6bf13d86026071f598c4c2ff1f68"
 
-vue-event-calendar@^1.5.2:
-  version "1.5.2"
-  resolved "https://registry.yarnpkg.com/vue-event-calendar/-/vue-event-calendar-1.5.2.tgz#4ed7e85073aa203558e931e04e0cd832e9db0b95"
-  dependencies:
-    vue "^2.1.8"
-
 vue-fullcalendar@^1.0.5, vue-fullcalendar@^1.0.9:
   version "1.0.9"
   resolved "https://registry.yarnpkg.com/vue-fullcalendar/-/vue-fullcalendar-1.0.9.tgz#a853bb25946252277533b9994ef503cfacb01233"

@@ -5,6 +5,8 @@ import Subscriptions from '../components/Subscriptions.vue'
 import SignIn from '../components/SignIn.vue'
 import Dashboard from '../components/Dashboard.vue'
 import Shopping from '../components/Shopping.vue'
+import ItServices from '../components/ItServices'
+import RepairServices from '../components/RepairServices'
 import Vue from 'vue'
 import Router from 'vue-router'
 
@@ -76,13 +78,13 @@ export default new Router({
 			meta: {auth: true},
 			path: '/repairs',
 			name: 'repairs',
-			component: ComingSoon
+			component: RepairServices
 		},
 		{
 			meta: {auth: true},
 			path: '/it',
 			name: 'it',
-			component: ComingSoon
+			component: ItServices
 		}
 	]
 })

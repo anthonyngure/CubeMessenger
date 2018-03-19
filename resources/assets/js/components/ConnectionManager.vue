@@ -23,7 +23,7 @@
     name: 'connection-manager',
     data () {
       return {
-        connecting: false,
+        connecting: true,
         error: false,
         errorText: null,
       }
@@ -62,11 +62,15 @@
             this.connecting = false
             this.$emit('onSuccess', response)
             this.$utils.log(response)
-          }).catch(error => {
-          this.error = true
-          this.$emit('onError', error)
-          this.$utils.log(error)
-        })
+          })
+          .catch(error => {
+            if (error.response) {
+              this.errorText = error.response.data.meta.message
+            }
+            this.error = true
+            this.$emit('onError', error)
+            this.$utils.log(error)
+          })
       }
     }
   }

@@ -70,8 +70,8 @@
           {icon: 'date_range', title: 'Appointments', route: 'appointments'},
           //{icon: 'folder', title: 'Documents', route: 'documents'},
           {icon: 'shopping_basket', title: 'Shopping', route: 'shopping'},
-          {icon: 'computer', title: 'IT', route: 'it'},
-          {icon: 'build', title: 'Repairs', route: 'repairs'},
+          {icon: 'computer', title: 'IT Services', route: 'it'},
+          {icon: 'build', title: 'Repair Services', route: 'repairs'},
           {icon: 'local_shipping', title: 'Courier', route: 'courier'},
         ]
       }

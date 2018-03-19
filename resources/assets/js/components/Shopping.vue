@@ -29,7 +29,7 @@
 
                     <v-container fluid grid-list-md>
                         <v-layout row wrap>
-                            <v-flex xs4 v-for="(product, n) in products" :key="n">
+                            <v-flex xs3 v-for="(product, n) in products" :key="n">
                                 <v-card>
                                     <v-card-media
                                             :src="$utils.imageUrl(product.image)"
@@ -89,7 +89,7 @@
         products: [],
         before: 0,
         after: 0,
-        perPage: 6,
+        perPage: 8,
         recent: true,
         distance: 10
       }

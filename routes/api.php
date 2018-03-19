@@ -56,6 +56,8 @@
 			Route::resource('appointments', 'AppointmentController');
 			Route::resource('shopProducts', 'ShopProductController');
 			Route::resource('shopCategories', 'ShopCategoryController');
+			Route::resource('serviceRequests', 'ServiceRequestController');
+			Route::resource('serviceRequestOptions', 'ServiceRequestOptionController');
 		});
 		
 	});
