@@ -16,24 +16,15 @@
 		public function index(Request $request)
 		{
 			//
-			sleep(2);
 			$this->validate($request, [
 				'filter' => 'required|in:new,pending,complete',
+				'type'   => 'required|in:it,repair',
 			]);
 			
-			$services = ServiceRequest::all();
+			$services = ServiceRequest::whereStatus(strtoupper($request->filter))
+				->whereType(strtoupper($request->type))->get();
 			
 			return $this->collectionResponse($services);
-		}
-		
-		/**
-		 * Show the form for creating a new resource.
-		 *
-		 * @return \Illuminate\Http\Response
-		 */
-		public function create()
-		{
-			//
 		}
 		
 		/**
@@ -41,10 +32,29 @@
 		 *
 		 * @param  \Illuminate\Http\Request $request
 		 * @return \Illuminate\Http\Response
+		 * @throws \App\Exceptions\WrappedException
 		 */
 		public function store(Request $request)
 		{
 			//
+			sleep(3);
+			$this->validate($request, [
+				'details' => 'required',
+				'type'    => 'required|in:it,repair',
+			]);
+			
+			$client = $this->getClient();
+			
+			$serviceRequest = ServiceRequest::create([
+				'client_id'     => $client->getKey(),
+				'schedule_date' => empty($request->scheduleDate) ? date("Y-m-d H:i:s") : $request->scheduleDate,
+				'schedule_time' => empty($request->scheduleTime) ? date("H:i:s") : $request->scheduleTime,
+				'note'          => $request->note,
+				'type'          => $request->type === 'it' ? 'IT' : 'REPAIR',
+				'details'       => implode('#', $request->details),
+			]);
+			
+			return $this->itemCreatedResponse($serviceRequest);
 		}
 		
 		/**

@@ -1,5 +1,5 @@
 <template>
-    <service-requests type="it"></service-requests>
+    <service-requests type="repair"></service-requests>
 </template>
 
 <script>

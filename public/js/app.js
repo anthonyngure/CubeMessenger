@@ -4406,6 +4406,86 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 
 /***/ }),
 
+/***/ "./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}]],\"plugins\":[\"transform-object-rest-spread\",[\"transform-runtime\",{\"polyfill\":false,\"helpers\":false}]]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/js/components/AddToCartDialog.vue":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  name: 'add-to-cart-dialog',
+  props: {
+    product: {
+      required: true
+    }
+  },
+  watch: {
+    product: function product(val) {
+      this.dialog = !!val;
+    }
+  },
+  data: function data() {
+    return {
+      dialog: false,
+      quantity: false
+    };
+  }
+});
+
+/***/ }),
+
 /***/ "./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}]],\"plugins\":[\"transform-object-rest-spread\",[\"transform-runtime\",{\"polyfill\":false,\"helpers\":false}]]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/js/components/Appointments.vue":
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -4713,7 +4793,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
   name: 'connection-manager',
   data: function data() {
     return {
-      connecting: true,
+      connecting: false,
       error: false,
       errorText: null
     };
@@ -7383,6 +7463,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__ConnectionManager__ = __webpack_require__("./resources/assets/js/components/ConnectionManager.vue");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__ConnectionManager___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__ConnectionManager__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__DateInput__ = __webpack_require__("./resources/assets/js/components/DateInput.vue");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__DateInput___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__DateInput__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__TimeInput__ = __webpack_require__("./resources/assets/js/components/TimeInput.vue");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__TimeInput___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__TimeInput__);
 //
 //
 //
@@ -7426,16 +7510,70 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
 
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-  components: { ConnectionManager: __WEBPACK_IMPORTED_MODULE_0__ConnectionManager___default.a },
+  components: {
+    TimeInput: __WEBPACK_IMPORTED_MODULE_2__TimeInput___default.a,
+    DateInput: __WEBPACK_IMPORTED_MODULE_1__DateInput___default.a,
+    ConnectionManager: __WEBPACK_IMPORTED_MODULE_0__ConnectionManager___default.a
+  },
   name: 'service-request-dialog',
   props: {
     show: {
       type: Boolean,
       required: true
+    },
+    type: {
+      type: String,
+      required: true,
+      validator: function validator(value) {
+        return value === 'it' || value === 'repair';
+      }
+    }
+  },
+  computed: {
+    formIsValid: function formIsValid() {
+      return this.select.length > 0;
+    },
+    detailsHint: function detailsHint() {
+      return this.type === 'it' ? 'Hit \'Enter\' to write multiple issues or select from the suggestions, e.g Computer is slow' : 'Hit \'Enter\' to write multiple issues or select from the suggestions, e.g A broken chair or wall painting';
+    },
+    detailsLabel: function detailsLabel() {
+      return this.type === 'it' ? 'What issues you have noticed' : 'What repairs do you need';
     }
   },
   watch: {
@@ -7449,24 +7587,42 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
   data: function data() {
     return {
       dialog: false,
+      connecting: false,
       serviceOptions: [],
       note: null,
       select: [],
       loading: false,
       items: [],
-      search: null
+      search: null,
+      scheduleDate: null,
+      scheduleTime: null
     };
   },
 
   methods: {
-    submit: function submit() {},
-    querySelections: function querySelections(v) {
+    onConnectionManagerSuccess: function onConnectionManagerSuccess(response) {
+      this.$emit('onClose', true);
+    },
+    submit: function submit() {
+      var serviceRequest = {
+        scheduleDate: this.scheduleDate,
+        scheduleTime: this.scheduleTime,
+        note: this.note,
+        type: this.type,
+        details: this.select
+      };
+
+      this.$utils.log(serviceRequest);
+      this.$refs.connectionManager.store('serviceRequests', serviceRequest);
+    },
+    querySelections: function querySelections(val) {
       var _this = this;
 
       this.loading = true;
       this.axios.get('serviceRequestOptions', {
         params: {
-          search: v
+          search: val,
+          type: this.type
         }
       }).then(function (response) {
         _this.items = [];
@@ -7584,6 +7740,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
 
 
 
@@ -7599,28 +7756,50 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       type: String,
       required: true,
       validator: function validator(value) {
-        return value === 'it' || value === 'repairs';
+        return value === 'it' || value === 'repair';
       }
     }
   },
   data: function data() {
     return {
       currentItem: null,
+      loading: false,
       addingServiceRequest: false,
-      headers: [{ text: 'ID', value: 'id' }, { text: 'Description', value: 'description' }, { text: 'Assigned To', value: 'assignedTo' }, { text: 'Cost', value: 'cost' }, { text: 'Date Added', value: 'createdAt' }, { text: 'Scheduled Date', value: 'scheduledDate' }, { text: 'Scheduled Time', value: 'scheduledTime' }],
+      headers: [{ text: 'ID', value: 'id' }, { text: 'Details', value: 'details' }, { text: 'Assigned To', value: 'assignedTo' }, { text: 'Cost', value: 'cost' }, { text: 'Scheduled Date', value: 'scheduleDate' }, { text: 'Scheduled Time', value: 'scheduleTime' }],
       serviceRequests: []
     };
   },
 
   watch: {
-    currentItem: function currentItem(_currentItem) {
-      if (_currentItem) {
-        this.$refs.connectionManager.index('serviceRequests', { filter: _currentItem });
+    currentItem: function currentItem(val) {
+      if (val) {
+        this.serviceRequests = [];
+        this.loading = true;
+        this.$refs.connectionManager.index('serviceRequests', {
+          filter: this.currentItem,
+          type: this.type
+        });
       }
     }
   },
   methods: {
-    onConnectionManagerSuccess: function onConnectionManagerSuccess(response) {}
+    onCloseAddingServiceRequest: function onCloseAddingServiceRequest(successful) {
+      this.addingServiceRequest = false;
+      this.currentItem = 'new';
+      this.$utils.log(successful);
+      if (successful) {
+        this.serviceRequests = [];
+        this.loading = true;
+        this.$refs.connectionManager.index('serviceRequests', {
+          filter: this.currentItem,
+          type: this.type
+        });
+      }
+    },
+    onConnectionManagerSuccess: function onConnectionManagerSuccess(response) {
+      this.serviceRequests = this.serviceRequests.concat(response.data.data);
+      this.loading = false;
+    }
   },
   mounted: function mounted() {
     this.currentItem = 'new';
@@ -7634,10 +7813,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__ConnectionManager__ = __webpack_require__("./resources/assets/js/components/ConnectionManager.vue");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__ConnectionManager___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__ConnectionManager__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vue_infinite_loading__ = __webpack_require__("./node_modules/vue-infinite-loading/dist/vue-infinite-loading.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vue_infinite_loading___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_vue_infinite_loading__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__event_bus__ = __webpack_require__("./resources/assets/js/event-bus.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__ConnectionManager__ = __webpack_require__("./resources/assets/js/components/ConnectionManager.vue");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__ConnectionManager___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__ConnectionManager__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_vue_infinite_loading__ = __webpack_require__("./node_modules/vue-infinite-loading/dist/vue-infinite-loading.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_vue_infinite_loading___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_vue_infinite_loading__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__AddToCartDialog__ = __webpack_require__("./resources/assets/js/components/AddToCartDialog.vue");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__AddToCartDialog___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3__AddToCartDialog__);
 //
 //
 //
@@ -7715,15 +7897,28 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+
+
 
 
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-  components: { ConnectionManager: __WEBPACK_IMPORTED_MODULE_0__ConnectionManager___default.a, InfiniteLoading: __WEBPACK_IMPORTED_MODULE_1_vue_infinite_loading___default.a },
+  components: {
+    AddToCartDialog: __WEBPACK_IMPORTED_MODULE_3__AddToCartDialog___default.a,
+    ConnectionManager: __WEBPACK_IMPORTED_MODULE_1__ConnectionManager___default.a, InfiniteLoading: __WEBPACK_IMPORTED_MODULE_2_vue_infinite_loading___default.a
+  },
   name: 'shopping',
   data: function data() {
     return {
+      selectedProduct: null,
       currentTab: null,
       categories: [],
       products: [],
@@ -7762,6 +7957,18 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     }
   },
   methods: {
+    onConfirmAddToCart: function onConfirmAddToCart(quantity) {
+      var that = this;
+      var item = this.products.find(function (element) {
+        return element.id === that.selectedProduct.id;
+      });
+      var index = this.products.indexOf(item);
+      item.isInCart = true;
+      item.quantity = quantity;
+      this.products[index] = item;
+      __WEBPACK_IMPORTED_MODULE_0__event_bus__["a" /* default */].$emit('onAddRemoveFromCart', item);
+      this.selectedProduct = null;
+    },
     onConnectionChange: function onConnectionChange(status) {},
     onConnectionManagerSuccess: function onConnectionManagerSuccess(response) {
       this.categories = this.categories.concat(response.data.data);
@@ -8109,202 +8316,203 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-	name: 'subscription-dialog',
-	props: {
-		subscribeItem: {
-			required: true
-		},
-		subscriptionSchedules: {
-			required: true
-		}
-	},
-	data: function data() {
-		return {
-			connecting: false,
-			error: null,
-			errorText: '',
-			dialog: false,
-			everydayCheckbox: true,
-			quantity: null
-		};
-	},
+  name: 'subscription-dialog',
+  props: {
+    subscribeItem: {
+      required: true
+    },
+    subscriptionSchedules: {
+      required: true
+    }
+  },
+  data: function data() {
+    return {
+      connecting: false,
+      error: null,
+      errorText: '',
+      dialog: false,
+      everydayCheckbox: true,
+      quantity: null
+    };
+  },
 
-	watch: {
-		subscribeItem: function subscribeItem(_subscribeItem) {
-			this.dialog = !!_subscribeItem;
-		},
-		everydayCheckbox: function everydayCheckbox(_everydayCheckbox) {
-			this.$utils.log('everydayCheckbox ' + _everydayCheckbox);
-			if (_everydayCheckbox) {
-				var _iteratorNormalCompletion = true;
-				var _didIteratorError = false;
-				var _iteratorError = undefined;
+  watch: {
+    subscribeItem: function subscribeItem(_subscribeItem) {
+      this.dialog = !!_subscribeItem;
+    },
+    everydayCheckbox: function everydayCheckbox(_everydayCheckbox) {
+      this.$utils.log('everydayCheckbox ' + _everydayCheckbox);
+      if (_everydayCheckbox) {
+        var _iteratorNormalCompletion = true;
+        var _didIteratorError = false;
+        var _iteratorError = undefined;
 
-				try {
-					for (var _iterator = this.subscriptionSchedules[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-						var weekday = _step.value;
+        try {
+          for (var _iterator = this.subscriptionSchedules[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+            var weekday = _step.value;
 
-						weekday.selected = false;
-					}
-				} catch (err) {
-					_didIteratorError = true;
-					_iteratorError = err;
-				} finally {
-					try {
-						if (!_iteratorNormalCompletion && _iterator.return) {
-							_iterator.return();
-						}
-					} finally {
-						if (_didIteratorError) {
-							throw _iteratorError;
-						}
-					}
-				}
-			}
-		},
+            weekday.selected = false;
+          }
+        } catch (err) {
+          _didIteratorError = true;
+          _iteratorError = err;
+        } finally {
+          try {
+            if (!_iteratorNormalCompletion && _iterator.return) {
+              _iterator.return();
+            }
+          } finally {
+            if (_didIteratorError) {
+              throw _iteratorError;
+            }
+          }
+        }
+      }
+    },
 
-		subscriptionSchedules: {
-			handler: function handler(after, before) {
-				// Return the object that changed
-				/*let changed = after.filter(function (p, idx) {
-    	return Object.keys(p).some(function (prop) {
-    		return p[prop] !== before[idx][prop]
-    	})
-    })
-    // Log it
-    console.log(changed)
-    */
-				this.$utils.log(this.subscriptionSchedules);
-				var selected = 0;
-				var _iteratorNormalCompletion2 = true;
-				var _didIteratorError2 = false;
-				var _iteratorError2 = undefined;
+    subscriptionSchedules: {
+      handler: function handler(after, before) {
+        // Return the object that changed
+        /*let changed = after.filter(function (p, idx) {
+            return Object.keys(p).some(function (prop) {
+                return p[prop] !== before[idx][prop]
+            })
+        })
+        // Log it
+        console.log(changed)
+        */
+        this.$utils.log(this.subscriptionSchedules);
+        var selected = 0;
+        var _iteratorNormalCompletion2 = true;
+        var _didIteratorError2 = false;
+        var _iteratorError2 = undefined;
 
-				try {
-					for (var _iterator2 = this.subscriptionSchedules[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
-						var weekday = _step2.value;
+        try {
+          for (var _iterator2 = this.subscriptionSchedules[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+            var weekday = _step2.value;
 
-						this.$utils.log('weekday = ' + weekday.name + ', selected = ' + weekday.selected);
-						if (weekday.selected) {
-							selected = selected + 1;
-						}
-					}
-				} catch (err) {
-					_didIteratorError2 = true;
-					_iteratorError2 = err;
-				} finally {
-					try {
-						if (!_iteratorNormalCompletion2 && _iterator2.return) {
-							_iterator2.return();
-						}
-					} finally {
-						if (_didIteratorError2) {
-							throw _iteratorError2;
-						}
-					}
-				}
+            this.$utils.log('weekday = ' + weekday.name + ', selected = ' + weekday.selected);
+            if (weekday.selected) {
+              selected = selected + 1;
+            }
+          }
+        } catch (err) {
+          _didIteratorError2 = true;
+          _iteratorError2 = err;
+        } finally {
+          try {
+            if (!_iteratorNormalCompletion2 && _iterator2.return) {
+              _iterator2.return();
+            }
+          } finally {
+            if (_didIteratorError2) {
+              throw _iteratorError2;
+            }
+          }
+        }
 
-				if (selected > 0 && this.everydayCheckbox) {
-					this.everydayCheckbox = false;
-				}
+        if (selected > 0 && this.everydayCheckbox) {
+          this.everydayCheckbox = false;
+        }
 
-				if (selected === 5 || selected === 0) {
-					this.everydayCheckbox = true;
-				}
-			},
-			deep: true
-		}
-	},
-	methods: {
-		reset: function reset() {
-			this.connecting = false;
-			this.quantity = null;
-			this.everydayCheckbox = true;
-			var _iteratorNormalCompletion3 = true;
-			var _didIteratorError3 = false;
-			var _iteratorError3 = undefined;
+        if (selected === 5 || selected === 0) {
+          this.everydayCheckbox = true;
+        }
+      },
+      deep: true
+    }
+  },
+  methods: {
+    reset: function reset() {
+      this.connecting = false;
+      this.quantity = null;
+      this.everydayCheckbox = true;
+      var _iteratorNormalCompletion3 = true;
+      var _didIteratorError3 = false;
+      var _iteratorError3 = undefined;
 
-			try {
-				for (var _iterator3 = this.subscriptionSchedules[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
-					var schedule = _step3.value;
+      try {
+        for (var _iterator3 = this.subscriptionSchedules[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
+          var schedule = _step3.value;
 
-					schedule.selected = false;
-				}
-			} catch (err) {
-				_didIteratorError3 = true;
-				_iteratorError3 = err;
-			} finally {
-				try {
-					if (!_iteratorNormalCompletion3 && _iterator3.return) {
-						_iterator3.return();
-					}
-				} finally {
-					if (_didIteratorError3) {
-						throw _iteratorError3;
-					}
-				}
-			}
-		},
-		onClose: function onClose() {
-			this.reset();
-			this.$emit('onClose');
-		},
-		subscribe: function subscribe() {
-			var _this = this;
+          schedule.selected = false;
+        }
+      } catch (err) {
+        _didIteratorError3 = true;
+        _iteratorError3 = err;
+      } finally {
+        try {
+          if (!_iteratorNormalCompletion3 && _iterator3.return) {
+            _iterator3.return();
+          }
+        } finally {
+          if (_didIteratorError3) {
+            throw _iteratorError3;
+          }
+        }
+      }
+    },
+    onClose: function onClose() {
+      this.reset();
+      this.$emit('onClose');
+    },
+    subscribe: function subscribe() {
+      var _this = this;
 
-			this.connecting = true;
-			var subscription = {
-				subscriptionItemId: this.subscribeItem.id,
-				quantity: this.quantity,
-				schedules: []
-			};
-			if (this.everydayCheckbox) {
-				var everydaySchedule = this.subscriptionSchedules.find(function (element) {
-					return element.name === 'Everyday';
-				});
-				subscription.schedules.push(everydaySchedule.id);
-			} else {
-				var _iteratorNormalCompletion4 = true;
-				var _didIteratorError4 = false;
-				var _iteratorError4 = undefined;
+      this.connecting = true;
+      var subscription = {
+        subscriptionItemId: this.subscribeItem.id,
+        quantity: this.quantity,
+        schedules: []
+      };
+      if (this.everydayCheckbox) {
+        var everydaySchedule = this.subscriptionSchedules.find(function (element) {
+          return element.name === 'Everyday';
+        });
+        subscription.schedules.push(everydaySchedule.id);
+      } else {
+        var _iteratorNormalCompletion4 = true;
+        var _didIteratorError4 = false;
+        var _iteratorError4 = undefined;
 
-				try {
-					for (var _iterator4 = this.subscriptionSchedules[Symbol.iterator](), _step4; !(_iteratorNormalCompletion4 = (_step4 = _iterator4.next()).done); _iteratorNormalCompletion4 = true) {
-						var schedule = _step4.value;
+        try {
+          for (var _iterator4 = this.subscriptionSchedules[Symbol.iterator](), _step4; !(_iteratorNormalCompletion4 = (_step4 = _iterator4.next()).done); _iteratorNormalCompletion4 = true) {
+            var schedule = _step4.value;
 
-						if (schedule.selected) {
-							subscription.schedules.push(schedule.id);
-						}
-					}
-				} catch (err) {
-					_didIteratorError4 = true;
-					_iteratorError4 = err;
-				} finally {
-					try {
-						if (!_iteratorNormalCompletion4 && _iterator4.return) {
-							_iterator4.return();
-						}
-					} finally {
-						if (_didIteratorError4) {
-							throw _iteratorError4;
-						}
-					}
-				}
-			}
-			this.$utils.log(subscription);
-			this.axios.post('/subscriptions', {
-				subscriptionItemId: subscription.subscriptionItemId,
-				schedules: subscription.schedules,
-				quantity: subscription.quantity
-			}).then(function (response) {
-				var subscriptionItem = response.data.data;
-				_this.$emit('onClose', subscriptionItem);
-				_this.reset();
-			}).catch(function (error) {});
-		}
-	}
+            if (schedule.selected) {
+              subscription.schedules.push(schedule.id);
+            }
+          }
+        } catch (err) {
+          _didIteratorError4 = true;
+          _iteratorError4 = err;
+        } finally {
+          try {
+            if (!_iteratorNormalCompletion4 && _iterator4.return) {
+              _iterator4.return();
+            }
+          } finally {
+            if (_didIteratorError4) {
+              throw _iteratorError4;
+            }
+          }
+        }
+      }
+      this.$utils.log(subscription);
+      this.axios.post('/subscriptions', {
+        subscriptionItemId: subscription.subscriptionItemId,
+        schedules: subscription.schedules,
+        quantity: subscription.quantity
+      }).then(function (response) {
+        var subscriptionItem = response.data.data;
+        _this.$emit('onClose', subscriptionItem);
+        _this.reset();
+      }).catch(function (error) {});
+    }
+  }
 });
 
 /***/ }),
@@ -8690,6 +8898,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__event_bus__ = __webpack_require__("./resources/assets/js/event-bus.js");
 //
 //
 //
@@ -8748,10 +8957,17 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: 'toolbar',
+  data: function data() {
+    return {
+      cartItems: []
+    };
+  },
+
   methods: {
     signOut: function signOut() {
       this.$auth.logout({
@@ -8765,6 +8981,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         }
       });
     }
+  },
+  mounted: function mounted() {
+    var that = this;
+    __WEBPACK_IMPORTED_MODULE_0__event_bus__["a" /* default */].$on('onAddRemoveFromCart', function (item) {
+      that.cartItems = that.cartItems.concat(item);
+    });
   }
 });
 
@@ -24288,21 +24510,6 @@ module.exports = {
 
 /***/ }),
 
-/***/ "./node_modules/css-loader/index.js!./node_modules/vue-event-calendar/dist/style.css":
-/***/ (function(module, exports, __webpack_require__) {
-
-exports = module.exports = __webpack_require__("./node_modules/css-loader/lib/css-base.js")(false);
-// imports
-
-
-// module
-exports.push([module.i, "@media screen and (min-width:768px){.__vev_calendar-wrapper{max-width:1200px;margin:0 auto}.__vev_calendar-wrapper .cal-wrapper{width:50%;padding:100px 50px}.__vev_calendar-wrapper .cal-wrapper .date-num{line-height:50px}.__vev_calendar-wrapper .events-wrapper{width:50%;background-color:#f29543;color:#fff;padding:40px 45px;position:absolute;left:50%;top:0;bottom:0}}@media screen and (max-width:768px){.__vev_calendar-wrapper .cal-wrapper{width:100%;padding:10px 5px}.__vev_calendar-wrapper .cal-wrapper .date-num{line-height:42px}.__vev_calendar-wrapper .events-wrapper{width:100%;margin-top:10px;padding:10px}}.__vev_calendar-wrapper{position:relative;overflow:hidden;width:100%}.__vev_calendar-wrapper *{box-sizing:border-box}.__vev_calendar-wrapper ::-webkit-scrollbar{width:8px;height:8px}.__vev_calendar-wrapper ::-webkit-scrollbar-track{box-shadow:inset 0 0 2px rgba(0,0,0,.2);border-radius:5px}.__vev_calendar-wrapper ::-webkit-scrollbar-thumb{border-radius:5px;background:rgba(0,0,0,.2)}.__vev_calendar-wrapper .cal-wrapper .cal-header{position:relative;width:100%;background-color:#fff;font-weight:500;overflow:hidden;padding-bottom:10px}.__vev_calendar-wrapper .cal-wrapper .cal-header>div{float:left;line-height:20px;padding:15px}.__vev_calendar-wrapper .cal-wrapper .cal-header .title{width:60%;text-align:center}.__vev_calendar-wrapper .cal-wrapper .cal-header .l{text-align:left;width:20%;cursor:pointer;user-select:none;-webkit-tap-highlight-color:rgba(0,0,0,0)}.__vev_calendar-wrapper .cal-wrapper .cal-header .r{text-align:right;width:20%;cursor:pointer;user-select:none;-webkit-tap-highlight-color:rgba(0,0,0,0)}.__vev_calendar-wrapper .cal-wrapper .cal-body{width:100%}.__vev_calendar-wrapper .cal-wrapper .cal-body .weeks{width:100%;overflow:hidden;text-align:center;font-size:1rem}.__vev_calendar-wrapper .cal-wrapper .cal-body .weeks .item{line-height:50px;float:left;width:14.285%}.__vev_calendar-wrapper .cal-wrapper .cal-body .dates{width:100%;overflow:hidden;text-align:center;font-size:1rem}.__vev_calendar-wrapper .cal-wrapper .cal-body .dates .item{position:relative;float:left;display:block;width:14.285%;cursor:default;-webkit-tap-highlight-color:rgba(0,0,0,0)}.__vev_calendar-wrapper .cal-wrapper .cal-body .dates .item .date-num{font-size:1rem;position:relative;z-index:3}.__vev_calendar-wrapper .cal-wrapper .cal-body .dates .item.event{cursor:pointer}.__vev_calendar-wrapper .cal-wrapper .cal-body .dates .item.selected-day .is-event{background-color:#f29543}.__vev_calendar-wrapper .cal-wrapper .cal-body .dates .item .is-event{content:\"\";border:1px solid #f29543;background-color:#fff;border-radius:50%;width:36px;height:36px;position:absolute;left:50%;top:50%;z-index:1;margin-left:-18px;margin-top:-19px}.__vev_calendar-wrapper .cal-wrapper .cal-body .dates .item .is-today{content:\"\";background-color:#f29543;border-radius:50%;opacity:.8;width:12px;height:4px;position:absolute;left:50%;top:50%;z-index:2;margin-left:-6px;margin-top:8px}.__vev_calendar-wrapper .events-wrapper{border-radius:10px}.__vev_calendar-wrapper .events-wrapper .cal-events{height:95%;overflow-y:auto;padding:0 5px;margin:15px 0}.__vev_calendar-wrapper .events-wrapper .date{max-width:60%;min-width:200px;text-align:center;color:#fff;background-color:rgba(0,0,0,.2);border-radius:20px;margin:0 auto;font-size:22px}.__vev_calendar-wrapper .events-wrapper .event-item{padding:5px 20px;margin-top:15px;box-shadow:0 3px 11px 2px rgba(0,0,0,.1);background-color:#fff;border-radius:5px;color:#323232;position:relative}.__vev_calendar-wrapper .events-wrapper .event-item:first-child{margin-top:0}.__vev_calendar-wrapper .events-wrapper .event-item .title{height:40px;line-height:40px;color:#323232;font-size:16px;border-bottom:1px solid #f2f2f2}.__vev_calendar-wrapper .events-wrapper .event-item .time{position:absolute;right:30px;top:17px;color:#9b9b9b;font-size:14px}.__vev_calendar-wrapper .events-wrapper .event-item .desc{color:#9b9b9b;font-size:14px;padding:7px 0}.__vev_calendar-wrapper .arrow-left.icon{color:#000;position:absolute;left:6%;margin-top:10px}.__vev_calendar-wrapper .arrow-left.icon:before{content:\"\";position:absolute;left:1px;top:-5px;width:10px;height:10px;border-top:1px solid currentColor;border-right:1px solid currentColor;-webkit-transform:rotate(-135deg);transform:rotate(-135deg)}.__vev_calendar-wrapper .arrow-right.icon{color:#000;position:absolute;right:6%;margin-top:10px}.__vev_calendar-wrapper .arrow-right.icon:before{content:\"\";position:absolute;right:1px;top:-5px;width:10px;height:10px;border-top:1px solid currentColor;border-right:1px solid currentColor;-webkit-transform:rotate(45deg);transform:rotate(45deg)}.__vev_calendar-wrapper h3,.__vev_calendar-wrapper p{margin:0;padding:0}", ""]);
-
-// exports
-
-
-/***/ }),
-
 /***/ "./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-0363e686\",\"scoped\":false,\"hasInlineConfig\":true}!./node_modules/vue-loader/lib/selector.js?type=styles&index=0!./resources/assets/js/components/Courier.vue":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -24341,7 +24548,7 @@ exports = module.exports = __webpack_require__("./node_modules/css-loader/lib/cs
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -24416,7 +24623,7 @@ exports = module.exports = __webpack_require__("./node_modules/css-loader/lib/cs
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -24477,6 +24684,21 @@ exports = module.exports = __webpack_require__("./node_modules/css-loader/lib/cs
 
 // module
 exports.push([module.i, "\n.full-calendar-body {\n  margin-top: 20px;\n}\n.full-calendar-body .weeks {\n    display: flex;\n    border-top: 1px solid #e0e0e0;\n    border-bottom: 1px solid #e0e0e0;\n    border-left: 1px solid #e0e0e0;\n}\n.full-calendar-body .weeks .week {\n      flex: 1;\n      text-align: center;\n      border-right: 1px solid #e0e0e0;\n}\n.full-calendar-body .dates {\n    position: relative;\n}\n.full-calendar-body .dates .week-row {\n      border-left: 1px solid #e0e0e0;\n      display: flex;\n}\n.full-calendar-body .dates .week-row .day-cell {\n        flex: 1;\n        min-height: 100px;\n        padding: 4px;\n        border-right: 1px solid #e0e0e0;\n        border-bottom: 1px solid #e0e0e0;\n}\n.full-calendar-body .dates .week-row .day-cell .day-number {\n          text-align: right;\n}\n.full-calendar-body .dates .week-row .day-cell.today {\n          background-color: #fcf8e3;\n}\n.full-calendar-body .dates .week-row .day-cell.not-cur-month .day-number {\n          color: rgba(0, 0, 0, 0.24);\n}\n.full-calendar-body .dates .dates-events {\n      position: absolute;\n      top: 0;\n      left: 0;\n      z-index: 1;\n      width: 100%;\n}\n.full-calendar-body .dates .dates-events .events-week {\n        display: flex;\n}\n.full-calendar-body .dates .dates-events .events-week .events-day {\n          cursor: pointer;\n          flex: 1;\n          min-height: 109px;\n          overflow: hidden;\n          text-overflow: ellipsis;\n}\n.full-calendar-body .dates .dates-events .events-week .events-day .day-number {\n            text-align: right;\n            padding: 4px 5px 4px 4px;\n            opacity: 0;\n}\n.full-calendar-body .dates .dates-events .events-week .events-day.not-cur-month .day-number {\n            color: rgba(0, 0, 0, 0.24);\n}\n.full-calendar-body .dates .dates-events .events-week .events-day .event-box .event-item {\n            cursor: pointer;\n            font-size: 12px;\n            background-color: #C7E6FD;\n            margin-bottom: 2px;\n            color: rgba(0, 0, 0, 0.87);\n            padding: 0 0 0 4px;\n            height: 18px;\n            line-height: 18px;\n            white-space: nowrap;\n            overflow: hidden;\n            text-overflow: ellipsis;\n}\n.full-calendar-body .dates .dates-events .events-week .events-day .event-box .event-item.is-start {\n              margin-left: 4px;\n}\n.full-calendar-body .dates .dates-events .events-week .events-day .event-box .event-item.is-end {\n              margin-right: 4px;\n}\n.full-calendar-body .dates .dates-events .events-week .events-day .event-box .event-item.is-opacity {\n              opacity: 0;\n}\n.full-calendar-body .dates .dates-events .events-week .events-day .event-box .more-link {\n            cursor: pointer;\n            padding-left: 8px;\n            padding-right: 2px;\n            color: rgba(0, 0, 0, 0.38);\n            font-size: 14px;\n}\n.full-calendar-body .dates .more-events {\n      position: absolute;\n      width: 150px;\n      z-index: 2;\n      border: 1px solid #eee;\n      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);\n}\n.full-calendar-body .dates .more-events .more-header {\n        background-color: #eee;\n        padding: 5px;\n        display: flex;\n        align-items: center;\n        font-size: 14px;\n}\n.full-calendar-body .dates .more-events .more-header .title {\n          flex: 1;\n}\n.full-calendar-body .dates .more-events .more-header .close {\n          margin-right: 2px;\n          cursor: pointer;\n          font-size: 16px;\n}\n.full-calendar-body .dates .more-events .more-body {\n        height: 140px;\n        overflow: hidden;\n}\n.full-calendar-body .dates .more-events .more-body .body-list {\n          height: 120px;\n          padding: 5px;\n          overflow: auto;\n          background-color: #fff;\n}\n.full-calendar-body .dates .more-events .more-body .body-list .body-item {\n            cursor: pointer;\n            font-size: 12px;\n            background-color: #C7E6FD;\n            margin-bottom: 2px;\n            color: rgba(0, 0, 0, 0.87);\n            padding: 0 0 0 4px;\n            height: 18px;\n            line-height: 18px;\n            white-space: nowrap;\n            overflow: hidden;\n            text-overflow: ellipsis;\n}\n", ""]);
+
+// exports
+
+
+/***/ }),
+
+/***/ "./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-55fbc07d\",\"scoped\":true,\"hasInlineConfig\":true}!./node_modules/vue-loader/lib/selector.js?type=styles&index=0!./resources/assets/js/components/AddToCartDialog.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__("./node_modules/css-loader/lib/css-base.js")(false);
+// imports
+
+
+// module
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -24566,7 +24788,7 @@ exports = module.exports = __webpack_require__("./node_modules/css-loader/lib/cs
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -24761,7 +24983,7 @@ exports = module.exports = __webpack_require__("./node_modules/css-loader/lib/cs
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -24776,7 +24998,7 @@ exports = module.exports = __webpack_require__("./node_modules/css-loader/lib/cs
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -58990,38 +59212,6 @@ var reactiveProp = {
 
 /***/ }),
 
-/***/ "./node_modules/vue-event-calendar/dist/style.css":
-/***/ (function(module, exports, __webpack_require__) {
-
-// style-loader: Adds some css to the DOM by adding a <style> tag
-
-// load the styles
-var content = __webpack_require__("./node_modules/css-loader/index.js!./node_modules/vue-event-calendar/dist/style.css");
-if(typeof content === 'string') content = [[module.i, content, '']];
-// Prepare cssTransformation
-var transform;
-
-var options = {}
-options.transform = transform
-// add the styles to the DOM
-var update = __webpack_require__("./node_modules/style-loader/lib/addStyles.js")(content, options);
-if(content.locals) module.exports = content.locals;
-// Hot Module Replacement
-if(false) {
-	// When the styles change, update the <style> tags
-	if(!content.locals) {
-		module.hot.accept("!!../../css-loader/index.js!./style.css", function() {
-			var newContent = require("!!../../css-loader/index.js!./style.css");
-			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-			update(newContent);
-		});
-	}
-	// When the module is disposed, remove the <style> tags
-	module.hot.dispose(function() { update(); });
-}
-
-/***/ }),
-
 /***/ "./node_modules/vue-fullcalendar/src/components/body.vue":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -60183,7 +60373,7 @@ var render = function() {
                       ]),
                       _vm._v(" "),
                       _c("v-tab", { attrs: { href: "#complete" } }, [
-                        _vm._v("Completed")
+                        _vm._v("Complete")
                       ])
                     ],
                     1
@@ -60193,7 +60383,7 @@ var render = function() {
                     attrs: {
                       headers: _vm.headers,
                       items: _vm.serviceRequests,
-                      loading: "",
+                      loading: _vm.loading,
                       "hide-actions": ""
                     },
                     scopedSlots: _vm._u([
@@ -60201,27 +60391,33 @@ var render = function() {
                         key: "items",
                         fn: function(props) {
                           return [
-                            _c("td", [_vm._v(_vm._s(props.item.name))]),
+                            _c("td", [_vm._v(_vm._s(props.item.id))]),
                             _vm._v(" "),
-                            _c("td", { staticClass: "text-xs-right" }, [
-                              _vm._v(_vm._s(props.item.calories))
+                            _c("td", [_vm._v(_vm._s(props.item.details))]),
+                            _vm._v(" "),
+                            _c("td", [
+                              _vm._v(
+                                _vm._s(
+                                  props.item.assignedTo
+                                    ? props.item.assignedTo.name
+                                    : "N/A"
+                                )
+                              )
                             ]),
                             _vm._v(" "),
-                            _c("td", { staticClass: "text-xs-right" }, [
-                              _vm._v(_vm._s(props.item.fat))
+                            _c("td", [
+                              _vm._v(
+                                _vm._s(
+                                  _vm.currentItem === "complete"
+                                    ? props.item.cost
+                                    : "N/A"
+                                )
+                              )
                             ]),
                             _vm._v(" "),
-                            _c("td", { staticClass: "text-xs-right" }, [
-                              _vm._v(_vm._s(props.item.carbs))
-                            ]),
+                            _c("td", [_vm._v(_vm._s(props.item.scheduleDate))]),
                             _vm._v(" "),
-                            _c("td", { staticClass: "text-xs-right" }, [
-                              _vm._v(_vm._s(props.item.protein))
-                            ]),
-                            _vm._v(" "),
-                            _c("td", { staticClass: "text-xs-right" }, [
-                              _vm._v(_vm._s(props.item.iron))
-                            ])
+                            _c("td", [_vm._v(_vm._s(props.item.scheduleTime))])
                           ]
                         }
                       }
@@ -60267,12 +60463,8 @@ var render = function() {
       ),
       _vm._v(" "),
       _c("service-request-dialog", {
-        attrs: { show: _vm.addingServiceRequest },
-        on: {
-          onClose: function($event) {
-            _vm.addingServiceRequest = false
-          }
-        }
+        attrs: { show: _vm.addingServiceRequest, type: _vm.type },
+        on: { onClose: _vm.onCloseAddingServiceRequest }
       })
     ],
     1
@@ -61542,6 +61734,7 @@ var render = function() {
                   _c("v-text-field", {
                     attrs: {
                       required: "",
+                      mask: "###",
                       label: "Enter quantity",
                       disabled: _vm.connecting,
                       placeholder: "Quantity to be delivered to you"
@@ -63065,6 +63258,174 @@ if (false) {
 
 /***/ }),
 
+/***/ "./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-55fbc07d\",\"hasScoped\":true,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/components/AddToCartDialog.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "v-dialog",
+    {
+      attrs: { "max-width": "600px", lazy: "" },
+      model: {
+        value: _vm.dialog,
+        callback: function($$v) {
+          _vm.dialog = $$v
+        },
+        expression: "dialog"
+      }
+    },
+    [
+      _c(
+        "v-card",
+        [
+          _c(
+            "v-toolbar",
+            { attrs: { card: "", dark: "", dense: "", color: "primary" } },
+            [
+              _c("v-icon", [_vm._v("shopping_cart")]),
+              _vm._v(" "),
+              _c("v-toolbar-title", [_vm._v("Add to cart")])
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _vm.product
+            ? _c(
+                "v-card-media",
+                {
+                  attrs: {
+                    src: _vm.$utils.imageUrl(_vm.product.image),
+                    height: "200px"
+                  }
+                },
+                [
+                  _c(
+                    "v-container",
+                    { attrs: { "fill-height": "", fluid: "" } },
+                    [
+                      _c(
+                        "v-layout",
+                        { attrs: { "fill-height": "" } },
+                        [
+                          _c(
+                            "v-flex",
+                            {
+                              attrs: { xs12: "", "align-end": "", flexbox: "" }
+                            },
+                            [
+                              _c(
+                                "span",
+                                { staticClass: "headline white--text" },
+                                [_vm._v(_vm._s(_vm.product.name))]
+                              )
+                            ]
+                          )
+                        ],
+                        1
+                      )
+                    ],
+                    1
+                  )
+                ],
+                1
+              )
+            : _vm._e(),
+          _vm._v(" "),
+          _vm.product
+            ? _c("v-card-title", { attrs: { "primary-title": "" } }, [
+                _c("div", [
+                  _c("div", { staticClass: "headline" }, [
+                    _vm._v("Ksh. " + _vm._s(_vm.product.price))
+                  ]),
+                  _vm._v(" "),
+                  _c("span", { staticClass: "grey--text" }, [
+                    _vm._v(_vm._s(_vm.product.description))
+                  ])
+                ])
+              ])
+            : _vm._e(),
+          _vm._v(" "),
+          _c(
+            "v-card-text",
+            [
+              _c("v-text-field", {
+                attrs: {
+                  required: "",
+                  label: "Enter quantity",
+                  mask: "###",
+                  placeholder: "Quantity"
+                },
+                model: {
+                  value: _vm.quantity,
+                  callback: function($$v) {
+                    _vm.quantity = $$v
+                  },
+                  expression: "quantity"
+                }
+              })
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c(
+            "v-card-actions",
+            [
+              _c("v-spacer"),
+              _vm._v(" "),
+              _c(
+                "v-btn",
+                {
+                  attrs: { flat: "", color: "red" },
+                  nativeOn: {
+                    click: function($event) {
+                      _vm.$emit("onClose")
+                    }
+                  }
+                },
+                [_vm._v("\n                Cancel\n            ")]
+              ),
+              _vm._v(" "),
+              _c(
+                "v-btn",
+                {
+                  attrs: { color: "primary", disabled: !_vm.quantity },
+                  nativeOn: {
+                    click: function($event) {
+                      _vm.$emit("onConfirmAddToCart", _vm.quantity)
+                    }
+                  }
+                },
+                [
+                  _c("v-icon", { attrs: { left: "" } }, [_vm._v("check")]),
+                  _vm._v("\n                Confirm\n            ")
+                ],
+                1
+              )
+            ],
+            1
+          )
+        ],
+        1
+      )
+    ],
+    1
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-55fbc07d", module.exports)
+  }
+}
+
+/***/ }),
+
 /***/ "./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-59a0bcc2\",\"hasScoped\":true,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/components/RepairServices.vue":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -63072,7 +63433,7 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("service-requests", { attrs: { type: "it" } })
+  return _c("service-requests", { attrs: { type: "repair" } })
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -63582,7 +63943,12 @@ var render = function() {
   return _c(
     "v-dialog",
     {
-      attrs: { lazy: "", persistent: "", "max-width": "500px" },
+      attrs: {
+        lazy: "",
+        persistent: "",
+        "min-height": "600px",
+        "max-width": "500px"
+      },
       model: {
         value: _vm.dialog,
         callback: function($$v) {
@@ -63596,12 +63962,36 @@ var render = function() {
         "v-card",
         [
           _c(
+            "v-toolbar",
+            { attrs: { dense: "", color: "primary", dark: "" } },
+            [
+              _c("v-icon", { staticClass: "mx-3" }, [
+                _vm._v(_vm._s(_vm.type === "it" ? "computer" : "build"))
+              ]),
+              _vm._v(" "),
+              _c("v-toolbar-title", [_vm._v(_vm._s(_vm.$route.name))])
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c(
             "v-card-text",
             [
+              _c("connection-manager", {
+                ref: "connectionManager",
+                on: {
+                  onSuccess: _vm.onConnectionManagerSuccess,
+                  onConnectionChange: function(val) {
+                    _vm.connecting = val
+                  }
+                }
+              }),
+              _vm._v(" "),
               _c("v-select", {
                 staticClass: "mb-3",
                 attrs: {
-                  label: "What issues you have noticed",
+                  disabled: _vm.connecting,
+                  label: _vm.detailsLabel,
                   multiple: "",
                   required: "",
                   rules: [
@@ -63611,8 +64001,7 @@ var render = function() {
                       )
                     }
                   ],
-                  hint:
-                    "Hit 'Enter' to write multiple issues or select from the suggestions, e.g Computer is slow",
+                  hint: _vm.detailsHint,
                   "persistent-hint": "",
                   chips: "",
                   tags: "",
@@ -63640,6 +64029,7 @@ var render = function() {
                   rows: "2",
                   label: "Write a short note",
                   placeholder: "Short note",
+                  disabled: _vm.connecting,
                   "multi-line": ""
                 },
                 model: {
@@ -63649,7 +64039,62 @@ var render = function() {
                   },
                   expression: "note"
                 }
-              })
+              }),
+              _vm._v(" "),
+              _c("v-alert", { attrs: { type: "info" } }, [
+                _vm._v(
+                  "\n                If you don't schedule, this issue will be attended to immediately\n            "
+                )
+              ]),
+              _vm._v(" "),
+              _c(
+                "v-layout",
+                { attrs: { row: "", wrap: "" } },
+                [
+                  _c(
+                    "v-flex",
+                    { attrs: { xs6: "" } },
+                    [
+                      _c("date-input", {
+                        attrs: {
+                          placeholder: "Schedule date",
+                          disabled: _vm.connecting
+                        },
+                        model: {
+                          value: _vm.scheduleDate,
+                          callback: function($$v) {
+                            _vm.scheduleDate = $$v
+                          },
+                          expression: "scheduleDate"
+                        }
+                      })
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "v-flex",
+                    { staticClass: "pl-3", attrs: { xs6: "" } },
+                    [
+                      _c("time-input", {
+                        attrs: {
+                          placeholder: "Schedule time",
+                          disabled: _vm.connecting
+                        },
+                        model: {
+                          value: _vm.scheduleTime,
+                          callback: function($$v) {
+                            _vm.scheduleTime = $$v
+                          },
+                          expression: "scheduleTime"
+                        }
+                      })
+                    ],
+                    1
+                  )
+                ],
+                1
+              )
             ],
             1
           ),
@@ -63676,7 +64121,10 @@ var render = function() {
               _c(
                 "v-btn",
                 {
-                  attrs: { color: "primary" },
+                  attrs: {
+                    color: "primary",
+                    disabled: !_vm.formIsValid || _vm.connecting
+                  },
                   on: {
                     click: function($event) {
                       $event.stopPropagation()
@@ -65329,8 +65777,13 @@ var render = function() {
                                           {
                                             attrs: {
                                               flat: "",
-                                              color: "accent",
+                                              color: "primary",
                                               outline: ""
+                                            },
+                                            nativeOn: {
+                                              click: function($event) {
+                                                _vm.selectedProduct = product
+                                              }
                                             }
                                           },
                                           [
@@ -65395,7 +65848,17 @@ var render = function() {
           )
         ],
         1
-      )
+      ),
+      _vm._v(" "),
+      _c("add-to-cart-dialog", {
+        attrs: { product: _vm.selectedProduct },
+        on: {
+          onClose: function($event) {
+            _vm.selectedProduct = null
+          },
+          onConfirmAddToCart: _vm.onConfirmAddToCart
+        }
+      })
     ],
     1
   )
@@ -65518,19 +65981,16 @@ var render = function() {
               _vm.$route.name === "shopping"
                 ? _c(
                     "v-btn",
-                    {
-                      attrs: {
-                        color: "accent",
-                        small: "",
-                        flat: "",
-                        to: "cart"
-                      }
-                    },
+                    { attrs: { small: "", flat: "", to: "cart" } },
                     [
                       _c("v-icon", { attrs: { color: "accent" } }, [
                         _vm._v("shopping_cart")
                       ]),
-                      _vm._v("\n            0 items\n        ")
+                      _vm._v(
+                        "\n            " +
+                          _vm._s(_vm.cartItems.length) +
+                          " items\n        "
+                      )
                     ],
                     1
                   )
@@ -68715,6 +69175,33 @@ if(false) {
  if(!content.locals) {
    module.hot.accept("!!../../../css-loader/index.js!../../../vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-47638a3c\",\"scoped\":false,\"hasInlineConfig\":true}!../../../sass-loader/lib/loader.js!../../../vue-loader/lib/selector.js?type=styles&index=0!./body.vue", function() {
      var newContent = require("!!../../../css-loader/index.js!../../../vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-47638a3c\",\"scoped\":false,\"hasInlineConfig\":true}!../../../sass-loader/lib/loader.js!../../../vue-loader/lib/selector.js?type=styles&index=0!./body.vue");
+     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+     update(newContent);
+   });
+ }
+ // When the module is disposed, remove the <style> tags
+ module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+
+/***/ "./node_modules/vue-style-loader/index.js!./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-55fbc07d\",\"scoped\":true,\"hasInlineConfig\":true}!./node_modules/vue-loader/lib/selector.js?type=styles&index=0!./resources/assets/js/components/AddToCartDialog.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__("./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-55fbc07d\",\"scoped\":true,\"hasInlineConfig\":true}!./node_modules/vue-loader/lib/selector.js?type=styles&index=0!./resources/assets/js/components/AddToCartDialog.vue");
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__("./node_modules/vue-style-loader/lib/addStylesClient.js")("2f136ec0", content, false, {});
+// Hot Module Replacement
+if(false) {
+ // When the styles change, update the <style> tags
+ if(!content.locals) {
+   module.hot.accept("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-55fbc07d\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./AddToCartDialog.vue", function() {
+     var newContent = require("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-55fbc07d\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./AddToCartDialog.vue");
      if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
      update(newContent);
    });
@@ -100374,8 +100861,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_vue_timeago___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_6_vue_timeago__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7_format_currency__ = __webpack_require__("./node_modules/format-currency/index.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7_format_currency___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_7_format_currency__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8_vue_event_calendar_dist_style_css__ = __webpack_require__("./node_modules/vue-event-calendar/dist/style.css");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8_vue_event_calendar_dist_style_css___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_8_vue_event_calendar_dist_style_css__);
 // The Vue build version to load with the `import` command
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 
@@ -100388,7 +100873,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 
- //^1.1.10, CSS has been extracted as one file, so you can easily update it.
+
 var DEBUG = false;
 
 var GOOGLE_MAPS_KEY = 'AIzaSyAS_9BsQpqTP8EVuMZ7rQ9gMCl0wmqhm7k';
@@ -100553,6 +101038,58 @@ if (false) {(function () {
     hotAPI.createRecord("data-v-1ea5e4e8", Component.options)
   } else {
     hotAPI.reload("data-v-1ea5e4e8", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+
+/***/ "./resources/assets/js/components/AddToCartDialog.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+function injectStyle (ssrContext) {
+  if (disposed) return
+  __webpack_require__("./node_modules/vue-style-loader/index.js!./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-55fbc07d\",\"scoped\":true,\"hasInlineConfig\":true}!./node_modules/vue-loader/lib/selector.js?type=styles&index=0!./resources/assets/js/components/AddToCartDialog.vue")
+}
+var normalizeComponent = __webpack_require__("./node_modules/vue-loader/lib/component-normalizer.js")
+/* script */
+var __vue_script__ = __webpack_require__("./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}]],\"plugins\":[\"transform-object-rest-spread\",[\"transform-runtime\",{\"polyfill\":false,\"helpers\":false}]]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/js/components/AddToCartDialog.vue")
+/* template */
+var __vue_template__ = __webpack_require__("./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-55fbc07d\",\"hasScoped\":true,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/components/AddToCartDialog.vue")
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = injectStyle
+/* scopeId */
+var __vue_scopeId__ = "data-v-55fbc07d"
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources\\assets\\js\\components\\AddToCartDialog.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-55fbc07d", Component.options)
+  } else {
+    hotAPI.reload("data-v-55fbc07d", Component.options)
   }
   module.hot.dispose(function (data) {
     disposed = true

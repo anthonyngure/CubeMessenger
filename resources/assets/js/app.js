@@ -10,7 +10,7 @@ import router from './router'
 import Vuetify from 'vuetify'
 import VueTimeago from 'vue-timeago'
 import formatCurrency from 'format-currency'
-import 'vue-event-calendar/dist/style.css' //^1.1.10, CSS has been extracted as one file, so you can easily update it.
+
 const DEBUG = false
 
 const GOOGLE_MAPS_KEY = 'AIzaSyAS_9BsQpqTP8EVuMZ7rQ9gMCl0wmqhm7k'

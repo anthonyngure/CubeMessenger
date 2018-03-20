@@ -23,7 +23,7 @@
     name: 'connection-manager',
     data () {
       return {
-        connecting: true,
+        connecting: false,
         error: false,
         errorText: null,
       }

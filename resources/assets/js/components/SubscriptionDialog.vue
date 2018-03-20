@@ -17,6 +17,7 @@
                 <v-text-field
                         v-model="quantity"
                         required
+                        mask="###"
                         label="Enter quantity"
                         :disabled="connecting"
                         placeholder="Quantity to be delivered to you">
@@ -58,115 +59,115 @@
 </template>
 
 <script>
-	export default {
-		name: 'subscription-dialog',
-		props: {
-			subscribeItem: {
-				required: true
-			},
-			subscriptionSchedules: {
-				required: true
-			}
-		},
-		data () {
-			return {
-				connecting: false,
-				error: null,
-				errorText: '',
-				dialog: false,
-				everydayCheckbox: true,
-				quantity: null,
-			}
-		},
-		watch: {
-			subscribeItem (subscribeItem) {
-				this.dialog = !!subscribeItem
-			},
-			everydayCheckbox (everydayCheckbox) {
-				this.$utils.log(`everydayCheckbox ${everydayCheckbox}`)
-				if (everydayCheckbox) {
-					for (let weekday of this.subscriptionSchedules) {
-						weekday.selected = false
-					}
-				}
-			},
-			subscriptionSchedules: {
-				handler: function (after, before) {
-					// Return the object that changed
-					/*let changed = after.filter(function (p, idx) {
-						return Object.keys(p).some(function (prop) {
-							return p[prop] !== before[idx][prop]
-						})
-					})
-					// Log it
-					console.log(changed)
+  export default {
+    name: 'subscription-dialog',
+    props: {
+      subscribeItem: {
+        required: true
+      },
+      subscriptionSchedules: {
+        required: true
+      }
+    },
+    data () {
+      return {
+        connecting: false,
+        error: null,
+        errorText: '',
+        dialog: false,
+        everydayCheckbox: true,
+        quantity: null,
+      }
+    },
+    watch: {
+      subscribeItem (subscribeItem) {
+        this.dialog = !!subscribeItem
+      },
+      everydayCheckbox (everydayCheckbox) {
+        this.$utils.log(`everydayCheckbox ${everydayCheckbox}`)
+        if (everydayCheckbox) {
+          for (let weekday of this.subscriptionSchedules) {
+            weekday.selected = false
+          }
+        }
+      },
+      subscriptionSchedules: {
+        handler: function (after, before) {
+          // Return the object that changed
+          /*let changed = after.filter(function (p, idx) {
+              return Object.keys(p).some(function (prop) {
+                  return p[prop] !== before[idx][prop]
+              })
+          })
+          // Log it
+          console.log(changed)
 */
-					this.$utils.log(this.subscriptionSchedules)
-					let selected = 0
-					for (let weekday of this.subscriptionSchedules) {
-						this.$utils.log(`weekday = ${weekday.name}, selected = ${weekday.selected}`)
-						if (weekday.selected) {
-							selected = selected + 1
-						}
-					}
+          this.$utils.log(this.subscriptionSchedules)
+          let selected = 0
+          for (let weekday of this.subscriptionSchedules) {
+            this.$utils.log(`weekday = ${weekday.name}, selected = ${weekday.selected}`)
+            if (weekday.selected) {
+              selected = selected + 1
+            }
+          }
 
-					if (selected > 0 && this.everydayCheckbox) {
-						this.everydayCheckbox = false
-					}
+          if (selected > 0 && this.everydayCheckbox) {
+            this.everydayCheckbox = false
+          }
 
-					if (selected === 5 || selected === 0) {
-						this.everydayCheckbox = true
-					}
-				},
-				deep: true
-			}
-		},
-		methods: {
-			reset () {
-				this.connecting = false
-				this.quantity = null
-				this.everydayCheckbox = true
-				for (let schedule of this.subscriptionSchedules) {
-					schedule.selected = false
-				}
-			},
-			onClose () {
-				this.reset()
-				this.$emit('onClose')
-			},
-			subscribe () {
-				this.connecting = true
-				let subscription = {
-					subscriptionItemId: this.subscribeItem.id,
-					quantity: this.quantity,
-					schedules: []
-				}
-				if (this.everydayCheckbox) {
-					let everydaySchedule = this.subscriptionSchedules.find(function (element) {
-						return element.name === 'Everyday'
-					})
-					subscription.schedules.push(everydaySchedule.id)
-				} else {
-					for (let schedule of this.subscriptionSchedules) {
-						if (schedule.selected) {
-							subscription.schedules.push(schedule.id)
-						}
-					}
-				}
-				this.$utils.log(subscription)
-				this.axios.post('/subscriptions', {
-					subscriptionItemId: subscription.subscriptionItemId,
-					schedules: subscription.schedules,
-					quantity: subscription.quantity,
-				}).then(response => {
-					let subscriptionItem = response.data.data
-					this.$emit('onClose', subscriptionItem)
-					this.reset()
-				}).catch(error => {
-				})
-			}
-		}
-	}
+          if (selected === 5 || selected === 0) {
+            this.everydayCheckbox = true
+          }
+        },
+        deep: true
+      }
+    },
+    methods: {
+      reset () {
+        this.connecting = false
+        this.quantity = null
+        this.everydayCheckbox = true
+        for (let schedule of this.subscriptionSchedules) {
+          schedule.selected = false
+        }
+      },
+      onClose () {
+        this.reset()
+        this.$emit('onClose')
+      },
+      subscribe () {
+        this.connecting = true
+        let subscription = {
+          subscriptionItemId: this.subscribeItem.id,
+          quantity: this.quantity,
+          schedules: []
+        }
+        if (this.everydayCheckbox) {
+          let everydaySchedule = this.subscriptionSchedules.find(function (element) {
+            return element.name === 'Everyday'
+          })
+          subscription.schedules.push(everydaySchedule.id)
+        } else {
+          for (let schedule of this.subscriptionSchedules) {
+            if (schedule.selected) {
+              subscription.schedules.push(schedule.id)
+            }
+          }
+        }
+        this.$utils.log(subscription)
+        this.axios.post('/subscriptions', {
+          subscriptionItemId: subscription.subscriptionItemId,
+          schedules: subscription.schedules,
+          quantity: subscription.quantity,
+        }).then(response => {
+          let subscriptionItem = response.data.data
+          this.$emit('onClose', subscriptionItem)
+          this.reset()
+        }).catch(error => {
+        })
+      }
+    }
+  }
 </script>
 
 <style scoped>

@@ -23,9 +23,9 @@
         <v-spacer></v-spacer>
         <v-toolbar-items v-if="$auth.check()">
 
-            <v-btn color="accent" small flat to="cart" v-if="$route.name === 'shopping'">
+            <v-btn small flat to="cart" v-if="$route.name === 'shopping'">
                 <v-icon color="accent">shopping_cart</v-icon>
-                0 items
+                {{cartItems.length}} items
             </v-btn>
 
             <v-menu origin="center center"
@@ -57,9 +57,15 @@
 </template>
 
 <script>
+  import EventBus from '../event-bus'
 
   export default {
     name: 'toolbar',
+    data () {
+      return {
+        cartItems: []
+      }
+    },
     methods: {
       signOut () {
         this.$auth.logout({
@@ -73,6 +79,12 @@
           }
         })
       },
+    },
+    mounted () {
+      let that = this
+      EventBus.$on('onAddRemoveFromCart', function (item) {
+        that.cartItems = that.cartItems.concat(item)
+      })
     }
   }
 </script>

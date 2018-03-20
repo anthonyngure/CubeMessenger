@@ -106,5 +106,27 @@
 				'description' => 'Blue Screen of Death (BSoD)',
 			]);
 			
+			
+			/*Repairs*/
+			
+			\App\ServiceRequestOption::create([
+				'type'        => 'REPAIR',
+				'description' => 'Wall Painting',
+			]);
+			
+			\App\ServiceRequestOption::create([
+				'type'        => 'REPAIR',
+				'description' => 'Broken Chair',
+			]);
+			
+			\App\ServiceRequestOption::create([
+				'type'        => 'REPAIR',
+				'description' => 'Broken Desk',
+			]);
+			
+			\App\ServiceRequestOption::create([
+				'type'        => 'REPAIR',
+				'description' => 'Broken Door Handle',
+			]);
 		}
 	}

@@ -18,12 +18,13 @@
 			//
 			$this->validate($request, [
 				'search' => 'required',
+				'type'   => 'required|in:it,repair',
 			]);
 			
-			$query = $request->search.'';
+			$query = $request->search . '';
 			//dd($query);
-			$suggestions = ServiceRequestOption::where('description', 'LIKE',
-				'%' . $query . '%')->get();
+			$suggestions = ServiceRequestOption::whereType(strtoupper($request->type))
+				->where('description', 'LIKE', '%' . $query . '%')->get();
 			
 			return $this->collectionResponse($suggestions);
 		}

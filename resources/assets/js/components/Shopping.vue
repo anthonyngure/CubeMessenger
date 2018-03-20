@@ -50,7 +50,8 @@
                                     </v-card-title>
                                     <v-card-actions>
                                         <v-spacer></v-spacer>
-                                        <v-btn flat color="accent" outline>
+                                        <v-btn flat color="primary" outline
+                                               @click.native="selectedProduct = product">
                                             <v-icon left>shopping_cart</v-icon>
                                             Add to cart
                                         </v-btn>
@@ -72,18 +73,30 @@
                 </v-card-text>
             </v-card>
         </v-flex>
+
+        <add-to-cart-dialog :product="selectedProduct"
+                            @onClose="selectedProduct = null"
+                            @onConfirmAddToCart="onConfirmAddToCart">
+        </add-to-cart-dialog>
+
     </v-layout>
 </template>
 
 <script>
+  import EventBus from '../event-bus'
   import ConnectionManager from './ConnectionManager'
   import InfiniteLoading from 'vue-infinite-loading'
+  import AddToCartDialog from './AddToCartDialog'
 
   export default {
-    components: {ConnectionManager, InfiniteLoading},
+    components: {
+      AddToCartDialog,
+      ConnectionManager, InfiniteLoading
+    },
     name: 'shopping',
     data () {
       return {
+        selectedProduct: null,
         currentTab: null,
         categories: [],
         products: [],
@@ -119,12 +132,24 @@
       }
     },
     methods: {
+      onConfirmAddToCart (quantity) {
+        let that = this
+        let item = this.products.find(function (element) {
+          return element.id === that.selectedProduct.id
+        })
+        let index = this.products.indexOf(item)
+        item.isInCart = true
+        item.quantity = quantity
+        this.products[index] = item
+        EventBus.$emit('onAddRemoveFromCart', item)
+        this.selectedProduct = null
+      },
       onConnectionChange (status) {
 
       },
       onConnectionManagerSuccess (response) {
         this.categories = this.categories.concat(response.data.data)
-        this.currentTab = ''+this.categories[0].id
+        this.currentTab = '' + this.categories[0].id
       },
       infiniteHandler ($state) {
         this.axios.get('shopProducts', {

@@ -33,6 +33,7 @@
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Client whereUpdatedAt($value)
  * @mixin \Eloquent
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\User[] $users
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\ServiceRequest[] $serviceRequests
  */
 	class Client extends Model
 	{
@@ -57,5 +58,13 @@
 		public function users()
 		{
 			return $this->hasMany(User::class);
+		}
+		
+		/**
+		 * @return \Illuminate\Database\Eloquent\Relations\HasMany
+		 */
+		public function serviceRequests()
+		{
+			return $this->hasMany(ServiceRequest::class);
 		}
 	}

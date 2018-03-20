@@ -18,17 +18,17 @@
 				$table->unsignedInteger('client_id', false);
 				$table->foreign('client_id')->references('id')->on('clients');
 				
-				$table->unsignedInteger('service_request_option_id', false);
-				$table->foreign('service_request_option_id')->references('id')->on('service_request_options');
-				
 				$table->unsignedInteger('assigned_to', false)->nullable();
 				$table->foreign('assigned_to')->references('id')->on('users');
 				
-				$table->enum('status', ['NEW', 'PENDING', 'COMPLETE']);
-				$table->string('note');
+				$table->enum('type', ['IT', 'REPAIR']);
+				$table->enum('status', ['NEW', 'PENDING', 'COMPLETE'])->default('NEW');
+				
+				$table->mediumText('details');
+				$table->string('note')->nullable();
 				$table->double('cost', 8, 2)->default(0);
-				$table->date('scheduled_date');
-				$table->time('scheduled_time');
+				$table->date('schedule_date')->nullable();
+				$table->time('schedule_time')->nullable();
 				$table->timestamps();
 			});
 		}

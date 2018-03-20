@@ -14,21 +14,21 @@
                             grow>
                         <v-tab href="#new">New</v-tab>
                         <v-tab href="#pending">Pending</v-tab>
-                        <v-tab href="#complete">Completed</v-tab>
+                        <v-tab href="#complete">Complete</v-tab>
                     </v-tabs>
 
                     <v-data-table
                             :headers="headers"
                             :items="serviceRequests"
-                            loading
+                            :loading="loading"
                             hide-actions>
                         <template slot="items" slot-scope="props">
-                            <td>{{ props.item.name }}</td>
-                            <td class="text-xs-right">{{ props.item.calories }}</td>
-                            <td class="text-xs-right">{{ props.item.fat }}</td>
-                            <td class="text-xs-right">{{ props.item.carbs }}</td>
-                            <td class="text-xs-right">{{ props.item.protein }}</td>
-                            <td class="text-xs-right">{{ props.item.iron }}</td>
+                            <td>{{ props.item.id }}</td>
+                            <td>{{ props.item.details }}</td>
+                            <td>{{ props.item.assignedTo ? props.item.assignedTo.name : 'N/A' }}</td>
+                            <td>{{ currentItem === 'complete' ? props.item.cost : 'N/A' }}</td>
+                            <td>{{ props.item.scheduleDate }}</td>
+                            <td>{{ props.item.scheduleTime }}</td>
                         </template>
                     </v-data-table>
 
@@ -51,7 +51,8 @@
         </v-fab-transition>
 
         <service-request-dialog :show="addingServiceRequest"
-                                @onClose="addingServiceRequest = false">
+                                :type="type"
+                                @onClose="onCloseAddingServiceRequest">
         </service-request-dialog>
 
     </v-layout>
@@ -72,36 +73,55 @@
         type: String,
         required: true,
         validator: function (value) {
-          return value === 'it' || value === 'repairs'
+          return value === 'it' || value === 'repair'
         }
       }
     },
     data () {
       return {
         currentItem: null,
+        loading: false,
         addingServiceRequest: false,
         headers: [
           {text: 'ID', value: 'id'},
-          {text: 'Description', value: 'description'},
+          {text: 'Details', value: 'details'},
           {text: 'Assigned To', value: 'assignedTo'},
           {text: 'Cost', value: 'cost'},
-          {text: 'Date Added', value: 'createdAt'},
-          {text: 'Scheduled Date', value: 'scheduledDate'},
-          {text: 'Scheduled Time', value: 'scheduledTime'},
+          {text: 'Scheduled Date', value: 'scheduleDate'},
+          {text: 'Scheduled Time', value: 'scheduleTime'},
         ],
         serviceRequests: []
       }
     },
     watch: {
-      currentItem (currentItem) {
-        if (currentItem) {
-          this.$refs.connectionManager.index('serviceRequests', {filter: currentItem})
+      currentItem (val) {
+        if (val) {
+          this.serviceRequests = []
+          this.loading = true
+          this.$refs.connectionManager.index('serviceRequests', {
+            filter: this.currentItem,
+            type: this.type
+          })
         }
       }
     },
     methods: {
+      onCloseAddingServiceRequest (successful) {
+        this.addingServiceRequest = false
+        this.currentItem = 'new'
+        this.$utils.log(successful)
+        if (successful) {
+          this.serviceRequests = []
+          this.loading = true
+          this.$refs.connectionManager.index('serviceRequests', {
+            filter: this.currentItem,
+            type: this.type
+          })
+        }
+      },
       onConnectionManagerSuccess (response) {
-
+        this.serviceRequests = this.serviceRequests.concat(response.data.data)
+        this.loading = false
       },
     },
     mounted () {
