@@ -14,8 +14,8 @@ import formatCurrency from 'format-currency'
 const DEBUG = false
 
 const GOOGLE_MAPS_KEY = 'AIzaSyAS_9BsQpqTP8EVuMZ7rQ9gMCl0wmqhm7k'
-const PRIMARY_COLOR = '#486b00'
-const ACCENT_COLOR = '#F50057'
+const PRIMARY_COLOR = '#1A75BA'
+const ACCENT_COLOR = '#FFC908'
 
 
 Vue.router = router

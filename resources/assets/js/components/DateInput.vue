@@ -25,7 +25,7 @@
         ></v-text-field>
         <v-date-picker v-model="date" @change="onChange"
                        format="24hr"
-                       :allowed-dates="allowedDates.callback">
+                       :allowed-dates="allowedDates.dates">
         </v-date-picker>
     </v-menu>
 </template>

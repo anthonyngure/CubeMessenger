@@ -23,7 +23,7 @@
                     <v-flex xs12>
                         <connection-manager ref="connectionManager"
                                             @onConnectionChange="onConnectionChange"
-                                            @onSuccess="$emit('onClose')">
+                                            @onSuccess="onConnectionManagerSuccess">
                         </connection-manager>
                     </v-flex>
 
@@ -140,6 +140,7 @@
                         <date-input v-model="startDate"
                                     :disabled="connecting"
                                     placeholder="Starting date"
+                                    :allowedDates="allowedDates"
                                     :error-messages="errors.startDate">
                         </date-input>
                     </v-flex>
@@ -147,6 +148,7 @@
                         <time-input v-model="startTime"
                                     :disabled="connecting"
                                     placeholder="Starting time"
+                                    :allowedTimes="allowedTimes"
                                     :error-messages="errors.startTime">
                         </time-input>
                     </v-flex>
@@ -154,6 +156,7 @@
                         <date-input v-model="endDate"
                                     :disabled="connecting"
                                     placeholder="Ending date"
+                                    :allowedDates="allowedDates"
                                     :error-messages="errors.endDate">
                         </date-input>
                     </v-flex>
@@ -161,6 +164,7 @@
                         <time-input v-model="endTime"
                                     :disabled="connecting"
                                     placeholder="Ending time"
+                                    :allowedTimes="allowedTimes"
                                     :error-messages="errors.endTime">
                         </time-input>
                     </v-flex>
@@ -304,20 +308,22 @@
         addressData: null,
         placeResultData: null,
 
-        allowedDates: function (date) {
-          //YYYY/MM/DD
-          let givenDate = moment(date, 'YYYY/MM/DD')
-          return moment().diff(givenDate, 'days') <= 0
-          //const [, , day] = date.split('-')
-          //return parseInt(day, 10) % 2 === 0
+        allowedDates: {
+          dates: function (date) {
+            //YYYY/MM/DD
+            let givenDate = moment(date, 'YYYY/MM/DD')
+            return moment().diff(givenDate, 'days') <= 0
+            //const [, , day] = date.split('-')
+            //return parseInt(day, 10) % 2 === 0
+          }
         },
 
         allowedTimes: {
           hours: function (value) {
-            return value >= moment().hour()
+            return value >= moment().hour() && value <= 22
           },
           minutes: function (value) {
-            return value % 15 === 0
+            return value % 30 === 0
           }
         }
       }
@@ -328,6 +334,9 @@
       }
     },
     methods: {
+      onConnectionManagerSuccess (response) {
+        this.$emit('onClose', true)
+      },
       onConnectionChange (connecting) {
         this.connecting = connecting
       },

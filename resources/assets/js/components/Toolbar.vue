@@ -1,25 +1,22 @@
 <template>
-    <v-toolbar color="primary" fixed dense dark app flat clipped-left>
-        <v-toolbar-side-icon></v-toolbar-side-icon>
+    <v-toolbar color="primary" fixed dense dark app clipped-left>
+        <v-toolbar-side-icon @click.stop="onToolbarSideIconClick"></v-toolbar-side-icon>
+        <img :src="'/img/logo.png'" height="36px" width="200px" class="mr-3"/>
         <v-avatar size="36px" v-if="$auth.check() && $auth.user().client">
-            <img :src="'/storage/'+$auth.user().client.logo" alt="Logo">
+            <img :src="$utils.imageUrl($auth.user().client.logo)" alt="Logo">
         </v-avatar>
         <v-toolbar-title>
             <span>{{$auth.check() && $auth.user().client ? $auth.user().client.name : $appName}}</span>
         </v-toolbar-title>
+
+        <v-spacer></v-spacer>
         <v-toolbar-items v-if="$auth.check()">
-            <v-btn flat to="documents">
-                <v-icon left>circle_check</v-icon>
-                {{$route.name}}
+            <v-btn small flat>
+                <v-icon left>check_circle</v-icon>
+                Home / {{$route.name}}
             </v-btn>
         </v-toolbar-items>
-        <!--<v-toolbar-items v-if="$auth.check() && $auth.user().client">
-            <v-btn flat to="dashboard">Dashboard</v-btn>
-            <v-btn flat to="courier">Courier</v-btn>
-            <v-btn flat to="shopping">Shopping</v-btn>
-            <v-btn flat to="appointments">Appointments</v-btn>
-            <v-btn flat to="documents">Documents</v-btn>
-        </v-toolbar-items>-->
+
         <v-spacer></v-spacer>
         <v-toolbar-items v-if="$auth.check()">
 
@@ -79,6 +76,9 @@
           }
         })
       },
+      onToolbarSideIconClick(){
+        EventBus.$emit('onToolbarSideIconClick')
+      }
     },
     mounted () {
       let that = this

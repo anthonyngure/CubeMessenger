@@ -67,4 +67,12 @@
 		{
 			return $this->hasMany(ServiceRequest::class);
 		}
+		
+		/**
+		 * @return \Illuminate\Database\Eloquent\Relations\HasMany
+		 */
+		public function appointments()
+		{
+			return $this->hasMany(Appointment::class);
+		}
 	}

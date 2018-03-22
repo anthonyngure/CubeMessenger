@@ -1,13 +1,15 @@
 <template>
     <v-navigation-drawer
-            fixed
             clipped
-            :mobile-break-point="0"
-            permernent
+            stateless
+            hide-overlay
+            fixed
+            permanent
+            :mini-variant.sync="mini"
             v-model="drawerOpen"
             app>
         <v-list>
-            <v-list-tile avatar @click="" class="py-3">
+            <v-list-tile avatar class="py-1">
                 <v-list-tile-avatar>
                     <img :src="'/storage/'+$auth.user().avatar">
                 </v-list-tile-avatar>
@@ -19,39 +21,28 @@
                         <b>{{$auth.user().email}}</b>
                     </v-list-tile-sub-title>
                 </v-list-tile-content>
+                <v-list-tile-action>
+                    <v-btn icon @click.native.stop="mini = !mini">
+                        <v-icon>chevron_left</v-icon>
+                    </v-btn>
+                </v-list-tile-action>
             </v-list-tile>
         </v-list>
         <v-divider></v-divider>
         <v-list dense>
             <template v-for="(item,index) in items">
-                <v-list-group v-if="item.children" v-model="item.model" :key="index" :prepend-icon="item.icon"
-                              :append-icon="item.model ? 'keyboard_arrow_up' : 'keyboard_arrow_down'">
-                    <v-list-tile slot="activator">
-                        <v-list-tile-content>
-                            <v-list-tile-title>
-                                {{ item.title }}
-                            </v-list-tile-title>
-                        </v-list-tile-content>
-                    </v-list-tile>
-                    <v-list-tile v-for="(child, i) in item.children" :key="i" :to="child.route">
-                        <v-list-tile-action>
-                            <v-icon>{{child.icon}}</v-icon>
-                        </v-list-tile-action>
-                        <v-list-tile-content>
-                            <v-list-tile-title>
-                                {{ child.title }}
-                            </v-list-tile-title>
-                        </v-list-tile-content>
-                    </v-list-tile>
-                </v-list-group>
-
-                <v-list-tile v-else :to="item.route" :key="index">
+                <v-list-tile :to="item.route" :key="index">
                     <v-list-tile-action>
                         <v-icon>{{item.icon}}</v-icon>
                     </v-list-tile-action>
                     <v-list-tile-content>
                         <v-list-tile-title>{{item.title}}</v-list-tile-title>
                     </v-list-tile-content>
+                    <v-list-tile-action v-if="item.badge">
+                        <v-chip small color="accent" text-color="white">
+                            0
+                        </v-chip>
+                    </v-list-tile-action>
                 </v-list-tile>
             </template>
         </v-list>
@@ -59,22 +50,32 @@
 </template>
 
 <script>
+  import EventBus from '../event-bus'
+
   export default {
-    name: 'dashboard-drawer',
+    name: 'drawer',
     data () {
       return {
         drawerOpen: true,
+        mini: false,
         items: [
           {icon: 'dashboard', title: 'Dashboard', route: 'dashboard'},
-          {icon: 'date_range', title: 'Subscriptions', route: 'subscriptions'},
+          {icon: 'view_list', title: 'Subscriptions', route: 'subscriptions'},
           {icon: 'date_range', title: 'Appointments', route: 'appointments'},
           //{icon: 'folder', title: 'Documents', route: 'documents'},
-          {icon: 'shopping_basket', title: 'Shopping', route: 'shopping'},
+          {icon: 'shopping_cart', title: 'Shopping', route: 'shopping'},
+          {icon: 'shopping_basket', title: 'Orders', route: 'orders', badge: true},
           {icon: 'computer', title: 'IT Services', route: 'it'},
           {icon: 'build', title: 'Repair Services', route: 'repairs'},
           {icon: 'local_shipping', title: 'Courier', route: 'courier'},
         ]
       }
+    },
+    mounted () {
+      let that = this
+      EventBus.$on('onToolbarSideIconClick', function () {
+        that.mini = !that.mini
+      })
     }
   }
 </script>

@@ -32,7 +32,7 @@
                                     :text="item.quantity > 1 ? JSON.stringify({id:item.id, count: i}) : JSON.stringify({id:item.id})"
                                     :size="135">
                             </q-r-code>
-                            <div class="primary py-1" v-if="item.quantity > 1">
+                            <div class="primary py-1">
                                 <p class="text-xs-center pt-1">{{item.courierOption.name+' '+i}}
                                     to <b>{{item.destinationName}}</b>
                                 </p>

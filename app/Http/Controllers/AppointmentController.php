@@ -4,9 +4,6 @@
 	
 	use App\Appointment;
 	use App\AppointmentParticipant;
-	use App\Client;
-	use App\Exceptions\WrappedException;
-	use Auth;
 	use Illuminate\Http\Request;
 	
 	class AppointmentController extends Controller
@@ -15,10 +12,24 @@
 		 * Display a listing of the resource.
 		 *
 		 * @return \Illuminate\Http\Response
+		 * @throws \App\Exceptions\WrappedException
 		 */
-		public function index()
+		public function index(Request $request)
 		{
-			$appointments = Appointment::with('participants')->get();
+			$this->validate($request, [
+				'publish_at' => 'nullable|date',
+			]);
+			
+			$client = $this->getClient();
+			
+			$date = empty($request->date) ? date("Y-m-d") : $request->date;
+			
+			$appointments = $client->appointments()
+				->where('start_date', $date)
+				->with(['participants','user'])
+				->orderBy('start_date')
+				->orderBy('start_time')
+				->get();
 			
 			return $this->collectionResponse($appointments);
 		}
@@ -33,20 +44,17 @@
 		 */
 		public function store(Request $request)
 		{
-			$client = Client::find(Auth::user()->client_id);
-			if (is_null($client)) {
-				throw new WrappedException("Sorry, you are not associated to any client.");
-			}
+			$client = $this->getClient();
 			
 			\Validator::validate($request->json()->all(), [
-				'venue'        => 'required',
-				'with'         => 'required|exists:users,id',
-				'title'        => 'required',
-				'startDate'    => 'required',
-				'startTime'    => 'required_if:allDay,false',
-				'endDate'      => 'required',
-				'endTime'      => 'required_if:allDay,false',
-				'allDay'       => 'required',
+				'venue'     => 'required',
+				'with'      => 'required|exists:users,id',
+				'title'     => 'required',
+				'startDate' => 'required',
+				'startTime' => 'required_if:allDay,false',
+				'endDate'   => 'required',
+				'endTime'   => 'required_if:allDay,false',
+				'allDay'    => 'required',
 			]);
 			
 			$appointment = Appointment::create([

@@ -2,8 +2,7 @@
     <div>
         <div v-if="$auth.ready()">
             <v-app>
-                <dashboard-drawer v-if="$auth.check() && $auth.user().client">
-                </dashboard-drawer>
+                <drawer v-if="$auth.check() && $auth.user().client"></drawer>
                 <toolbar></toolbar>
                 <v-content>
                     <v-container grid-list-xs fluid fill-height>
@@ -33,6 +32,13 @@
                         <router-view v-else></router-view>
                     </v-container>
                 </v-content>
+                <v-footer app color="primary" dark :fixed="false">
+                    <v-layout row wrap>
+                        <v-flex xs12 py-3 text-xs-center white--text>
+                            &copy;2018 — <strong>www.cube-messenger.com</strong>
+                        </v-flex>
+                    </v-layout>
+                </v-footer>
                 <v-snackbar :timeout="0" top left multi-line v-model="snackbarNotification">
                     {{snackbarNotificationMessage}}
                     <v-btn flat color="pink" @click.native="snackbarNotification = false">Close</v-btn>
@@ -46,60 +52,60 @@
 </template>
 
 <script>
-    import Loader from './components/Loader'
-    import Toolbar from './components/Toolbar'
-    import EventBus from './event-bus'
-    import DashboardDrawer from './components/DashboardDrawer'
+  import Loader from './components/Loader'
+  import Toolbar from './components/Toolbar'
+  import EventBus from './event-bus'
+  import Drawer from './components/Drawer'
 
-    export default {
-        name: 'app',
-        components: {
-            DashboardDrawer,
-            Toolbar,
-            Loader
-        },
-        data: () => ({
-            snackbarNotification: false,
-            snackbarNotificationMessage: 'No message specified!',
-        }),
-        methods: {
-            signOut () {
-                this.$auth.logout({
-                    success () {
-                        this.$utils.log('SignOut success')
-                        this.$vuetify.theme.primary = this.$utils.primaryColor
-                        this.$vuetify.theme.accent = this.$utils.accentColor
-                    },
-                    error () {
-                        this.$utils.log('SignOut failed')
-                    }
-                })
-            },
-            contact () {
-                this.$utils.log(this.$route.name)
-                this.$utils.log((this.$route.name !== 'signIn'))
-                this.$utils.log((this.$auth.check()))
-                this.$utils.log((this.$auth.user().client))
-                this.$utils.log((this.$route.name !== 'signIn' && this.$auth.check() && !this.$auth.user().client))
-                this.$utils.log((this.$auth.user()))
-            }
-        },
-        mounted () {
-            let that = this
-            EventBus.$on('showSnackbarNotification', function (message, key) {
-                that.snackbarNotificationKey = key
-                that.snackbarNotification = true
-                that.snackbarNotificationMessage = message
-            })
-            EventBus.$on('closeSnackbarNotification', function (key) {
-                if (that.snackbarNotificationKey === key) {
-                    that.snackbarNotificationKey = null
-                    that.snackbarNotification = false
-                    that.snackbarNotificationMessage = null
-                }
-            })
+  export default {
+    name: 'app',
+    components: {
+      Drawer,
+      Toolbar,
+      Loader
+    },
+    data: () => ({
+      snackbarNotification: false,
+      snackbarNotificationMessage: 'No message specified!',
+    }),
+    methods: {
+      signOut () {
+        this.$auth.logout({
+          success () {
+            this.$utils.log('SignOut success')
+            this.$vuetify.theme.primary = this.$utils.primaryColor
+            this.$vuetify.theme.accent = this.$utils.accentColor
+          },
+          error () {
+            this.$utils.log('SignOut failed')
+          }
+        })
+      },
+      contact () {
+        this.$utils.log(this.$route.name)
+        this.$utils.log((this.$route.name !== 'signIn'))
+        this.$utils.log((this.$auth.check()))
+        this.$utils.log((this.$auth.user().client))
+        this.$utils.log((this.$route.name !== 'signIn' && this.$auth.check() && !this.$auth.user().client))
+        this.$utils.log((this.$auth.user()))
+      }
+    },
+    mounted () {
+      let that = this
+      EventBus.$on('showSnackbarNotification', function (message, key) {
+        that.snackbarNotificationKey = key
+        that.snackbarNotification = true
+        that.snackbarNotificationMessage = message
+      })
+      EventBus.$on('closeSnackbarNotification', function (key) {
+        if (that.snackbarNotificationKey === key) {
+          that.snackbarNotificationKey = null
+          that.snackbarNotification = false
+          that.snackbarNotificationMessage = null
         }
+      })
     }
+  }
 </script>
 
 <style>

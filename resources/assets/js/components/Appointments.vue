@@ -1,45 +1,111 @@
 <template>
     <v-layout row wrap>
         <v-flex xs12>
+
+            <v-date-picker
+                    v-model="date"
+                    full-width
+                    landscape
+                    event-color="green"
+                    :events="appointmentDates">
+            </v-date-picker>
+
+            <connection-manager ref="connectionManager"
+                                @onSuccess="onConnectionManagerSuccess">
+            </connection-manager>
+
             <v-card>
                 <v-card-text>
-                    <table border="1|0">
-                        <thead>
-                        <tr>
-                            <th>.</th>
-                            <th v-for="day in daysOfWeek" :key="day.date">
-                                <h5>{{day.name}}</h5>
-                                <h1>{{day.date}}</h1>
-                            </th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr v-for="hour in hoursOfDay">
-                            <td>{{hour}}</td>
-                            <td v-for="day in daysOfWeek" :key="day.date"
-                                @click="onCellClicked({hourOfDay: hour, dayOfWeek:day})"
-                                :style="{'background-color': determineCelColor(day, hour)}">
-                            </td>
-                        </tr>
-                        </tbody>
-                    </table>
-                    <!--<full-calendar
-                            :events="appointments"
-                            @changeMonth="changeMonth"
-                            @eventClick="eventClick"
-                            @dayClick="dayClick"
-                            @moreClick="moreClick">
-                        <template slot="fc-header-left">
-                            <v-btn icon>
-                                <v-icon>more_vert</v-icon>
-                            </v-btn>
+                    <v-data-iterator
+                            content-tag="v-list"
+                            :items="appointments"
+                            :rows-per-page-items="rowsPerPageItems"
+                            :pagination.sync="pagination">
+                        <span slot="no-data">
+                            <p>No appointments or meetings found for {{date}}</p>
+                        </span>
+                        <template slot="item" slot-scope="props">
+                            <v-list-group no-action :key="props.item.id" v-model="props.item.active">
+                                <v-list-tile slot="activator" avatar>
+                                    <v-list-tile-action>
+                                        <v-chip label small color="accent" text-color="white">
+                                            <v-icon left>access_time</v-icon>
+                                            {{props.item.allDay ? 'All day long'
+                                            : props.item.startTime+' -'+props.item.endTime}}
+                                        </v-chip>
+                                    </v-list-tile-action>
+                                    <v-list-tile-content>
+                                        <v-list-tile-title>{{ props.item.user.name }}</v-list-tile-title>
+                                        <v-list-tile-sub-title>{{ props.item.venue }} -
+                                            <strong>
+                                                {{ props.item.participants.length }} participants
+                                            </strong>
+                                        </v-list-tile-sub-title>
+                                    </v-list-tile-content>
+                                </v-list-tile>
+
+                                <v-list-tile v-for="participant in props.item.participants" :key="participant.id">
+                                    <v-list-tile-action>
+                                        <v-icon color="primary">person</v-icon>
+                                    </v-list-tile-action>
+                                    <v-list-tile-content>
+                                        <v-list-tile-title>{{ participant.email }}</v-list-tile-title>
+                                        <v-list-tile-sub-title>{{participant.phone}}</v-list-tile-sub-title>
+                                    </v-list-tile-content>
+                                    <v-list-tile-action>
+                                        <v-btn icon @click.native="">
+                                            <v-icon color="red">close</v-icon>
+                                        </v-btn>
+                                    </v-list-tile-action>
+                                </v-list-tile>
+
+                            </v-list-group>
+                            <v-divider :key="'div_'+props.item.id"></v-divider>
                         </template>
-                        <template slot="fc-event-card" slot-scope="p">
-                            <p><i class="fa">sadfsd</i> {{ p.event.title }} test</p>
+
+                    </v-data-iterator>
+                    <!--<v-list>
+                        <template v-for="(item, index) in appointments">
+                            <v-list-group no-action :key="item.id" v-model="item.active">
+                                <v-list-tile slot="activator" avatar>
+                                    <v-list-tile-action>
+                                        <v-chip label small color="accent" text-color="white">
+                                            <v-icon left>access_time</v-icon>
+                                            {{item.allDay ? 'All day long' : item.startTime+' - '+item.endTime}}
+                                        </v-chip>
+                                    </v-list-tile-action>
+                                    <v-list-tile-content>
+                                        <v-list-tile-title>{{ item.user.name }}</v-list-tile-title>
+                                        <v-list-tile-sub-title>{{ item.venue }} -
+                                            <strong>
+                                                {{ item.participants.length }} participants
+                                            </strong>
+                                        </v-list-tile-sub-title>
+                                    </v-list-tile-content>
+                                </v-list-tile>
+
+                                <v-list-tile v-for="participant in item.participants" :key="participant.id">
+                                    <v-list-tile-action>
+                                        <v-icon color="primary">person</v-icon>
+                                    </v-list-tile-action>
+                                    <v-list-tile-content>
+                                        <v-list-tile-title>{{ participant.email }}</v-list-tile-title>
+                                        <v-list-tile-sub-title>{{participant.phone}}</v-list-tile-sub-title>
+                                    </v-list-tile-content>
+                                    <v-list-tile-action>
+                                        <v-btn icon @click.native="">
+                                            <v-icon color="red">close</v-icon>
+                                        </v-btn>
+                                    </v-list-tile-action>
+                                </v-list-tile>
+
+                            </v-list-group>
+                            <v-divider v-if="index + 1 < appointments.length" :key="'div_'+index"></v-divider>
                         </template>
-                    </full-calendar>-->
+                    </v-list>-->
                 </v-card-text>
             </v-card>
+
         </v-flex>
 
         <v-flex xs12>
@@ -50,12 +116,7 @@
         </v-flex>
 
         <v-fab-transition>
-            <v-btn class="ma-3"
-                   color="accent"
-                   fab
-                   dark
-                   fixed
-                   bottom
+            <v-btn class="ma-3" color="accent" fab dark fixed bottom
                    @click.native="appointmentFullDialog = true"
                    right>
                 <v-icon>add</v-icon>
@@ -72,150 +133,66 @@
   import AddAppointmentFullDialog from './AddAppointmentFullDialog'
 
   import {extendMoment} from 'moment-range'
+  import ConnectionManager from './ConnectionManager'
 
   const moment = extendMoment(Moment)
 
   export default {
     components: {
+      ConnectionManager,
       AddAppointmentFullDialog,
       FullCalendar
     },
     name: 'appointments',
     data () {
       return {
-        date: '2018-03-02',
+        date: null,
+        rowsPerPageItems: [5, 10, 15],
+        pagination: {
+          rowsPerPage: 5
+        },
         appointmentFullDialog: false,
         selectedCell: null,
-        daysOfWeek: [],
-        hoursOfDay: [],
-        appointments: []
+        appointments: [],
+        appointmentDates: [],
+      }
+    },
+    watch: {
+      date (val) {
+        this.appointments = []
+        this.$refs.connectionManager.index('appointments', {
+          date: this.date
+        })
       }
     },
     methods: {
       onCloseDialog (addedAppointmentSuccessfully) {
         this.appointmentFullDialog = false
+        this.$utils.log('addedAppointmentSuccessfully: ' + addedAppointmentSuccessfully)
         if (addedAppointmentSuccessfully) {
-          this.loadAppointments()
+          this.$refs.connectionManager.index('appointments', {
+            date: this.date
+          })
         }
       },
-      loadAppointments () {
-        this.axios.get('appointments')
-          .then(response => {
-            for (let item of response.data.data) {
-              this.appointments.push(item)
-            }
-            //alert(this.appointments)
-          }).catch(error => {
-          this.$utils.log(error)
-        })
-      },
-      determineCelColor (day, hour) {
-        if (this.appointments.length === 0) {
-          return 'white'
-        }
-        let that = this
-        let appointment = this.appointments.find(function (a) {
-          that.$utils.log(a.startDate + ' === ' + day.fullDate)
-          return a.startDate === day.fullDate
-        })
-
-        this.$utils.log('+++++++++++++++++++++++++++++++++++++++++++')
-        this.$utils.log((appointment && appointment.allDay))
-
-        if (appointment && appointment.allDay) {
-          return 'red'
-        } else if (appointment && !appointment.allDay) {
-
-          let start = moment(appointment.startTime, 'HH:mm:ss')
-          let end = moment(appointment.endTime, 'HH:mm:ss')
-          let cellHour = moment(hour, 'HH:mm:ss')
-
-          let range = moment.range(start, end)
-
-          this.$utils.log(cellHour.within(range))
-
-          if (range.contains(cellHour)) {
-            return 'yellow'
-          } else {
-            return 'white'
-          }
-        } else {
-          return 'white'
+      onConnectionManagerSuccess (response) {
+        this.appointments = []
+        for (let appointment of response.data.data) {
+          appointment.active = false
+          this.appointmentDates.push(appointment.startDate)
+          this.appointments.push(appointment)
         }
       },
-      onCellClicked (cell) {
-        this.selectedCell = cell
-        this.appointmentFullDialog = true
-      },
-      weekdayName (i) {
-        switch (i) {
-          case 0:
-            return 'Sun'
-          case 1:
-            return 'Mon'
-          case 2:
-            return 'Tue'
-          case 3:
-            return 'Wed'
-          case 4:
-            return 'Thu'
-          case 5:
-            return 'Fri'
-          case 6:
-            return 'Sat'
-          default:
-            return 'N/A'
-        }
-      }
     },
     mounted () {
-      for (let i = 0; i <= 5; i++) {
-        let weekday = moment().add(i, 'days')
-        this.daysOfWeek.push({
-          name: this.weekdayName(weekday.weekday()),
-          date: weekday.get('date'),
-          fullDate: weekday.format('YYYY-MM-DD'),
-        })
-      }
-      for (let h = 6; h <= 22; h++) {
-        if (h < 10) {
-          this.hoursOfDay.push('0' + h + ':00:00')
-        } else {
-          this.hoursOfDay.push(h + ':00:00')
-        }
-      }
-
-      this.loadAppointments()
+      this.date = moment().format('YYYY-MM-DD')
+      this.$refs.connectionManager.index('appointments', {
+        date: this.date
+      })
     }
   }
 </script>
 
 <style scoped>
-    table {
-        border-collapse: collapse;
-        width: 100%;
-    }
-
-    table, th, td {
-        border: 1px solid lightgray;
-    }
-
-    th {
-        height: 40px;
-        padding: 15px;
-        text-align: left;
-    }
-
-    td {
-        height: 30px;
-        padding: 5px;
-        text-align: left;
-        vertical-align: center;
-    }
-
-    td:nth-child(1) {
-        width: 75px;
-        vertical-align: bottom;
-    }
 
 </style>
