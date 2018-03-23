@@ -58,6 +58,7 @@
 			Route::resource('shopCategories', 'ShopCategoryController');
 			Route::resource('serviceRequests', 'ServiceRequestController');
 			Route::resource('serviceRequestOptions', 'ServiceRequestOptionController');
+			Route::resource('shopOrders', 'ShopOrderController');
 		});
 		
 	});

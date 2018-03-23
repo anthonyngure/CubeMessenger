@@ -1,7 +1,7 @@
 <template>
     <v-layout row wrap>
         <v-flex xs12 d-inline-flex wrap align-center>
-            <v-btn color="primary">
+            <v-btn color="primary" class="hidden">
                 <v-icon class="mr-1">account_balance_wallet</v-icon>
                 Balance KES 0.00
             </v-btn>
@@ -12,8 +12,9 @@
         <v-flex xs12>
             <v-divider></v-divider>
         </v-flex>
-        <stats-card title="Deliveries"></stats-card>
-        <stats-card title="Documents"></stats-card>
+        <stats-card :title="$appName"></stats-card>
+        <stats-card :title="$appName"></stats-card>
+        <stats-card :title="$appName"></stats-card>
     </v-layout>
 </template>
 

@@ -8,7 +8,6 @@
                     </connection-manager>
                     <v-tabs fixed-tabs
                             v-model="currentItem"
-                            color="white"
                             slider-color="accent"
                             lazy
                             grow>

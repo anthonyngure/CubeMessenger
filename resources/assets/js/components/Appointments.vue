@@ -10,8 +10,7 @@
                     :events="appointmentDates">
             </v-date-picker>
 
-            <connection-manager ref="connectionManager"
-                                @onSuccess="onConnectionManagerSuccess">
+            <connection-manager ref="connectionManager">
             </connection-manager>
 
             <v-card>
@@ -35,7 +34,10 @@
                                         </v-chip>
                                     </v-list-tile-action>
                                     <v-list-tile-content>
-                                        <v-list-tile-title>{{ props.item.user.name }}</v-list-tile-title>
+                                        <v-list-tile-title>
+                                            {{ props.item.user.name }} -
+                                            <span class="caption">{{ props.item.title }}</span>
+                                        </v-list-tile-title>
                                         <v-list-tile-sub-title>{{ props.item.venue }} -
                                             <strong>
                                                 {{ props.item.participants.length }} participants
@@ -64,45 +66,6 @@
                         </template>
 
                     </v-data-iterator>
-                    <!--<v-list>
-                        <template v-for="(item, index) in appointments">
-                            <v-list-group no-action :key="item.id" v-model="item.active">
-                                <v-list-tile slot="activator" avatar>
-                                    <v-list-tile-action>
-                                        <v-chip label small color="accent" text-color="white">
-                                            <v-icon left>access_time</v-icon>
-                                            {{item.allDay ? 'All day long' : item.startTime+' - '+item.endTime}}
-                                        </v-chip>
-                                    </v-list-tile-action>
-                                    <v-list-tile-content>
-                                        <v-list-tile-title>{{ item.user.name }}</v-list-tile-title>
-                                        <v-list-tile-sub-title>{{ item.venue }} -
-                                            <strong>
-                                                {{ item.participants.length }} participants
-                                            </strong>
-                                        </v-list-tile-sub-title>
-                                    </v-list-tile-content>
-                                </v-list-tile>
-
-                                <v-list-tile v-for="participant in item.participants" :key="participant.id">
-                                    <v-list-tile-action>
-                                        <v-icon color="primary">person</v-icon>
-                                    </v-list-tile-action>
-                                    <v-list-tile-content>
-                                        <v-list-tile-title>{{ participant.email }}</v-list-tile-title>
-                                        <v-list-tile-sub-title>{{participant.phone}}</v-list-tile-sub-title>
-                                    </v-list-tile-content>
-                                    <v-list-tile-action>
-                                        <v-btn icon @click.native="">
-                                            <v-icon color="red">close</v-icon>
-                                        </v-btn>
-                                    </v-list-tile-action>
-                                </v-list-tile>
-
-                            </v-list-group>
-                            <v-divider v-if="index + 1 < appointments.length" :key="'div_'+index"></v-divider>
-                        </template>
-                    </v-list>-->
                 </v-card-text>
             </v-card>
 
@@ -159,36 +122,37 @@
     },
     watch: {
       date (val) {
-        this.appointments = []
-        this.$refs.connectionManager.index('appointments', {
-          date: this.date
-        })
+        this.refresh()
       }
     },
     methods: {
+      refresh () {
+        this.appointments = []
+        let that = this
+        this.$refs.connectionManager.get('appointments', {
+          onSuccess (response) {
+            that.appointments = []
+            for (let appointment of response.data.data) {
+              appointment.active = false
+              that.appointmentDates.push(appointment.startDate)
+              that.appointments.push(appointment)
+            }
+          }
+        }, {
+          date: this.date
+        })
+      },
       onCloseDialog (addedAppointmentSuccessfully) {
         this.appointmentFullDialog = false
         this.$utils.log('addedAppointmentSuccessfully: ' + addedAppointmentSuccessfully)
         if (addedAppointmentSuccessfully) {
-          this.$refs.connectionManager.index('appointments', {
-            date: this.date
-          })
+          this.refresh()
         }
-      },
-      onConnectionManagerSuccess (response) {
-        this.appointments = []
-        for (let appointment of response.data.data) {
-          appointment.active = false
-          this.appointmentDates.push(appointment.startDate)
-          this.appointments.push(appointment)
-        }
-      },
+      }
     },
     mounted () {
       this.date = moment().format('YYYY-MM-DD')
-      this.$refs.connectionManager.index('appointments', {
-        date: this.date
-      })
+      this.refresh()
     }
   }
 </script>

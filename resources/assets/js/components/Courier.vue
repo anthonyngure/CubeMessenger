@@ -6,7 +6,6 @@
                     <v-tabs
                             fixed-tabs
                             v-model="currentItem"
-                            color="white"
                             slider-color="accent"
                             grow>
                         <v-tab href="#pending">Pending Deliveries</v-tab>

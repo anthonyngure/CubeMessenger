@@ -34,6 +34,8 @@
  * @mixin \Eloquent
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\User[] $users
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\ServiceRequest[] $serviceRequests
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Appointment[] $appointments
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\ShopOrder[] $shopOrders
  */
 	class Client extends Model
 	{
@@ -74,5 +76,13 @@
 		public function appointments()
 		{
 			return $this->hasMany(Appointment::class);
+		}
+		
+		/**
+		 * @return \Illuminate\Database\Eloquent\Relations\HasMany
+		 */
+		public function shopOrders()
+		{
+			return $this->hasMany(ShopOrder::class);
 		}
 	}

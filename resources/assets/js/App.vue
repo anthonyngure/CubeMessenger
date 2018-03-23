@@ -1,7 +1,7 @@
 <template>
     <div>
         <div v-if="$auth.ready()">
-            <v-app>
+            <v-app :dark="darkTheme">
                 <drawer v-if="$auth.check() && $auth.user().client"></drawer>
                 <toolbar></toolbar>
                 <v-content>
@@ -32,7 +32,7 @@
                         <router-view v-else></router-view>
                     </v-container>
                 </v-content>
-                <v-footer app color="primary" dark :fixed="false">
+                <v-footer app dark :fixed="false">
                     <v-layout row wrap>
                         <v-flex xs12 py-3 text-xs-center white--text>
                             &copy;2018 — <strong>www.cube-messenger.com</strong>
@@ -65,6 +65,7 @@
       Loader
     },
     data: () => ({
+      darkTheme: false,
       snackbarNotification: false,
       snackbarNotificationMessage: 'No message specified!',
     }),
@@ -103,6 +104,9 @@
           that.snackbarNotification = false
           that.snackbarNotificationMessage = null
         }
+      })
+      EventBus.$on('onThemeSwitch', function (val) {
+        that.darkTheme = val;
       })
     }
   }

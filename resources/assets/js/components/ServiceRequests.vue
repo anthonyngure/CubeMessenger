@@ -3,12 +3,10 @@
         <v-flex xs12>
             <v-card>
                 <v-card-text>
-                    <connection-manager ref="connectionManager"
-                                        @onSuccess="onConnectionManagerSuccess">
+                    <connection-manager ref="connectionManager">
                     </connection-manager>
                     <v-tabs fixed-tabs
                             v-model="currentItem"
-                            color="white"
                             slider-color="accent"
                             lazy
                             grow>
@@ -96,32 +94,33 @@
     watch: {
       currentItem (val) {
         if (val) {
-          this.serviceRequests = []
-          this.loading = true
-          this.$refs.connectionManager.index('serviceRequests', {
-            filter: this.currentItem,
-            type: this.type
-          })
+          this.refresh()
         }
       }
     },
     methods: {
+      refresh () {
+        let that = this
+        this.serviceRequests = []
+        this.loading = true
+        this.$refs.connectionManager.get('serviceRequests', {
+          onSuccess (response) {
+            that.serviceRequests = []
+            that.serviceRequests = that.serviceRequests.concat(response.data.data)
+            that.loading = false
+          }
+        }, {
+          filter: this.currentItem,
+          type: this.type
+        })
+      },
       onCloseAddingServiceRequest (successful) {
         this.addingServiceRequest = false
         this.currentItem = 'new'
         this.$utils.log(successful)
         if (successful) {
-          this.serviceRequests = []
-          this.loading = true
-          this.$refs.connectionManager.index('serviceRequests', {
-            filter: this.currentItem,
-            type: this.type
-          })
+          this.refresh()
         }
-      },
-      onConnectionManagerSuccess (response) {
-        this.serviceRequests = this.serviceRequests.concat(response.data.data)
-        this.loading = false
       },
     },
     mounted () {

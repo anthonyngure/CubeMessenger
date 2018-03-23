@@ -1,28 +1,29 @@
 <template>
     <v-navigation-drawer
             clipped
-            stateless
-            hide-overlay
             fixed
             permanent
+            :disable-route-watcher="true"
+            stateless
             :mini-variant.sync="mini"
             v-model="drawerOpen"
             app>
         <v-list>
-            <v-list-tile avatar class="py-1">
+            <v-list-tile v-if="mini" @click.stop="mini = !mini">
+                <v-list-tile-action>
+                    <v-icon>chevron_right</v-icon>
+                </v-list-tile-action>
+            </v-list-tile>
+
+            <v-list-tile avatar tag="div">
                 <v-list-tile-avatar>
-                    <img :src="'/storage/'+$auth.user().avatar">
+                    <img :src="$utils.imageUrl($auth.user().avatar)">
                 </v-list-tile-avatar>
                 <v-list-tile-content>
-                    <v-list-tile-title>
-                        <b>{{$auth.user().name}}</b>
-                    </v-list-tile-title>
-                    <v-list-tile-sub-title>
-                        <b>{{$auth.user().email}}</b>
-                    </v-list-tile-sub-title>
+                    <v-list-tile-title>{{$auth.user().name}}</v-list-tile-title>
                 </v-list-tile-content>
                 <v-list-tile-action>
-                    <v-btn icon @click.native.stop="mini = !mini">
+                    <v-btn icon @click.stop="mini = !mini">
                         <v-icon>chevron_left</v-icon>
                     </v-btn>
                 </v-list-tile-action>
@@ -33,16 +34,15 @@
             <template v-for="(item,index) in items">
                 <v-list-tile :to="item.route" :key="index">
                     <v-list-tile-action>
-                        <v-icon>{{item.icon}}</v-icon>
+                        <v-icon v-if="!item.showShopOrdersCount">{{item.icon}}</v-icon>
+                        <v-badge right small color="accent" v-else>
+                            <span slot="badge">{{shopOrdersCount}}</span>
+                            <v-icon>{{item.icon}}</v-icon>
+                        </v-badge>
                     </v-list-tile-action>
                     <v-list-tile-content>
                         <v-list-tile-title>{{item.title}}</v-list-tile-title>
                     </v-list-tile-content>
-                    <v-list-tile-action v-if="item.badge">
-                        <v-chip small color="accent" text-color="white">
-                            0
-                        </v-chip>
-                    </v-list-tile-action>
                 </v-list-tile>
             </template>
         </v-list>
@@ -57,18 +57,33 @@
     data () {
       return {
         drawerOpen: true,
-        mini: false,
+        mini: true,
+        shopOrdersCount: 0,
         items: [
           {icon: 'dashboard', title: 'Dashboard', route: 'dashboard'},
           {icon: 'view_list', title: 'Subscriptions', route: 'subscriptions'},
           {icon: 'date_range', title: 'Appointments', route: 'appointments'},
           //{icon: 'folder', title: 'Documents', route: 'documents'},
           {icon: 'shopping_cart', title: 'Shopping', route: 'shopping'},
-          {icon: 'shopping_basket', title: 'Orders', route: 'orders', badge: true},
+          {icon: 'shopping_basket', title: 'Orders', route: 'orders', showShopOrdersCount: true},
           {icon: 'computer', title: 'IT Services', route: 'it'},
           {icon: 'build', title: 'Repair Services', route: 'repairs'},
           {icon: 'local_shipping', title: 'Courier', route: 'courier'},
         ]
+      }
+    },
+    methods: {
+      refreshShopOrdersCount () {
+        this.axios.get('shopOrders', {
+          params: {filter: 'count'}
+        })
+          .then(response => {
+            this.$utils.log(response)
+            this.shopOrdersCount = response.data.data.count
+          })
+          .catch(error => {
+            this.$utils.log(error)
+          })
       }
     },
     mounted () {
@@ -76,6 +91,11 @@
       EventBus.$on('onToolbarSideIconClick', function () {
         that.mini = !that.mini
       })
+      EventBus.$on('onShopProductOrdered', function () {
+        //Refresh the count
+        that.refreshShopOrdersCount()
+      })
+      this.refreshShopOrdersCount()
     }
   }
 </script>

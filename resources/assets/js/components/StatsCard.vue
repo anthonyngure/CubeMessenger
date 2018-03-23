@@ -1,7 +1,7 @@
 <template>
-    <v-flex xs12 sm6>
+    <v-flex xs12 sm4>
         <v-card>
-            <v-toolbar dark flat dense color="primary">
+            <v-toolbar dark flat dense>
                 <v-toolbar-side-icon></v-toolbar-side-icon>
                 <v-toolbar-title>{{title}}</v-toolbar-title>
                 <v-spacer></v-spacer>

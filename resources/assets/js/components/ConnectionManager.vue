@@ -1,21 +1,12 @@
 <template>
-    <v-card v-if="connecting">
-        <v-card-text>
-            <v-progress-linear :indeterminate="true"></v-progress-linear>
-            <p class="text-xs-center">Please wait....</p>
-            <v-alert v-model="error" type="error" dismissible icon="warning" dark>
-                {{errorText}}
-            </v-alert>
-            <p v-show="!connecting && !error">Complete</p>
-        </v-card-text>
-        <v-card-actions>
-            <v-spacer></v-spacer>
-            <v-btn :color="error ? 'red' : 'primary'" flat v-show="!connecting || error"
-                   @click.native="onCloseSubmittingDialog">
-                {{error ? 'Cancel' : 'Close'}}
-            </v-btn>
-        </v-card-actions>
-    </v-card>
+    <div v-if="connecting || error">
+        <v-progress-linear v-if="connecting" :indeterminate="true"></v-progress-linear>
+        <p v-if="connecting" class="text-xs-center">Please wait....</p>
+        <v-alert v-model="error" type="error" icon="warning" dark>
+            {{errorText}}
+        </v-alert>
+        <p v-show="!connecting && !error">Complete</p>
+    </div>
 </template>
 
 <script>
@@ -71,7 +62,57 @@
             this.$emit('onError', error)
             this.$utils.log(error)
           })
-      }
+      },
+
+      onFailure (error, callbacks) {
+        this.error = true
+        this.connecting = false
+        if (callbacks && callbacks.onFailure) {
+          callbacks.onFailure(error)
+        }
+        this.$utils.log(error)
+        if (error.response) {
+          this.errorText = error.response.data.data
+        }
+        /*if (error.response && error.status === 422) {
+          this.errorText = error.response.data.data
+        } else if (error.response) {
+          this.errorText = error.response.data.meta.message
+        }*/
+      },
+
+      onSuccess (response, callbacks) {
+        this.error = false
+        this.connecting = false
+        this.$utils.log(response)
+        if (callbacks && callbacks.onSuccess) {
+          callbacks.onSuccess(response)
+        }
+      },
+
+
+      post (relativePath, callbacks, body) {
+        this.connecting = true
+        this.error = false
+        this.axios.post(relativePath, body)
+          .then(response => {
+            this.onSuccess(response, callbacks)
+          })
+          .catch(error => {
+            this.onFailure(error, callbacks)
+          })
+      },
+      get (relativePath, callbacks, params) {
+        this.connecting = true
+        this.error = false
+        this.axios.get(relativePath, {params: params})
+          .then(response => {
+            this.onSuccess(response, callbacks)
+          })
+          .catch(error => {
+            this.onFailure(error, callbacks)
+          })
+      },
     }
   }
 </script>

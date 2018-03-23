@@ -2,58 +2,65 @@
     <v-layout row wrap>
         <v-flex xs12>
             <v-card>
-                <connection-manager ref="connectionManager"
-                                    @onConnectionChange="onConnectionChange"
-                                    @onSuccess="onConnectionManagerSuccess">
-                </connection-manager>
-
+                <connection-manager ref="connectionManager"></connection-manager>
                 <v-card-text>
-                    <v-toolbar color="white" tabs flat dense>
-                        <v-text-field
-                                prepend-icon="search" append-icon="mic" label="Search" solo-inverted class="mx-3" flat>
-                        </v-text-field>
-                        <v-tabs fixed-tabs v-model="currentTab"
-                                slider-color="accent"
-                                show-arrows
-                                grow
-                                slot="extension"
-                                color="transparent">
-                            <v-tab v-for="category in categories"
-                                   :key="category.id"
-                                   :href="`#${category.id}`">
-                                {{category.name}}
-                            </v-tab>
-                        </v-tabs>
-
-                    </v-toolbar>
-
+                    <v-tabs fixed-tabs v-model="currentTab"
+                            slider-color="accent"
+                            show-arrows
+                            grow
+                            slot="extension"
+                            color="transparent">
+                        <v-tab v-for="category in categories"
+                               :key="category.id"
+                               :href="`#${category.id}`">
+                            {{category.name}}
+                        </v-tab>
+                    </v-tabs>
                     <v-container fluid grid-list-md>
                         <v-layout row wrap>
-                            <v-flex xs3 v-for="(product, n) in products" :key="n">
+                            <v-flex xs2 v-for="(product, n) in products" :key="n">
                                 <v-card>
                                     <v-card-media
                                             :src="$utils.imageUrl(product.image)"
-                                            height="200px">
+                                            height="150px">
                                         <v-container fill-height fluid>
                                             <v-layout fill-height>
                                                 <v-flex xs12 align-end flexbox>
-                                                    <span class="headline white--text">{{product.name}}</span>
+                                                    <span class="subheading white--text">{{product.name}}</span>
                                                 </v-flex>
                                             </v-layout>
                                         </v-container>
                                     </v-card-media>
-                                    <v-card-title primary-title>
-                                        <div>
-                                            <div class="headline">Ksh. {{product.price}}</div>
-                                            <span class="grey--text">{{product.description}}</span>
-                                        </div>
-                                    </v-card-title>
+
+                                    <v-tooltip top lazy max-width="175px">
+                                        <v-btn flat block slot="activator">
+                                            Ksh. {{product.price}}
+                                            <v-icon small right>info</v-icon>
+                                        </v-btn>
+                                        <span>{{product.description}}</span>
+                                    </v-tooltip>
+
                                     <v-card-actions>
                                         <v-spacer></v-spacer>
-                                        <v-btn flat color="primary" outline
+                                        <v-tooltip v-if="product.clientOrder" top lazy max-width="175px">
+                                            <v-btn flat color="accent" small outline slot="activator">
+                                                <v-icon left small>access_time</v-icon>
+                                                Pending
+                                            </v-btn>
+                                            <span>
+                                                <span>Quantity: {{product.clientOrder.quantity}}</span><br/>
+                                                <span>Status: {{product.clientOrder.status}}</span><br/>
+                                                <span v-if="product.clientOrder.status === 'CONFIRMED'">
+                                                    Date Confirmed: {{product.clientOrder.confirmedAt}}
+                                                    <br/>
+                                                </span>
+                                                <span v-else>Date Ordered: {{product.clientOrder.createdAt}}</span><br/>
+                                            </span>
+                                        </v-tooltip>
+                                        <v-btn v-else flat color="primary" small outline
                                                @click.native="selectedProduct = product">
-                                            <v-icon left>shopping_cart</v-icon>
-                                            Add to cart
+                                            <v-icon left small>shopping_basket</v-icon>
+                                            Order
                                         </v-btn>
                                     </v-card-actions>
                                 </v-card>
@@ -75,8 +82,7 @@
         </v-flex>
 
         <add-to-cart-dialog :product="selectedProduct"
-                            @onClose="selectedProduct = null"
-                            @onConfirmAddToCart="onConfirmAddToCart">
+                            @onClose="onCloseOderDialog">
         </add-to-cart-dialog>
 
     </v-layout>
@@ -102,54 +108,34 @@
         products: [],
         before: 0,
         after: 0,
-        perPage: 8,
+        perPage: 12,
         recent: true,
         distance: 10
       }
     },
     watch: {
-      currentTab (currentTab) {
+      currentTab (val) {
+        if (val) {
+          this.refresh()
+        }
+      }
+    },
+    methods: {
+      refresh () {
         this.products = []
         this.recent = true
         this.before = 0
         this.after = 0
         this.$nextTick(() => {
-          this.$utils.log(currentTab)
-          this.$utils.log(this.distance)
           this.$refs.infiniteLoading.$emit('$InfiniteLoading:reset')
           this.$refs.infiniteLoading.attemptLoad()
-
-          /*if (this.distance === 10) {
-            //Has already attempted loading
-            //Should now reset
-            this.$refs.infiniteLoading.$emit('$InfiniteLoading:reset')
-          } else {
-            //Has note yet attempted to load
-            this.distance = 10
-            this.$refs.infiniteLoading.attemptLoad()
-          }*/
         })
-      }
-    },
-    methods: {
-      onConfirmAddToCart (quantity) {
-        let that = this
-        let item = this.products.find(function (element) {
-          return element.id === that.selectedProduct.id
-        })
-        let index = this.products.indexOf(item)
-        item.isInCart = true
-        item.quantity = quantity
-        this.products[index] = item
-        EventBus.$emit('onAddRemoveFromCart', item)
+      },
+      onCloseOderDialog (successful) {
         this.selectedProduct = null
-      },
-      onConnectionChange (status) {
-
-      },
-      onConnectionManagerSuccess (response) {
-        this.categories = this.categories.concat(response.data.data)
-        this.currentTab = '' + this.categories[0].id
+        if (successful) {
+          this.refresh()
+        }
       },
       infiniteHandler ($state) {
         this.axios.get('shopProducts', {
@@ -158,7 +144,7 @@
             before: this.before,
             after: this.after,
             perPage: this.perPage,
-            category: this.currentTab,
+            shopCategoryId: this.currentTab,
           }
         }).then(response => {
 
@@ -166,8 +152,6 @@
           this.before = response.data.cursors.before
           this.after = response.data.cursors.after
           this.products = this.products.concat(response.data.data)
-
-          this.$utils.log(this.products)
 
           //State handling
           if (response.data.data.length === 0) {
@@ -179,9 +163,18 @@
           this.$utils.log(error)
         })
       },
+      loadShopCategories () {
+        let that = this
+        this.$refs.connectionManager.get('shopCategories', {
+          onSuccess (response) {
+            that.categories = that.categories.concat(response.data.data)
+            that.currentTab = '' + that.categories[0].id
+          }
+        })
+      }
     },
     mounted () {
-      this.$refs.connectionManager.index('shopCategories')
+      this.loadShopCategories()
     }
   }
 </script>

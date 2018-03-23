@@ -2,16 +2,11 @@
 	
 	namespace App\Http\Controllers;
 	
-	use App\ShopProduct;
-	use App\Traits\Paginates;
-	use Illuminate\Database\Eloquent\Relations\HasOne;
+	use App\ShopOrder;
 	use Illuminate\Http\Request;
 	
-	class ShopProductController extends Controller
+	class ShopOrderController extends Controller
 	{
-		
-		use Paginates;
-		
 		/**
 		 * Display a listing of the resource.
 		 *
@@ -23,26 +18,25 @@
 		{
 			$client = $this->getClient();
 			$this->validate($request, [
-				'shopCategoryId' => 'required|exists:shop_categories,id',
+				'filter' => 'required|in:count,new,confirmed,delivered',
 			]);
-			//
-			$products = ShopProduct::whereShopCategoryId($request->shopCategoryId)
-				->with(['clientOrder' => function (HasOne $hasOne) use ($client) {
-					$hasOne->where('client_id', $client->id)
-						->where('status', '!=', 'DELIVERED');
-				}]);
 			
-			return $this->paginate($request, $products);
-		}
-		
-		/**
-		 * Show the form for creating a new resource.
-		 *
-		 * @return \Illuminate\Http\Response
-		 */
-		public function create()
-		{
-			//
+			if ($request->filter === 'count') {
+				$count = $client->shopOrders()->where('status', '!=', 'DELIVERED')
+					->count();
+				$data = [
+					'count' => $count,
+				];
+				
+				return $this->arrayResponse($data);
+			} else {
+				$orders = $client->shopOrders()->where('status', strtoupper($request->filter))
+					->with('shopProduct')
+					->get();
+				
+				return $this->collectionResponse($orders);
+			}
+			
 		}
 		
 		/**
@@ -50,10 +44,22 @@
 		 *
 		 * @param  \Illuminate\Http\Request $request
 		 * @return \Illuminate\Http\Response
+		 * @throws \App\Exceptions\WrappedException
 		 */
 		public function store(Request $request)
 		{
 			//
+			$client = $this->getClient();
+			$this->validate($request, [
+				'shopProductId' => 'required|numeric|exists:shop_products,id',
+				'quantity'      => 'required|numeric',
+			]);
+			$shopOrder = $client->shopOrders()->save(new ShopOrder([
+				'quantity'        => $request->quantity,
+				'shop_product_id' => $request->shopProductId,
+			]));
+			
+			return $this->itemCreatedResponse($shopOrder);
 		}
 		
 		/**
@@ -67,16 +73,6 @@
 			//
 		}
 		
-		/**
-		 * Show the form for editing the specified resource.
-		 *
-		 * @param  int $id
-		 * @return \Illuminate\Http\Response
-		 */
-		public function edit($id)
-		{
-			//
-		}
 		
 		/**
 		 * Update the specified resource in storage.
