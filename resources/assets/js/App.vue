@@ -32,7 +32,7 @@
                         <router-view v-else></router-view>
                     </v-container>
                 </v-content>
-                <v-footer app dark :fixed="false">
+                <v-footer app color="primary" dark :fixed="false">
                     <v-layout row wrap>
                         <v-flex xs12 py-3 text-xs-center white--text>
                             &copy;2018 — <strong>www.cube-messenger.com</strong>
@@ -106,7 +106,7 @@
         }
       })
       EventBus.$on('onThemeSwitch', function (val) {
-        that.darkTheme = val;
+        that.darkTheme = val
       })
     }
   }

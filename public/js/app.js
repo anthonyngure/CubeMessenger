@@ -64403,7 +64403,9 @@ var render = function() {
                 _vm._v(" "),
                 _c(
                   "v-footer",
-                  { attrs: { app: "", dark: "", fixed: false } },
+                  {
+                    attrs: { app: "", color: "primary", dark: "", fixed: false }
+                  },
                   [
                     _c(
                       "v-layout",
@@ -66703,7 +66705,15 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c(
     "v-toolbar",
-    { attrs: { fixed: "", dense: "", dark: "", app: "", "clipped-left": "" } },
+    {
+      attrs: {
+        fixed: "",
+        dense: "",
+        color: _vm.darkTheme ? "black" : "white",
+        app: "",
+        "clipped-left": ""
+      }
+    },
     [
       _c("v-toolbar-side-icon", {
         on: {
@@ -66716,31 +66726,8 @@ var render = function() {
       _vm._v(" "),
       _c("img", {
         staticClass: "mr-3",
-        attrs: { src: "/img/logo.png", height: "36px", width: "200px" }
+        attrs: { src: "/img/logo.png", height: "32px", width: "200px" }
       }),
-      _vm._v(" "),
-      _vm.$auth.check() && _vm.$auth.user().client
-        ? _c("v-avatar", { attrs: { size: "36px" } }, [
-            _c("img", {
-              attrs: {
-                src: _vm.$utils.imageUrl(_vm.$auth.user().client.logo),
-                alt: "Logo"
-              }
-            })
-          ])
-        : _vm._e(),
-      _vm._v(" "),
-      _c("v-toolbar-title", [
-        _c("span", [
-          _vm._v(
-            _vm._s(
-              _vm.$auth.check() && _vm.$auth.user().client
-                ? _vm.$auth.user().client.name
-                : _vm.$appName
-            )
-          )
-        ])
-      ]),
       _vm._v(" "),
       _c("v-spacer"),
       _vm._v(" "),
