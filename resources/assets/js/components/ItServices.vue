@@ -4,8 +4,10 @@
 
 <script>
   import ServiceRequests from './ServiceRequests'
+  import Base from './Base.vue'
 
   export default {
+    extends: Base,
     components: {ServiceRequests},
     name: 'it-services'
   }

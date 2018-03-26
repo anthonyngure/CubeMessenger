@@ -2,9 +2,9 @@
     <v-layout row wrap align-center justify-center>
         <v-flex xs12 sm8 md4>
             <v-card class="elevation-12">
-                <v-toolbar dark color="primary" dense>
+                <v-toolbar color="white" dense>
                     <img :src="'/img/logo.png'" height="36px" width="200px" class="mr-3"/>
-                    <v-icon>person</v-icon>
+                    <v-icon color="primary">person</v-icon>
                     <v-toolbar-title>Sign In</v-toolbar-title>
                 </v-toolbar>
                 <v-card-text>

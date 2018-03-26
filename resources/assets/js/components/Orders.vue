@@ -6,7 +6,7 @@
                     <connection-manager ref="connectionManager">
                     </connection-manager>
                     <v-tabs fixed-tabs
-                            v-model="currentItem"
+                            v-model="currentTab"
                             slider-color="accent"
                             lazy
                             grow>
@@ -48,13 +48,13 @@
                                                          :since="order.createdAt">
                                                 </timeago>
                                             </span><br/>
-                                            <span v-if="currentItem !== 'new'">Confirmed At:
+                                            <span v-if="currentTab !== 'new'">Confirmed At:
                                                 <timeago class="accent--text"
                                                          :since="order.confirmedAt">
                                                 </timeago>
                                                 <br/>
                                             </span>
-                                            <span v-if="currentItem === 'delivered'">Delivered At:
+                                            <span v-if="currentTab === 'delivered'">Delivered At:
                                                 <timeago class="accent--text"
                                                          :since="order.deliveredAt">
                                                 </timeago>
@@ -63,7 +63,7 @@
                                         </div>
                                     </v-card-title>
 
-                                    <v-card-actions v-if="currentItem === 'new'">
+                                    <v-card-actions v-if="currentTab === 'new'">
                                         <v-spacer></v-spacer>
                                         <v-btn flat color="red" small outline
                                                @click.native="selectedProduct = product">
@@ -88,13 +88,15 @@
 
 <script>
   import ConnectionManager from './ConnectionManager'
+  import Base from './Base.vue'
 
   export default {
+    extends: Base,
     components: {ConnectionManager},
     name: 'orders',
     data () {
       return {
-        currentItem: null,
+        currentTab: null,
         loading: false,
         selectedProduct: null,
         orders: [],
@@ -111,12 +113,12 @@
             that.loading = false
           }
         }, {
-          filter: this.currentItem
+          filter: this.currentTab
         })
       }
     },
     watch: {
-      currentItem (val) {
+      currentTab (val) {
         if (val) {
           this.orders = []
           this.refresh()
@@ -124,7 +126,7 @@
       }
     },
     mounted () {
-      this.currentItem = 'new'
+      this.currentTab = 'new'
     }
   }
 </script>

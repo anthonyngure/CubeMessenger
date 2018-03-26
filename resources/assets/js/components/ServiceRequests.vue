@@ -6,7 +6,7 @@
                     <connection-manager ref="connectionManager">
                     </connection-manager>
                     <v-tabs fixed-tabs
-                            v-model="currentItem"
+                            v-model="currentTab"
                             slider-color="accent"
                             lazy
                             grow>
@@ -24,7 +24,7 @@
                             <td>{{ props.item.id }}</td>
                             <td>{{ props.item.details }}</td>
                             <td>{{ props.item.assignedTo ? props.item.assignedTo.name : 'N/A' }}</td>
-                            <td>{{ currentItem === 'complete' ? props.item.cost : 'N/A' }}</td>
+                            <td>{{ currentTab === 'complete' ? props.item.cost : 'N/A' }}</td>
                             <td>{{ props.item.scheduleDate }}</td>
                             <td>{{ props.item.scheduleTime }}</td>
                         </template>
@@ -77,7 +77,7 @@
     },
     data () {
       return {
-        currentItem: null,
+        currentTab: null,
         loading: false,
         addingServiceRequest: false,
         headers: [
@@ -92,7 +92,7 @@
       }
     },
     watch: {
-      currentItem (val) {
+      currentTab (val) {
         if (val) {
           this.refresh()
         }
@@ -110,13 +110,13 @@
             that.loading = false
           }
         }, {
-          filter: this.currentItem,
+          filter: this.currentTab,
           type: this.type
         })
       },
       onCloseAddingServiceRequest (successful) {
         this.addingServiceRequest = false
-        this.currentItem = 'new'
+        this.currentTab = 'new'
         this.$utils.log(successful)
         if (successful) {
           this.refresh()
@@ -124,7 +124,7 @@
       },
     },
     mounted () {
-      this.currentItem = 'new'
+      this.currentTab = 'new'
     }
   }
 </script>

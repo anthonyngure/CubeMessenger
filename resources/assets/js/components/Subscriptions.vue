@@ -7,7 +7,7 @@
                                         @onSuccess="onConnectionManagerSuccess">
                     </connection-manager>
                     <v-tabs fixed-tabs
-                            v-model="currentItem"
+                            v-model="currentTab"
                             slider-color="accent"
                             lazy
                             grow>
@@ -95,8 +95,10 @@
   import SubscriptionDialog from './SubscriptionDialog'
   import EditSubscriptionDialog from './EditSubscriptionDialog'
   import ConnectionManager from './ConnectionManager'
+  import Base from './Base.vue'
 
   export default {
+    extends:Base,
     components: {
       ConnectionManager,
       EditSubscriptionDialog,
@@ -107,7 +109,7 @@
       return {
         connecting: false,
         unSubscribing: 0,
-        currentItem: null,
+        currentTab: null,
         subscribeItem: null,
         editItem: null,
         subscriptionTypes: [],
@@ -131,7 +133,7 @@
       }
     },
     watch: {
-      currentItem (currentItem) {
+      currentTab (currentItem) {
         this.$utils.log(currentItem)
         if (currentItem && !this.connecting) {
           let subscriptionType = this.subscriptionTypes.find(function (element) {
@@ -181,7 +183,7 @@
         this.subscriptionTypes = []
         this.subscriptionTypes = this.subscriptionTypes.concat(response.data.data.subscriptionTypes)
         this.subscriptionSchedules = response.data.data.subscriptionSchedules
-        this.currentItem = this.subscriptionTypes[0].name
+        this.currentTab = this.subscriptionTypes[0].name
       },
       updateSubscriptionItem (subscriptionItem) {
         if (subscriptionItem) {

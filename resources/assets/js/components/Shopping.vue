@@ -93,8 +93,10 @@
   import ConnectionManager from './ConnectionManager'
   import InfiniteLoading from 'vue-infinite-loading'
   import AddToCartDialog from './AddToCartDialog'
+  import Base from './Base.vue'
 
   export default {
+    extends: Base,
     components: {
       AddToCartDialog,
       ConnectionManager, InfiniteLoading

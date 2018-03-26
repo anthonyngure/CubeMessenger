@@ -26,7 +26,9 @@
 				$table->boolean('phone_verified')->default(false);
 				$table->string('password')->nullable();
 				$table->string('password_recovery_code')->nullable();
-				$table->enum('account_type', ['USER', 'RIDER'])->default('USER');
+				$table->enum('account_type', ['CUBE_MESSENGER_USER', 'CUBE_MESSENGER_RIDER', 'CLIENT_ADMIN',
+					'CLIENT_PURCHASING_HEAD', 'CLIENT_DEPARTMENT_HEAD', 'CLIENT_DEPARTMENT_USER', 'CLIENT_USER'])
+					->default('CUBE_MESSENGER_USER');
 				$table->double('latitude', 8, 5)->nullable();
 				$table->double('longitude', 8, 5)->nullable();
 				$table->rememberToken();

@@ -5,7 +5,7 @@
                 <v-card-text>
                     <v-tabs
                             fixed-tabs
-                            v-model="currentItem"
+                            v-model="currentTab"
                             slider-color="accent"
                             grow>
                         <v-tab href="#pending">Pending Deliveries</v-tab>
@@ -172,17 +172,17 @@
         pagination: {
           rowsPerPage: 4
         },
-        currentItem: null,
+        currentTab: null,
       }
     },
     watch: {
       month (month) {
-        if (month && this.currentItem && !this.connecting) {
+        if (month && this.currentTab && !this.connecting) {
           this.loadDeliveries()
         }
       },
-      currentItem (currentItem) {
-        if (this.month && currentItem && !this.connecting) {
+      currentTab (currentTab) {
+        if (this.month && currentTab && !this.connecting) {
           this.loadDeliveries()
         }
       }
@@ -199,7 +199,7 @@
         let that = this
         this.axios.get('/deliveries', {
           params: {
-            filter: this.currentItem,
+            filter: this.currentTab,
             month: this.month,
           }
         }).then(response => {
@@ -221,7 +221,7 @@
       let today = moment()
       this.maxMonth = today.year() + '-' + (today.month() + 2)
       this.month = today.year() + '-' + today.month()
-      this.currentItem = 'pending'
+      this.currentTab = 'pending'
       let that = this
       EventBus.$on('refreshDeliveryHistoryList', function () {
         that.loadDeliveries()

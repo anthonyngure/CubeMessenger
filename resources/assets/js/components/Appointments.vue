@@ -94,6 +94,7 @@
   import FullCalendar from 'vue-fullcalendar/src/fullCalendar'
   import Moment from 'moment'
   import AddAppointmentFullDialog from './AddAppointmentFullDialog'
+  import Base from './Base.vue'
 
   import {extendMoment} from 'moment-range'
   import ConnectionManager from './ConnectionManager'
@@ -101,6 +102,7 @@
   const moment = extendMoment(Moment)
 
   export default {
+    extends: Base,
     components: {
       ConnectionManager,
       AddAppointmentFullDialog,
