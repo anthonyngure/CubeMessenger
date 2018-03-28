@@ -77,12 +77,4 @@
 		{
 			return $this->hasMany(Appointment::class);
 		}
-		
-		/**
-		 * @return \Illuminate\Database\Eloquent\Relations\HasMany
-		 */
-		public function shopOrders()
-		{
-			return $this->hasMany(ShopOrder::class);
-		}
 	}

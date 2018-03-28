@@ -1,36 +1,35 @@
 <template>
     <v-layout row wrap>
         <v-flex xs12>
+            <v-tabs fixed-tabs
+                    v-model="currentTab"
+                    slider-color="accent"
+                    lazy
+                    grow>
+                <v-tab href="#new">New</v-tab>
+                <v-tab href="#pending">Pending</v-tab>
+                <v-tab href="#complete">Complete</v-tab>
+                <v-tab href="#rejected">Rejected</v-tab>
+            </v-tabs>
             <v-card>
-                <v-card-text>
-                    <connection-manager ref="connectionManager">
-                    </connection-manager>
-                    <v-tabs fixed-tabs
-                            v-model="currentTab"
-                            slider-color="accent"
-                            lazy
-                            grow>
-                        <v-tab href="#new">New</v-tab>
-                        <v-tab href="#pending">Pending</v-tab>
-                        <v-tab href="#complete">Complete</v-tab>
-                    </v-tabs>
-
-                    <v-data-table
-                            :headers="headers"
-                            :items="serviceRequests"
-                            :loading="loading"
-                            hide-actions>
-                        <template slot="items" slot-scope="props">
-                            <td>{{ props.item.id }}</td>
-                            <td>{{ props.item.details }}</td>
-                            <td>{{ props.item.assignedTo ? props.item.assignedTo.name : 'N/A' }}</td>
-                            <td>{{ currentTab === 'complete' ? props.item.cost : 'N/A' }}</td>
-                            <td>{{ props.item.scheduleDate }}</td>
-                            <td>{{ props.item.scheduleTime }}</td>
-                        </template>
-                    </v-data-table>
-
-                </v-card-text>
+                <connection-manager ref="connectionManager"
+                                    @onConnectionChange="(status)=> {loading = status}">
+                </connection-manager>
+                <v-data-table
+                        :headers="headers"
+                        :items="serviceRequests"
+                        :loading="loading"
+                        :no-data-text="loading ? '' : 'No data available'"
+                        hide-actions>
+                    <template slot="items" slot-scope="props">
+                        <td>{{ props.item.id }}</td>
+                        <td>{{ props.item.details }}</td>
+                        <td>{{ props.item.assignedTo ? props.item.assignedTo.name : 'N/A' }}</td>
+                        <td>{{ currentTab === 'complete' ? props.item.cost : 'N/A' }}</td>
+                        <td>{{ props.item.scheduleDate }}</td>
+                        <td>{{ props.item.scheduleTime }}</td>
+                    </template>
+                </v-data-table>
             </v-card>
         </v-flex>
 
@@ -102,12 +101,10 @@
       refresh () {
         let that = this
         this.serviceRequests = []
-        this.loading = true
         this.$refs.connectionManager.get('serviceRequests', {
           onSuccess (response) {
             that.serviceRequests = []
             that.serviceRequests = that.serviceRequests.concat(response.data.data)
-            that.loading = false
           }
         }, {
           filter: this.currentTab,

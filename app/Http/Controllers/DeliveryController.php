@@ -28,7 +28,7 @@
 		public function index(Request $request)
 		{
 			$this->validate($request, [
-				'filter' => 'required|in:pending,complete,rider',
+				'filter' => 'required|in:pendingApproval,pendingDelivery,delivered,rejected,rider',
 				'month'  => 'required_unless:filter,rider',
 			]);
 			
@@ -50,7 +50,8 @@
 		 */
 		public function store(Request $request)
 		{
-			$client = Client::find(Auth::user()->client_id);
+			$client = $this->getClient();
+			
 			if (is_null($client)) {
 				throw new WrappedException("Sorry, you are not associated to any client.");
 			}
@@ -72,6 +73,7 @@
 			$scheduleDate = $request->json('scheduleDate');
 			$scheduleTime = $request->json('scheduleTime');
 			$delivery = new Delivery([
+				'user_id'                  => Auth::user()->getKey(),
 				'origin_name'              => $request->json('originName'),
 				'origin_vicinity'          => $request->json('originVicinity'),
 				'origin_formatted_address' => $request->json('originFormattedAddress'),
@@ -86,6 +88,15 @@
 			
 			
 			$client->deliveries()->save($delivery);
+			
+			$user = Auth::user();
+			if ($user->account_type == 'PURCHASING_HEAD') {
+				$status = 'PENDING_DELIVERY';
+			} else if ($user->account_type == 'DEPARTMENT_HEAD') {
+				$status = 'AT_PURCHASING_HEAD';
+			} else {
+				$status = 'AT_DEPARTMENT_HEAD';
+			}
 			
 			$deliveryItems = array();
 			foreach ($items as $item) {
@@ -103,6 +114,7 @@
 					'note'                          => $deliveryItem->note,
 					'estimated_duration'            => $deliveryItem->estimatedDuration,
 					'estimated_distance'            => $deliveryItem->estimatedDistance,
+					'status'                        => $status,
 				]));
 			}
 			
@@ -207,8 +219,12 @@
 			
 			$deliveries = $client->deliveries()
 				->whereHas('items', function (Builder $builder) use ($request) {
-					if ($request->filter === 'pending') {
-						$builder->where('status', '!=', 'AT_DESTINATION');
+					if ($request->filter == 'pendingApproval') {
+						$builder->where('status', 'AT_DEPARTMENT_HEAD')
+							->orWhere('status', 'AT_PURCHASING_HEAD');
+					} else if ($request->filter == 'pendingDelivery') {
+						$builder->where('status', 'PENDING_DELIVERY')
+							->orWhere('status', 'EN_ROUTE_TO_DESTINATION');
 					} else {
 						$builder->where('status', 'AT_DESTINATION');
 					}

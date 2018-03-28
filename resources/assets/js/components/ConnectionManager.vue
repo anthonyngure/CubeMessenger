@@ -1,12 +1,14 @@
 <template>
-    <div v-if="connecting || error">
-        <v-progress-linear v-if="connecting" :indeterminate="true"></v-progress-linear>
-        <p v-if="connecting" class="text-xs-center">Please wait....</p>
-        <v-alert v-model="error" type="error" icon="warning" dark>
-            {{errorText}}
-        </v-alert>
-        <p v-show="!connecting && !error">Complete</p>
-    </div>
+    <v-card flat v-if="connecting || error">
+        <v-card-text>
+            <v-progress-linear v-if="connecting" :indeterminate="true"></v-progress-linear>
+            <p v-if="connecting" class="text-xs-center">Please wait....</p>
+            <v-alert v-model="error" type="error" icon="warning" dark>
+                {{errorText}}
+            </v-alert>
+            <p v-show="!connecting && !error">Complete</p>
+        </v-card-text>
+    </v-card>
 </template>
 
 <script>
@@ -72,7 +74,15 @@
         }
         this.$utils.log(error)
         if (error.response) {
-          this.errorText = error.response.data.data
+          if (error.response.status === 422) {
+            switch (error.response.data.meta.code) {
+              case 'VALIDATION':
+                this.errorText = error.response.data.data
+                break
+              default:
+                this.errorText = error.response.data.meta.message
+            }
+          }
         }
         /*if (error.response && error.status === 422) {
           this.errorText = error.response.data.data
@@ -83,6 +93,7 @@
 
       onSuccess (response, callbacks) {
         this.error = false
+        this.errorText = null
         this.connecting = false
         this.$utils.log(response)
         if (callbacks && callbacks.onSuccess) {
@@ -103,9 +114,25 @@
           })
       },
       get (relativePath, callbacks, params) {
+        this.$utils.log(relativePath)
+        this.$utils.log(params)
         this.connecting = true
         this.error = false
         this.axios.get(relativePath, {params: params})
+          .then(response => {
+            this.onSuccess(response, callbacks)
+          })
+          .catch(error => {
+            this.onFailure(error, callbacks)
+          })
+      },
+
+      patch (relativePath, callbacks, data) {
+        this.$utils.log(relativePath)
+        this.$utils.log(data)
+        this.connecting = true
+        this.error = false
+        this.axios.patch(relativePath, data)
           .then(response => {
             this.onSuccess(response, callbacks)
           })

@@ -2,8 +2,7 @@
     <v-toolbar fixed dense :color="darkTheme ? 'black' : 'white'" app clipped-left>
         <v-toolbar-side-icon @click.stop="onToolbarSideIconClick"></v-toolbar-side-icon>
         <img :src="'/img/logo.png'" height="32px" width="200px"/>
-        <v-spacer></v-spacer>
-        <v-btn color="primary" v-if="$auth.check()">
+        <v-btn color="primary" v-if="$auth.check()" class="ml-5">
             <v-icon left>account_balance_wallet</v-icon>
             Balance KES 0.00
         </v-btn>
@@ -16,31 +15,35 @@
         </v-toolbar-items>
         <v-spacer></v-spacer>
         <v-switch v-model="darkTheme" hide-details></v-switch>
-        <v-btn icon v-if="$auth.check()">
-            <v-badge overlap left small color="accent">
-                <span slot="badge">0</span>
-                <v-icon color="primary">notifications</v-icon>
-            </v-badge>
-        </v-btn>
-        <v-toolbar-items v-if="$auth.check()">
-            <v-btn v-if="$auth.user().accountType === 'CLIENT_ADMIN'" to="/" flat>
-                <v-icon color="primary" left>group_add</v-icon>
-                Add User
+        <v-menu offset-y bottom>
+            <v-btn icon v-if="$auth.check()" slot="activator">
+                <v-badge overlap left small color="accent">
+                    <span slot="badge">0</span>
+                    <v-icon color="primary">notifications</v-icon>
+                </v-badge>
             </v-btn>
-            <v-btn @click="signOut" flat>
-                <v-icon color="primary" left>person</v-icon>
-                Sign Out
-            </v-btn>
-        </v-toolbar-items>
-        <v-toolbar-items v-else>
+            <v-card>
+                <v-card-text>
+                    <span>No notifications</span>
+                </v-card-text>
+            </v-card>
+        </v-menu>
+        <v-toolbar-items v-if="!$auth.check()">
             <v-btn to="signIn" flat>
                 <v-icon left>person</v-icon>
                 Sign In
             </v-btn>
         </v-toolbar-items>
-        <v-btn icon>
-            <v-icon>more_vert</v-icon>
-        </v-btn>
+        <v-menu offset-y bottom>
+            <v-btn icon slot="activator">
+                <v-icon>more_vert</v-icon>
+            </v-btn>
+            <v-list dense v-if="$auth.check()">
+                <v-list-tile @click="signOut">
+                    Sign Out
+                </v-list-tile>
+            </v-list>
+        </v-menu>
     </v-toolbar>
 </template>
 

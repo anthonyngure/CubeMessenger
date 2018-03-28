@@ -23,6 +23,7 @@ class CreateClientsTable extends Migration
 	        $table->string('primary_color');
 	        $table->string('accent_color');
 	        $table->timestamps();
+	        $table->softDeletes();
         });
     }
 

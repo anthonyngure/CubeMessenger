@@ -38,6 +38,14 @@
  * @method static \Illuminate\Database\Eloquent\Builder|\App\ServiceRequest whereScheduleDate($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\ServiceRequest whereScheduleTime($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\ServiceRequest whereType($value)
+ * @property string|null $department_head_approved_at
+ * @property string|null $purchasing_head_approved_at
+ * @property string|null $attended_at
+ * @property string|null $completed_at
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\ServiceRequest whereAttendedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\ServiceRequest whereCompletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\ServiceRequest whereDepartmentHeadApprovedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\ServiceRequest wherePurchasingHeadApprovedAt($value)
  */
 	class ServiceRequest extends Model
 	{

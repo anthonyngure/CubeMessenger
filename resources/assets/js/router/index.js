@@ -8,6 +8,7 @@ import Shopping from '../components/Shopping.vue'
 import ItServices from '../components/ItServices'
 import RepairServices from '../components/RepairServices'
 import Orders from '../components/Orders'
+import Users from '../components/Users'
 import Vue from 'vue'
 import Router from 'vue-router'
 
@@ -65,15 +66,9 @@ export default new Router({
     },
     {
       meta: {auth: true},
-      path: '/documents',
-      name: 'documents',
-      component: ComingSoon
-    },
-    {
-      meta: {auth: true},
-      path: '/invoices',
-      name: 'invoices',
-      component: ComingSoon
+      path: '/users',
+      name: 'users',
+      component: Users
     },
     {
       meta: {auth: true},

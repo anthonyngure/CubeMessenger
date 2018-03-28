@@ -10,6 +10,7 @@ import router from './router'
 import Vuetify from 'vuetify'
 import VueTimeago from 'vue-timeago'
 import formatCurrency from 'format-currency'
+
 const DEBUG = false
 
 const GOOGLE_MAPS_KEY = 'AIzaSyAS_9BsQpqTP8EVuMZ7rQ9gMCl0wmqhm7k'
@@ -64,9 +65,9 @@ Vue.use(require('@websanova/vue-auth'), {
   http: require('@websanova/vue-auth/drivers/http/axios.1.x.js'),
   router: require('@websanova/vue-auth/drivers/router/vue-router.2.x.js'),
   fetchData: {url: 'auth/user', method: 'GET', enabled: true},
-  registerData: {url: 'auth/signUp', method: 'POST', redirect: '/dashboard'},
-  loginData: {url: 'auth/signIn', method: 'POST', redirect: '/dashboard', fetchUser: true},
-  logoutData: {url: 'auth/signOut', method: 'POST', redirect: '/auth/signIn', makeRequest: true},
+  registerData: {url: 'auth/signUp', method: 'POST', redirect: {name: 'dashboard'}},
+  loginData: {url: 'auth/signIn', method: 'POST', redirect: {name: 'dashboard'}, fetchUser: true},
+  logoutData: {url: 'auth/signOut', method: 'POST', redirect: {name: 'signIn'}, makeRequest: true},
   refreshData: {url: 'auth/refresh', method: 'GET', enabled: false, interval: 0},
   authRedirect: {path: 'auth/signIn'}
 })
@@ -128,5 +129,10 @@ new Vue({
     emulateHTTP: true
   },
   template: '<App></App>',
-  components: {App}
+  components: {App},
+  data () {
+    return {
+      test: 'This is a test in the app'
+    }
+  }
 })

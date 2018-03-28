@@ -22,13 +22,18 @@
 				$table->foreign('assigned_to')->references('id')->on('users');
 				
 				$table->enum('type', ['IT', 'REPAIR']);
-				$table->enum('status', ['NEW', 'PENDING', 'COMPLETE'])->default('NEW');
-				
+				$table->enum('status', ['AT_DEPARTMENT_HEAD', 'AT_PURCHASING_HEAD',
+					'ON_PROGRESS', 'COMPLETE'])->default('AT_DEPARTMENT_HEAD');
 				$table->mediumText('details');
 				$table->string('note')->nullable();
 				$table->double('cost', 8, 2)->default(0);
 				$table->date('schedule_date')->nullable();
 				$table->time('schedule_time')->nullable();
+				
+				$table->timestamp('department_head_approved_at')->nullable();
+				$table->timestamp('purchasing_head_approved_at')->nullable();
+				$table->timestamp('attended_at')->nullable();
+				$table->timestamp('completed_at')->nullable();
 				$table->timestamps();
 			});
 		}

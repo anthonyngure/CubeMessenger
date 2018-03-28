@@ -14,8 +14,8 @@
 		public function run()
 		{
 			
-			$accountTypes = ['CUBE_MESSENGER_USER', 'CUBE_MESSENGER_RIDER', 'CLIENT_ADMIN',
-				'CLIENT_PURCHASING_HEAD', 'CLIENT_DEPARTMENT_HEAD', 'CLIENT_DEPARTMENT_USER', 'CLIENT_USER'];
+			$accountTypes = ['CUBE_MESSENGER_USER', 'CUBE_MESSENGER_RIDER', 'CLIENT_PURCHASING_HEAD',
+				'CLIENT_DEPARTMENT_HEAD', 'CLIENT_DEPARTMENT_USER', 'CLIENT_USER'];
 			
 			$adminRole = Role::where('name', 'admin')->firstOrFail();
 			$testClient = \App\Client::where('name', 'Test Client')->firstOrFail();
@@ -47,7 +47,7 @@
 				'name'           => 'Test Purchasing Head',
 				'email'          => 'testpurchasinghead@cube-messenger.com',
 				'email_verified' => 1,
-				'account_type'   => 'CLIENT_PURCHASING_HEAD',
+				'account_type'   => 'PURCHASING_HEAD',
 				'password'       => bcrypt('testpurchasinghead'),
 				'remember_token' => str_random(60),
 			]);
@@ -58,7 +58,7 @@
 				'name'           => 'Test Department Head',
 				'email'          => 'testdepartmenthead@cube-messenger.com',
 				'email_verified' => 1,
-				'account_type'   => 'CLIENT_DEPARTMENT_HEAD',
+				'account_type'   => 'DEPARTMENT_HEAD',
 				'password'       => bcrypt('testdepartmenthead'),
 				'remember_token' => str_random(60),
 			]);
@@ -69,7 +69,7 @@
 				'name'           => 'Test Department User',
 				'email'          => 'testdepartmentuser@cube-messenger.com',
 				'email_verified' => 1,
-				'account_type'   => 'CLIENT_DEPARTMENT_USER',
+				'account_type'   => 'DEPARTMENT_USER',
 				'password'       => bcrypt('testdepartmentuser'),
 				'remember_token' => str_random(60),
 			]);

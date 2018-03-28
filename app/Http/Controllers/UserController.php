@@ -2,49 +2,24 @@
 	
 	namespace App\Http\Controllers;
 	
-	use App\ShopProduct;
-	use App\Traits\Paginates;
-	use Illuminate\Database\Eloquent\Relations\HasOne;
 	use Illuminate\Http\Request;
 	
-	class ShopProductController extends Controller
+	class UserController extends Controller
 	{
-		
-		use Paginates;
-		
 		/**
 		 * Display a listing of the resource.
 		 *
-		 * @param \Illuminate\Http\Request $request
 		 * @return \Illuminate\Http\Response
 		 * @throws \App\Exceptions\WrappedException
 		 */
-		public function index(Request $request)
+		public function index()
 		{
 			$client = $this->getClient();
-			$this->validate($request, [
-				'shopCategoryId' => 'required|exists:shop_categories,id',
-			]);
-			//
-			$products = ShopProduct::whereShopCategoryId($request->shopCategoryId)
-				->with(['clientOrder' => function (HasOne $hasOne) use ($client) {
-					$hasOne->whereIn('user_id', $client->users->pluck('id'))
-						->where('status', '!=', 'DELIVERED')
-						->where('status', '!=', 'REJECTED');
-				}]);
+			$users = $client->users()->get();
 			
-			return $this->paginate($request, $products);
+			return $this->collectionResponse($users);
 		}
 		
-		/**
-		 * Show the form for creating a new resource.
-		 *
-		 * @return \Illuminate\Http\Response
-		 */
-		public function create()
-		{
-			//
-		}
 		
 		/**
 		 * Store a newly created resource in storage.
@@ -68,16 +43,6 @@
 			//
 		}
 		
-		/**
-		 * Show the form for editing the specified resource.
-		 *
-		 * @param  int $id
-		 * @return \Illuminate\Http\Response
-		 */
-		public function edit($id)
-		{
-			//
-		}
 		
 		/**
 		 * Update the specified resource in storage.

@@ -24,7 +24,7 @@
 		 */
 		protected function getClient()
 		{
-			$client = Client::find(Auth::user()->client_id);
+			$client = Client::with('users')->find(Auth::user()->client_id);
 			if (is_null($client)) {
 				throw new WrappedException("Sorry, you are not associated to any client.");
 			}

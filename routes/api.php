@@ -11,6 +11,9 @@
 	|
 	*/
 	
+	
+	sleep(0);
+	
 	ob_start('ob_gzhandler');
 	
 	
@@ -50,6 +53,7 @@
 			Route::post('auth/signOut', 'AuthController@signOut');
 			Route::get('auth/refresh', 'AuthController@refresh');
 			Route::get('auth/user', 'AuthController@user');
+			Route::resource('users', 'UserController');
 			Route::resource('deliveries', 'DeliveryController');
 			Route::resource('deliveries.items', 'DeliveryItemController');
 			Route::resource('subscriptions', 'SubscriptionController');

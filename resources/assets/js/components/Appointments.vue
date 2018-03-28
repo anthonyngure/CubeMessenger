@@ -1,7 +1,6 @@
 <template>
     <v-layout row wrap>
         <v-flex xs12>
-
             <v-date-picker
                     v-model="date"
                     full-width
@@ -9,64 +8,59 @@
                     event-color="green"
                     :events="appointmentDates">
             </v-date-picker>
-
-            <connection-manager ref="connectionManager">
-            </connection-manager>
-
             <v-card>
-                <v-card-text>
-                    <v-data-iterator
-                            content-tag="v-list"
-                            :items="appointments"
-                            :rows-per-page-items="rowsPerPageItems"
-                            :pagination.sync="pagination">
+                <connection-manager ref="connectionManager"></connection-manager>
+                <v-data-iterator
+                        content-tag="v-list"
+                        :items="appointments"
+                        :rows-per-page-items="rowsPerPageItems"
+                        :pagination.sync="pagination">
                         <span slot="no-data">
                             <p>No appointments or meetings found for {{date}}</p>
                         </span>
-                        <template slot="item" slot-scope="props">
-                            <v-list-group no-action :key="props.item.id" v-model="props.item.active">
-                                <v-list-tile slot="activator" avatar>
-                                    <v-list-tile-action>
-                                        <v-chip label small color="accent" text-color="white">
-                                            <v-icon left>access_time</v-icon>
-                                            {{props.item.allDay ? 'All day long'
-                                            : props.item.startTime+' -'+props.item.endTime}}
-                                        </v-chip>
-                                    </v-list-tile-action>
-                                    <v-list-tile-content>
-                                        <v-list-tile-title>
-                                            {{ props.item.user.name }} -
-                                            <span class="caption">{{ props.item.title }}</span>
-                                        </v-list-tile-title>
-                                        <v-list-tile-sub-title>{{ props.item.venue }} -
-                                            <strong>
-                                                {{ props.item.participants.length }} participants
-                                            </strong>
-                                        </v-list-tile-sub-title>
-                                    </v-list-tile-content>
-                                </v-list-tile>
+                    <template slot="item" slot-scope="props">
+                        <v-list-group no-action :key="props.item.id" v-model="props.item.active">
+                            <v-list-tile slot="activator" avatar>
+                                <v-list-tile-action>
+                                    <v-chip label small color="accent" text-color="white">
+                                        <v-icon left>access_time</v-icon>
+                                        {{props.item.allDay ? 'All day long'
+                                        : props.item.startTime+' -'+props.item.endTime}}
+                                    </v-chip>
+                                </v-list-tile-action>
+                                <v-list-tile-content>
+                                    <v-list-tile-title>
+                                        {{ props.item.user.name }} -
+                                        <span class="caption">{{ props.item.title }}</span>
+                                    </v-list-tile-title>
+                                    <v-list-tile-sub-title>{{ props.item.venue }} -
+                                        <strong>
+                                            {{ props.item.participants.length }} participants
+                                        </strong>
+                                    </v-list-tile-sub-title>
+                                </v-list-tile-content>
+                            </v-list-tile>
 
-                                <v-list-tile v-for="participant in props.item.participants" :key="participant.id">
-                                    <v-list-tile-action>
-                                        <v-icon color="primary">person</v-icon>
-                                    </v-list-tile-action>
-                                    <v-list-tile-content>
-                                        <v-list-tile-title>{{ participant.email }}</v-list-tile-title>
-                                        <v-list-tile-sub-title>{{participant.phone}}</v-list-tile-sub-title>
-                                    </v-list-tile-content>
-                                    <v-list-tile-action>
-                                        <v-btn icon @click.native="">
-                                            <v-icon color="red">close</v-icon>
-                                        </v-btn>
-                                    </v-list-tile-action>
-                                </v-list-tile>
+                            <v-list-tile v-for="participant in props.item.participants" :key="participant.id">
+                                <v-list-tile-action>
+                                    <v-icon color="primary">person</v-icon>
+                                </v-list-tile-action>
+                                <v-list-tile-content>
+                                    <v-list-tile-title>{{ participant.email }}</v-list-tile-title>
+                                    <v-list-tile-sub-title>{{participant.phone}}</v-list-tile-sub-title>
+                                </v-list-tile-content>
+                                <v-list-tile-action>
+                                    <v-btn icon @click.native="">
+                                        <v-icon color="red">close</v-icon>
+                                    </v-btn>
+                                </v-list-tile-action>
+                            </v-list-tile>
 
-                            </v-list-group>
-                            <v-divider :key="'div_'+props.item.id"></v-divider>
-                        </template>
+                        </v-list-group>
+                        <v-divider :key="'div_'+props.item.id"></v-divider>
+                    </template>
 
-                    </v-data-iterator>
-                </v-card-text>
+                </v-data-iterator>
             </v-card>
 
         </v-flex>

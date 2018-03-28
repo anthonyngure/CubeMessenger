@@ -15,7 +15,9 @@
 			Schema::create('deliveries', function (Blueprint $table) {
 				$table->increments('id');
 				$table->unsignedInteger('client_id', false);
-				$table->foreign('client_id')->references('id')->on('users');
+				$table->foreign('client_id')->references('id')->on('clients');
+				$table->unsignedInteger('user_id', false);
+				$table->foreign('user_id')->references('id')->on('users');
 				$table->string('origin_name');
 				$table->string('origin_vicinity');
 				$table->string('origin_formatted_address');

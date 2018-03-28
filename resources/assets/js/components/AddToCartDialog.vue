@@ -21,7 +21,7 @@
                 </v-container>
             </v-card-media>
             <v-tooltip top lazy max-width="200px">
-                <v-btn flat block slot="activator">
+                <v-btn flat block slot="activator" class="mt-0 mb-0">
                     Ksh. {{product.price}}
                     <v-icon small right>info</v-icon>
                 </v-btn>

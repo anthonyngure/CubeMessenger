@@ -113,7 +113,7 @@
                             <template slot="item" slot-scope="data">
                                 <template>
                                     <v-list-tile-avatar>
-                                        <img :src="`storage/${data.item.avatar}`">
+                                        <img :src="$utils.imageUrl(user.avatar)">
                                     </v-list-tile-avatar>
                                     <v-list-tile-content>
                                         <v-list-tile-title v-html="data.item.name"></v-list-tile-title>

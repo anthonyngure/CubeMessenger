@@ -35,6 +35,7 @@
         <v-list dense>
             <template v-for="(item,index) in items">
                 <v-list-tile :to="item.route" :key="index"
+                             v-if="showItem(item)"
                              @mouseover="mini = false"
                              @mouseout="mini = true">
                     <v-list-tile-action>
@@ -55,8 +56,10 @@
 
 <script>
   import EventBus from '../event-bus'
+  import Base from './Base.vue'
 
   export default {
+    extends: Base,
     name: 'drawer',
     data () {
       return {
@@ -64,27 +67,29 @@
         mini: true,
         shopOrdersCount: 0,
         items: [
-          {icon: 'dashboard', title: 'Dashboard', route: 'dashboard', visible: true},
-          {icon: 'schedule', title: 'Subscriptions', route: 'subscriptions', visible: true},
-          {icon: 'date_range', title: 'Appointments', route: 'appointments', visible: true},
+          {icon: 'dashboard', title: 'Dashboard', route: 'dashboard'},
+          {icon: 'schedule', title: 'Subscriptions', route: 'subscriptions'},
+          {icon: 'date_range', title: 'Appointments', route: 'appointments'},
           //{icon: 'folder', title: 'Documents', route: 'documents'},
-          {icon: 'shopping_cart', title: 'Shopping', route: 'shopping', visible: true},
-          {icon: 'shopping_basket', title: 'Orders', route: 'orders', visible: true, showShopOrdersCount: true},
-          {icon: 'computer', title: 'IT Services', route: 'it', visible: true},
-          {icon: 'build', title: 'Repair Services', route: 'repairs', visible: true},
-          {icon: 'local_shipping', title: 'Courier', route: 'courier', visible: true},
-          {icon: '', title: '', route: '', visible: true},
-          {icon: '', title: '', route: '', visible: true},
-          {icon: '', title: '', route: '', visible: true},
+          {icon: 'shopping_cart', title: 'Shopping', route: 'shopping'},
+          {icon: 'shopping_basket', title: 'Orders', route: 'orders', showShopOrdersCount: true},
+          {icon: 'computer', title: 'IT Services', route: 'it'},
+          {icon: 'build', title: 'Repair Services', route: 'repairs'},
+          {icon: 'local_shipping', title: 'Courier', route: 'courier'},
+          {icon: 'group', title: 'Users', route: 'users'},
+          {icon: 'view_list', title: 'Departments', route: 'departments'},
+          {icon: 'settings', title: 'Settings', route: 'settings'}
         ]
       }
     },
     methods: {
-      onMouseOver () {
-        let that = this
-        setTimeout(function () {
-          that.mini = false
-        }, 100)
+      showItem (item) {
+        //this.$utils.log(this.isClientAdmin())
+        if (!this.isClientAdmin() && (item.route === 'users' || item.route === 'departments')) {
+          return false
+        } else {
+          return !(this.isClientAdmin() && item.route !== 'users' && item.route !== 'departments')
+        }
       },
       refreshShopOrdersCount () {
         this.axios.get('shopOrders', {

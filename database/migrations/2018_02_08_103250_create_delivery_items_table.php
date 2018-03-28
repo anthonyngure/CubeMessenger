@@ -29,8 +29,8 @@
 				$table->string('note')->nullable();
 				$table->double('estimated_distance', 8, 2);
 				$table->double('estimated_duration', 8, 2);
-				$table->enum('status', ['AT_PICKUP', 'EN_ROUTE_TO_DESTINATION', 'AT_DESTINATION'])
-					->default('AT_PICKUP');
+				$table->enum('status', ['AT_DEPARTMENT_HEAD', 'AT_PURCHASING_HEAD', 'PENDING_DELIVERY',
+					'EN_ROUTE_TO_DESTINATION', 'AT_DESTINATION'])->default('AT_DEPARTMENT_HEAD');
 				$table->timestamp('estimated_arrival_time')->nullable();
 				$table->unsignedSmallInteger('received_confirmation_code', false)->nullable();
 				$table->timestamp('received_time')->nullable();
