@@ -85,7 +85,9 @@
     methods: {
       showItem (item) {
         //this.$utils.log(this.isClientAdmin())
-        if (!this.isClientAdmin() && (item.route === 'users' || item.route === 'departments')) {
+        if (item.route === 'dashboard'){
+          return true
+        } else if (!this.isClientAdmin() && (item.route === 'users' || item.route === 'departments')) {
           return false
         } else {
           return !(this.isClientAdmin() && item.route !== 'users' && item.route !== 'departments')
