@@ -88750,6 +88750,11 @@ __WEBPACK_IMPORTED_MODULE_11_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_12_vu
     component: __WEBPACK_IMPORTED_MODULE_10__components_Users___default.a
   }, {
     meta: { auth: true },
+    path: '/departments',
+    name: 'departments',
+    component: __WEBPACK_IMPORTED_MODULE_1__components_ComingSoon_vue___default.a
+  }, {
+    meta: { auth: true },
     path: '/settings',
     name: 'settings',
     component: __WEBPACK_IMPORTED_MODULE_1__components_ComingSoon_vue___default.a

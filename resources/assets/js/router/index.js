@@ -72,6 +72,12 @@ export default new Router({
     },
     {
       meta: {auth: true},
+      path: '/departments',
+      name: 'departments',
+      component: ComingSoon
+    },
+    {
+      meta: {auth: true},
       path: '/settings',
       name: 'settings',
       component: ComingSoon
