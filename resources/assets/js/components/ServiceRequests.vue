@@ -6,9 +6,9 @@
                     slider-color="accent"
                     lazy
                     grow>
-                <v-tab href="#new">New</v-tab>
-                <v-tab href="#pending">Pending</v-tab>
-                <v-tab href="#complete">Complete</v-tab>
+                <v-tab href="#pendingApproval">Pending Approval</v-tab>
+                <v-tab href="#pending">Pending/On Progress</v-tab>
+                <v-tab href="#attended">Attended</v-tab>
                 <v-tab href="#rejected">Rejected</v-tab>
             </v-tabs>
             <v-card>
@@ -113,7 +113,7 @@
       },
       onCloseAddingServiceRequest (successful) {
         this.addingServiceRequest = false
-        this.currentTab = 'new'
+        this.currentTab = 'pendingApproval'
         this.$utils.log(successful)
         if (successful) {
           this.refresh()
@@ -121,7 +121,7 @@
       },
     },
     mounted () {
-      this.currentTab = 'new'
+      this.currentTab = 'pendingApproval'
     }
   }
 </script>

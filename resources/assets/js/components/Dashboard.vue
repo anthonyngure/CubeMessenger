@@ -89,6 +89,15 @@
       return {
         tabs: [
           {
+            icon: 'data_usage', title: 'Ledger', id: 'ledger',
+            headers: [
+              {text: 'Id', sortable: false, value: 'item'},
+              {text: 'Amount', sortable: false, value: 'quantity'},
+              {text: 'Description', sortable: false, value: 'quantity'},
+              {text: 'Date/Time', sortable: false, value: 'quantity'},
+            ],
+          },
+          {
             icon: 'schedule', title: 'Subscriptions', id: 'subscriptions',
             headers: [
               {text: 'Item', sortable: false, value: 'item'},
@@ -198,7 +207,7 @@
         todayMonth = '0' + todayMonth
       }
       this.month = today.year() + '-' + todayMonth
-      this.currentTab = 'subscriptions'
+      this.currentTab = 'ledger'
     }
 
   }

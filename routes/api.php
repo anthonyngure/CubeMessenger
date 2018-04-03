@@ -54,6 +54,7 @@
 			Route::get('auth/refresh', 'AuthController@refresh');
 			Route::get('auth/user', 'AuthController@user');
 			Route::resource('users', 'UserController');
+			Route::resource('departments', 'DepartmentController');
 			Route::resource('deliveries', 'DeliveryController');
 			Route::resource('deliveries.items', 'DeliveryItemController');
 			Route::resource('subscriptions', 'SubscriptionController');

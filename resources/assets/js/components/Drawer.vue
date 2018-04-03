@@ -77,7 +77,7 @@
           {icon: 'build', title: 'Repair Services', route: 'repairs'},
           {icon: 'local_shipping', title: 'Courier', route: 'courier'},
           {icon: 'group', title: 'Users', route: 'users'},
-          {icon: 'view_list', title: 'Departments', route: 'departments'},
+          {icon: 'group_work', title: 'Departments', route: 'departments'},
           {icon: 'settings', title: 'Settings', route: 'settings'}
         ]
       }
@@ -85,13 +85,18 @@
     methods: {
       showItem (item) {
         //this.$utils.log(this.isClientAdmin())
-        if (item.route === 'dashboard'){
+        if (item.route === 'users' || item.route === 'departments' || item.route === 'dashboard') {
+          return this.isClientAdmin()
+        } else {
+          return !this.isClientAdmin()
+        }
+        /*if (item.route === 'dashboard'){
           return true
         } else if (!this.isClientAdmin() && (item.route === 'users' || item.route === 'departments')) {
           return false
         } else {
           return !(this.isClientAdmin() && item.route !== 'users' && item.route !== 'departments')
-        }
+        }*/
       },
       refreshShopOrdersCount () {
         this.axios.get('shopOrders', {

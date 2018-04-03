@@ -15,15 +15,15 @@
 			Schema::create('service_requests', function (Blueprint $table) {
 				$table->increments('id');
 				
-				$table->unsignedInteger('client_id', false);
-				$table->foreign('client_id')->references('id')->on('clients');
+				$table->unsignedInteger('user_id', false);
+				$table->foreign('user_id')->references('id')->on('users');
 				
 				$table->unsignedInteger('assigned_to', false)->nullable();
 				$table->foreign('assigned_to')->references('id')->on('users');
 				
 				$table->enum('type', ['IT', 'REPAIR']);
 				$table->enum('status', ['AT_DEPARTMENT_HEAD', 'AT_PURCHASING_HEAD',
-					'ON_PROGRESS', 'COMPLETE'])->default('AT_DEPARTMENT_HEAD');
+					'PENDING', 'ATTENDED', 'REJECTED'])->default('AT_DEPARTMENT_HEAD');
 				$table->mediumText('details');
 				$table->string('note')->nullable();
 				$table->double('cost', 8, 2)->default(0);

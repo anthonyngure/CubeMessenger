@@ -56,16 +56,10 @@
                                     <span class="grey--text">Quantity: {{props.item.quantity}}</span><br>
                                     <span>Total: {{$utils.formatMoney(props.item.shopProduct.price * props.item.quantity)}}</span><br/>
                                     <span>Ordered At:
-                                                <timeago class="accent--text"
-                                                         :since="props.item.createdAt">
-                                                </timeago>
-                                            </span><br/>
-                                    <span v-if="currentTab !== 'pendingApproval'">Confirmed At:
-                                                <timeago class="accent--text"
-                                                         :since="props.item.confirmedAt">
-                                                </timeago>
-                                                <br/>
-                                            </span>
+                                        <timeago class="accent--text"
+                                                 :since="props.item.createdAt">
+                                        </timeago>
+                                    </span><br/>
                                     <span v-if="currentTab === 'delivered'">Delivered At:
                                         <timeago class="accent--text"
                                                  :since="props.item.deliveredAt">

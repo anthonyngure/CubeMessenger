@@ -48,6 +48,8 @@
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Delivery whereUpdatedAt($value)
  * @mixin \Eloquent
  * @property-read \App\Client $client
+ * @property int $user_id
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Delivery whereUserId($value)
  */
 	class Delivery extends Model
 	{

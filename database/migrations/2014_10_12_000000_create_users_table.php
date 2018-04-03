@@ -16,6 +16,8 @@
 				$table->increments('id');
 				$table->unsignedInteger('client_id', false)->nullable();
 				$table->foreign('client_id')->references('id')->on('users');
+				$table->unsignedInteger('department_id', false)->nullable();
+				$table->foreign('department_id')->references('id')->on('departments');
 				$table->string('name');
 				$table->string('avatar')->default('users/default.png');
 				$table->string('email')->nullable()->unique();

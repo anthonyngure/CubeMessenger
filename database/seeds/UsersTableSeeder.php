@@ -19,6 +19,7 @@
 			
 			$adminRole = Role::where('name', 'admin')->firstOrFail();
 			$testClient = \App\Client::where('name', 'Test Client')->firstOrFail();
+			$testDepartment = \App\Department::where('name', 'Test Department')->firstOrFail();
 			
 			//Admin
 			User::create([
@@ -44,6 +45,7 @@
 			//Test Purchasing Head
 			User::create([
 				'client_id'      => $testClient->getKey(),
+				'department_id'  => $testDepartment->getKey(),
 				'name'           => 'Test Purchasing Head',
 				'email'          => 'testpurchasinghead@cube-messenger.com',
 				'email_verified' => 1,
@@ -55,6 +57,7 @@
 			//Test Department Head
 			User::create([
 				'client_id'      => $testClient->getKey(),
+				'department_id'  => $testDepartment->getKey(),
 				'name'           => 'Test Department Head',
 				'email'          => 'testdepartmenthead@cube-messenger.com',
 				'email_verified' => 1,
@@ -66,6 +69,7 @@
 			//Test Department User
 			User::create([
 				'client_id'      => $testClient->getKey(),
+				'department_id'  => $testDepartment->getKey(),
 				'name'           => 'Test Department User',
 				'email'          => 'testdepartmentuser@cube-messenger.com',
 				'email_verified' => 1,

@@ -129,22 +129,25 @@
 				'action' => 'required|in:confirm,reject',
 			]);
 			
-			
-			if (!$user->isDepartmentHead()
-				|| !$user->isPurchasingHead()
-				|| ($order->status == 'AT_DEPARTMENT_HEAD' && !$user->isDepartmentHead())
-				|| ($order->status == 'AT_PURCHASING_HEAD' && !$user->isPurchasingHead())) {
+			if (!$user->isDepartmentHead() && !$user->isPurchasingHead()) {
 				throw new WrappedException("You are not allowed to perform the requested operation");
 			}
+			
 			
 			if ($request->action == 'reject') {
 				$order->status = 'REJECTED';
 			} else {
 				//Confirming order
-				$order->status = 'AT_' . $user->account_type;
+				if (($order->status == 'AT_DEPARTMENT_HEAD' && $user->isDepartmentHead())) {
+					$order->status = 'AT_PURCHASING_HEAD';
+					$order->save();
+				} else if (($order->status == 'AT_PURCHASING_HEAD' && $user->isPurchasingHead())) {
+					$order->status = 'PENDING_DELIVERY';
+					$order->save();
+				} else {
+					throw new WrappedException("You are not allowed to perform the requested operation");
+				}
 			}
-			
-			$order->save();
 			
 			$orders = ShopOrder::whereIn('user_id', $client->users->pluck('id'))
 				->where('status', 'AT_DEPARTMENT_HEAD')

@@ -32,6 +32,7 @@
 			$this->call(TranslationsTableSeeder::class);
 			
 			$this->call(ClientsTableSeeder::class);
+			$this->call(DepartmentsTableSeeder::class);
 			$this->call(UsersTableSeeder::class);
 			$this->call(CourierOptionsTableSeeder::class);
 			$this->call(SubscriptionTypesTableSeeder::class);

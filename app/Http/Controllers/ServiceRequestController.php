@@ -12,17 +12,42 @@
 		 *
 		 * @param \Illuminate\Http\Request $request
 		 * @return \Illuminate\Http\Response
+		 * @throws \App\Exceptions\WrappedException
 		 */
 		public function index(Request $request)
 		{
 			//
+			
+			$client = $this->getClient();
+			
 			$this->validate($request, [
-				'filter' => 'required|in:new,pending,complete',
+				'filter' => 'required|in:pendingApproval,pending,attended,rejected',
 				'type'   => 'required|in:it,repair',
 			]);
 			
-			$services = ServiceRequest::whereStatus(strtoupper($request->filter))
-				->whereType(strtoupper($request->type))->get();
+			if ($request->filter === 'pendingApproval'){
+				$services = ServiceRequest::whereIn('user_id', $client->users->pluck('id'))
+					->where('status', 'AT_DEPARTMENT_HEAD')
+					->orWhere('status', 'AT_PURCHASING_HEAD')
+					->whereType(strtoupper($request->type))->get();
+			}
+			else if($request->filter === 'pending'){
+				$services = ServiceRequest::whereIn('user_id', $client->users->pluck('id'))
+					->where('status', 'PENDING')
+					->whereType(strtoupper($request->type))->get();
+			}
+			else if($request->filter === 'attended'){
+				$services = ServiceRequest::whereIn('user_id', $client->users->pluck('id'))
+					->where('status', 'ATTENDED')
+					->whereType(strtoupper($request->type))->get();
+			}
+			else {
+				$services = ServiceRequest::whereIn('user_id', $client->users->pluck('id'))
+					->where('status', 'REJECTED')
+					->whereType(strtoupper($request->type))->get();
+			}
+			
+			
 			
 			return $this->collectionResponse($services);
 		}
@@ -46,7 +71,7 @@
 			$client = $this->getClient();
 			
 			$serviceRequest = ServiceRequest::create([
-				'client_id'     => $client->getKey(),
+				'user_id'       => \Auth::user()->getKey(),
 				'schedule_date' => empty($request->scheduleDate) ? date("Y-m-d H:i:s") : $request->scheduleDate,
 				'schedule_time' => empty($request->scheduleTime) ? date("H:i:s") : $request->scheduleTime,
 				'note'          => $request->note,

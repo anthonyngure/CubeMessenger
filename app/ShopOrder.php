@@ -30,6 +30,9 @@
  * @method static \Illuminate\Database\Eloquent\Builder|\App\ShopOrder whereDepartmentHeadApprovedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\ShopOrder wherePurchasingHeadApprovedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\ShopOrder whereStatus($value)
+ * @property int $user_id
+ * @property-read \App\User $user
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\ShopOrder whereUserId($value)
  */
 	class ShopOrder extends Model
 	{
