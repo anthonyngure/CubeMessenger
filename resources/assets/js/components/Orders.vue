@@ -47,9 +47,20 @@
                                     <span>{{props.item.shopProduct.description}}</span>
                                 </v-tooltip>
 
-                                <v-alert class="ma-2" type="info" :value="currentTab === 'pendingApproval'">
+                                <!--<v-alert class="ma-2" type="info" :value="currentTab === 'pendingApproval'">
                                     Pending <b>{{props.item.status === 'AT_DEPARTMENT_HEAD' ? 'Department' :
                                     'Purchasing'}}</b> Head approval
+                                </v-alert>-->
+
+                                <v-chip v-if="props.item.status === 'AT_DEPARTMENT_HEAD' || props.item.status === 'AT_PURCHASING_HEAD'"
+                                        label outline color="red" small>
+                                    <v-icon left>info</v-icon>
+                                    Pending {{props.item.status === 'AT_DEPARTMENT_HEAD' ? ' Department ' :
+                                    ' Purchasing '}} Head approval
+                                </v-chip>
+
+                                <v-alert type="error" :value="true" v-if="props.item.status === 'REJECTED'" outline>
+                                    Rejected by {{props.item.rejectedBy.accountType}} <br/> {{props.item.rejectedBy.name}}
                                 </v-alert>
 
                                 <div class="mx-3">
@@ -140,7 +151,7 @@
             that.orders = that.orders.concat(response.data.data)
           }
         }, {
-          action: 'confirm'
+          action: 'approve'
         })
       },
       reject (order) {

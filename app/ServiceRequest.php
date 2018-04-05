@@ -46,6 +46,10 @@
  * @method static \Illuminate\Database\Eloquent\Builder|\App\ServiceRequest whereCompletedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\ServiceRequest whereDepartmentHeadApprovedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\ServiceRequest wherePurchasingHeadApprovedAt($value)
+ * @property int $user_id
+ * @property int|null $rejected_by_id
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\ServiceRequest whereRejectedById($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\ServiceRequest whereUserId($value)
  */
 	class ServiceRequest extends Model
 	{
@@ -53,4 +57,12 @@
 		protected $guarded = ['id', 'created_at', 'updated_at'];
 		
 		protected $hidden = ['client_id'];
+		
+		/**
+		 * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+		 */
+		public function rejectedBy()
+		{
+			return $this->belongsTo(User::class, 'rejected_by_id');
+		}
 	}

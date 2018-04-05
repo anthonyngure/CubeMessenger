@@ -20,6 +20,7 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Department whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Department whereUpdatedAt($value)
  * @mixin \Eloquent
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\User[] $users
  */
 class Department extends Model
 {

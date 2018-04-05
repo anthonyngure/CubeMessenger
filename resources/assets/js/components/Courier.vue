@@ -72,6 +72,31 @@
                                         <v-list-tile-sub-title class="caption accent--text">
                                             {{item.destinationFormattedAddress}}
                                         </v-list-tile-sub-title>
+                                        <div>
+                                            <v-chip v-if="item.status === 'REJECTED'"
+                                                    label outline color="red" small>
+                                                <v-icon left>info</v-icon>
+                                                Rejected by {{item.rejectedBy.accountType}} - {{item.rejectedBy.name}}
+                                            </v-chip>
+                                            <v-chip v-if="item.status === 'AT_DEPARTMENT_HEAD' || item.status === 'AT_PURCHASING_HEAD'"
+                                                    label outline color="info" small>
+                                                <v-icon left>info</v-icon>
+                                                Pending {{item.status === 'AT_DEPARTMENT_HEAD' ? ' Department ' :
+                                                ' Purchasing '}} Head approval
+                                            </v-chip>
+                                            <v-btn flat color="red" small outline
+                                                   v-if="showApprovalActions(item)"
+                                                   @click.native="reject(props.item, item)">
+                                                <v-icon left small>close</v-icon>
+                                                Reject
+                                            </v-btn>
+                                            <v-btn flat color="success" small outline
+                                                   v-if="showApprovalActions(item)"
+                                                   @click.native="confirm(props.item, item)">
+                                                <v-icon left small>check_circle</v-icon>
+                                                Approve
+                                            </v-btn>
+                                        </div>
                                     </v-list-tile-content>
                                     <v-list-tile-action v-if="item.status === 'PENDING_DELIVERY'">
                                         <v-btn slot="activator" @click="printingItem = item"
@@ -117,7 +142,7 @@
         </v-dialog>
         <delivery-item-q-r-dialog :item="printingItem" @onClose="printingItem = null"></delivery-item-q-r-dialog>
 
-        <v-fab-transition>
+        <v-fab-transition v-if="isDepartmentUser()">
             <v-btn class="ma-3"
                    color="accent"
                    fab
@@ -183,6 +208,36 @@
       }
     },
     methods: {
+      showApprovalActions (item) {
+        return this.currentTab === 'pendingApproval' && (
+          (this.isPurchasingHead() && item.status === 'AT_PURCHASING_HEAD')
+          || (this.isDepartmentHead() && item.status === 'AT_DEPARTMENT_HEAD')
+        )
+      },
+      confirm (delivery, item) {
+        this.items = []
+        let that = this
+        this.$refs.connectionManager.patch('deliveries/' + delivery.id + '/items/' + item.id, {
+          onSuccess (response) {
+            that.items = []
+            that.items = that.items.concat(response.data.data)
+          }
+        }, {
+          action: 'approve'
+        })
+      },
+      reject (delivery, item) {
+        this.items = []
+        let that = this
+        this.$refs.connectionManager.patch('deliveries/' + delivery.id + '/items/' + item.id, {
+          onSuccess (response) {
+            that.items = []
+            that.items = that.items.concat(response.data.data)
+          }
+        }, {
+          action: 'reject'
+        })
+      },
       onCloseAddingDelivery (refresh) {
         this.addingDelivery = false
         if (refresh) {

@@ -26,6 +26,7 @@
 			if ($request->filter === 'count') {
 				$count = ShopOrder::whereIn('user_id', $client->users->pluck('id'))
 					->where('status', '!=', 'DELIVERED')
+					->where('status', '!=', 'REJECTED')
 					->count();
 				$data = [
 					'count' => $count,
@@ -53,6 +54,7 @@
 					$orders = ShopOrder::whereIn('user_id', $client->users->pluck('id'))
 						->where('status', 'REJECTED')
 						->with(['shopProduct', 'user'])
+						->with('rejectedBy')
 						->get();
 				}
 				
@@ -70,28 +72,19 @@
 		 */
 		public function store(Request $request)
 		{
+			$client = $this->getClient();
 			//
 			/** @var \App\User $user */
 			$user = Auth::user();
-			$client = $this->getClient();
 			$this->validate($request, [
 				'shopProductId' => 'required|numeric|exists:shop_products,id',
 				'quantity'      => 'required|numeric',
 			]);
 			
-			if ($user->account_type == 'PURCHASING_HEAD') {
-				$status = 'PENDING_DELIVERY';
-			} else if ($user->account_type == 'DEPARTMENT_HEAD') {
-				$status = 'AT_PURCHASING_HEAD';
-			} else {
-				$status = 'AT_DEPARTMENT_HEAD';
-			}
-			
 			$shopOrder = ShopOrder::create([
 				'user_id'         => $user->getKey(),
 				'quantity'        => $request->quantity,
 				'shop_product_id' => $request->shopProductId,
-				'status'          => $status,
 			]);
 			
 			return $this->itemCreatedResponse($shopOrder);
@@ -126,27 +119,21 @@
 			$user = Auth::user();
 			
 			$this->validate($request, [
-				'action' => 'required|in:confirm,reject',
+				'action' => 'required|in:approve,reject',
 			]);
 			
-			if (!$user->isDepartmentHead() && !$user->isPurchasingHead()) {
-				throw new WrappedException("You are not allowed to perform the requested operation");
+			if ($request->action == 'reject') {
+				$order->rejected_by_id = $user->getKey();
 			}
 			
-			
-			if ($request->action == 'reject') {
-				$order->status = 'REJECTED';
+			if (($order->status == 'AT_DEPARTMENT_HEAD' && $user->isDepartmentHead())) {
+				$order->status = $request->action == 'approve' ? 'AT_PURCHASING_HEAD' : 'REJECTED';
+				$order->save();
+			} else if (($order->status == 'AT_PURCHASING_HEAD' && $user->isPurchasingHead())) {
+				$order->status = $request->action == 'approve' ? 'PENDING_DELIVERY' : 'REJECTED';
+				$order->save();
 			} else {
-				//Confirming order
-				if (($order->status == 'AT_DEPARTMENT_HEAD' && $user->isDepartmentHead())) {
-					$order->status = 'AT_PURCHASING_HEAD';
-					$order->save();
-				} else if (($order->status == 'AT_PURCHASING_HEAD' && $user->isPurchasingHead())) {
-					$order->status = 'PENDING_DELIVERY';
-					$order->save();
-				} else {
-					throw new WrappedException("You are not allowed to perform the requested operation");
-				}
+				throw new WrappedException("You are not allowed to perform the requested operation");
 			}
 			
 			$orders = ShopOrder::whereIn('user_id', $client->users->pluck('id'))

@@ -4,6 +4,7 @@
 	
 	use App\Appointment;
 	use App\AppointmentParticipant;
+	use Auth;
 	use Illuminate\Http\Request;
 	
 	class AppointmentController extends Controller
@@ -24,9 +25,9 @@
 			
 			$date = empty($request->date) ? date("Y-m-d") : $request->date;
 			
-			$appointments = $client->appointments()
+			$appointments = Appointment::whereIn('user_id', $client->users->pluck('id'))
 				->where('start_date', $date)
-				->with(['participants','user'])
+				->with(['participants', 'user'])
 				->orderBy('start_date')
 				->orderBy('start_time')
 				->get();
@@ -58,7 +59,7 @@
 			]);
 			
 			$appointment = Appointment::create([
-				'client_id'  => $client->id,
+				'user_id'    => Auth::user()->getKey(),
 				'venue'      => $request->venue,
 				'with_id'    => $request->with,
 				'title'      => $request->title,

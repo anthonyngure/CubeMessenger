@@ -2,7 +2,6 @@
 	
 	namespace App\Http\Controllers;
 	
-	use App\Client;
 	use App\Delivery;
 	use App\DeliveryItem;
 	use App\Exceptions\WrappedException;
@@ -24,6 +23,7 @@
 		 *
 		 * @param \Illuminate\Http\Request $request
 		 * @return \Illuminate\Http\Response
+		 * @throws \App\Exceptions\WrappedException
 		 */
 		public function index(Request $request)
 		{
@@ -72,7 +72,7 @@
 			
 			$scheduleDate = $request->json('scheduleDate');
 			$scheduleTime = $request->json('scheduleTime');
-			$delivery = new Delivery([
+			$delivery = Delivery::create([
 				'user_id'                  => Auth::user()->getKey(),
 				'origin_name'              => $request->json('originName'),
 				'origin_vicinity'          => $request->json('originVicinity'),
@@ -85,18 +85,6 @@
 				'schedule_date'            => empty($scheduleDate) ? date("Y-m-d H:i:s") : $scheduleDate,
 				'schedule_time'            => empty($scheduleTime) ? date("H:i:s") : $scheduleTime,
 			]);
-			
-			
-			$client->deliveries()->save($delivery);
-			
-			$user = Auth::user();
-			if ($user->account_type == 'PURCHASING_HEAD') {
-				$status = 'PENDING_DELIVERY';
-			} else if ($user->account_type == 'DEPARTMENT_HEAD') {
-				$status = 'AT_PURCHASING_HEAD';
-			} else {
-				$status = 'AT_DEPARTMENT_HEAD';
-			}
 			
 			$deliveryItems = array();
 			foreach ($items as $item) {
@@ -114,7 +102,6 @@
 					'note'                          => $deliveryItem->note,
 					'estimated_duration'            => $deliveryItem->estimatedDuration,
 					'estimated_distance'            => $deliveryItem->estimatedDistance,
-					'status'                        => $status,
 				]));
 			}
 			
@@ -213,11 +200,16 @@
 			//
 		}
 		
+		/**
+		 * @param \Illuminate\Http\Request $request
+		 * @return \Illuminate\Http\Response
+		 * @throws \App\Exceptions\WrappedException
+		 */
 		private function clientDeliveries(Request $request)
 		{
-			$client = Client::find(Auth::user()->client_id);
+			$client = $this->getClient();
 			
-			$deliveries = $client->deliveries()
+			$deliveries = Delivery::whereIn('user_id', $client->users->pluck('id'))
 				->whereHas('items', function (Builder $builder) use ($request) {
 					if ($request->filter == 'pendingApproval') {
 						$builder->where('status', 'AT_DEPARTMENT_HEAD')
@@ -225,12 +217,14 @@
 					} else if ($request->filter == 'pendingDelivery') {
 						$builder->where('status', 'PENDING_DELIVERY')
 							->orWhere('status', 'EN_ROUTE_TO_DESTINATION');
-					} else {
+					} else if ($request->filter == 'delivered') {
 						$builder->where('status', 'AT_DESTINATION');
+					} else {
+						$builder->where('status', 'REJECTED');
 					}
 				})
 				->with(['items' => function (HasMany $hasMany) {
-					$hasMany->with(['courierOption' => function (BelongsTo $belongsTo) {
+					$hasMany->with(['rejectedBy', 'courierOption' => function (BelongsTo $belongsTo) {
 						$belongsTo->select(['id', 'name', 'plural_name', 'icon']);
 					}])->orderByDesc('id');
 				}])->orderByDesc('id')

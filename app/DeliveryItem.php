@@ -53,6 +53,8 @@
  * @method static \Illuminate\Database\Eloquent\Builder|\App\DeliveryItem whereStatus($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\DeliveryItem whereUpdatedAt($value)
  * @mixin \Eloquent
+ * @property int|null $rejected_by_id
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DeliveryItem whereRejectedById($value)
  */
 	class DeliveryItem extends Model
 	{
@@ -75,5 +77,13 @@
 		public function courierOption()
 		{
 			return $this->belongsTo(CourierOption::class);
+		}
+		
+		/**
+		 * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+		 */
+		public function rejectedBy()
+		{
+			return $this->belongsTo(User::class, 'rejected_by_id');
 		}
 	}

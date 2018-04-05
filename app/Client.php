@@ -38,18 +38,11 @@
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\ShopOrder[] $shopOrders
  * @property string|null $deleted_at
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Client whereDeletedAt($value)
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Department[] $departments
  */
 	class Client extends Model
 	{
 		//
-		
-		/**
-		 * @return \Illuminate\Database\Eloquent\Relations\HasMany
-		 */
-		public function deliveries()
-		{
-			return $this->hasMany(Delivery::class);
-		}
 		
 		public function subscriptions()
 		{
@@ -62,22 +55,6 @@
 		public function users()
 		{
 			return $this->hasMany(User::class);
-		}
-		
-		/**
-		 * @return \Illuminate\Database\Eloquent\Relations\HasMany
-		 */
-		public function serviceRequests()
-		{
-			return $this->hasMany(ServiceRequest::class);
-		}
-		
-		/**
-		 * @return \Illuminate\Database\Eloquent\Relations\HasMany
-		 */
-		public function appointments()
-		{
-			return $this->hasMany(Appointment::class);
 		}
 		
 		/**

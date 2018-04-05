@@ -33,6 +33,8 @@
  * @property int $user_id
  * @property-read \App\User $user
  * @method static \Illuminate\Database\Eloquent\Builder|\App\ShopOrder whereUserId($value)
+ * @property int|null $rejected_by_id
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\ShopOrder whereRejectedById($value)
  */
 	class ShopOrder extends Model
 	{
@@ -56,5 +58,13 @@
 		public function user()
 		{
 			return $this->belongsTo(User::class);
+		}
+		
+		/**
+		 * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+		 */
+		public function rejectedBy()
+		{
+			return $this->belongsTo(User::class, 'rejected_by_id');
 		}
 	}

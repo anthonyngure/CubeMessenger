@@ -74,6 +74,11 @@
  * @mixin \Eloquent
  * @property string|null $deleted_at
  * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereDeletedAt($value)
+ * @property int|null $department_id
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Appointment[] $appointments
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Delivery[] $deliveries
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\ServiceRequest[] $serviceRequests
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereDepartmentId($value)
  */
 	class User extends \TCG\Voyager\Models\User implements JWTSubject
 	{
@@ -159,5 +164,30 @@
 		public function isDepartmentHead()
 		{
 			return $this->account_type == 'DEPARTMENT_HEAD';
+		}
+		
+		
+		/**
+		 * @return \Illuminate\Database\Eloquent\Relations\HasMany
+		 */
+		public function serviceRequests()
+		{
+			return $this->hasMany(ServiceRequest::class);
+		}
+		
+		/**
+		 * @return \Illuminate\Database\Eloquent\Relations\HasMany
+		 */
+		public function appointments()
+		{
+			return $this->hasMany(Appointment::class);
+		}
+		
+		/**
+		 * @return \Illuminate\Database\Eloquent\Relations\HasMany
+		 */
+		public function deliveries()
+		{
+			return $this->hasMany(Delivery::class);
 		}
 	}

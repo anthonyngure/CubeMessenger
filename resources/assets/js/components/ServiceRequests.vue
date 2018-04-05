@@ -22,8 +22,35 @@
                         :no-data-text="loading ? '' : 'No data available'"
                         hide-actions>
                     <template slot="items" slot-scope="props">
-                        <td>{{ props.item.id }}</td>
-                        <td>{{ props.item.details }}</td>
+                        <!--<td>{{ props.item.id }}</td>-->
+                        <td>
+                            <p class="ma-2">{{ props.item.details }}</p>
+                            <div>
+                                <v-chip v-if="props.item.status === 'AT_DEPARTMENT_HEAD' || props.item.status === 'AT_PURCHASING_HEAD'"
+                                        label outline color="info" small>
+                                    <v-icon left>info</v-icon>
+                                    Pending {{props.item.status === 'AT_DEPARTMENT_HEAD' ? ' Department ' :
+                                    ' Purchasing '}} Head approval
+                                </v-chip>
+                                <v-chip v-if="props.item.status === 'REJECTED'"
+                                        label outline color="red" small>
+                                    <v-icon left>info</v-icon>
+                                    Rejected by {{props.item.rejectedBy.accountType}} - {{props.item.rejectedBy.name}}
+                                </v-chip>
+                                <v-btn flat color="red" small outline
+                                       v-if="showApprovalActions(props.item)"
+                                       @click.native="reject(props.item)">
+                                    <v-icon left small>close</v-icon>
+                                    Reject
+                                </v-btn>
+                                <v-btn flat color="success" small outline
+                                       v-if="showApprovalActions(props.item)"
+                                       @click.native="confirm(props.item)">
+                                    <v-icon left small>check_circle</v-icon>
+                                    Approve
+                                </v-btn>
+                            </div>
+                        </td>
                         <td>{{ props.item.assignedTo ? props.item.assignedTo.name : 'N/A' }}</td>
                         <td>{{ currentTab === 'complete' ? props.item.cost : 'N/A' }}</td>
                         <td>{{ props.item.scheduleDate }}</td>
@@ -33,7 +60,7 @@
             </v-card>
         </v-flex>
 
-        <v-fab-transition>
+        <v-fab-transition v-if="isDepartmentUser()">
             <v-btn class="ma-3"
                    color="accent"
                    fab
@@ -58,9 +85,12 @@
 <script>
   import ConnectionManager from './ConnectionManager'
   import ServiceRequestDialog from './ServiceRequestDialog'
+  import Base from './Base.vue'
 
   export default {
+    extends: Base,
     components: {
+      Base,
       ServiceRequestDialog,
       ConnectionManager
     },
@@ -80,7 +110,7 @@
         loading: false,
         addingServiceRequest: false,
         headers: [
-          {text: 'ID', value: 'id'},
+          /*{text: 'ID', value: 'id'},*/
           {text: 'Details', value: 'details'},
           {text: 'Assigned To', value: 'assignedTo'},
           {text: 'Cost', value: 'cost'},
@@ -98,6 +128,38 @@
       }
     },
     methods: {
+      showApprovalActions (order) {
+        return this.currentTab === 'pendingApproval' && (
+          (this.isPurchasingHead() && order.status === 'AT_PURCHASING_HEAD')
+          || (this.isDepartmentHead() && order.status === 'AT_DEPARTMENT_HEAD')
+        )
+      },
+      confirm (order) {
+        this.serviceRequests = []
+        let that = this
+        this.$refs.connectionManager.patch('serviceRequests/' + order.id, {
+          onSuccess (response) {
+            that.serviceRequests = []
+            that.serviceRequests = that.serviceRequests.concat(response.data.data)
+          }
+        }, {
+          action: 'approve',
+          type: this.type
+        })
+      },
+      reject (order) {
+        this.serviceRequests = []
+        let that = this
+        this.$refs.connectionManager.patch('serviceRequests/' + order.id, {
+          onSuccess (response) {
+            that.serviceRequests = []
+            that.serviceRequests = that.serviceRequests.concat(response.data.data)
+          }
+        }, {
+          action: 'reject',
+          type: this.type
+        })
+      },
       refresh () {
         let that = this
         this.serviceRequests = []
