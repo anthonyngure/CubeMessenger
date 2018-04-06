@@ -40,21 +40,27 @@
                    dark
                    fixed
                    bottom
-
                    @click.native="addingUser = true"
                    right>
                 <v-icon>add</v-icon>
             </v-btn>
         </v-fab-transition>
 
+        <add-user-dialog :adding-user="addingUser"
+                         @onClose="onCloseAddUserDialog">
+        </add-user-dialog>
+
     </v-layout>
 </template>
 
 <script>
   import ConnectionManager from './ConnectionManager'
+  import Base from './Base'
+  import AddUserDialog from './AddUserDialog'
 
   export default {
-    components: {ConnectionManager},
+    extends: Base,
+    components: {AddUserDialog, ConnectionManager, Base},
     name: 'users',
     data () {
       return {
@@ -63,6 +69,12 @@
       }
     },
     methods: {
+      onCloseAddUserDialog(added){
+        this.addingUser = false;
+        if (added) {
+          this.loadUsers()
+        }
+      },
       loadUsers () {
         let that = this
         this.$refs.connectionManager.get('users', {

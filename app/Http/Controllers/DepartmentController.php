@@ -2,6 +2,7 @@
 	
 	namespace App\Http\Controllers;
 	
+	use App\Department;
 	use Illuminate\Http\Request;
 	
 	class DepartmentController extends Controller
@@ -22,24 +23,26 @@
 		}
 		
 		/**
-		 * Show the form for creating a new resource.
-		 *
-		 * @return \Illuminate\Http\Response
-		 */
-		public function create()
-		{
-			//
-		}
-		
-		/**
 		 * Store a newly created resource in storage.
 		 *
 		 * @param  \Illuminate\Http\Request $request
 		 * @return \Illuminate\Http\Response
+		 * @throws \App\Exceptions\WrappedException
 		 */
 		public function store(Request $request)
 		{
 			//
+			$this->validate($request, [
+				'name' => 'required|unique:departments',
+			]);
+			
+			$client = $this->getClient();
+			
+			$department = $client->departments()->save(new Department([
+				'name' => $request->name,
+			]));
+			
+			return $this->itemCreatedResponse($department);
 		}
 		
 		/**

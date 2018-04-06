@@ -30,7 +30,7 @@
 		private function authenticateUser(User $user, array $meta = null)
 		{
 			$user = User::with(['client' => function (BelongsTo $belongsTo) {
-				$belongsTo->with('users');
+				$belongsTo->with(['users', 'departments']);
 			}])->findOrFail($user->getKey());
 			$token = JWTAuth::fromUser($user);
 			
@@ -73,7 +73,7 @@
 		public function user()
 		{
 			$user = User::with(['client' => function (BelongsTo $belongsTo) {
-				$belongsTo->with('users');
+				$belongsTo->with(['users', 'departments']);
 			}])->findOrFail(Auth::user()->getKey());
 			
 			return $this->itemResponse($user);
@@ -82,7 +82,7 @@
 		public function refresh()
 		{
 			$user = User::with(['client' => function (BelongsTo $belongsTo) {
-				$belongsTo->with('users');
+				$belongsTo->with(['users', 'departments']);
 			}])->findOrFail(Auth::user()->getKey());
 			
 			return $this->itemResponse($user);

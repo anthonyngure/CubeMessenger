@@ -22,11 +22,17 @@
                                         <v-list-tile-content>
                                             <v-list-tile-title>{{ department.name }}</v-list-tile-title>
                                             <div>
-                                                <v-chip color="accent" text-color="white" small>
+                                                <v-chip color="info" text-color="white" small>
                                                     <v-avatar small>
                                                         <v-icon>group</v-icon>
                                                     </v-avatar>
                                                     <span>{{department.users.length}} Members</span>
+                                                </v-chip>
+                                                <v-chip color="accent" text-color="white" small>
+                                                    <v-avatar small>
+                                                        <v-icon>account_balance_wallet</v-icon>
+                                                    </v-avatar>
+                                                    <span>Spent KES 0.00</span>
                                                 </v-chip>
                                                 <v-chip color="primary" text-color="white" small>
                                                     <v-avatar small>
@@ -71,29 +77,39 @@
                    dark
                    fixed
                    bottom
-
-                   @click.native="addingUser = true"
+                   @click.native="addingDepartment = true"
                    right>
                 <v-icon>add</v-icon>
             </v-btn>
         </v-fab-transition>
+
+        <add-department-dialog :adding-department="addingDepartment"
+                               @onClose="onCloseAddDepartmentDialog">
+        </add-department-dialog>
 
     </v-layout>
 </template>
 
 <script>
   import ConnectionManager from './ConnectionManager'
+  import AddDepartmentDialog from './AddDepartmentDialog'
 
   export default {
-    components: {ConnectionManager},
+    components: {AddDepartmentDialog, ConnectionManager},
     name: 'departments',
     data () {
       return {
-        addingUser: false,
+        addingDepartment: false,
         departments: [],
       }
     },
     methods: {
+      onCloseAddDepartmentDialog (added) {
+        this.addingDepartment = false
+        if (added) {
+          this.loadDepartments()
+        }
+      },
       loadDepartments () {
         let that = this
         this.$refs.connectionManager.get('departments', {

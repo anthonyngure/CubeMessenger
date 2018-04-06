@@ -14,7 +14,7 @@
 	
 	sleep(0);
 	
-	ob_start('ob_gzhandler');
+	//ob_start('ob_gzhandler');
 	
 	
 	Route::group(['prefix' => 'v1', 'guard' => 'api'], function () {

@@ -4425,6 +4425,88 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 
 /***/ }),
 
+/***/ "./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}]],\"plugins\":[\"transform-object-rest-spread\",[\"transform-runtime\",{\"polyfill\":false,\"helpers\":false}]]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/js/components/AddDepartmentDialog.vue":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__ConnectionManager__ = __webpack_require__("./resources/assets/js/components/ConnectionManager.vue");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__ConnectionManager___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__ConnectionManager__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  name: 'AddDepartmentDialog',
+  components: { ConnectionManager: __WEBPACK_IMPORTED_MODULE_0__ConnectionManager___default.a },
+  props: {
+    addingDepartment: {
+      type: Boolean,
+      required: true
+    }
+  },
+  data: function data() {
+    return {
+      dialog: false,
+      connecting: false,
+      departmentName: null
+    };
+  },
+
+  watch: {
+    addingDepartment: function addingDepartment(val) {
+      this.dialog = !!val;
+    }
+  },
+  methods: {
+    submit: function submit() {
+      var that = this;
+      this.$refs.connectionManager.post('departments', {
+        onSuccess: function onSuccess(response) {
+          that.departmentName = null;
+          that.$emit('onClose', true);
+        }
+      }, {
+        name: this.departmentName
+      });
+    }
+  }
+});
+
+/***/ }),
+
 /***/ "./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}]],\"plugins\":[\"transform-object-rest-spread\",[\"transform-runtime\",{\"polyfill\":false,\"helpers\":false}]]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/js/components/AddToCartDialog.vue":
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -4529,6 +4611,153 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       quantity: null,
       connecting: false
     };
+  }
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}]],\"plugins\":[\"transform-object-rest-spread\",[\"transform-runtime\",{\"polyfill\":false,\"helpers\":false}]]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/js/components/AddUserDialog.vue":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__ConnectionManager__ = __webpack_require__("./resources/assets/js/components/ConnectionManager.vue");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__ConnectionManager___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__ConnectionManager__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  name: 'AddUserDialog',
+  components: { ConnectionManager: __WEBPACK_IMPORTED_MODULE_0__ConnectionManager___default.a },
+  props: {
+    addingUser: {
+      type: Boolean,
+      required: true
+    }
+  },
+  data: function data() {
+    return {
+      dialog: false,
+      connecting: false,
+      name: null,
+      email: null,
+      phone: null,
+      departmentId: null,
+      rules: {
+        required: function required(value) {
+          return !!value || 'Required.';
+        },
+        phone: function phone(value) {
+          return !!value && ('' + value).length === 10 || 'Phone number must be 10 characters';
+        },
+        email: function email(value) {
+          var pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+          return pattern.test(value) || 'Invalid e-mail.';
+        }
+      }
+    };
+  },
+
+  watch: {
+    addingUser: function addingUser(val) {
+      this.dialog = !!val;
+    }
+  },
+  computed: {
+    formIsValid: function formIsValid() {
+      var pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+      return this.name && this.email && this.departmentId && pattern.test(this.email) && ('' + this.phone).length === 10;
+    }
+  },
+  methods: {
+    submit: function submit() {
+      var that = this;
+      this.$refs.connectionManager.post('users', {
+        onSuccess: function onSuccess(response) {
+          that.name = null;
+          that.email = null;
+          that.phone = null;
+          that.departmentId = null;
+          that.$emit('onClose', true);
+        }
+      }, {
+        name: this.name,
+        email: this.email,
+        phone: this.phone,
+        departmentId: this.departmentId
+      });
+    }
+  },
+  mounted: function mounted() {
+    this.departments = this.$auth.user().client.departments;
   }
 });
 
@@ -6393,6 +6622,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__ConnectionManager__ = __webpack_require__("./resources/assets/js/components/ConnectionManager.vue");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__ConnectionManager___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__ConnectionManager__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__AddDepartmentDialog__ = __webpack_require__("./resources/assets/js/components/AddDepartmentDialog.vue");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__AddDepartmentDialog___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__AddDepartmentDialog__);
 //
 //
 //
@@ -6476,20 +6707,36 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
 
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-  components: { ConnectionManager: __WEBPACK_IMPORTED_MODULE_0__ConnectionManager___default.a },
+  components: { AddDepartmentDialog: __WEBPACK_IMPORTED_MODULE_1__AddDepartmentDialog___default.a, ConnectionManager: __WEBPACK_IMPORTED_MODULE_0__ConnectionManager___default.a },
   name: 'departments',
   data: function data() {
     return {
-      addingUser: false,
+      addingDepartment: false,
       departments: []
     };
   },
 
   methods: {
+    onCloseAddDepartmentDialog: function onCloseAddDepartmentDialog(added) {
+      this.addingDepartment = false;
+      if (added) {
+        this.loadDepartments();
+      }
+    },
     loadDepartments: function loadDepartments() {
       var that = this;
       this.$refs.connectionManager.get('departments', {
@@ -9542,6 +9789,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__ConnectionManager__ = __webpack_require__("./resources/assets/js/components/ConnectionManager.vue");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__ConnectionManager___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__ConnectionManager__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Base__ = __webpack_require__("./resources/assets/js/components/Base.vue");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Base___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__Base__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__AddUserDialog__ = __webpack_require__("./resources/assets/js/components/AddUserDialog.vue");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__AddUserDialog___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__AddUserDialog__);
 //
 //
 //
@@ -9594,11 +9845,17 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+
+
 
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-  components: { ConnectionManager: __WEBPACK_IMPORTED_MODULE_0__ConnectionManager___default.a },
+  extends: __WEBPACK_IMPORTED_MODULE_1__Base___default.a,
+  components: { AddUserDialog: __WEBPACK_IMPORTED_MODULE_2__AddUserDialog___default.a, ConnectionManager: __WEBPACK_IMPORTED_MODULE_0__ConnectionManager___default.a, Base: __WEBPACK_IMPORTED_MODULE_1__Base___default.a },
   name: 'users',
   data: function data() {
     return {
@@ -9608,6 +9865,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
   },
 
   methods: {
+    onCloseAddUserDialog: function onCloseAddUserDialog(added) {
+      this.addingUser = false;
+      if (added) {
+        this.loadUsers();
+      }
+    },
     loadUsers: function loadUsers() {
       var that = this;
       this.$refs.connectionManager.get('users', {
@@ -10405,7 +10668,7 @@ exports = module.exports = __webpack_require__("./node_modules/css-loader/lib/cs
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -10481,6 +10744,21 @@ exports = module.exports = __webpack_require__("./node_modules/css-loader/lib/cs
 
 // module
 exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+
+// exports
+
+
+/***/ }),
+
+/***/ "./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-366cc88d\",\"scoped\":true,\"hasInlineConfig\":true}!./node_modules/vue-loader/lib/selector.js?type=styles&index=0!./resources/assets/js/components/AddUserDialog.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__("./node_modules/css-loader/lib/css-base.js")(false);
+// imports
+
+
+// module
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -10735,7 +11013,7 @@ exports = module.exports = __webpack_require__("./node_modules/css-loader/lib/cs
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -10811,6 +11089,21 @@ exports = module.exports = __webpack_require__("./node_modules/css-loader/lib/cs
 
 // module
 exports.push([module.i, "\n.comp-full-calendar {\n  padding: 20px;\n  background: #fff;\n  max-width: 960px;\n  margin: 0 auto;\n}\n.comp-full-calendar ul, .comp-full-calendar p {\n    margin: 0;\n    padding: 0;\n    font-size: 14px;\n}\n", ""]);
+
+// exports
+
+
+/***/ }),
+
+/***/ "./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-8ef18c58\",\"scoped\":true,\"hasInlineConfig\":true}!./node_modules/vue-loader/lib/selector.js?type=styles&index=0!./resources/assets/js/components/AddDepartmentDialog.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__("./node_modules/css-loader/lib/css-base.js")(false);
+// imports
+
+
+// module
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -45992,7 +46285,7 @@ var render = function() {
                                                 "v-chip",
                                                 {
                                                   attrs: {
-                                                    color: "accent",
+                                                    color: "info",
                                                     "text-color": "white",
                                                     small: ""
                                                   }
@@ -46015,6 +46308,36 @@ var render = function() {
                                                         department.users.length
                                                       ) + " Members"
                                                     )
+                                                  ])
+                                                ],
+                                                1
+                                              ),
+                                              _vm._v(" "),
+                                              _c(
+                                                "v-chip",
+                                                {
+                                                  attrs: {
+                                                    color: "accent",
+                                                    "text-color": "white",
+                                                    small: ""
+                                                  }
+                                                },
+                                                [
+                                                  _c(
+                                                    "v-avatar",
+                                                    { attrs: { small: "" } },
+                                                    [
+                                                      _c("v-icon", [
+                                                        _vm._v(
+                                                          "account_balance_wallet"
+                                                        )
+                                                      ])
+                                                    ],
+                                                    1
+                                                  ),
+                                                  _vm._v(" "),
+                                                  _c("span", [
+                                                    _vm._v("Spent KES 0.00")
                                                   ])
                                                 ],
                                                 1
@@ -46161,7 +46484,7 @@ var render = function() {
               },
               nativeOn: {
                 click: function($event) {
-                  _vm.addingUser = true
+                  _vm.addingDepartment = true
                 }
               }
             },
@@ -46170,7 +46493,12 @@ var render = function() {
           )
         ],
         1
-      )
+      ),
+      _vm._v(" "),
+      _c("add-department-dialog", {
+        attrs: { "adding-department": _vm.addingDepartment },
+        on: { onClose: _vm.onCloseAddDepartmentDialog }
+      })
     ],
     1
   )
@@ -47719,6 +48047,198 @@ if (false) {
   module.hot.accept()
   if (module.hot.data) {
     require("vue-hot-reload-api")      .rerender("data-v-361369fc", module.exports)
+  }
+}
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-366cc88d\",\"hasScoped\":true,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/components/AddUserDialog.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "v-dialog",
+    {
+      attrs: { lazy: "", "max-width": "600px", persistent: "" },
+      model: {
+        value: _vm.dialog,
+        callback: function($$v) {
+          _vm.dialog = $$v
+        },
+        expression: "dialog"
+      }
+    },
+    [
+      _c(
+        "v-card",
+        [
+          _c(
+            "v-toolbar",
+            { attrs: { dark: "", card: "", color: "primary" } },
+            [
+              _c("v-icon", [_vm._v("person")]),
+              _vm._v(" "),
+              _c("v-toolbar-title", [_vm._v("Add User")])
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c("connection-manager", {
+            ref: "connectionManager",
+            on: {
+              onConnectionChange: function(status) {
+                _vm.connecting = status
+              }
+            }
+          }),
+          _vm._v(" "),
+          _c(
+            "v-card-text",
+            [
+              _c(
+                "v-layout",
+                { attrs: { row: "", wrap: "" } },
+                [
+                  _c(
+                    "v-flex",
+                    { attrs: { xs12: "" } },
+                    [
+                      _c("v-text-field", {
+                        attrs: {
+                          placeholder: "Full name",
+                          label: "Enter full name",
+                          required: "",
+                          type: "text",
+                          rules: [_vm.rules.required],
+                          disabled: _vm.connecting
+                        },
+                        model: {
+                          value: _vm.name,
+                          callback: function($$v) {
+                            _vm.name = $$v
+                          },
+                          expression: "name"
+                        }
+                      }),
+                      _vm._v(" "),
+                      _c("v-text-field", {
+                        staticClass: "mb-2",
+                        attrs: {
+                          label: "Enter phone number",
+                          placeholder: "Phone number",
+                          required: "",
+                          rules: [_vm.rules.required, _vm.rules.phone],
+                          type: "phone",
+                          disabled: _vm.connecting,
+                          mask: "##########",
+                          counter: 10,
+                          hint: "A password will be sent to this phone number",
+                          "persistent-hint": ""
+                        },
+                        model: {
+                          value: _vm.phone,
+                          callback: function($$v) {
+                            _vm.phone = $$v
+                          },
+                          expression: "phone"
+                        }
+                      }),
+                      _vm._v(" "),
+                      _c("v-text-field", {
+                        attrs: {
+                          placeholder: "Email address",
+                          label: "Enter email address",
+                          required: "",
+                          type: "email",
+                          rules: [_vm.rules.required, _vm.rules.email],
+                          disabled: _vm.connecting
+                        },
+                        model: {
+                          value: _vm.email,
+                          callback: function($$v) {
+                            _vm.email = $$v
+                          },
+                          expression: "email"
+                        }
+                      })
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c("v-select", {
+                    attrs: {
+                      items: _vm.$auth.user().client.departments,
+                      "item-text": "name",
+                      "item-value": "id",
+                      required: "",
+                      label: "Select department",
+                      disabled: _vm.connecting,
+                      clearable: ""
+                    },
+                    model: {
+                      value: _vm.departmentId,
+                      callback: function($$v) {
+                        _vm.departmentId = $$v
+                      },
+                      expression: "departmentId"
+                    }
+                  })
+                ],
+                1
+              )
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c(
+            "v-card-actions",
+            [
+              _c("v-spacer"),
+              _vm._v(" "),
+              _c(
+                "v-btn",
+                {
+                  attrs: { color: "red", flat: "" },
+                  on: {
+                    click: function($event) {
+                      _vm.$emit("onClose", false)
+                    }
+                  }
+                },
+                [_vm._v("Cancel")]
+              ),
+              _vm._v(" "),
+              _c(
+                "v-btn",
+                {
+                  attrs: {
+                    color: "primary",
+                    disabled: _vm.connecting || !_vm.formIsValid
+                  },
+                  on: { click: _vm.submit }
+                },
+                [_vm._v("Add Department")]
+              )
+            ],
+            1
+          )
+        ],
+        1
+      )
+    ],
+    1
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-366cc88d", module.exports)
   }
 }
 
@@ -51276,7 +51796,12 @@ var render = function() {
           )
         ],
         1
-      )
+      ),
+      _vm._v(" "),
+      _c("add-user-dialog", {
+        attrs: { "adding-user": _vm.addingUser },
+        on: { onClose: _vm.onCloseAddUserDialog }
+      })
     ],
     1
   )
@@ -52117,6 +52642,135 @@ if (false) {
   module.hot.accept()
   if (module.hot.data) {
     require("vue-hot-reload-api")      .rerender("data-v-8cb898ee", module.exports)
+  }
+}
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-8ef18c58\",\"hasScoped\":true,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/components/AddDepartmentDialog.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "v-dialog",
+    {
+      attrs: { lazy: "", "max-width": "400px", persistent: "" },
+      model: {
+        value: _vm.dialog,
+        callback: function($$v) {
+          _vm.dialog = $$v
+        },
+        expression: "dialog"
+      }
+    },
+    [
+      _c(
+        "v-card",
+        [
+          _c(
+            "v-toolbar",
+            { attrs: { dark: "", card: "", color: "primary" } },
+            [
+              _c("v-icon", [_vm._v("group_work")]),
+              _vm._v(" "),
+              _c("v-toolbar-title", [_vm._v("Add Department")])
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c("connection-manager", {
+            ref: "connectionManager",
+            on: {
+              onConnectionChange: function(status) {
+                _vm.connecting = status
+              }
+            }
+          }),
+          _vm._v(" "),
+          _c(
+            "v-card-text",
+            [
+              _c(
+                "v-layout",
+                { attrs: { row: "", wrap: "" } },
+                [
+                  _c(
+                    "v-flex",
+                    { attrs: { xs12: "" } },
+                    [
+                      _c("v-text-field", {
+                        attrs: {
+                          placeholder: "Department name",
+                          label: "Enter department name",
+                          required: ""
+                        },
+                        model: {
+                          value: _vm.departmentName,
+                          callback: function($$v) {
+                            _vm.departmentName = $$v
+                          },
+                          expression: "departmentName"
+                        }
+                      })
+                    ],
+                    1
+                  )
+                ],
+                1
+              )
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c(
+            "v-card-actions",
+            [
+              _c("v-spacer"),
+              _vm._v(" "),
+              _c(
+                "v-btn",
+                {
+                  attrs: { color: "red", flat: "" },
+                  on: {
+                    click: function($event) {
+                      _vm.$emit("onClose", false)
+                    }
+                  }
+                },
+                [_vm._v("Cancel")]
+              ),
+              _vm._v(" "),
+              _c(
+                "v-btn",
+                {
+                  attrs: {
+                    color: "primary",
+                    disabled: _vm.connecting || !_vm.departmentName
+                  },
+                  on: { click: _vm.submit }
+                },
+                [_vm._v("Add Department")]
+              )
+            ],
+            1
+          )
+        ],
+        1
+      )
+    ],
+    1
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-8ef18c58", module.exports)
   }
 }
 
@@ -55981,6 +56635,33 @@ if(false) {
 
 /***/ }),
 
+/***/ "./node_modules/vue-style-loader/index.js!./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-366cc88d\",\"scoped\":true,\"hasInlineConfig\":true}!./node_modules/vue-loader/lib/selector.js?type=styles&index=0!./resources/assets/js/components/AddUserDialog.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__("./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-366cc88d\",\"scoped\":true,\"hasInlineConfig\":true}!./node_modules/vue-loader/lib/selector.js?type=styles&index=0!./resources/assets/js/components/AddUserDialog.vue");
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__("./node_modules/vue-style-loader/lib/addStylesClient.js")("776280b6", content, false, {});
+// Hot Module Replacement
+if(false) {
+ // When the styles change, update the <style> tags
+ if(!content.locals) {
+   module.hot.accept("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-366cc88d\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./AddUserDialog.vue", function() {
+     var newContent = require("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-366cc88d\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./AddUserDialog.vue");
+     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+     update(newContent);
+   });
+ }
+ // When the module is disposed, remove the <style> tags
+ module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+
 /***/ "./node_modules/vue-style-loader/index.js!./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-3c3f4cf9\",\"scoped\":true,\"hasInlineConfig\":true}!./node_modules/vue-loader/lib/selector.js?type=styles&index=0!./resources/assets/js/components/SignIn.vue":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -56565,6 +57246,33 @@ if(false) {
  if(!content.locals) {
    module.hot.accept("!!../../css-loader/index.js!../../vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-8cb898ee\",\"scoped\":false,\"hasInlineConfig\":true}!../../sass-loader/lib/loader.js!../../vue-loader/lib/selector.js?type=styles&index=0!./fullCalendar.vue", function() {
      var newContent = require("!!../../css-loader/index.js!../../vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-8cb898ee\",\"scoped\":false,\"hasInlineConfig\":true}!../../sass-loader/lib/loader.js!../../vue-loader/lib/selector.js?type=styles&index=0!./fullCalendar.vue");
+     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+     update(newContent);
+   });
+ }
+ // When the module is disposed, remove the <style> tags
+ module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+
+/***/ "./node_modules/vue-style-loader/index.js!./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-8ef18c58\",\"scoped\":true,\"hasInlineConfig\":true}!./node_modules/vue-loader/lib/selector.js?type=styles&index=0!./resources/assets/js/components/AddDepartmentDialog.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__("./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-8ef18c58\",\"scoped\":true,\"hasInlineConfig\":true}!./node_modules/vue-loader/lib/selector.js?type=styles&index=0!./resources/assets/js/components/AddDepartmentDialog.vue");
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__("./node_modules/vue-style-loader/lib/addStylesClient.js")("12dd1f60", content, false, {});
+// Hot Module Replacement
+if(false) {
+ // When the styles change, update the <style> tags
+ if(!content.locals) {
+   module.hot.accept("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-8ef18c58\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./AddDepartmentDialog.vue", function() {
+     var newContent = require("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-8ef18c58\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./AddDepartmentDialog.vue");
      if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
      update(newContent);
    });
@@ -88012,6 +88720,58 @@ module.exports = Component.exports
 
 /***/ }),
 
+/***/ "./resources/assets/js/components/AddDepartmentDialog.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+function injectStyle (ssrContext) {
+  if (disposed) return
+  __webpack_require__("./node_modules/vue-style-loader/index.js!./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-8ef18c58\",\"scoped\":true,\"hasInlineConfig\":true}!./node_modules/vue-loader/lib/selector.js?type=styles&index=0!./resources/assets/js/components/AddDepartmentDialog.vue")
+}
+var normalizeComponent = __webpack_require__("./node_modules/vue-loader/lib/component-normalizer.js")
+/* script */
+var __vue_script__ = __webpack_require__("./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}]],\"plugins\":[\"transform-object-rest-spread\",[\"transform-runtime\",{\"polyfill\":false,\"helpers\":false}]]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/js/components/AddDepartmentDialog.vue")
+/* template */
+var __vue_template__ = __webpack_require__("./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-8ef18c58\",\"hasScoped\":true,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/components/AddDepartmentDialog.vue")
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = injectStyle
+/* scopeId */
+var __vue_scopeId__ = "data-v-8ef18c58"
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources\\assets\\js\\components\\AddDepartmentDialog.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-8ef18c58", Component.options)
+  } else {
+    hotAPI.reload("data-v-8ef18c58", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+
 /***/ "./resources/assets/js/components/AddToCartDialog.vue":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -88053,6 +88813,58 @@ if (false) {(function () {
     hotAPI.createRecord("data-v-55fbc07d", Component.options)
   } else {
     hotAPI.reload("data-v-55fbc07d", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+
+/***/ "./resources/assets/js/components/AddUserDialog.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+function injectStyle (ssrContext) {
+  if (disposed) return
+  __webpack_require__("./node_modules/vue-style-loader/index.js!./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-366cc88d\",\"scoped\":true,\"hasInlineConfig\":true}!./node_modules/vue-loader/lib/selector.js?type=styles&index=0!./resources/assets/js/components/AddUserDialog.vue")
+}
+var normalizeComponent = __webpack_require__("./node_modules/vue-loader/lib/component-normalizer.js")
+/* script */
+var __vue_script__ = __webpack_require__("./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}]],\"plugins\":[\"transform-object-rest-spread\",[\"transform-runtime\",{\"polyfill\":false,\"helpers\":false}]]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/js/components/AddUserDialog.vue")
+/* template */
+var __vue_template__ = __webpack_require__("./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-366cc88d\",\"hasScoped\":true,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/components/AddUserDialog.vue")
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = injectStyle
+/* scopeId */
+var __vue_scopeId__ = "data-v-366cc88d"
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources\\assets\\js\\components\\AddUserDialog.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-366cc88d", Component.options)
+  } else {
+    hotAPI.reload("data-v-366cc88d", Component.options)
   }
   module.hot.dispose(function (data) {
     disposed = true
