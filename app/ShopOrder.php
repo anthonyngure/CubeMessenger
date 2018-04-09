@@ -35,6 +35,7 @@
  * @method static \Illuminate\Database\Eloquent\Builder|\App\ShopOrder whereUserId($value)
  * @property int|null $rejected_by_id
  * @method static \Illuminate\Database\Eloquent\Builder|\App\ShopOrder whereRejectedById($value)
+ * @property-read \App\User|null $rejectedBy
  */
 	class ShopOrder extends Model
 	{

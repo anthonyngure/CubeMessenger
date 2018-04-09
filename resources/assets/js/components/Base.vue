@@ -18,8 +18,9 @@
       }
     },
     mounted () {
+      let that = this
       setTimeout(function () {
-        EventBus.$emit('collapseDrawer')
+        EventBus.$emit(that.$actions.collapsedDrawer)
       }, 1000)
     }
   }

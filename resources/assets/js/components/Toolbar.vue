@@ -2,9 +2,9 @@
     <v-toolbar fixed dense :color="darkTheme ? 'black' : 'white'" app clipped-left>
         <v-toolbar-side-icon @click.stop="onToolbarSideIconClick"></v-toolbar-side-icon>
         <img :src="'/img/logo.png'" height="32px" width="200px"/>
-        <v-btn color="primary" v-if="$auth.check()" class="ml-5">
+        <v-btn color="primary" v-if="$auth.check()" class="ml-5" :loading="balance === 0">
             <v-icon left>account_balance_wallet</v-icon>
-            Balance KES 0.00
+            Balance {{$utils.formatMoney(balance)}}
         </v-btn>
         <v-spacer></v-spacer>
         <v-toolbar-items v-if="$auth.check()">
@@ -54,7 +54,8 @@
     name: 'toolbar',
     data () {
       return {
-        darkTheme: false
+        darkTheme: false,
+        balance: 0,
       }
     },
     watch: {
@@ -77,10 +78,24 @@
       },
       onToolbarSideIconClick () {
         EventBus.$emit('onToolbarSideIconClick')
+      },
+      refreshBalance () {
+        this.balance = 0
+        this.axios.get('balance').then(response => {
+          this.balance = response.data.data.balance
+        })
       }
     },
     mounted () {
+      let that = this
       this.darkTheme = false
+      EventBus.$on(this.$actions.addedDelivery, function () {
+        that.refreshBalance()
+      })
+      EventBus.$on(this.$actions.placedOrder, function () {
+        that.refreshBalance()
+      })
+      this.refreshBalance()
     }
   }
 </script>

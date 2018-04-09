@@ -57,6 +57,7 @@
 			}
 			
 			\Validator::validate($request->json()->all(), [
+				'urgent'                 => 'required|boolean',
 				'originName'             => 'required',
 				'originVicinity'         => 'required',
 				'originFormattedAddress' => 'required',
@@ -72,8 +73,11 @@
 			
 			$scheduleDate = $request->json('scheduleDate');
 			$scheduleTime = $request->json('scheduleTime');
+			
+			
 			$delivery = Delivery::create([
 				'user_id'                  => Auth::user()->getKey(),
+				'urgent'                   => $request->json('urgent'),
 				'origin_name'              => $request->json('originName'),
 				'origin_vicinity'          => $request->json('originVicinity'),
 				'origin_formatted_address' => $request->json('originFormattedAddress'),
@@ -88,21 +92,23 @@
 			
 			$deliveryItems = array();
 			foreach ($items as $item) {
-				$deliveryItem = ((object)$item);
-				array_push($deliveryItems, new DeliveryItem([
-					'courier_option_id'             => $deliveryItem->courierOptionId,
-					'destination_name'              => $deliveryItem->destinationName,
-					'destination_vicinity'          => $deliveryItem->destinationVicinity,
-					'destination_formatted_address' => $deliveryItem->destinationFormattedAddress,
-					'destination_latitude'          => $deliveryItem->destinationLatitude,
-					'destination_longitude'         => $deliveryItem->destinationLongitude,
-					'recipient_contact'             => $deliveryItem->recipientContact,
-					'recipient_name'                => $deliveryItem->recipientName,
-					'quantity'                      => $deliveryItem->quantity,
-					'note'                          => $deliveryItem->note,
-					'estimated_duration'            => $deliveryItem->estimatedDuration,
-					'estimated_distance'            => $deliveryItem->estimatedDistance,
-				]));
+				$deliveryItemObject = ((object)$item);
+				$deliveryItem = new DeliveryItem([
+					'courier_option_id'             => $deliveryItemObject->courierOptionId,
+					'destination_name'              => $deliveryItemObject->destinationName,
+					'destination_vicinity'          => $deliveryItemObject->destinationVicinity,
+					'destination_formatted_address' => $deliveryItemObject->destinationFormattedAddress,
+					'destination_latitude'          => $deliveryItemObject->destinationLatitude,
+					'destination_longitude'         => $deliveryItemObject->destinationLongitude,
+					'recipient_contact'             => Utils::normalizePhone($deliveryItemObject->recipientContact),
+					'recipient_name'                => $deliveryItemObject->recipientName,
+					'quantity'                      => $deliveryItemObject->quantity,
+					'note'                          => $deliveryItemObject->note,
+					'estimated_duration'            => $deliveryItemObject->estimatedDuration,
+					'estimated_distance'            => $deliveryItemObject->estimatedDistance,
+				]);
+				
+				array_push($deliveryItems, $deliveryItem);
 			}
 			
 			$delivery->items()->saveMany($deliveryItems);
@@ -135,29 +141,26 @@
 		 */
 		public function update(Request $request, $id)
 		{
-			//An update on deliveries will only come from the riders
+			/**
+			 * An update on deliveries will only come from the staff app with a rider
+			 */
 			
 			$this->validate($request, [
 				'pickupLatitude'  => 'required|numeric',
 				'pickupLongitude' => 'required|numeric',
 			]);
 			
-			/** @var \App\User $rider */
-			$rider = Auth::user();
-			
-			if ($rider->account_type != 'RIDER') {
-				throw new WrappedException('You are not authorized to perform deliveries!');
-			}
+			$this->checkIfUserIsRider();
 			
 			/** @var Delivery $delivery */
 			$delivery = Delivery::with(['items' => function (HasMany $hasMany) {
 				$hasMany->with('courierOption');
-			}, 'client'                         => function () {
-			
+			}, 'user'                           => function (BelongsTo $belongsTo) {
+				$belongsTo->with('client');
 			}])->findOrFail($id);
 			
 			
-			$delivery->rider_id = $rider->getKey();
+			$delivery->rider_id = Auth::user()->getKey();
 			$delivery->pickup_time = Carbon::now()->toDateTimeString();
 			$delivery->pickup_latitude = $request->pickupLatitude;
 			$delivery->pickup_longitude = $request->pickupLongitude;
@@ -168,7 +171,7 @@
 				$deliveryItem->estimated_arrival_time = Carbon::now()
 					->addSeconds($deliveryItem->estimated_duration)
 					->toDateTimeString();
-				$deliveryItem->received_confirmation_code = Utils::code();
+				$deliveryItem->received_confirmation_code = Messages::code($deliveryItem->recipient_contact);
 				$deliveryItem->status = 'EN_ROUTE_TO_DESTINATION';
 				$deliveryItem->save();
 				
@@ -177,10 +180,12 @@
 				$nameToUse = $deliveryItem->quantity > 1 ? $deliveryItem->courierOption->plural_name
 					: $deliveryItem->courierOption->name;
 				$smsText = 'Hi ' . $deliveryItem->recipient_name . ', ' . $deliveryItem->quantity . ' ' . $nameToUse .
-					' from ' . $delivery->client->name . ' will be delivered to you around '
+					' from ' . $delivery->user->client->name . ' will be delivered to you around '
 					. $deliveryItem->estimated_arrival_time . '. Use CODE: ' . $deliveryItem->received_confirmation_code .
 					' to confirm you have received.';
+				
 				$this->sendSMS($smsText, $deliveryItem->recipient_contact);
+				
 				//dd($smsText);
 			}
 			
@@ -255,7 +260,7 @@
 		private function riderDeliveries($request)
 		{
 			$deliveries = Delivery::whereHas('items', function (Builder $builder) use ($request) {
-				$builder->where('status', 'AT_PICKUP');
+				$builder->where('status', 'PENDING_DELIVERY');
 			})->with(['items' => function (HasMany $hasMany) {
 				$hasMany->with(['courierOption' => function (BelongsTo $belongsTo) {
 					$belongsTo->select(['id', 'name', 'plural_name', 'icon']);
@@ -279,5 +284,12 @@
 			});
 			
 			return $this->collectionResponse($deliveries);
+		}
+		
+		private function calculateDeliveryEstimatedCost(DeliveryItem $deliveryItem)
+		{
+			$costPerItem = ($deliveryItem->estimated_distance / 1000) * 10;
+			
+			return ($deliveryItem->quantity * ($deliveryItem));
 		}
 	}

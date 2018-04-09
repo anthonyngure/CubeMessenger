@@ -59,7 +59,15 @@
 		 */
 		public function update(Request $request, $deliveryId, $itemId)
 		{
-			//An update on deliveries will only come from the riders
+			
+			/**
+			 * action is required when we are updating from the Web
+			 * code, receivedLatitude & receivedLongitude are required when updating from the stuff app
+			 * code is the recipient confirmation code sent to the recipient of the delivery item
+			 * receivedLongitude & receivedLongitude are the coordinates of where the recipient
+			 * enters the code on receiving the item
+			 */
+			
 			
 			$this->validate($request, [
 				'code'              => 'required_with:receivedLatitude,receivedLongitude|digits:4',
@@ -69,9 +77,17 @@
 			]);
 			
 			/** @var DeliveryItem $deliveryItem */
-			$deliveryItem = DeliveryItem::findOrFail($itemId);
+			$deliveryItem = DeliveryItem::whereDeliveryId($deliveryId)->findOrFail($itemId);
+			
+			/**
+			 * Make sure the status of this item is EN_ROUTE_TO_DESTINATION
+			 */
+			
+			//$deliveryItem->checkEnRouteRoDestination();
 			
 			if (!empty($request->action)) {
+				
+				//It is an update from the web
 				
 				if ($request->action == 'reject') {
 					$deliveryItem->rejected_by_id = Auth::user()->getKey();
@@ -125,18 +141,14 @@
 				
 			} else {
 				
-				//This is an update from a rider
+				//This is an update from a stuff app
 				
-				/** @var \App\User $rider */
-				$rider = Auth::user();
-				
-				if ($rider->account_type != 'RIDER') {
-					throw new WrappedException('You are not authorized to perform deliveries!');
-				}
+				$this->checkIfUserIsRider();
 				
 				if ($deliveryItem->received_confirmation_code != $request->code) {
 					throw new WrappedException("The code entered is invalid!");
 				}
+				
 				$deliveryItem->received_time = Carbon::now()->toDateTimeString();
 				$deliveryItem->received_latitude = $request->receivedLatitude;
 				$deliveryItem->received_longitude = $request->receivedLongitude;

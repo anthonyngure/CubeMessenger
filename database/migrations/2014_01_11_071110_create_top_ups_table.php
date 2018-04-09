@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateTransactionsTable extends Migration
+class CreateTopUpsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -12,15 +12,13 @@ class CreateTransactionsTable extends Migration
      */
     public function up()
     {
-        Schema::create('transactions', function (Blueprint $table) {
+        Schema::create('top_ups', function (Blueprint $table) {
             $table->increments('id');
 	        $table->unsignedInteger('client_id', false);
 	        $table->foreign('client_id')->references('id')->on('clients');
-	        $table->unsignedInteger('user_id', false)->nullable();
-	        $table->foreign('user_id')->references('id')->on('users');
 	        $table->double('amount', null, 2);
-	        $table->text('description');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
@@ -31,6 +29,6 @@ class CreateTransactionsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('transactions');
+        Schema::dropIfExists('top_ups');
     }
 }

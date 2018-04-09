@@ -3,6 +3,10 @@
         <v-card-text class="mb-0 pb-0">
             <v-layout wrap row>
                 <v-flex xs10 offset-xs1>
+                    <v-chip v-if="courierOption" label outline color="info" small>
+                        <v-icon left>info</v-icon>
+                        {{courierOption.name}} option description for user
+                    </v-chip>
                     <v-radio-group v-if="courierOptions.length"
                                    v-model="courierOption"
                                    row hide-details
@@ -10,21 +14,18 @@
                         <v-radio v-for="(courierOption, i) in courierOptions"
                                  :key="courierOption.id"
                                  :value="courierOption"
+                                 :disabled="disabled"
+                                 v-if="courierOption.active"
                                  :label="courierOption.name">
                         </v-radio>
                     </v-radio-group>
                 </v-flex>
             </v-layout>
-            <v-progress-linear v-if="!courierOptions.length"
-                               :indeterminate="true"
-                               hide-details>
-            </v-progress-linear>
-
             <google-place-input class="mb-2"
                                 id="destination"
                                 country="KE"
                                 :clearable="false"
-                                :disabled="!courierOption"
+                                :disabled="!courierOption || disabled"
                                 :enable-geolocation="true"
                                 label="Enter destination location"
                                 placeholder="Destination location"
@@ -83,14 +84,15 @@
                     v-model="note"
                     label="Write a short note"
                     placeholder="Write a short note"
+                    :disabled="disabled"
                     multi-line>
             </v-text-field>
         </v-card-text>
         <v-card-actions>
             <v-spacer></v-spacer>
-            <v-btn flat v-if="cancelable" color="red" @click.native="close">Cancel</v-btn>
+            <v-btn flat v-if="cancelable" :disabled="disabled" color="red" @click.native="close">Cancel</v-btn>
             <v-btn small color="primary"
-                   :disabled="invalidForm"
+                   :disabled="invalidForm || disabled"
                    @click.native="onAddItem">Add item
             </v-btn>
         </v-card-actions>
@@ -99,94 +101,97 @@
 
 <script>
 
-    import formatCurrency from 'format-currency'
-    import GooglePlaceInput from './GooglePlaceInput'
+  import GooglePlaceInput from './GooglePlaceInput'
 
-    export default {
-        name: 'delivery-item-form',
-        components: {
-            GooglePlaceInput
+  export default {
+    name: 'delivery-item-form',
+    components: {
+      GooglePlaceInput
+    },
+    props: {
+      courierOptions: {
+        type: Array,
+        required: false,
+        default: function () {
+          return []
+        }
+      },
+      cancelable: {
+        type: Boolean,
+        required: true
+      },
+      disabled: {
+        type: Boolean,
+        required: true
+      }
+    },
+    data: () => ({
+      note: null,
+      recipientContact: null,
+      recipientName: null,
+      quantity: 1,
+      courierOption: null,
+      addressData: null,
+      placeResultData: null,
+      rules: {
+        required: (value) => !!value || 'Required.',
+        recipientContact: (value) => {
+          return !!value && ('' + value).length === 10 || 'Recipient contact must be 10 characters'
         },
-        props: {
-            courierOptions: {
-                type: Array,
-                required: false,
-                default: function () {
-                    return []
-                }
-            },
-            cancelable: {
-                type: Boolean,
-                required: true
-            }
-        },
-        data: () => ({
-            note: null,
-            recipientContact: null,
-            recipientName: null,
-            quantity: 1,
-            courierOption: null,
-            addressData: null,
-            placeResultData: null,
-            rules: {
-                required: (value) => !!value || 'Required.',
-                recipientContact: (value) => {
-                    return !!value && ('' + value).length === 10 || 'Recipient contact must be 10 characters'
-                },
-                quantity: (value) => !!value && parseInt(value) >= 1 && parseInt(value) <= 100
-                    || 'Quantity cannot be less than 1 and greater than 100',
-            },
-        }),
-        computed: {
-            quantityHint: function () {
-                if (this.courierOption) {
-                    return 'Number of ' + this.courierOption.name + 's'
-                } else {
-                    return 'Number of items'
-                }
-            },
-            invalidForm: function () {
-                return !this.courierOption || !this.addressData || !this.placeResultData
-                    || ('' + this.recipientContact).length !== 10 || !this.recipientName
-                    || this.quantity < 1 || this.quantity > 100
-            }
-        },
-        methods: {
-            onDestinationEntered (addressData, placeResultData) {
-                this.addressData = addressData
-                this.placeResultData = placeResultData
-            },
-            onAddItem: function () {
-                let item = {
-                    recipientContact: this.recipientContact,
-                    recipientName: this.recipientName,
-                    note: this.note,
-                    quantity: this.quantity,
-                    courierOption: this.courierOption,
-                    destinationFormattedAddress: this.placeResultData.formatted_address,
-                    destinationVicinity: this.placeResultData.vicinity,
-                    destinationName: this.placeResultData.name,
-                    destinationPosition: {
-                        lat: this.placeResultData.geometry.location.lat(),
-                        lng: this.placeResultData.geometry.location.lng()
-                    }
-                }
-                this.$emit('onAddItem', item)
-            },
-            close: function () {
-                this.destinationInput = ''
-                this.courierOption = null
-                this.note = null
-                this.recipientContact = null
-                this.recipientName = null
-                this.quantity = 1
-                this.addressData = null
-                this.placeResultData = null
-                this.$refs.destinationInput.clear()
-                this.$emit('onClose')
-            }
-        },
-    }
+        quantity: (value) => !!value && parseInt(value) >= 1 && parseInt(value) <= 100
+          || 'Quantity cannot be less than 1 and greater than 100',
+      },
+    }),
+    computed: {
+      quantityHint: function () {
+        if (this.courierOption) {
+          return 'Number of ' + this.courierOption.name + 's'
+        } else {
+          return 'Number of items'
+        }
+      },
+      invalidForm: function () {
+        return !this.courierOption || !this.addressData || !this.placeResultData
+          || ('' + this.recipientContact).length !== 10 || !this.recipientName
+          || this.quantity < 1 || this.quantity > 100
+      }
+    },
+    methods: {
+      onDestinationEntered (addressData, placeResultData) {
+        this.addressData = addressData
+        this.placeResultData = placeResultData
+      },
+      onAddItem: function () {
+        let item = {
+          recipientContact: this.recipientContact,
+          recipientName: this.recipientName,
+          note: this.note,
+          quantity: this.quantity,
+          courierOption: this.courierOption,
+          destinationFormattedAddress: this.placeResultData.formatted_address,
+          destinationVicinity: this.placeResultData.vicinity,
+          destinationName: this.placeResultData.name,
+          destinationPosition: {
+            lat: this.placeResultData.geometry.location.lat(),
+            lng: this.placeResultData.geometry.location.lng()
+          }
+        }
+        this.$emit('onAddItem', item)
+      },
+      close: function () {
+        this.destinationInput = ''
+        this.courierOption = null
+        this.note = null
+        this.recipientContact = null
+        this.recipientName = null
+        this.quantity = 1
+        this.addressData = null
+        this.placeResultData = null
+        this.$refs.destinationInput.clear()
+        this.$emit('onClose')
+      }
+    },
+  }
 </script>
 
 <style scoped>

@@ -97,7 +97,21 @@ Vue.use(VueTimeago, {
 
 Vue.config.productionTip = true
 
-Vue.prototype.$appName = 'CubeMessenger'
+Vue.prototype.$appName = 'Cube Messenger'
+
+Vue.prototype.$actions = {
+  addedDelivery: 'addedDelivery',
+  collapsedDrawer: 'collapsedDrawer',
+  clickedToolbarSideIcon: 'clickedToolbarSideIcon',
+  placedOrder: 'placedOrder',
+  requestedService: 'requestedService',
+  addedAppointment: 'addedAppointment',
+  approved: 'approved',
+  rejected: 'rejected',
+}
+
+Vue.prototype.$systemVariables = []
+
 Vue.prototype.$utils = {
   //url: DEBUG ? 'http://localhost:3000' : 'https://cube-messenger.com',
   url: DEBUG ? 'http://localhost:3000' : 'http://35.192.81.247',
@@ -117,6 +131,7 @@ Vue.prototype.$utils = {
     let opts = {format: '%s%v', symbol: 'KES '}
     return formatCurrency(estimatedCost, opts)
   },
+
   primaryColor: PRIMARY_COLOR,
   accentColor: ACCENT_COLOR,
 }

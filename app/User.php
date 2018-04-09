@@ -8,57 +8,35 @@
 	/**
  * App\User
  *
- * @property int
- *                   $id
- * @property int|null
- *                   $role_id
- * @property int|null
- *                   $client_id
- * @property string
- *                   $name
- * @property string
- *                   $avatar
- * @property string|null
- *                   $email
- * @property string|null
- *                   $email_verification_code
- * @property int
- *                   $email_verified
- * @property string|null
- *                   $phone
- * @property string|null
- *                   $phone_verification_code
- * @property int
- *                   $phone_verified
- * @property string|null
- *                   $password
- * @property string|null
- *                   $password_recovery_code
- * @property string
- *                   $account_type
- * @property float|null
- *                   $latitude
- * @property float|null
- *                   $longitude
- * @property string|null
- *                   $remember_token
- * @property \Carbon\Carbon|null
- *                   $created_at
- * @property \Carbon\Carbon|null
- *                   $updated_at
- * @property-read \App\Client|null
- *                        $client
- * @property-read \Illuminate\Notifications\DatabaseNotificationCollection|\Illuminate\Notifications\DatabaseNotification[]
- *                $notifications
- * @property-read \TCG\Voyager\Models\Role|null
- *                        $role
+ * @property int $id
+ * @property int|null $role_id
+ * @property int|null $client_id
+ * @property int|null $department_id
+ * @property string $name
+ * @property string $avatar
+ * @property string|null $email
+ * @property string|null $phone
+ * @property string|null $password
+ * @property string|null $password_recovery_code
+ * @property string $account_type
+ * @property float|null $latitude
+ * @property float|null $longitude
+ * @property \Carbon\Carbon|null $created_at
+ * @property \Carbon\Carbon|null $updated_at
+ * @property string|null $deleted_at
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Appointment[] $appointments
+ * @property-read \App\Client|null $client
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Delivery[] $deliveries
+ * @property-read \Illuminate\Notifications\DatabaseNotificationCollection|\Illuminate\Notifications\DatabaseNotification[] $notifications
+ * @property-read \TCG\Voyager\Models\Role|null $role
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\ServiceRequest[] $serviceRequests
  * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereAccountType($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereAvatar($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereClientId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereDepartmentId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereEmail($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereEmailVerificationCode($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereEmailVerified($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereLatitude($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereLongitude($value)
@@ -66,19 +44,9 @@
  * @method static \Illuminate\Database\Eloquent\Builder|\App\User wherePassword($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\User wherePasswordRecoveryCode($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\User wherePhone($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\User wherePhoneVerificationCode($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\User wherePhoneVerified($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereRememberToken($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereRoleId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereUpdatedAt($value)
  * @mixin \Eloquent
- * @property string|null $deleted_at
- * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereDeletedAt($value)
- * @property int|null $department_id
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Appointment[] $appointments
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Delivery[] $deliveries
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\ServiceRequest[] $serviceRequests
- * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereDepartmentId($value)
  */
 	class User extends \TCG\Voyager\Models\User implements JWTSubject
 	{
@@ -164,6 +132,14 @@
 		public function isDepartmentHead()
 		{
 			return $this->account_type == 'DEPARTMENT_HEAD';
+		}
+		
+		/**
+		 * @return bool
+		 */
+		public function isRider()
+		{
+			return $this->account_type == 'CUBE_MESSENGER_RIDER';
 		}
 		
 		

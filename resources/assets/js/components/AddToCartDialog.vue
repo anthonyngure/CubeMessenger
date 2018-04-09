@@ -80,7 +80,7 @@
           onSuccess (response) {
             that.connecting = false
             that.quantity = null
-            EventBus.$emit('onShopProductOrdered')
+            EventBus.$emit(that.$actions.placedOrder)
             that.$emit('onClose', true)
           }
         }, {

@@ -31,7 +31,9 @@
 			$this->call(SettingsTableSeeder::class);
 			$this->call(TranslationsTableSeeder::class);
 			
+			$this->call(CostVariablesTableSeeder::class);
 			$this->call(ClientsTableSeeder::class);
+			$this->call(TopUpsTableSeeder::class);
 			$this->call(DepartmentsTableSeeder::class);
 			$this->call(UsersTableSeeder::class);
 			$this->call(CourierOptionsTableSeeder::class);

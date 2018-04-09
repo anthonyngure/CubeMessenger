@@ -89,11 +89,14 @@
         this.$auth.login({
           data: {
             signInId: this.email,
-            password: this.password
+            password: this.password,
+            withVariables: true,
           },
           rememberMe: true,
           success (response) {
             this.$utils.log(response.data.data)
+            this.$systemVariables = []
+            this.$systemVariables = this.$systemVariables.concat(response.data.variables)
             this.connecting = false
           },
           error (error) {

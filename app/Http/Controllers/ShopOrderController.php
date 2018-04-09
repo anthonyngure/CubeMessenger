@@ -23,43 +23,31 @@
 				'filter' => 'required|in:count,pendingApproval,pendingDelivery,delivered,rejected',
 			]);
 			
-			if ($request->filter === 'count') {
-				$count = ShopOrder::whereIn('user_id', $client->users->pluck('id'))
-					->where('status', '!=', 'DELIVERED')
-					->where('status', '!=', 'REJECTED')
-					->count();
-				$data = [
-					'count' => $count,
-				];
-				
-				return $this->arrayResponse($data);
+			if ($request->filter === 'pendingApproval') {
+				$orders = ShopOrder::whereIn('user_id', $client->users->pluck('id'))
+					->where('status', 'AT_DEPARTMENT_HEAD')
+					->orWhere('status', 'AT_PURCHASING_HEAD')
+					->with(['shopProduct', 'user'])
+					->get();
+			} else if ($request->filter === 'pendingDelivery') {
+				$orders = ShopOrder::whereIn('user_id', $client->users->pluck('id'))
+					->where('status', 'PENDING_DELIVERY')
+					->with(['shopProduct', 'user'])
+					->get();
+			} else if ($request->filter === 'delivered') {
+				$orders = ShopOrder::whereIn('user_id', $client->users->pluck('id'))
+					->where('status', 'DELIVERED')
+					->with(['shopProduct', 'user'])
+					->get();
 			} else {
-				if ($request->filter === 'pendingApproval') {
-					$orders = ShopOrder::whereIn('user_id', $client->users->pluck('id'))
-						->where('status', 'AT_DEPARTMENT_HEAD')
-						->orWhere('status', 'AT_PURCHASING_HEAD')
-						->with(['shopProduct', 'user'])
-						->get();
-				} else if ($request->filter === 'pendingDelivery') {
-					$orders = ShopOrder::whereIn('user_id', $client->users->pluck('id'))
-						->where('status', 'PENDING_DELIVERY')
-						->with(['shopProduct', 'user'])
-						->get();
-				} else if ($request->filter === 'delivered') {
-					$orders = ShopOrder::whereIn('user_id', $client->users->pluck('id'))
-						->where('status', 'DELIVERED')
-						->with(['shopProduct', 'user'])
-						->get();
-				} else {
-					$orders = ShopOrder::whereIn('user_id', $client->users->pluck('id'))
-						->where('status', 'REJECTED')
-						->with(['shopProduct', 'user'])
-						->with('rejectedBy')
-						->get();
-				}
-				
-				return $this->collectionResponse($orders);
+				$orders = ShopOrder::whereIn('user_id', $client->users->pluck('id'))
+					->where('status', 'REJECTED')
+					->with(['shopProduct', 'user'])
+					->with('rejectedBy')
+					->get();
 			}
+			
+			return $this->collectionResponse($orders);
 			
 		}
 		

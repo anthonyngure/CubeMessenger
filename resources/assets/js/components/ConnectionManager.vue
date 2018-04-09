@@ -92,13 +92,13 @@
       },
 
       onSuccess (response, callbacks) {
-        this.error = false
-        this.errorText = null
-        this.connecting = false
         this.$utils.log(response)
         if (callbacks && callbacks.onSuccess) {
           callbacks.onSuccess(response)
         }
+        this.error = false
+        this.errorText = null
+        this.connecting = false
       },
 
 

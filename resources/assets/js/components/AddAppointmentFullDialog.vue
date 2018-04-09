@@ -21,9 +21,7 @@
                 <v-layout row wrap style="width: 75%; margin: 0 auto">
 
                     <v-flex xs12>
-                        <connection-manager ref="connectionManager"
-                                            @onConnectionChange="onConnectionChange"
-                                            @onSuccess="onConnectionManagerSuccess">
+                        <connection-manager ref="connectionManager" @onConnectionChange="(val)=>{connecting = val}">
                         </connection-manager>
                     </v-flex>
 
@@ -113,7 +111,7 @@
                             <template slot="item" slot-scope="data">
                                 <template>
                                     <v-list-tile-avatar>
-                                        <img :src="$utils.imageUrl(user.avatar)">
+                                        <img :src="$utils.imageUrl(data.item.avatar)">
                                     </v-list-tile-avatar>
                                     <v-list-tile-content>
                                         <v-list-tile-title v-html="data.item.name"></v-list-tile-title>
@@ -238,6 +236,7 @@
   import TimeInput from './TimeInput'
   import DateInput from './DateInput'
   import ConnectionManager from './ConnectionManager'
+  import EventBus from '../event-bus'
 
   export default {
     components: {
@@ -334,12 +333,6 @@
       }
     },
     methods: {
-      onConnectionManagerSuccess (response) {
-        this.$emit('onClose', true)
-      },
-      onConnectionChange (connecting) {
-        this.connecting = connecting
-      },
       removeParticipant (participant) {
         this.participants.splice(this.participants.indexOf(participant), 1)
         this.participants = [...this.participants]
@@ -425,8 +418,13 @@
             })
           }
           this.$utils.log(appointment)
-
-          this.$refs.connectionManager.store('appointments', {
+          let that = this
+          this.$refs.connectionManager.post('appointments', {
+            onSuccess (response) {
+              that.$emit('onClose', true)
+              EventBus.$emit(that.$actions.addedAppointment)
+            }
+          }, {
             venue: appointment.venue,
             with: appointment.with,
             title: appointment.title,

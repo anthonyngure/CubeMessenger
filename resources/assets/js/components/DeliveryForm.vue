@@ -25,13 +25,18 @@
                          'height: '+($vuetify.breakpoint.height  - 100)+'px'"
                         class="scroll-y">
                     <v-card tile>
+
+                        <connection-manager ref="connectionManager"
+                                            @onConnectionChange="(status)=> {connecting = status}">
+                        </connection-manager>
+
                         <v-card-text>
                             <!--Origin-->
                             <google-place-input
                                     id="origin"
                                     country="KE"
                                     :clearable="false"
-                                    :disabled="(addingItem && items.length > 0) || addingSchedule || items.length > 0"
+                                    :disabled="(addingItem && items.length > 0) || addingSchedule || items.length > 0 ||connecting"
                                     :enable-geolocation="true"
                                     label="Enter pickup location"
                                     placeholder="Pickup location"
@@ -77,6 +82,7 @@
                                 <delivery-item-form
                                         v-show="addingItem"
                                         :courierOptions="courierOptions"
+                                        :disabled="connecting"
                                         :cancelable="items.length > 0"
                                         @onAddItem="onAddItem"
                                         @onClose="addingItem = false"
@@ -121,17 +127,31 @@
                             <!--Total cost estimate-->
                             <v-progress-linear v-if="calculatingDirections" :indeterminate="true" hide-details>
                             </v-progress-linear>
-                            <v-tooltip bottom>
-                                <v-btn block color="accent" outline small flat slot="activator"
-                                       v-if="items.length">
-                                    Total Cost Estimate: <b> {{totalEstimatedCostFormatted}}</b>
-                                </v-btn>
-                                <span>Estimated Max Distance: {{estimatedMaxDistance/1000}}km</span><br/>
-                                <!--<span>Estimate Max Time: {{estimatedMaxDuration/60}}min</span><br/>-->
-                                <span>Cost Per Kilometer: KES 30.00</span><br/>
-                                <span>Cost Per Minute: KES 4.00</span><br/>
-                                <span>Estimate Total Cost: {{totalEstimatedCostFormatted}}</span>
-                            </v-tooltip>
+                            <v-layout row wrap v-if="items.length">
+                                <v-flex xs4>
+                                    <v-checkbox hide-details label="Urgent" v-model="urgent"></v-checkbox>
+                                </v-flex>
+                                <v-flex xs8>
+                                    <v-tooltip bottom>
+                                        <v-btn block color="accent" outline small flat slot="activator">
+                                            Total Cost Estimate: <b>{{$utils.formatMoney(estimatedCost)}}</b>
+                                        </v-btn>
+                                        <span v-if="itemWithLongestDistance">Estimated Max Distance: {{itemWithLongestDistance.distance/1000}}km</span>
+                                        <br/>
+                                        <br/>
+                                        <!--<span>Estimate Max Time: {{estimatedMaxDuration/60}}min</span><br/>-->
+                                        <span>Urgent Cost Per Kilometer: KES {{systemVariables.URGENT_COST_PER_KM}}</span><br/>
+                                        <span>Non Urgent Cost Per Kilometer: KES {{systemVariables.NON_URGENT_COST_PER_KM}}</span>
+                                        <br/>
+                                        <br/>
+                                        <span>Urgent Cost Per Minute: KES {{systemVariables.URGENT_COST_PER_MIN}}</span><br/>
+                                        <span>Non Cost Per Minute: KES {{systemVariables.NON_URGENT_COST_PER_MIN}}</span>
+                                        <br/>
+                                        <br/>
+                                        <span>Estimate Total Cost: {{$utils.formatMoney(estimatedCost)}}</span>
+                                    </v-tooltip>
+                                </v-flex>
+                            </v-layout>
 
                         </v-card-text>
                         <v-card-actions v-if="!addingItem && !addingSchedule">
@@ -157,27 +177,6 @@
                     <pick-pack-map></pick-pack-map>
                 </v-flex>
             </v-layout>
-            <v-dialog v-model="submittingDialog"
-                      max-width="350px"
-                      lazy persistent>
-                <v-card>
-                    <v-card-text>
-                        <v-progress-linear v-show="connecting" :indeterminate="true"></v-progress-linear>
-                        <p v-show="connecting" class="text-xs-center">Please wait....</p>
-                        <v-alert v-model="error" type="error" dismissible icon="warning" dark>
-                            {{errorText}}
-                        </v-alert>
-                        <p v-show="!connecting && !error">Delivery added successfully</p>
-                    </v-card-text>
-                    <v-card-actions>
-                        <v-spacer></v-spacer>
-                        <v-btn :color="error ? 'red' : 'primary'" flat v-show="!connecting"
-                               @click.native="onCloseSubmittingDialog">
-                            {{error ? 'Cancel' : 'Close'}}
-                        </v-btn>
-                    </v-card-actions>
-                </v-card>
-            </v-dialog>
         </v-card-text>
     </v-card>
 </template>
@@ -187,13 +186,14 @@
   import DeliveryItemForm from './DeliveryItemForm'
   import GooglePlaceInput from './GooglePlaceInput'
   import EventBus from '../event-bus'
-  import formatCurrency from 'format-currency'
   import moment from 'moment'
   import DateInput from './DateInput'
   import TimeInput from './TimeInput'
+  import ConnectionManager from './ConnectionManager'
 
   export default {
     components: {
+      ConnectionManager,
       TimeInput,
       DateInput,
       GooglePlaceInput,
@@ -202,8 +202,9 @@
     },
     name: 'delivery-form',
     data: () => ({
-      drawerOpen: true,
+      urgent: false,
       courierOptions: [],
+      systemVariables: [],
       originInput: '',
       originName: null,
       originFormattedAddress: null,
@@ -212,11 +213,8 @@
       error: null,
       errorText: '',
       connecting: false,
-      submittingDialog: false,
       estimatedCost: 0,
-      estimatedMaxDuration: 0,
-      estimatedMaxDistance: 0,
-      totalEstimatedCostFormatted: null,
+      itemWithLongestDistance: null,
       note: null,
       scheduleDate: null,
       allowedDates: {
@@ -247,6 +245,9 @@
     }),
     watch: {
       items: function () {
+        this.updateTotalEstimatedCost()
+      },
+      urgent: function () {
         this.updateTotalEstimatedCost()
       },
       polyLinePaths (polyLinePaths) {
@@ -337,57 +338,32 @@
           }
         })
       },
-      onCloseSubmittingDialog () {
-        this.submittingDialog = false
-        if (!this.error) {
-          this.originPosition = null
-          this.originFormattedAddress = null
-          this.originVicinity = null
-          this.note = null
-          this.scheduleDate = null
-          this.scheduleTime = null
-          this.items = []
-          this.polyLinePaths = []
-          this.estimatedCost = 0
-          this.totalEstimatedCostFormatted = null
-          this.addingItem = true
-          this.$refs.originInput.clear()
-          this.$emit('onClose', true)
-        }
-      },
       updateTotalEstimatedCost () {
-        let totalBaseCosts = 0
-        this.estimatedMaxDistance = 0
-        for (let i = 0; i < this.items.length; i++) {
-          let item = this.items[i]
-          totalBaseCosts = +item.quantity * parseFloat(item.courierOption.baseCost)
-          if (item.distance > this.estimatedMaxDistance) {
-            this.estimatedMaxDistance = item.distance
-            this.estimatedMaxDuration = item.duration
+        if (this.items.length > 0) {
+          let estimatedMaxDistance = 0
+          for (let i = 0; i < this.items.length; i++) {
+            let item = this.items[i]
+            if (item.distance > estimatedMaxDistance) {
+              estimatedMaxDistance = item.distance
+              this.itemWithLongestDistance = item
+            }
           }
+          let costPerMinute
+          let costPerKM
+          let baseCost
+          if (this.urgent) {
+            costPerMinute = this.systemVariables.URGENT_COST_PER_KM * (this.itemWithLongestDistance.distance / 60)
+            costPerKM = this.systemVariables.URGENT_COST_PER_MIN * (this.itemWithLongestDistance.duration / 1000)
+            baseCost = this.systemVariables.URGENT_BASE_COST
+          } else {
+            costPerMinute = this.systemVariables.NON_URGENT_COST_PER_KM * (this.itemWithLongestDistance.distance / 60)
+            costPerKM = this.systemVariables.NON_URGENT_COST_PER_MIN * (this.itemWithLongestDistance.duration / 1000)
+            baseCost = this.systemVariables.NON_URGENT_BASE_COST
+          }
+          this.estimatedCost = baseCost + costPerMinute + costPerKM
         }
-        let costPerMinute = (this.estimatedMaxDuration / 60)
-        let costPerKM = 3.15 * (this.estimatedMaxDistance / 1000)
-        this.estimatedCost = totalBaseCosts + costPerMinute + costPerKM
-        let opts = {format: '%s%v', symbol: 'KES '}
-        this.totalEstimatedCostFormatted = formatCurrency(this.estimatedCost, opts)
-      },
-      formatDate (date) {
-        if (!date) {
-          return null
-        }
-        const [year, month, day] = date.split('-')
-        return `${month}/${day}/${year}`
-      },
-      parseDate (date) {
-        if (!date) {
-          return null
-        }
-        const [month, day, year] = date.split('/')
-        return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`
       },
       submit () {
-        this.submittingDialog = true
         this.connecting = true
         this.error = false
         let deliveryItems = []
@@ -408,7 +384,26 @@
           })
         }
         let that = this
-        this.axios.post('/deliveries', {
+        this.$refs.connectionManager.post('/deliveries', {
+          onSuccess (response) {
+            that.originPosition = null
+            that.originFormattedAddress = null
+            that.originVicinity = null
+            that.note = null
+            that.scheduleDate = null
+            that.scheduleTime = null
+            that.items = []
+            that.polyLinePaths = []
+            that.estimatedCost = 0
+            that.itemWithLongestDistance = null
+            that.addingItem = true
+            that.$refs.originInput.clear()
+            that.$emit('onClose', true)
+            EventBus.$emit(that.$actions.addedDelivery)
+            that.$utils.log(response)
+          }
+        }, {
+          urgent: this.urgent,
           originName: this.originName,
           originVicinity: this.originVicinity,
           originFormattedAddress: this.originFormattedAddress,
@@ -417,20 +412,9 @@
           scheduleDate: this.scheduleDate,
           scheduleTime: this.scheduleTime,
           estimatedCost: this.estimatedCost,
-          estimatedMaxDistance: this.estimatedMaxDistance,
-          estimatedMaxDuration: this.estimatedMaxDuration,
+          estimatedMaxDistance: this.itemWithLongestDistance.distance,
+          estimatedMaxDuration: this.itemWithLongestDistance.duration,
           items: deliveryItems
-        }).then(function (response) {
-          that.connecting = false
-          that.$utils.log(response)
-        }).catch(function (error) {
-          that.connecting = false
-          that.error = true
-          if (error.response) {
-            that.errorText = error.response.data
-          } else {
-            that.errorText = 'An error occurred'
-          }
         })
       }
     },
@@ -440,13 +424,14 @@
         that.mapObject = mapObject
       })
       //Load courier options
-      this.axios.get('/courierOptions')
-        .then(response => {
-          console.info('Data = ' + response.data.data.length)
-          this.courierOptions = this.courierOptions.concat(response.data.data)
-        }).catch(e => {
-        //console.error('Error ' + e);
-      })
+      this.$refs.connectionManager.get('/courierOptions', {
+        onSuccess (response) {
+          that.$utils.log(response.data.data)
+          that.$utils.log(response.data.variables)
+          that.systemVariables = response.data.variables
+          that.courierOptions = that.courierOptions.concat(response.data.data)
+        }
+      }, {withVariables: true})
     }
   }
 </script>

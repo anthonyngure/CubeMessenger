@@ -16,6 +16,7 @@
 				$table->increments('id');
 				$table->unsignedInteger('user_id', false);
 				$table->foreign('user_id')->references('id')->on('users');
+				$table->boolean('urgent');
 				$table->string('origin_name');
 				$table->string('origin_vicinity');
 				$table->string('origin_formatted_address');
@@ -26,7 +27,6 @@
 				$table->double('estimated_cost', 8, 2);
 				$table->double('estimated_max_distance', 8, 2);
 				$table->double('estimated_max_duration', 8, 2);
-				$table->double('actual_cost', 8, 2)->default(0);
 				$table->unsignedInteger('rider_id', false)->nullable();
 				$table->foreign('rider_id')->references('id')->on('users');
 				$table->timestamp('pickup_time')->nullable();

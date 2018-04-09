@@ -7,17 +7,18 @@
 	/**
  * App\ShopProduct
  *
- * @property int                    $id
- * @property int                    $shop_category_id
- * @property string                 $name
- * @property string                 $image
- * @property string|null            $slug
- * @property float                  $price
- * @property float                  $old_price
- * @property string                 $description
- * @property \Carbon\Carbon|null    $created_at
- * @property \Carbon\Carbon|null    $updated_at
+ * @property int $id
+ * @property int $shop_category_id
+ * @property string $name
+ * @property string $image
+ * @property string|null $slug
+ * @property float $price
+ * @property float $old_price
+ * @property string $description
+ * @property \Carbon\Carbon|null $created_at
+ * @property \Carbon\Carbon|null $updated_at
  * @property-read \App\ShopCategory $category
+ * @property-read \App\ShopOrder $clientOrder
  * @method static \Illuminate\Database\Eloquent\Builder|\App\ShopProduct whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\ShopProduct whereDescription($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\ShopProduct whereId($value)
@@ -29,7 +30,6 @@
  * @method static \Illuminate\Database\Eloquent\Builder|\App\ShopProduct whereSlug($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\ShopProduct whereUpdatedAt($value)
  * @mixin \Eloquent
- * @property-read \App\ShopOrder $clientOrder
  */
 	class ShopProduct extends Model
 	{

@@ -11,9 +11,7 @@
             </v-toolbar>
             <v-card-text>
 
-                <connection-manager ref="connectionManager"
-                                    @onSuccess="onConnectionManagerSuccess"
-                                    @onConnectionChange="(val)=>{connecting = val}">
+                <connection-manager ref="connectionManager" @onConnectionChange="(val)=>{connecting = val}">
                 </connection-manager>
 
                 <v-select
@@ -75,6 +73,7 @@
   import ConnectionManager from './ConnectionManager'
   import DateInput from './DateInput'
   import TimeInput from './TimeInput'
+  import EventBus from '../event-bus'
 
   export default {
     components: {
@@ -131,9 +130,6 @@
       }
     },
     methods: {
-      onConnectionManagerSuccess (response) {
-        this.$emit('onClose', true)
-      },
       submit () {
         let serviceRequest = {
           scheduleDate: this.scheduleDate,
@@ -144,7 +140,13 @@
         }
 
         this.$utils.log(serviceRequest)
-        this.$refs.connectionManager.store('serviceRequests', serviceRequest)
+        let that = this
+        this.$refs.connectionManager.post('serviceRequests', {
+          onSuccess (response) {
+            EventBus.$emit(that.$actions.requestedService)
+            that.$emit('onClose', true)
+          }
+        }, serviceRequest)
       },
 
 
@@ -167,13 +169,6 @@
             this.loading = false
             this.$utils.log(error)
           })
-        // Simulated ajax query
-        /*setTimeout(() => {
-          this.items = this.states.filter(e => {
-            return (e || '').toLowerCase().indexOf((v || '').toLowerCase()) > -1
-          })
-          this.loading = false
-        }, 500)*/
       }
     },
     mounted () {

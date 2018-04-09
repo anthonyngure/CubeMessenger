@@ -18,10 +18,6 @@ class CreateClientsTable extends Migration
 	        $table->string('logo')->default('clients/default.png');
 	        $table->string('email')->unique();
 	        $table->string('phone')->unique();
-	        $table->double('latitude', 8, 5);
-	        $table->double('longitude', 8, 5);
-	        $table->string('primary_color');
-	        $table->string('accent_color');
 	        $table->timestamps();
 	        $table->softDeletes();
         });

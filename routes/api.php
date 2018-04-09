@@ -53,6 +53,8 @@
 			Route::post('auth/signOut', 'AuthController@signOut');
 			Route::get('auth/refresh', 'AuthController@refresh');
 			Route::get('auth/user', 'AuthController@user');
+			Route::get('drawerItems', 'UIController@drawerItems');
+			Route::get('balance', 'UIController@balance');
 			Route::resource('users', 'UserController');
 			Route::resource('departments', 'DepartmentController');
 			Route::resource('deliveries', 'DeliveryController');

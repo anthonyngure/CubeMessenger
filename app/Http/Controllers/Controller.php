@@ -18,6 +18,17 @@
 	{
 		use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
 		
+		
+		/**
+		 * @throws \App\Exceptions\WrappedException
+		 */
+		public function checkIfUserIsRider()
+		{
+			if (!Auth::user()->isRider()) {
+				throw new WrappedException('You are not authorized to perform deliveries!');
+			}
+		}
+		
 		/**
 		 * @throws \App\Exceptions\WrappedException
 		 * @return \App\Client
@@ -28,6 +39,7 @@
 			if (is_null($client)) {
 				throw new WrappedException("Sorry, you are not associated to any client.");
 			}
+			
 			return $client;
 		}
 		

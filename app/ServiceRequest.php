@@ -50,6 +50,7 @@
  * @property int|null $rejected_by_id
  * @method static \Illuminate\Database\Eloquent\Builder|\App\ServiceRequest whereRejectedById($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\ServiceRequest whereUserId($value)
+ * @property-read \App\User|null $rejectedBy
  */
 	class ServiceRequest extends Model
 	{

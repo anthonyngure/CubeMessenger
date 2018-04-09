@@ -12,6 +12,8 @@
 	class Utils
 	{
 		
+		
+		
 		/**
 		 * @param $phone
 		 * @return string
@@ -27,10 +29,5 @@
 			}
 			
 			return '254' . substr($phone, (strlen($phone) - 9));
-		}
-		
-		public static function code()
-		{
-			return random_int(1000, 9999);
 		}
 	}

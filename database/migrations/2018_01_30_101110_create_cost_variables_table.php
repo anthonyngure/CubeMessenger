@@ -3,7 +3,7 @@
 	use Illuminate\Database\Migrations\Migration;
 	use Illuminate\Database\Schema\Blueprint;
 	
-	class CreateCourierOptionsTable extends Migration
+	class CreateCostVariablesTable extends Migration
 	{
 		/**
 		 * Run the migrations.
@@ -12,13 +12,11 @@
 		 */
 		public function up()
 		{
-			Schema::create('courier_options', function (Blueprint $table) {
+			Schema::create('cost_variables', function (Blueprint $table) {
 				$table->increments('id');
 				$table->string('name')->unique();
-				$table->string('plural_name')->unique();
-				$table->string('icon')->default('icons/default.png');
-				$table->boolean('active')->default(true);
-				$table->mediumText('description')->nullable();
+				$table->double('value', 8, 2);
+				$table->boolean('public')->default(true);
 				$table->timestamps();
 			});
 		}
@@ -30,6 +28,6 @@
 		 */
 		public function down()
 		{
-			Schema::dropIfExists('courier_options');
+			Schema::dropIfExists('cost_variables');
 		}
 	}
