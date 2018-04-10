@@ -4,11 +4,13 @@
 	
 	use App\Exceptions\WrappedException;
 	use App\ShopOrder;
+	use App\ShopProduct;
 	use Auth;
 	use Illuminate\Http\Request;
 	
 	class ShopOrderController extends Controller
 	{
+		
 		/**
 		 * Display a listing of the resource.
 		 *
@@ -18,7 +20,7 @@
 		 */
 		public function index(Request $request)
 		{
-			$client = $this->getClient();
+			$client = Auth::user()->getClient();
 			$this->validate($request, [
 				'filter' => 'required|in:count,pendingApproval,pendingDelivery,delivered,rejected',
 			]);
@@ -60,14 +62,16 @@
 		 */
 		public function store(Request $request)
 		{
-			$client = $this->getClient();
-			//
 			/** @var \App\User $user */
 			$user = Auth::user();
 			$this->validate($request, [
 				'shopProductId' => 'required|numeric|exists:shop_products,id',
 				'quantity'      => 'required|numeric',
 			]);
+			
+			$product = ShopProduct::findOrFail($request->shopProductId, ['price']);
+			$amount = $product->price * $request->quantity;
+			$this->checkBalance($amount);
 			
 			$shopOrder = ShopOrder::create([
 				'user_id'         => $user->getKey(),

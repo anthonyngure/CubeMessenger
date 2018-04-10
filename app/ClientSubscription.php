@@ -34,7 +34,7 @@
 		
 		protected $hidden = [
 			'client_id',
-			'subscription_id',
+			'subscription_item_id',
 		];
 		
 		/**
@@ -43,5 +43,13 @@
 		public function subscriptionSchedules()
 		{
 			return $this->belongsToMany(SubscriptionSchedule::class, 'client_subscription_schedules');
+		}
+		
+		/**
+		 * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+		 */
+		public function subscriptionItem()
+		{
+			return $this->belongsTo(SubscriptionSchedule::class);
 		}
 	}

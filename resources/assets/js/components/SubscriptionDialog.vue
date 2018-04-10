@@ -1,19 +1,15 @@
 <template>
     <v-dialog v-model="dialog"
-              lazy
               persistent
-              max-width="500px">
-        <v-card v-if="subscribeItem">
+              max-width="600px">
+        <v-card>
             <v-toolbar dark dense card flat color="primary">
-                <v-toolbar-title>Subscribe to get {{subscribeItem.name}}</v-toolbar-title>
+                <v-toolbar-title>Subscribe</v-toolbar-title>
             </v-toolbar>
+
+            <connection-manager ref="connectionManager" v-model="connecting"></connection-manager>
+
             <v-card-text>
-
-                <v-progress-linear v-show="connecting" :indeterminate="true"></v-progress-linear>
-                <v-alert v-model="error" type="error" dismissible icon="warning" dark>
-                    {{errorText}}
-                </v-alert>
-
                 <v-text-field
                         v-model="quantity"
                         required
@@ -34,9 +30,8 @@
                         </v-list-tile-action>
                     </v-list-tile>
                     <v-divider class="mt-2"></v-divider>
-                    <v-subheader>Deliver on specific day(s)</v-subheader>
-                    <v-list-tile v-for="item in subscriptionSchedules" :key="item.name" avatar
-                                 v-if="item.name !== 'Everyday'">
+                    <v-subheader v-if="!everydayCheckbox">Deliver on specific day(s)</v-subheader>
+                    <v-list-tile v-for="item in subscriptionSchedules" :key="item.name" v-if="!everydayCheckbox">
                         <v-list-tile-content>
                             <v-list-tile-title>{{ item.name }}</v-list-tile-title>
                             <v-list-tile-sub-title>{{ item.description }}</v-list-tile-sub-title>
@@ -47,9 +42,10 @@
                     </v-list-tile>
                 </v-list>
             </v-card-text>
+
             <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn color="primary" flat @click.stop="onClose" :disabled="connecting">Cancel</v-btn>
+                <v-btn color="primary" flat @click.stop="close(false)" :disabled="connecting">Cancel</v-btn>
                 <v-btn color="primary" @click.stop="subscribe" :disabled="connecting || !quantity">
                     Continue
                 </v-btn>
@@ -59,13 +55,13 @@
 </template>
 
 <script>
+  import ConnectionManager from './ConnectionManager'
+
   export default {
     name: 'subscription-dialog',
+    components: {ConnectionManager},
     props: {
       subscribeItem: {
-        required: true
-      },
-      subscriptionSchedules: {
         required: true
       }
     },
@@ -77,63 +73,48 @@
         dialog: false,
         everydayCheckbox: true,
         quantity: null,
+        subscriptionSchedules: [],
       }
     },
     watch: {
-      subscribeItem (subscribeItem) {
-        this.dialog = !!subscribeItem
+      subscribeItem (val) {
+        this.everydayCheckbox = true
+        this.dialog = !!val
+        if (this.dialog && this.subscriptionSchedules.length === 0 && val) {
+          this.loadSubscriptionSchedules()
+        }
       },
-      everydayCheckbox (everydayCheckbox) {
-        this.$utils.log(`everydayCheckbox ${everydayCheckbox}`)
-        if (everydayCheckbox) {
-          for (let weekday of this.subscriptionSchedules) {
-            weekday.selected = false
+      everydayCheckbox (val) {
+        this.$utils.log(`everydayCheckbox ${val}`)
+        if (val) {
+          for (let i = 0; i < this.subscriptionSchedules.length; i++) {
+            this.subscriptionSchedules[i].selected = false
           }
         }
       },
-      subscriptionSchedules: {
-        handler: function (after, before) {
-          // Return the object that changed
-          /*let changed = after.filter(function (p, idx) {
-              return Object.keys(p).some(function (prop) {
-                  return p[prop] !== before[idx][prop]
-              })
-          })
-          // Log it
-          console.log(changed)
-*/
-          this.$utils.log(this.subscriptionSchedules)
-          let selected = 0
-          for (let weekday of this.subscriptionSchedules) {
-            this.$utils.log(`weekday = ${weekday.name}, selected = ${weekday.selected}`)
-            if (weekday.selected) {
-              selected = selected + 1
-            }
+      subscriptionSchedules (val) {
+        this.$utils.log(val)
+        let selected = 0
+        for (let schedule of this.subscriptionSchedules) {
+          if (schedule.selected) {
+            selected++
           }
+        }
+        this.$utils.log(selected)
 
-          if (selected > 0 && this.everydayCheckbox) {
-            this.everydayCheckbox = false
-          }
-
-          if (selected === 5 || selected === 0) {
-            this.everydayCheckbox = true
-          }
-        },
-        deep: true
+        if (selected === this.subscriptionSchedules.length) {
+          this.everydayCheckbox = true
+        }
       }
     },
     methods: {
       reset () {
-        this.connecting = false
         this.quantity = null
         this.everydayCheckbox = true
-        for (let schedule of this.subscriptionSchedules) {
-          schedule.selected = false
-        }
       },
-      onClose () {
+      close (val) {
         this.reset()
-        this.$emit('onClose')
+        this.$emit('onClose', val)
       },
       subscribe () {
         this.connecting = true
@@ -142,31 +123,33 @@
           quantity: this.quantity,
           schedules: []
         }
-        if (this.everydayCheckbox) {
-          let everydaySchedule = this.subscriptionSchedules.find(function (element) {
-            return element.name === 'Everyday'
-          })
-          subscription.schedules.push(everydaySchedule.id)
-        } else {
-          for (let schedule of this.subscriptionSchedules) {
-            if (schedule.selected) {
-              subscription.schedules.push(schedule.id)
-            }
+        for (let schedule of this.subscriptionSchedules) {
+          if (schedule.selected || this.everydayCheckbox) {
+            subscription.schedules.push(schedule.id)
           }
         }
         this.$utils.log(subscription)
-        this.axios.post('/subscriptions', {
+        let that = this
+        this.$refs.connectionManager.post('/subscriptions', {
+          onSuccess (response) {
+            //let subscriptionItem = response.data.data
+            that.close(true)
+          }
+        }, {
           subscriptionItemId: subscription.subscriptionItemId,
           schedules: subscription.schedules,
           quantity: subscription.quantity,
-        }).then(response => {
-          let subscriptionItem = response.data.data
-          this.$emit('onClose', subscriptionItem)
-          this.reset()
-        }).catch(error => {
+        })
+      },
+      loadSubscriptionSchedules () {
+        let that = this
+        this.$refs.connectionManager.get('subscriptionSchedules', {
+          onSuccess (response) {
+            that.subscriptionSchedules = that.subscriptionSchedules.concat(response.data.data)
+          }
         })
       }
-    }
+    },
   }
 </script>
 

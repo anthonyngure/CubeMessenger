@@ -8,9 +8,7 @@
                 <v-icon>shopping_cart</v-icon>
                 <v-toolbar-title>Add to cart</v-toolbar-title>
             </v-toolbar>
-            <connection-manager ref="connectionManager"
-                                @onConnectionChange="(status)=>{connecting = status}">
-            </connection-manager>
+            <connection-manager ref="connectionManager" v-model="connecting"></connection-manager>
             <v-card-media :src="$utils.imageUrl(product.image)" height="150px">
                 <v-container fill-height fluid>
                     <v-layout fill-height>
@@ -22,20 +20,27 @@
             </v-card-media>
             <v-tooltip top lazy max-width="200px">
                 <v-btn flat block slot="activator" class="mt-0 mb-0">
-                    Ksh. {{product.price}}
+                    {{$utils.formatMoney(product.price)}}
                     <v-icon small right>info</v-icon>
                 </v-btn>
                 <span>{{product.description}}</span>
             </v-tooltip>
             <v-card-text>
-                <v-text-field
-                        v-model="quantity"
-                        required
-                        :disabled="connecting"
-                        label="Enter quantity"
-                        mask="###"
-                        placeholder="Quantity">
-                </v-text-field>
+                <v-layout row wrap align-center justify-center>
+                    <v-flex xs8>
+                        <v-text-field
+                                v-model="quantity"
+                                required
+                                :disabled="connecting"
+                                label="Enter quantity"
+                                mask="###"
+                                placeholder="Quantity">
+                        </v-text-field>
+                    </v-flex>
+                    <v-flex xs4>
+                        <v-btn flat>{{$utils.formatMoney(quantity *product.price)}}</v-btn>
+                    </v-flex>
+                </v-layout>
             </v-card-text>
             <v-card-actions>
                 <v-spacer></v-spacer>

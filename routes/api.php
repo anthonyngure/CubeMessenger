@@ -14,7 +14,7 @@
 	
 	sleep(0);
 	
-	//ob_start('ob_gzhandler');
+	ob_start('ob_gzhandler');
 	
 	
 	Route::group(['prefix' => 'v1', 'guard' => 'api'], function () {
@@ -55,17 +55,20 @@
 			Route::get('auth/user', 'AuthController@user');
 			Route::get('drawerItems', 'UIController@drawerItems');
 			Route::get('balance', 'UIController@balance');
-			Route::resource('users', 'UserController');
-			Route::resource('departments', 'DepartmentController');
-			Route::resource('deliveries', 'DeliveryController');
-			Route::resource('deliveries.items', 'DeliveryItemController');
-			Route::resource('subscriptions', 'SubscriptionController');
-			Route::resource('appointments', 'AppointmentController');
-			Route::resource('shopProducts', 'ShopProductController');
-			Route::resource('shopCategories', 'ShopCategoryController');
-			Route::resource('serviceRequests', 'ServiceRequestController');
-			Route::resource('serviceRequestOptions', 'ServiceRequestOptionController');
-			Route::resource('shopOrders', 'ShopOrderController');
+			Route::apiResource('users', 'UserController');
+			Route::apiResource('departments', 'DepartmentController');
+			Route::apiResource('deliveries', 'DeliveryController');
+			Route::apiResource('deliveries.items', 'DeliveryItemController');
+			Route::apiResource('subscriptionTypes', 'SubscriptionTypeController')->only(['index']);
+			Route::apiResource('subscriptionSchedules', 'SubscriptionScheduleController')->only(['index']);
+			Route::apiResource('subscriptions', 'SubscriptionController');
+			Route::apiResource('appointments', 'AppointmentController');
+			Route::apiResource('shopProducts', 'ShopProductController');
+			Route::apiResource('shopCategories', 'ShopCategoryController');
+			Route::apiResource('serviceRequests', 'ServiceRequestController');
+			Route::apiResource('serviceRequestOptions', 'ServiceRequestOptionController');
+			Route::apiResource('shopOrders', 'ShopOrderController');
+			Route::apiResource('reports', 'ReportsController')->only(['index']);
 		});
 		
 	});

@@ -15,8 +15,7 @@
             </v-tabs>
             <v-card>
                 <v-container fluid grid-list-md>
-                    <connection-manager ref="connectionManager"
-                                        @onConnectionChange="(status)=> {loading = status}">
+                    <connection-manager ref="connectionManager" v-model="loading">
                     </connection-manager>
                     <v-data-iterator
                             content-tag="v-layout"
@@ -28,7 +27,7 @@
                             :pagination.sync="pagination">
                         <v-flex slot="item"
                                 slot-scope="props"
-                                xs2>
+                                xs3>
                             <v-card>
                                 <v-card-media
                                         :src="$utils.imageUrl(props.item.image)"
@@ -51,20 +50,16 @@
                                 </v-tooltip>
 
                                 <v-card-actions v-if="isDepartmentUser()">
-                                    <v-spacer></v-spacer>
-                                    <v-tooltip v-if="props.item.clientOrder" top lazy max-width="175px">
-                                        <v-btn flat color="accent" small outline slot="activator">
-                                            {{props.item.clientOrder.status}}
+                                    <v-badge small v-if="props.item.clientOrders.length" color="accent" overlap>
+                                        <span slot="badge">{{props.item.clientOrders.length}}</span>
+                                        <v-btn icon>
+                                            <v-icon color="primary">shopping_basket</v-icon>
                                         </v-btn>
-                                        <span>
-                                            <span>Quantity: {{props.item.clientOrder.quantity}}</span><br/>
-                                            <span>Status: {{props.item.clientOrder.status}}</span><br/>
-                                            <span>Ordered At: {{props.item.clientOrder.createdAt}}</span><br/>
-                                        </span>
-                                    </v-tooltip>
-                                    <v-btn v-else flat color="primary" small outline
+                                    </v-badge>
+                                    <v-spacer></v-spacer>
+                                    <v-btn flat color="primary" small outline
                                            @click.native="selectedProduct = props.item">
-                                        <v-icon left small>shopping_basket</v-icon>
+                                        <v-icon left small>shopping_cart</v-icon>
                                         Order
                                     </v-btn>
                                 </v-card-actions>
@@ -84,7 +79,6 @@
 </template>
 
 <script>
-  import EventBus from '../event-bus'
   import ConnectionManager from './ConnectionManager'
   import AddToCartDialog from './AddToCartDialog'
   import Base from './Base.vue'

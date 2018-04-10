@@ -12,8 +12,7 @@
                 <v-tab href="#rejected">Rejected</v-tab>
             </v-tabs>
             <v-card>
-                <connection-manager ref="connectionManager"
-                                    @onConnectionChange="(status)=> {loading = status}">
+                <connection-manager ref="connectionManager" v-model="loading">
                 </connection-manager>
                 <v-data-table
                         :headers="headers"

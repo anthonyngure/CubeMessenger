@@ -12,7 +12,6 @@
 		public function run()
 		{
 			//
-			\App\SubscriptionSchedule::create(['name' => 'Everyday', 'description' => 'Deliver everyday']);
 			\App\SubscriptionSchedule::create(['name' => 'Monday', 'description' => 'Deliver on Monday']);
 			\App\SubscriptionSchedule::create(['name' => 'Tuesday', 'description' => 'Deliver on Tuesday']);
 			\App\SubscriptionSchedule::create(['name' => 'Wednesday', 'description' => 'Deliver on Wednesday']);

@@ -21,7 +21,7 @@
                 <v-layout row wrap style="width: 75%; margin: 0 auto">
 
                     <v-flex xs12>
-                        <connection-manager ref="connectionManager" @onConnectionChange="(val)=>{connecting = val}">
+                        <connection-manager ref="connectionManager" v-model="connecting">
                         </connection-manager>
                     </v-flex>
 

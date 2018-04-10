@@ -30,23 +30,7 @@
 		{
 			//code...
 			
-			/**
-			 * Charge client for this order
-			 * The user associated with the delivery
-			 * @var \App\User $user
-			 */
-			$user = User::with('client')->findOrFail($shopOrder->user_id);
 			
-			/** @var \App\ShopProduct $product */
-			$product = $shopOrder->shopProduct()->firstOrFail();
-			$amount = $product->price * $shopOrder->quantity;
-			Charge::updateOrCreate([
-				'client_id'       => $user->client_id,
-				'chargeable_id'   => $shopOrder->id,
-				'chargeable_type' => ShopOrder::class,
-			], [
-				'amount' => $amount,
-			]);
 		}
 		
 		/**
@@ -90,7 +74,27 @@
 		 */
 		public function saved(ShopOrder $shopOrder)
 		{
-			//code...
+			/**
+			 * Charge client for this order
+			 * The user associated with the delivery
+			 * @var \App\User $user
+			 */
+			$user = User::with('client')->findOrFail($shopOrder->user_id);
+			
+			/** @var \App\ShopProduct $product */
+			$product = $shopOrder->shopProduct()->firstOrFail();
+			$amount = $product->price * $shopOrder->quantity;
+			
+			$description = 'Purchased ' . $shopOrder->quantity . ' ' . $product->name;
+			
+			Charge::updateOrCreate([
+				'client_id'       => $user->client_id,
+				'chargeable_id'   => $shopOrder->id,
+				'chargeable_type' => ShopOrder::class,
+			], [
+				'description' => $description,
+				'amount'      => $amount,
+			]);
 		}
 		
 		/**

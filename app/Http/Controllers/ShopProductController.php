@@ -4,6 +4,7 @@
 	
 	use App\ShopProduct;
 	use App\Traits\Paginates;
+	use Illuminate\Database\Eloquent\Relations\HasMany;
 	use Illuminate\Database\Eloquent\Relations\HasOne;
 	use Illuminate\Http\Request;
 	
@@ -21,14 +22,14 @@
 		 */
 		public function index(Request $request)
 		{
-			$client = $this->getClient();
+			$client = \Auth::user()->getClient();
 			$this->validate($request, [
 				'shopCategoryId' => 'required|exists:shop_categories,id',
 			]);
 			//
 			$products = ShopProduct::whereShopCategoryId($request->shopCategoryId)
-				->with(['clientOrder' => function (HasOne $hasOne) use ($client) {
-					$hasOne->whereIn('user_id', $client->users->pluck('id'))
+				->with(['clientOrders' => function (HasMany $hasMany) use ($client) {
+					$hasMany->whereIn('user_id', $client->users->pluck('id'))
 						->where('status', '!=', 'DELIVERED')
 						->where('status', '!=', 'REJECTED');
 				}]);

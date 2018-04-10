@@ -26,8 +26,7 @@
                         class="scroll-y">
                     <v-card tile>
 
-                        <connection-manager ref="connectionManager"
-                                            @onConnectionChange="(status)=> {connecting = status}">
+                        <connection-manager ref="connectionManager" v-model="connecting">
                         </connection-manager>
 
                         <v-card-text>
@@ -360,7 +359,12 @@
             costPerKM = this.systemVariables.NON_URGENT_COST_PER_MIN * (this.itemWithLongestDistance.duration / 1000)
             baseCost = this.systemVariables.NON_URGENT_BASE_COST
           }
-          this.estimatedCost = baseCost + costPerMinute + costPerKM
+
+          let totalCost = baseCost + costPerMinute + costPerKM
+          let profitMargin = 0.16 * totalCost
+          let valueAddedTax = 0.16 * (totalCost + profitMargin)
+
+          this.estimatedCost = totalCost + profitMargin + valueAddedTax
         }
       },
       submit () {

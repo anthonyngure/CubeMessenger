@@ -19,7 +19,6 @@
 				$table->unsignedInteger('chargeable_id', false);
 				$table->string('chargeable_type', false);
 				$table->double('amount', null, 2);
-				$table->boolean('settled')->default(false);
 				$table->text('description')->nullable();
 				$table->timestamps();
 				$table->softDeletes();

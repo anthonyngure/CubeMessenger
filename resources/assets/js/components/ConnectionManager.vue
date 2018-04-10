@@ -22,50 +22,12 @@
       }
     },
     watch: {
-      connecting (connecting) {
-        this.$emit('onConnectionChange', connecting)
+      connecting (val) {
+        this.$utils.log(val)
+        this.$emit('input', this.connecting)
       }
     },
     methods: {
-      onCloseSubmittingDialog () {
-        this.connecting = false
-        this.$emit('onCancel')
-      },
-      store (relativePath, body) {
-        this.connecting = true
-        this.axios.post(relativePath, body)
-          .then(response => {
-            this.error = false
-            this.connecting = false
-            this.$emit('onSuccess', response)
-            this.$utils.log(response)
-          }).catch(error => {
-          this.error = true
-          this.$emit('onError', error)
-          this.$utils.log(error)
-        })
-      },
-      index (relativePath, params) {
-        this.connecting = true
-        this.axios.get(relativePath, {
-          params: params
-        })
-          .then(response => {
-            this.error = false
-            this.connecting = false
-            this.$emit('onSuccess', response)
-            this.$utils.log(response)
-          })
-          .catch(error => {
-            if (error.response) {
-              this.errorText = error.response.data.meta.message
-            }
-            this.error = true
-            this.$emit('onError', error)
-            this.$utils.log(error)
-          })
-      },
-
       onFailure (error, callbacks) {
         this.error = true
         this.connecting = false
@@ -82,23 +44,20 @@
               default:
                 this.errorText = error.response.data.meta.message
             }
+          } else  {
+            this.errorText = error.response.data
           }
         }
-        /*if (error.response && error.status === 422) {
-          this.errorText = error.response.data.data
-        } else if (error.response) {
-          this.errorText = error.response.data.meta.message
-        }*/
       },
 
       onSuccess (response, callbacks) {
+        this.connecting = false
+        this.error = false
+        this.errorText = null
         this.$utils.log(response)
         if (callbacks && callbacks.onSuccess) {
           callbacks.onSuccess(response)
         }
-        this.error = false
-        this.errorText = null
-        this.connecting = false
       },
 
 
@@ -133,6 +92,19 @@
         this.connecting = true
         this.error = false
         this.axios.patch(relativePath, data)
+          .then(response => {
+            this.onSuccess(response, callbacks)
+          })
+          .catch(error => {
+            this.onFailure(error, callbacks)
+          })
+      },
+
+      delete (relativePath, callbacks) {
+        this.$utils.log(relativePath)
+        this.connecting = true
+        this.error = false
+        this.axios.delete(relativePath)
           .then(response => {
             this.onSuccess(response, callbacks)
           })

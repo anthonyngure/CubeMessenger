@@ -3,9 +3,7 @@
         <v-flex xs12>
             <v-card>
                 <v-card-text>
-                    <connection-manager ref="connectionManager"
-                                        @onSuccess="onConnectionManagerSuccess">
-                    </connection-manager>
+                    <connection-manager ref="connectionManager" v-model="connecting"></connection-manager>
                     <v-tabs fixed-tabs
                             v-model="currentTab"
                             slider-color="accent"
@@ -79,9 +77,7 @@
             </v-card>
         </v-flex>
         <v-flex xs12>
-            <subscription-dialog :subscribeItem="subscribeItem"
-                                 @onClose="onCloseSubscriptionDialog"
-                                 :subscriptionSchedules="subscriptionSchedules">
+            <subscription-dialog :subscribeItem="subscribeItem" @onClose="onCloseSubscriptionDialog">
             </subscription-dialog>
             <edit-subscription-dialog :subscriptionItem="editItem"
                                       @onClose="onCloseEditSubscriptionDialog"
@@ -98,7 +94,7 @@
   import Base from './Base.vue'
 
   export default {
-    extends:Base,
+    extends: Base,
     components: {
       ConnectionManager,
       EditSubscriptionDialog,
@@ -116,103 +112,83 @@
         subscriptionItems: [],
         subscriptionSchedules: [],
         headers: [
-          {
-            text: 'Name',
-            align: 'left',
-            sortable: false,
-            value: 'name'
-          },
+          {text: 'Name', sortable: false, value: 'name'},
           {text: 'Quantity Subscribed', sortable: false, value: ''},
           {text: 'Schedule', sortable: false, value: ''},
           {text: 'Subscription Date', sortable: false, value: ''},
           {text: 'Total Deliveries', sortable: false, value: ''},
           {text: 'Total Cost', sortable: false, value: ''},
-          {text: 'Subscription', sortable: false, value: ''},
+          {text: 'Action', sortable: false, value: ''},
         ],
 
       }
     },
     watch: {
-      currentTab (currentItem) {
-        this.$utils.log(currentItem)
-        if (currentItem && !this.connecting) {
+      currentTab (val) {
+        this.$utils.log(val)
+        this.$utils.log(this.connecting)
+        if (val) {
           let subscriptionType = this.subscriptionTypes.find(function (element) {
-            return element.name === currentItem
+            return element.name === val
           })
-          this.subscriptionItems = subscriptionType.subscriptionItems
+          this.subscriptionItems = []
+          this.subscriptionItems = this.subscriptionItems.concat(subscriptionType.subscriptionItems)
         }
       },
       subscribeItem (subscribeItem) {
         this.dialog = !!subscribeItem
       },
-      everydayCheckbox (everydayCheckbox) {
-        if (everydayCheckbox) {
-          for (let weekday of this.weekdays) {
-            weekday.selected = false
-          }
-        }
-      },
-      weekdays (weekdays) {
-        this.$utils.log(weekdays)
-        let selected = 0
-        for (let weekday of weekdays) {
-          if (weekday.selected) {
-            selected = selected + 1
-          }
-        }
-        if (selected === 5) {
-          this.everydayCheckbox = true
-        }
-      }
     },
     methods: {
       unsubscribe (subscriptionItem) {
         this.unSubscribing = subscriptionItem.id
-        this.axios.delete('/subscriptions/' + subscriptionItem.id)
-          .then(response => {
-            let deletedSubscriptionItem = response.data.data
-            this.updateSubscriptionItem(deletedSubscriptionItem)
-            this.unSubscribing = 0
-          })
-          .catch(error => {
-            this.unSubscribing = 0
-          })
-      },
-      onConnectionManagerSuccess (response) {
-        this.$utils.log(response)
-        this.subscriptionTypes = []
-        this.subscriptionTypes = this.subscriptionTypes.concat(response.data.data.subscriptionTypes)
-        this.subscriptionSchedules = response.data.data.subscriptionSchedules
-        this.currentTab = this.subscriptionTypes[0].name
-      },
-      updateSubscriptionItem (subscriptionItem) {
-        if (subscriptionItem) {
-          let updatedSubscriptionItem = this.subscriptionItems.find(function (element) {
-            return element.id === subscriptionItem.id
-          })
-          this.$utils.log('Updated Item....')
-          this.$utils.log(updatedSubscriptionItem)
-          let updatedIndex = this.subscriptionItems.indexOf(updatedSubscriptionItem)
-          this.$utils.log('Index ' + updatedIndex)
-          let tempSubscriptionItems = this.subscriptionItems
-          tempSubscriptionItems[updatedIndex] = subscriptionItem
-          this.subscriptionItems = []
-          for (let item of tempSubscriptionItems) {
-            this.subscriptionItems.push(item)
+        let that = this
+        this.$refs.connectionManager.delete('/subscriptions/' + subscriptionItem.id, {
+          onSuccess (response) {
+            that.unSubscribing = 0
+            that.loadSubscriptionTypes()
           }
+        })
+      },
+      onCloseSubscriptionDialog (subscribedItem) {
+        this.$utils.log('onCloseSubscriptionDialog')
+        this.$utils.log(subscribedItem)
+        this.subscribeItem = null
+        if (subscribedItem) {
+          this.loadSubscriptionTypes(true)
         }
       },
-      onCloseSubscriptionDialog (subscriptionItem) {
-        this.updateSubscriptionItem(subscriptionItem)
+      onCloseEditSubscriptionDialog (subscribedItem) {
+        if (subscribedItem) {
+          this.loadSubscriptionTypes(true)
+        }
         this.subscribeItem = null
       },
-      onCloseEditSubscriptionDialog (subscriptionItem) {
-        this.updateSubscriptionItem(subscriptionItem)
-        this.editItem = null
+
+      loadSubscriptionTypes (refreshing) {
+        let that = this
+        this.subscriptionItems = []
+        this.$refs.connectionManager.get('subscriptionTypes', {
+          onSuccess (response) {
+            that.subscriptionTypes = []
+            that.subscriptionTypes = that.subscriptionTypes.concat(response.data.data)
+            if (refreshing) {
+              let subscriptionType = that.subscriptionTypes.find(function (element) {
+                return element.name === that.currentTab
+              })
+              that.subscriptionItems = []
+              that.subscriptionItems = that.subscriptionItems.concat(subscriptionType.subscriptionItems)
+            } else {
+              that.currentTab = null
+              that.currentTab = that.subscriptionTypes[0].name
+            }
+
+          }
+        })
       }
     },
     mounted () {
-      this.$refs.connectionManager.index('subscriptions')
+      this.loadSubscriptionTypes(false)
     }
   }
 </script>

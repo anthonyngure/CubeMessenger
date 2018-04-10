@@ -4462,8 +4462,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
-//
 
 
 
@@ -4514,6 +4512,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__ConnectionManager__ = __webpack_require__("./resources/assets/js/components/ConnectionManager.vue");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__ConnectionManager___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__ConnectionManager__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__event_bus__ = __webpack_require__("./resources/assets/js/event-bus.js");
+//
+//
+//
+//
+//
 //
 //
 //
@@ -4622,7 +4625,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__ConnectionManager__ = __webpack_require__("./resources/assets/js/components/ConnectionManager.vue");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__ConnectionManager___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__ConnectionManager__);
-//
 //
 //
 //
@@ -5054,50 +5056,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
   },
 
   watch: {
-    connecting: function connecting(_connecting) {
-      this.$emit('onConnectionChange', _connecting);
+    connecting: function connecting(val) {
+      this.$utils.log(val);
+      this.$emit('input', this.connecting);
     }
   },
   methods: {
-    onCloseSubmittingDialog: function onCloseSubmittingDialog() {
-      this.connecting = false;
-      this.$emit('onCancel');
-    },
-    store: function store(relativePath, body) {
-      var _this = this;
-
-      this.connecting = true;
-      this.axios.post(relativePath, body).then(function (response) {
-        _this.error = false;
-        _this.connecting = false;
-        _this.$emit('onSuccess', response);
-        _this.$utils.log(response);
-      }).catch(function (error) {
-        _this.error = true;
-        _this.$emit('onError', error);
-        _this.$utils.log(error);
-      });
-    },
-    index: function index(relativePath, params) {
-      var _this2 = this;
-
-      this.connecting = true;
-      this.axios.get(relativePath, {
-        params: params
-      }).then(function (response) {
-        _this2.error = false;
-        _this2.connecting = false;
-        _this2.$emit('onSuccess', response);
-        _this2.$utils.log(response);
-      }).catch(function (error) {
-        if (error.response) {
-          _this2.errorText = error.response.data.meta.message;
-        }
-        _this2.error = true;
-        _this2.$emit('onError', error);
-        _this2.$utils.log(error);
-      });
-    },
     onFailure: function onFailure(error, callbacks) {
       this.error = true;
       this.connecting = false;
@@ -5114,58 +5078,67 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             default:
               this.errorText = error.response.data.meta.message;
           }
+        } else {
+          this.errorText = error.response.data;
         }
       }
-      /*if (error.response && error.status === 422) {
-        this.errorText = error.response.data.data
-      } else if (error.response) {
-        this.errorText = error.response.data.meta.message
-      }*/
     },
     onSuccess: function onSuccess(response, callbacks) {
+      this.connecting = false;
+      this.error = false;
+      this.errorText = null;
       this.$utils.log(response);
       if (callbacks && callbacks.onSuccess) {
         callbacks.onSuccess(response);
       }
-      this.error = false;
-      this.errorText = null;
-      this.connecting = false;
     },
     post: function post(relativePath, callbacks, body) {
-      var _this3 = this;
+      var _this = this;
 
       this.connecting = true;
       this.error = false;
       this.axios.post(relativePath, body).then(function (response) {
-        _this3.onSuccess(response, callbacks);
+        _this.onSuccess(response, callbacks);
       }).catch(function (error) {
-        _this3.onFailure(error, callbacks);
+        _this.onFailure(error, callbacks);
       });
     },
     get: function get(relativePath, callbacks, params) {
-      var _this4 = this;
+      var _this2 = this;
 
       this.$utils.log(relativePath);
       this.$utils.log(params);
       this.connecting = true;
       this.error = false;
       this.axios.get(relativePath, { params: params }).then(function (response) {
-        _this4.onSuccess(response, callbacks);
+        _this2.onSuccess(response, callbacks);
       }).catch(function (error) {
-        _this4.onFailure(error, callbacks);
+        _this2.onFailure(error, callbacks);
       });
     },
     patch: function patch(relativePath, callbacks, data) {
-      var _this5 = this;
+      var _this3 = this;
 
       this.$utils.log(relativePath);
       this.$utils.log(data);
       this.connecting = true;
       this.error = false;
       this.axios.patch(relativePath, data).then(function (response) {
-        _this5.onSuccess(response, callbacks);
+        _this3.onSuccess(response, callbacks);
       }).catch(function (error) {
-        _this5.onFailure(error, callbacks);
+        _this3.onFailure(error, callbacks);
+      });
+    },
+    delete: function _delete(relativePath, callbacks) {
+      var _this4 = this;
+
+      this.$utils.log(relativePath);
+      this.connecting = true;
+      this.error = false;
+      this.axios.delete(relativePath).then(function (response) {
+        _this4.onSuccess(response, callbacks);
+      }).catch(function (error) {
+        _this4.onFailure(error, callbacks);
       });
     }
   }
@@ -5193,7 +5166,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__DeliveryItemQRDialog___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_6__DeliveryItemQRDialog__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__ConnectionManager__ = __webpack_require__("./resources/assets/js/components/ConnectionManager.vue");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__ConnectionManager___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_7__ConnectionManager__);
-//
 //
 //
 //
@@ -5480,6 +5452,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__DateInput___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__DateInput__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_moment__ = __webpack_require__("./node_modules/moment/moment.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_moment___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_moment__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__ConnectionManager__ = __webpack_require__("./resources/assets/js/components/ConnectionManager.vue");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__ConnectionManager___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3__ConnectionManager__);
 //
 //
 //
@@ -5558,20 +5532,26 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+
 
 
 
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-  components: { DateInput: __WEBPACK_IMPORTED_MODULE_1__DateInput___default.a },
+  components: { ConnectionManager: __WEBPACK_IMPORTED_MODULE_3__ConnectionManager___default.a, DateInput: __WEBPACK_IMPORTED_MODULE_1__DateInput___default.a },
   name: 'dashboard',
   extends: __WEBPACK_IMPORTED_MODULE_0__Base_vue___default.a,
   data: function data() {
     return {
-      tabs: [{
-        icon: 'data_usage', title: 'Ledger', id: 'ledger',
-        headers: [{ text: 'Id', sortable: false, value: 'item' }, { text: 'Amount', sortable: false, value: 'quantity' }, { text: 'Description', sortable: false, value: 'quantity' }, { text: 'Date/Time', sortable: false, value: 'quantity' }]
+      tabItems: [{
+        icon: 'data_usage', title: 'Charges', id: 'charges',
+        headers: [{ text: 'Id', sortable: false, value: 'id' }, { text: 'Amount', sortable: false, value: 'amount', isMoney: true }, { text: 'Description', sortable: false, value: 'description' }, { text: 'Date/Time', sortable: false, value: 'createdAt' }]
       }, {
         icon: 'schedule', title: 'Subscriptions', id: 'subscriptions',
         headers: [{ text: 'Item', sortable: false, value: 'item' }, { text: 'Quantity', sortable: false, value: 'quantity' }, { text: 'Cost', sortable: false, value: 'quantity' }, { text: 'Delivery Date/Time', sortable: false, value: 'quantity' }, { text: 'Received By', sortable: false, value: 'quantity' }]
@@ -5589,6 +5569,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         headers: [{ text: 'Item(s)', sortable: false, value: 'item' }, { text: 'Cost', sortable: false, value: 'quantity' }, { text: 'Requested By', sortable: false, value: 'quantity' }, { text: 'Approved By', sortable: false, value: 'quantity' }, { text: 'Origin', sortable: false, value: 'item' }, { text: 'Destination', sortable: false, value: 'quantity' }, { text: 'Date/Time', sortable: false, value: 'quantity' }, { text: 'Pick Up Date/Time', sortable: false, value: 'quantity' }, { text: 'Drop Off Date/Time', sortable: false, value: 'quantity' }, { text: 'Duration', sortable: false, value: 'quantity' }, { text: 'Recipient name/contact', sortable: false, value: 'quantity' }]
       }],
       search: '',
+      connecting: false,
       month: null,
       minMonth: null,
       maxMonth: null,
@@ -5597,26 +5578,38 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         rowsPerPage: 6
       },
       currentTab: null,
-      currentItem: null,
-      items: []
+      currentTabItem: null,
+      items: [],
+      spent: 0
     };
   },
 
   methods: {
-    refresh: function refresh() {}
+    refresh: function refresh() {
+      this.items = [];
+      var that = this;
+      this.$refs.connectionManager.get('reports', {
+        onSuccess: function onSuccess(response) {
+          that.items = that.items.concat(response.data.data);
+          that.spent = response.data.meta.spent;
+        }
+      }, { filter: this.currentTabItem.id });
+    }
   },
   watch: {
     month: function month(_month) {
-      if (_month && this.currentTab && !this.connecting) {
+      if (_month && this.currentTabItem && !this.connecting) {
         this.refresh();
       }
     },
     currentTab: function currentTab(val) {
       if (this.month && val && !this.connecting) {
-        this.currentItem = this.tabs.find(function (element) {
+        this.currentTabItem = this.tabItems.find(function (element) {
           return element.id === val;
         });
-        this.refresh();
+        if (this.currentTabItem) {
+          this.refresh();
+        }
       }
     }
   },
@@ -5630,7 +5623,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       todayMonth = '0' + todayMonth;
     }
     this.month = today.year() + '-' + todayMonth;
-    this.currentTab = 'ledger';
+    this.currentTab = 'charges';
   }
 });
 
@@ -5748,7 +5741,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__TimeInput___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_6__TimeInput__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__ConnectionManager__ = __webpack_require__("./resources/assets/js/components/ConnectionManager.vue");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__ConnectionManager___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_7__ConnectionManager__);
-//
 //
 //
 //
@@ -6129,7 +6121,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
           costPerKM = this.systemVariables.NON_URGENT_COST_PER_MIN * (this.itemWithLongestDistance.duration / 1000);
           baseCost = this.systemVariables.NON_URGENT_BASE_COST;
         }
-        this.estimatedCost = baseCost + costPerMinute + costPerKM;
+
+        var totalCost = baseCost + costPerMinute + costPerKM;
+        var profitMargin = 0.16 * totalCost;
+        var valueAddedTax = 0.16 * (totalCost + profitMargin);
+
+        this.estimatedCost = totalCost + profitMargin + valueAddedTax;
       }
     },
     submit: function submit() {
@@ -6737,7 +6734,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__event_bus__ = __webpack_require__("./resources/assets/js/event-bus.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Base_vue__ = __webpack_require__("./resources/assets/js/components/Base.vue");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Base_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__Base_vue__);
-//
 //
 //
 //
@@ -7785,12 +7781,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
-//
-//
-//
-//
-//
 
 
 
@@ -8555,7 +8545,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
 
 
 
@@ -8661,13 +8650,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__event_bus__ = __webpack_require__("./resources/assets/js/event-bus.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__ConnectionManager__ = __webpack_require__("./resources/assets/js/components/ConnectionManager.vue");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__ConnectionManager___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__ConnectionManager__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__AddToCartDialog__ = __webpack_require__("./resources/assets/js/components/AddToCartDialog.vue");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__AddToCartDialog___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__AddToCartDialog__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__Base_vue__ = __webpack_require__("./resources/assets/js/components/Base.vue");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__Base_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3__Base_vue__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__ConnectionManager__ = __webpack_require__("./resources/assets/js/components/ConnectionManager.vue");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__ConnectionManager___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__ConnectionManager__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__AddToCartDialog__ = __webpack_require__("./resources/assets/js/components/AddToCartDialog.vue");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__AddToCartDialog___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__AddToCartDialog__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__Base_vue__ = __webpack_require__("./resources/assets/js/components/Base.vue");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__Base_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__Base_vue__);
 //
 //
 //
@@ -8748,22 +8736,16 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
-//
-//
-//
-//
-
 
 
 
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-  extends: __WEBPACK_IMPORTED_MODULE_3__Base_vue___default.a,
+  extends: __WEBPACK_IMPORTED_MODULE_2__Base_vue___default.a,
   components: {
-    AddToCartDialog: __WEBPACK_IMPORTED_MODULE_2__AddToCartDialog___default.a,
-    ConnectionManager: __WEBPACK_IMPORTED_MODULE_1__ConnectionManager___default.a
+    AddToCartDialog: __WEBPACK_IMPORTED_MODULE_1__AddToCartDialog___default.a,
+    ConnectionManager: __WEBPACK_IMPORTED_MODULE_0__ConnectionManager___default.a
   },
   name: 'shopping',
   data: function data() {
@@ -8966,10 +8948,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-//
-//
-//
-//
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__ConnectionManager__ = __webpack_require__("./resources/assets/js/components/ConnectionManager.vue");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__ConnectionManager___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__ConnectionManager__);
 //
 //
 //
@@ -9027,13 +9007,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 
+
+
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: 'subscription-dialog',
+  components: { ConnectionManager: __WEBPACK_IMPORTED_MODULE_0__ConnectionManager___default.a },
   props: {
     subscribeItem: {
-      required: true
-    },
-    subscriptionSchedules: {
       required: true
     }
   },
@@ -9044,182 +9024,127 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       errorText: '',
       dialog: false,
       everydayCheckbox: true,
-      quantity: null
+      quantity: null,
+      subscriptionSchedules: []
     };
   },
 
   watch: {
-    subscribeItem: function subscribeItem(_subscribeItem) {
-      this.dialog = !!_subscribeItem;
+    subscribeItem: function subscribeItem(val) {
+      this.everydayCheckbox = true;
+      this.dialog = !!val;
+      if (this.dialog && this.subscriptionSchedules.length === 0 && val) {
+        this.loadSubscriptionSchedules();
+      }
     },
-    everydayCheckbox: function everydayCheckbox(_everydayCheckbox) {
-      this.$utils.log('everydayCheckbox ' + _everydayCheckbox);
-      if (_everydayCheckbox) {
-        var _iteratorNormalCompletion = true;
-        var _didIteratorError = false;
-        var _iteratorError = undefined;
-
-        try {
-          for (var _iterator = this.subscriptionSchedules[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-            var weekday = _step.value;
-
-            weekday.selected = false;
-          }
-        } catch (err) {
-          _didIteratorError = true;
-          _iteratorError = err;
-        } finally {
-          try {
-            if (!_iteratorNormalCompletion && _iterator.return) {
-              _iterator.return();
-            }
-          } finally {
-            if (_didIteratorError) {
-              throw _iteratorError;
-            }
-          }
+    everydayCheckbox: function everydayCheckbox(val) {
+      this.$utils.log('everydayCheckbox ' + val);
+      if (val) {
+        for (var i = 0; i < this.subscriptionSchedules.length; i++) {
+          this.subscriptionSchedules[i].selected = false;
         }
       }
     },
+    subscriptionSchedules: function subscriptionSchedules(val) {
+      this.$utils.log(val);
+      var selected = 0;
+      var _iteratorNormalCompletion = true;
+      var _didIteratorError = false;
+      var _iteratorError = undefined;
 
-    subscriptionSchedules: {
-      handler: function handler(after, before) {
-        // Return the object that changed
-        /*let changed = after.filter(function (p, idx) {
-            return Object.keys(p).some(function (prop) {
-                return p[prop] !== before[idx][prop]
-            })
-        })
-        // Log it
-        console.log(changed)
-        */
-        this.$utils.log(this.subscriptionSchedules);
-        var selected = 0;
-        var _iteratorNormalCompletion2 = true;
-        var _didIteratorError2 = false;
-        var _iteratorError2 = undefined;
+      try {
+        for (var _iterator = this.subscriptionSchedules[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+          var schedule = _step.value;
 
+          if (schedule.selected) {
+            selected++;
+          }
+        }
+      } catch (err) {
+        _didIteratorError = true;
+        _iteratorError = err;
+      } finally {
         try {
-          for (var _iterator2 = this.subscriptionSchedules[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
-            var weekday = _step2.value;
-
-            this.$utils.log('weekday = ' + weekday.name + ', selected = ' + weekday.selected);
-            if (weekday.selected) {
-              selected = selected + 1;
-            }
+          if (!_iteratorNormalCompletion && _iterator.return) {
+            _iterator.return();
           }
-        } catch (err) {
-          _didIteratorError2 = true;
-          _iteratorError2 = err;
         } finally {
-          try {
-            if (!_iteratorNormalCompletion2 && _iterator2.return) {
-              _iterator2.return();
-            }
-          } finally {
-            if (_didIteratorError2) {
-              throw _iteratorError2;
-            }
+          if (_didIteratorError) {
+            throw _iteratorError;
           }
         }
+      }
 
-        if (selected > 0 && this.everydayCheckbox) {
-          this.everydayCheckbox = false;
-        }
+      this.$utils.log(selected);
 
-        if (selected === 5 || selected === 0) {
-          this.everydayCheckbox = true;
-        }
-      },
-      deep: true
+      if (selected === this.subscriptionSchedules.length) {
+        this.everydayCheckbox = true;
+      }
     }
   },
   methods: {
     reset: function reset() {
-      this.connecting = false;
       this.quantity = null;
       this.everydayCheckbox = true;
-      var _iteratorNormalCompletion3 = true;
-      var _didIteratorError3 = false;
-      var _iteratorError3 = undefined;
-
-      try {
-        for (var _iterator3 = this.subscriptionSchedules[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
-          var schedule = _step3.value;
-
-          schedule.selected = false;
-        }
-      } catch (err) {
-        _didIteratorError3 = true;
-        _iteratorError3 = err;
-      } finally {
-        try {
-          if (!_iteratorNormalCompletion3 && _iterator3.return) {
-            _iterator3.return();
-          }
-        } finally {
-          if (_didIteratorError3) {
-            throw _iteratorError3;
-          }
-        }
-      }
     },
-    onClose: function onClose() {
+    close: function close(val) {
       this.reset();
-      this.$emit('onClose');
+      this.$emit('onClose', val);
     },
     subscribe: function subscribe() {
-      var _this = this;
-
       this.connecting = true;
       var subscription = {
         subscriptionItemId: this.subscribeItem.id,
         quantity: this.quantity,
         schedules: []
       };
-      if (this.everydayCheckbox) {
-        var everydaySchedule = this.subscriptionSchedules.find(function (element) {
-          return element.name === 'Everyday';
-        });
-        subscription.schedules.push(everydaySchedule.id);
-      } else {
-        var _iteratorNormalCompletion4 = true;
-        var _didIteratorError4 = false;
-        var _iteratorError4 = undefined;
+      var _iteratorNormalCompletion2 = true;
+      var _didIteratorError2 = false;
+      var _iteratorError2 = undefined;
 
-        try {
-          for (var _iterator4 = this.subscriptionSchedules[Symbol.iterator](), _step4; !(_iteratorNormalCompletion4 = (_step4 = _iterator4.next()).done); _iteratorNormalCompletion4 = true) {
-            var schedule = _step4.value;
+      try {
+        for (var _iterator2 = this.subscriptionSchedules[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+          var schedule = _step2.value;
 
-            if (schedule.selected) {
-              subscription.schedules.push(schedule.id);
-            }
+          if (schedule.selected || this.everydayCheckbox) {
+            subscription.schedules.push(schedule.id);
           }
-        } catch (err) {
-          _didIteratorError4 = true;
-          _iteratorError4 = err;
+        }
+      } catch (err) {
+        _didIteratorError2 = true;
+        _iteratorError2 = err;
+      } finally {
+        try {
+          if (!_iteratorNormalCompletion2 && _iterator2.return) {
+            _iterator2.return();
+          }
         } finally {
-          try {
-            if (!_iteratorNormalCompletion4 && _iterator4.return) {
-              _iterator4.return();
-            }
-          } finally {
-            if (_didIteratorError4) {
-              throw _iteratorError4;
-            }
+          if (_didIteratorError2) {
+            throw _iteratorError2;
           }
         }
       }
+
       this.$utils.log(subscription);
-      this.axios.post('/subscriptions', {
+      var that = this;
+      this.$refs.connectionManager.post('/subscriptions', {
+        onSuccess: function onSuccess(response) {
+          //let subscriptionItem = response.data.data
+          that.close(true);
+        }
+      }, {
         subscriptionItemId: subscription.subscriptionItemId,
         schedules: subscription.schedules,
         quantity: subscription.quantity
-      }).then(function (response) {
-        var subscriptionItem = response.data.data;
-        _this.$emit('onClose', subscriptionItem);
-        _this.reset();
-      }).catch(function (error) {});
+      });
+    },
+    loadSubscriptionSchedules: function loadSubscriptionSchedules() {
+      var that = this;
+      this.$refs.connectionManager.get('subscriptionSchedules', {
+        onSuccess: function onSuccess(response) {
+          that.subscriptionSchedules = that.subscriptionSchedules.concat(response.data.data);
+        }
+      });
     }
   }
 });
@@ -9239,10 +9164,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__ConnectionManager___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__ConnectionManager__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__Base_vue__ = __webpack_require__("./resources/assets/js/components/Base.vue");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__Base_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3__Base_vue__);
-//
-//
-//
-//
 //
 //
 //
@@ -9356,161 +9277,75 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       subscriptionTypes: [],
       subscriptionItems: [],
       subscriptionSchedules: [],
-      headers: [{
-        text: 'Name',
-        align: 'left',
-        sortable: false,
-        value: 'name'
-      }, { text: 'Quantity Subscribed', sortable: false, value: '' }, { text: 'Schedule', sortable: false, value: '' }, { text: 'Subscription Date', sortable: false, value: '' }, { text: 'Total Deliveries', sortable: false, value: '' }, { text: 'Total Cost', sortable: false, value: '' }, { text: 'Subscription', sortable: false, value: '' }]
+      headers: [{ text: 'Name', sortable: false, value: 'name' }, { text: 'Quantity Subscribed', sortable: false, value: '' }, { text: 'Schedule', sortable: false, value: '' }, { text: 'Subscription Date', sortable: false, value: '' }, { text: 'Total Deliveries', sortable: false, value: '' }, { text: 'Total Cost', sortable: false, value: '' }, { text: 'Action', sortable: false, value: '' }]
 
     };
   },
 
   watch: {
-    currentTab: function currentTab(currentItem) {
-      this.$utils.log(currentItem);
-      if (currentItem && !this.connecting) {
+    currentTab: function currentTab(val) {
+      this.$utils.log(val);
+      this.$utils.log(this.connecting);
+      if (val) {
         var subscriptionType = this.subscriptionTypes.find(function (element) {
-          return element.name === currentItem;
+          return element.name === val;
         });
-        this.subscriptionItems = subscriptionType.subscriptionItems;
+        this.subscriptionItems = [];
+        this.subscriptionItems = this.subscriptionItems.concat(subscriptionType.subscriptionItems);
       }
     },
     subscribeItem: function subscribeItem(_subscribeItem) {
       this.dialog = !!_subscribeItem;
-    },
-    everydayCheckbox: function everydayCheckbox(_everydayCheckbox) {
-      if (_everydayCheckbox) {
-        var _iteratorNormalCompletion = true;
-        var _didIteratorError = false;
-        var _iteratorError = undefined;
-
-        try {
-          for (var _iterator = this.weekdays[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-            var weekday = _step.value;
-
-            weekday.selected = false;
-          }
-        } catch (err) {
-          _didIteratorError = true;
-          _iteratorError = err;
-        } finally {
-          try {
-            if (!_iteratorNormalCompletion && _iterator.return) {
-              _iterator.return();
-            }
-          } finally {
-            if (_didIteratorError) {
-              throw _iteratorError;
-            }
-          }
-        }
-      }
-    },
-    weekdays: function weekdays(_weekdays) {
-      this.$utils.log(_weekdays);
-      var selected = 0;
-      var _iteratorNormalCompletion2 = true;
-      var _didIteratorError2 = false;
-      var _iteratorError2 = undefined;
-
-      try {
-        for (var _iterator2 = _weekdays[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
-          var weekday = _step2.value;
-
-          if (weekday.selected) {
-            selected = selected + 1;
-          }
-        }
-      } catch (err) {
-        _didIteratorError2 = true;
-        _iteratorError2 = err;
-      } finally {
-        try {
-          if (!_iteratorNormalCompletion2 && _iterator2.return) {
-            _iterator2.return();
-          }
-        } finally {
-          if (_didIteratorError2) {
-            throw _iteratorError2;
-          }
-        }
-      }
-
-      if (selected === 5) {
-        this.everydayCheckbox = true;
-      }
     }
   },
   methods: {
     unsubscribe: function unsubscribe(subscriptionItem) {
-      var _this = this;
-
       this.unSubscribing = subscriptionItem.id;
-      this.axios.delete('/subscriptions/' + subscriptionItem.id).then(function (response) {
-        var deletedSubscriptionItem = response.data.data;
-        _this.updateSubscriptionItem(deletedSubscriptionItem);
-        _this.unSubscribing = 0;
-      }).catch(function (error) {
-        _this.unSubscribing = 0;
+      var that = this;
+      this.$refs.connectionManager.delete('/subscriptions/' + subscriptionItem.id, {
+        onSuccess: function onSuccess(response) {
+          that.unSubscribing = 0;
+          that.loadSubscriptionTypes();
+        }
       });
     },
-    onConnectionManagerSuccess: function onConnectionManagerSuccess(response) {
-      this.$utils.log(response);
-      this.subscriptionTypes = [];
-      this.subscriptionTypes = this.subscriptionTypes.concat(response.data.data.subscriptionTypes);
-      this.subscriptionSchedules = response.data.data.subscriptionSchedules;
-      this.currentTab = this.subscriptionTypes[0].name;
-    },
-    updateSubscriptionItem: function updateSubscriptionItem(subscriptionItem) {
-      if (subscriptionItem) {
-        var updatedSubscriptionItem = this.subscriptionItems.find(function (element) {
-          return element.id === subscriptionItem.id;
-        });
-        this.$utils.log('Updated Item....');
-        this.$utils.log(updatedSubscriptionItem);
-        var updatedIndex = this.subscriptionItems.indexOf(updatedSubscriptionItem);
-        this.$utils.log('Index ' + updatedIndex);
-        var tempSubscriptionItems = this.subscriptionItems;
-        tempSubscriptionItems[updatedIndex] = subscriptionItem;
-        this.subscriptionItems = [];
-        var _iteratorNormalCompletion3 = true;
-        var _didIteratorError3 = false;
-        var _iteratorError3 = undefined;
-
-        try {
-          for (var _iterator3 = tempSubscriptionItems[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
-            var item = _step3.value;
-
-            this.subscriptionItems.push(item);
-          }
-        } catch (err) {
-          _didIteratorError3 = true;
-          _iteratorError3 = err;
-        } finally {
-          try {
-            if (!_iteratorNormalCompletion3 && _iterator3.return) {
-              _iterator3.return();
-            }
-          } finally {
-            if (_didIteratorError3) {
-              throw _iteratorError3;
-            }
-          }
-        }
+    onCloseSubscriptionDialog: function onCloseSubscriptionDialog(subscribedItem) {
+      this.$utils.log('onCloseSubscriptionDialog');
+      this.$utils.log(subscribedItem);
+      this.subscribeItem = null;
+      if (subscribedItem) {
+        this.loadSubscriptionTypes(true);
       }
     },
-    onCloseSubscriptionDialog: function onCloseSubscriptionDialog(subscriptionItem) {
-      this.updateSubscriptionItem(subscriptionItem);
+    onCloseEditSubscriptionDialog: function onCloseEditSubscriptionDialog(subscribedItem) {
+      if (subscribedItem) {
+        this.loadSubscriptionTypes(true);
+      }
       this.subscribeItem = null;
     },
-    onCloseEditSubscriptionDialog: function onCloseEditSubscriptionDialog(subscriptionItem) {
-      this.updateSubscriptionItem(subscriptionItem);
-      this.editItem = null;
+    loadSubscriptionTypes: function loadSubscriptionTypes(refreshing) {
+      var that = this;
+      this.subscriptionItems = [];
+      this.$refs.connectionManager.get('subscriptionTypes', {
+        onSuccess: function onSuccess(response) {
+          that.subscriptionTypes = [];
+          that.subscriptionTypes = that.subscriptionTypes.concat(response.data.data);
+          if (refreshing) {
+            var subscriptionType = that.subscriptionTypes.find(function (element) {
+              return element.name === that.currentTab;
+            });
+            that.subscriptionItems = [];
+            that.subscriptionItems = that.subscriptionItems.concat(subscriptionType.subscriptionItems);
+          } else {
+            that.currentTab = null;
+            that.currentTab = that.subscriptionTypes[0].name;
+          }
+        }
+      });
     }
   },
   mounted: function mounted() {
-    this.$refs.connectionManager.index('subscriptions');
+    this.loadSubscriptionTypes(false);
   }
 });
 
@@ -9611,6 +9446,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__event_bus__ = __webpack_require__("./resources/assets/js/event-bus.js");
+//
+//
 //
 //
 //
@@ -10643,7 +10480,7 @@ exports = module.exports = __webpack_require__("./node_modules/css-loader/lib/cs
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -10673,7 +10510,7 @@ exports = module.exports = __webpack_require__("./node_modules/css-loader/lib/cs
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -10688,7 +10525,7 @@ exports = module.exports = __webpack_require__("./node_modules/css-loader/lib/cs
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -10733,7 +10570,7 @@ exports = module.exports = __webpack_require__("./node_modules/css-loader/lib/cs
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -10748,7 +10585,7 @@ exports = module.exports = __webpack_require__("./node_modules/css-loader/lib/cs
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -10793,7 +10630,7 @@ exports = module.exports = __webpack_require__("./node_modules/css-loader/lib/cs
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -10823,7 +10660,7 @@ exports = module.exports = __webpack_require__("./node_modules/css-loader/lib/cs
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -10838,7 +10675,7 @@ exports = module.exports = __webpack_require__("./node_modules/css-loader/lib/cs
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -10973,7 +10810,7 @@ exports = module.exports = __webpack_require__("./node_modules/css-loader/lib/cs
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -10988,7 +10825,7 @@ exports = module.exports = __webpack_require__("./node_modules/css-loader/lib/cs
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -11033,7 +10870,7 @@ exports = module.exports = __webpack_require__("./node_modules/css-loader/lib/cs
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -11093,7 +10930,7 @@ exports = module.exports = __webpack_require__("./node_modules/css-loader/lib/cs
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -11153,7 +10990,7 @@ exports = module.exports = __webpack_require__("./node_modules/css-loader/lib/cs
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -11168,7 +11005,7 @@ exports = module.exports = __webpack_require__("./node_modules/css-loader/lib/cs
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -45598,10 +45435,12 @@ var render = function() {
             [
               _c("connection-manager", {
                 ref: "connectionManager",
-                on: {
-                  onConnectionChange: function(status) {
-                    _vm.loading = status
-                  }
+                model: {
+                  value: _vm.loading,
+                  callback: function($$v) {
+                    _vm.loading = $$v
+                  },
+                  expression: "loading"
                 }
               }),
               _vm._v(" "),
@@ -45677,6 +45516,8 @@ var render = function() {
                                 {
                                   attrs: {
                                     color: "accent",
+                                    label: "",
+                                    small: "",
                                     "text-color": "white"
                                   }
                                 },
@@ -45687,7 +45528,7 @@ var render = function() {
                                         _vm.$utils.formatMoney(
                                           props.item.estimatedCost
                                         )
-                                      )
+                                      ) + " incl. 16% VAT"
                                     )
                                   ])
                                 ]
@@ -46562,10 +46403,12 @@ var render = function() {
             [
               _c("connection-manager", {
                 ref: "connectionManager",
-                on: {
-                  onConnectionChange: function(status) {
-                    _vm.loading = status
-                  }
+                model: {
+                  value: _vm.loading,
+                  callback: function($$v) {
+                    _vm.loading = $$v
+                  },
+                  expression: "loading"
                 }
               }),
               _vm._v(" "),
@@ -46823,7 +46666,13 @@ var render = function() {
                 [
                   _c("connection-manager", {
                     ref: "connectionManager",
-                    on: { onSuccess: _vm.onConnectionManagerSuccess }
+                    model: {
+                      value: _vm.connecting,
+                      callback: function($$v) {
+                        _vm.connecting = $$v
+                      },
+                      expression: "connecting"
+                    }
                   }),
                   _vm._v(" "),
                   _c(
@@ -47087,10 +46936,7 @@ var render = function() {
         { attrs: { xs12: "" } },
         [
           _c("subscription-dialog", {
-            attrs: {
-              subscribeItem: _vm.subscribeItem,
-              subscriptionSchedules: _vm.subscriptionSchedules
-            },
+            attrs: { subscribeItem: _vm.subscribeItem },
             on: { onClose: _vm.onCloseSubscriptionDialog }
           }),
           _vm._v(" "),
@@ -47209,10 +47055,12 @@ var render = function() {
                     [
                       _c("connection-manager", {
                         ref: "connectionManager",
-                        on: {
-                          onConnectionChange: function(val) {
-                            _vm.connecting = val
-                          }
+                        model: {
+                          value: _vm.connecting,
+                          callback: function($$v) {
+                            _vm.connecting = $$v
+                          },
+                          expression: "connecting"
                         }
                       })
                     ],
@@ -47797,7 +47645,7 @@ var render = function() {
   return _c(
     "v-dialog",
     {
-      attrs: { lazy: "", persistent: "", "max-width": "500px" },
+      attrs: { persistent: "", "max-width": "600px" },
       model: {
         value: _vm.dialog,
         callback: function($$v) {
@@ -47807,226 +47655,195 @@ var render = function() {
       }
     },
     [
-      _vm.subscribeItem
-        ? _c(
-            "v-card",
+      _c(
+        "v-card",
+        [
+          _c(
+            "v-toolbar",
+            {
+              attrs: {
+                dark: "",
+                dense: "",
+                card: "",
+                flat: "",
+                color: "primary"
+              }
+            },
+            [_c("v-toolbar-title", [_vm._v("Subscribe")])],
+            1
+          ),
+          _vm._v(" "),
+          _c("connection-manager", {
+            ref: "connectionManager",
+            model: {
+              value: _vm.connecting,
+              callback: function($$v) {
+                _vm.connecting = $$v
+              },
+              expression: "connecting"
+            }
+          }),
+          _vm._v(" "),
+          _c(
+            "v-card-text",
             [
-              _c(
-                "v-toolbar",
-                {
-                  attrs: {
-                    dark: "",
-                    dense: "",
-                    card: "",
-                    flat: "",
-                    color: "primary"
-                  }
+              _c("v-text-field", {
+                attrs: {
+                  required: "",
+                  mask: "###",
+                  label: "Enter quantity",
+                  disabled: _vm.connecting,
+                  placeholder: "Quantity to be delivered to you"
                 },
-                [
-                  _c("v-toolbar-title", [
-                    _vm._v("Subscribe to get " + _vm._s(_vm.subscribeItem.name))
-                  ])
-                ],
-                1
-              ),
+                model: {
+                  value: _vm.quantity,
+                  callback: function($$v) {
+                    _vm.quantity = $$v
+                  },
+                  expression: "quantity"
+                }
+              }),
               _vm._v(" "),
               _c(
-                "v-card-text",
+                "v-list",
+                { attrs: { subheader: "", dense: "" } },
                 [
-                  _c("v-progress-linear", {
-                    directives: [
-                      {
-                        name: "show",
-                        rawName: "v-show",
-                        value: _vm.connecting,
-                        expression: "connecting"
-                      }
-                    ],
-                    attrs: { indeterminate: true }
-                  }),
+                  _c("v-subheader", [_vm._v("Deliver everyday")]),
                   _vm._v(" "),
                   _c(
-                    "v-alert",
-                    {
-                      attrs: {
-                        type: "error",
-                        dismissible: "",
-                        icon: "warning",
-                        dark: ""
-                      },
-                      model: {
-                        value: _vm.error,
-                        callback: function($$v) {
-                          _vm.error = $$v
-                        },
-                        expression: "error"
-                      }
-                    },
+                    "v-list-tile",
                     [
-                      _vm._v(
-                        "\n                " +
-                          _vm._s(_vm.errorText) +
-                          "\n            "
-                      )
-                    ]
-                  ),
-                  _vm._v(" "),
-                  _c("v-text-field", {
-                    attrs: {
-                      required: "",
-                      mask: "###",
-                      label: "Enter quantity",
-                      disabled: _vm.connecting,
-                      placeholder: "Quantity to be delivered to you"
-                    },
-                    model: {
-                      value: _vm.quantity,
-                      callback: function($$v) {
-                        _vm.quantity = $$v
-                      },
-                      expression: "quantity"
-                    }
-                  }),
-                  _vm._v(" "),
-                  _c(
-                    "v-list",
-                    { attrs: { subheader: "", dense: "" } },
-                    [
-                      _c("v-subheader", [_vm._v("Deliver everyday")]),
-                      _vm._v(" "),
                       _c(
-                        "v-list-tile",
+                        "v-list-tile-content",
                         [
-                          _c(
-                            "v-list-tile-content",
-                            [
-                              _c("v-list-tile-title", [_vm._v("Everyday")]),
-                              _vm._v(" "),
-                              _c("v-list-tile-sub-title", [
-                                _vm._v("Deliver everyday")
-                              ])
-                            ],
-                            1
-                          ),
+                          _c("v-list-tile-title", [_vm._v("Everyday")]),
                           _vm._v(" "),
-                          _c(
-                            "v-list-tile-action",
-                            [
-                              _c("v-checkbox", {
-                                attrs: { disabled: _vm.connecting },
-                                model: {
-                                  value: _vm.everydayCheckbox,
-                                  callback: function($$v) {
-                                    _vm.everydayCheckbox = $$v
-                                  },
-                                  expression: "everydayCheckbox"
-                                }
-                              })
-                            ],
-                            1
-                          )
+                          _c("v-list-tile-sub-title", [
+                            _vm._v("Deliver everyday")
+                          ])
                         ],
                         1
                       ),
                       _vm._v(" "),
-                      _c("v-divider", { staticClass: "mt-2" }),
-                      _vm._v(" "),
-                      _c("v-subheader", [_vm._v("Deliver on specific day(s)")]),
-                      _vm._v(" "),
-                      _vm._l(_vm.subscriptionSchedules, function(item) {
-                        return item.name !== "Everyday"
-                          ? _c(
-                              "v-list-tile",
-                              { key: item.name, attrs: { avatar: "" } },
+                      _c(
+                        "v-list-tile-action",
+                        [
+                          _c("v-checkbox", {
+                            attrs: { disabled: _vm.connecting },
+                            model: {
+                              value: _vm.everydayCheckbox,
+                              callback: function($$v) {
+                                _vm.everydayCheckbox = $$v
+                              },
+                              expression: "everydayCheckbox"
+                            }
+                          })
+                        ],
+                        1
+                      )
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c("v-divider", { staticClass: "mt-2" }),
+                  _vm._v(" "),
+                  !_vm.everydayCheckbox
+                    ? _c("v-subheader", [_vm._v("Deliver on specific day(s)")])
+                    : _vm._e(),
+                  _vm._v(" "),
+                  _vm._l(_vm.subscriptionSchedules, function(item) {
+                    return !_vm.everydayCheckbox
+                      ? _c(
+                          "v-list-tile",
+                          { key: item.name },
+                          [
+                            _c(
+                              "v-list-tile-content",
                               [
-                                _c(
-                                  "v-list-tile-content",
-                                  [
-                                    _c("v-list-tile-title", [
-                                      _vm._v(_vm._s(item.name))
-                                    ]),
-                                    _vm._v(" "),
-                                    _c("v-list-tile-sub-title", [
-                                      _vm._v(_vm._s(item.description))
-                                    ])
-                                  ],
-                                  1
-                                ),
+                                _c("v-list-tile-title", [
+                                  _vm._v(_vm._s(item.name))
+                                ]),
                                 _vm._v(" "),
-                                _c(
-                                  "v-list-tile-action",
-                                  [
-                                    _c("v-checkbox", {
-                                      attrs: { disabled: _vm.connecting },
-                                      model: {
-                                        value: item.selected,
-                                        callback: function($$v) {
-                                          _vm.$set(item, "selected", $$v)
-                                        },
-                                        expression: "item.selected"
-                                      }
-                                    })
-                                  ],
-                                  1
-                                )
+                                _c("v-list-tile-sub-title", [
+                                  _vm._v(_vm._s(item.description))
+                                ])
+                              ],
+                              1
+                            ),
+                            _vm._v(" "),
+                            _c(
+                              "v-list-tile-action",
+                              [
+                                _c("v-checkbox", {
+                                  attrs: { disabled: _vm.connecting },
+                                  model: {
+                                    value: item.selected,
+                                    callback: function($$v) {
+                                      _vm.$set(item, "selected", $$v)
+                                    },
+                                    expression: "item.selected"
+                                  }
+                                })
                               ],
                               1
                             )
-                          : _vm._e()
-                      })
-                    ],
-                    2
-                  )
+                          ],
+                          1
+                        )
+                      : _vm._e()
+                  })
                 ],
-                1
+                2
+              )
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c(
+            "v-card-actions",
+            [
+              _c("v-spacer"),
+              _vm._v(" "),
+              _c(
+                "v-btn",
+                {
+                  attrs: {
+                    color: "primary",
+                    flat: "",
+                    disabled: _vm.connecting
+                  },
+                  on: {
+                    click: function($event) {
+                      $event.stopPropagation()
+                      _vm.close(false)
+                    }
+                  }
+                },
+                [_vm._v("Cancel")]
               ),
               _vm._v(" "),
               _c(
-                "v-card-actions",
-                [
-                  _c("v-spacer"),
-                  _vm._v(" "),
-                  _c(
-                    "v-btn",
-                    {
-                      attrs: {
-                        color: "primary",
-                        flat: "",
-                        disabled: _vm.connecting
-                      },
-                      on: {
-                        click: function($event) {
-                          $event.stopPropagation()
-                          return _vm.onClose($event)
-                        }
-                      }
-                    },
-                    [_vm._v("Cancel")]
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "v-btn",
-                    {
-                      attrs: {
-                        color: "primary",
-                        disabled: _vm.connecting || !_vm.quantity
-                      },
-                      on: {
-                        click: function($event) {
-                          $event.stopPropagation()
-                          return _vm.subscribe($event)
-                        }
-                      }
-                    },
-                    [_vm._v("\n                Continue\n            ")]
-                  )
-                ],
-                1
+                "v-btn",
+                {
+                  attrs: {
+                    color: "primary",
+                    disabled: _vm.connecting || !_vm.quantity
+                  },
+                  on: {
+                    click: function($event) {
+                      $event.stopPropagation()
+                      return _vm.subscribe($event)
+                    }
+                  }
+                },
+                [_vm._v("\n                Continue\n            ")]
               )
             ],
             1
           )
-        : _vm._e()
+        ],
+        1
+      )
     ],
     1
   )
@@ -48079,10 +47896,12 @@ var render = function() {
           _vm._v(" "),
           _c("connection-manager", {
             ref: "connectionManager",
-            on: {
-              onConnectionChange: function(status) {
-                _vm.connecting = status
-              }
+            model: {
+              value: _vm.connecting,
+              callback: function($$v) {
+                _vm.connecting = $$v
+              },
+              expression: "connecting"
             }
           }),
           _vm._v(" "),
@@ -48553,10 +48372,12 @@ var render = function() {
                     [
                       _c("connection-manager", {
                         ref: "connectionManager",
-                        on: {
-                          onConnectionChange: function(status) {
-                            _vm.connecting = status
-                          }
+                        model: {
+                          value: _vm.connecting,
+                          callback: function($$v) {
+                            _vm.connecting = $$v
+                          },
+                          expression: "connecting"
                         }
                       }),
                       _vm._v(" "),
@@ -49465,10 +49286,12 @@ var render = function() {
               _vm._v(" "),
               _c("connection-manager", {
                 ref: "connectionManager",
-                on: {
-                  onConnectionChange: function(status) {
-                    _vm.connecting = status
-                  }
+                model: {
+                  value: _vm.connecting,
+                  callback: function($$v) {
+                    _vm.connecting = $$v
+                  },
+                  expression: "connecting"
                 }
               }),
               _vm._v(" "),
@@ -49525,8 +49348,8 @@ var render = function() {
                     },
                     [
                       _vm._v(
-                        "\n                Ksh. " +
-                          _vm._s(_vm.product.price) +
+                        "\n                " +
+                          _vm._s(_vm.$utils.formatMoney(_vm.product.price)) +
                           "\n                "
                       ),
                       _c("v-icon", { attrs: { small: "", right: "" } }, [
@@ -49544,22 +49367,60 @@ var render = function() {
               _c(
                 "v-card-text",
                 [
-                  _c("v-text-field", {
-                    attrs: {
-                      required: "",
-                      disabled: _vm.connecting,
-                      label: "Enter quantity",
-                      mask: "###",
-                      placeholder: "Quantity"
+                  _c(
+                    "v-layout",
+                    {
+                      attrs: {
+                        row: "",
+                        wrap: "",
+                        "align-center": "",
+                        "justify-center": ""
+                      }
                     },
-                    model: {
-                      value: _vm.quantity,
-                      callback: function($$v) {
-                        _vm.quantity = $$v
-                      },
-                      expression: "quantity"
-                    }
-                  })
+                    [
+                      _c(
+                        "v-flex",
+                        { attrs: { xs8: "" } },
+                        [
+                          _c("v-text-field", {
+                            attrs: {
+                              required: "",
+                              disabled: _vm.connecting,
+                              label: "Enter quantity",
+                              mask: "###",
+                              placeholder: "Quantity"
+                            },
+                            model: {
+                              value: _vm.quantity,
+                              callback: function($$v) {
+                                _vm.quantity = $$v
+                              },
+                              expression: "quantity"
+                            }
+                          })
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "v-flex",
+                        { attrs: { xs4: "" } },
+                        [
+                          _c("v-btn", { attrs: { flat: "" } }, [
+                            _vm._v(
+                              _vm._s(
+                                _vm.$utils.formatMoney(
+                                  _vm.quantity * _vm.product.price
+                                )
+                              )
+                            )
+                          ])
+                        ],
+                        1
+                      )
+                    ],
+                    1
+                  )
                 ],
                 1
               ),
@@ -49689,10 +49550,12 @@ var render = function() {
                 [
                   _c("connection-manager", {
                     ref: "connectionManager",
-                    on: {
-                      onConnectionChange: function(status) {
-                        _vm.loading = status
-                      }
+                    model: {
+                      value: _vm.loading,
+                      callback: function($$v) {
+                        _vm.loading = $$v
+                      },
+                      expression: "loading"
                     }
                   }),
                   _vm._v(" "),
@@ -50820,10 +50683,12 @@ var render = function() {
             [
               _c("connection-manager", {
                 ref: "connectionManager",
-                on: {
-                  onConnectionChange: function(val) {
-                    _vm.connecting = val
-                  }
+                model: {
+                  value: _vm.connecting,
+                  callback: function($$v) {
+                    _vm.connecting = $$v
+                  },
+                  expression: "connecting"
                 }
               }),
               _vm._v(" "),
@@ -51312,7 +51177,7 @@ var render = function() {
             [
               _c("v-tabs-slider", { attrs: { color: "yellow" } }),
               _vm._v(" "),
-              _vm._l(_vm.tabs, function(tab, index) {
+              _vm._l(_vm.tabItems, function(tab, index) {
                 return _c(
                   "v-tab",
                   { key: index, attrs: { href: "#" + tab.id } },
@@ -51331,7 +51196,18 @@ var render = function() {
             2
           ),
           _vm._v(" "),
-          _vm.currentItem
+          _c("connection-manager", {
+            ref: "connectionManager",
+            model: {
+              value: _vm.connecting,
+              callback: function($$v) {
+                _vm.connecting = $$v
+              },
+              expression: "connecting"
+            }
+          }),
+          _vm._v(" "),
+          _vm.currentTabItem
             ? _c(
                 "v-card",
                 { staticClass: "pt-3" },
@@ -51362,7 +51238,9 @@ var render = function() {
                             _vm._v("account_balance_wallet")
                           ]),
                           _vm._v(
-                            "\n                    SPENT KES 0.00\n                "
+                            "\n                    SPENT " +
+                              _vm._s(_vm.$utils.formatMoney(_vm.spent)) +
+                              "\n                "
                           )
                         ],
                         1
@@ -51480,7 +51358,7 @@ var render = function() {
                   _vm._v(" "),
                   _c("v-data-table", {
                     attrs: {
-                      headers: _vm.currentItem.headers,
+                      headers: _vm.currentTabItem.headers,
                       items: _vm.items,
                       search: _vm.search,
                       "rows-per-page-items": _vm.rowsPerPageItems,
@@ -51495,18 +51373,24 @@ var render = function() {
                       {
                         key: "items",
                         fn: function(props) {
-                          return _vm._l(_vm.currentItem.headers, function(
+                          return _vm._l(_vm.currentTabItem.headers, function(
                             header,
                             index
                           ) {
                             return _c(
                               "td",
-                              { key: index, staticClass: "text-xs-center" },
+                              { key: index, staticClass: "text-xs-left" },
                               [
                                 _vm._v(
                                   "\n                        " +
-                                    _vm._s(props.item[index]) +
-                                    "\n                    "
+                                    _vm._s(
+                                      header.isMoney
+                                        ? _vm.$utils.formatMoney(
+                                            props.item[header.value]
+                                          )
+                                        : props.item[header.value]
+                                    ) +
+                                    "\n                        "
                                 )
                               ]
                             )
@@ -52055,7 +51939,7 @@ var render = function() {
         permanent: "",
         "disable-route-watcher": true,
         stateless: "",
-        width: 200,
+        width: 250,
         "mini-variant": _vm.mini,
         app: ""
       },
@@ -52091,6 +51975,10 @@ var render = function() {
                 [
                   _c("v-list-tile-sub-title", [
                     _c("b", [_vm._v(_vm._s(_vm.$auth.user().name))])
+                  ]),
+                  _vm._v(" "),
+                  _c("v-list-tile-sub-title", [
+                    _vm._v(_vm._s(_vm.$auth.user().email))
                   ])
                 ],
                 1
@@ -52614,10 +52502,12 @@ var render = function() {
           _vm._v(" "),
           _c("connection-manager", {
             ref: "connectionManager",
-            on: {
-              onConnectionChange: function(status) {
-                _vm.connecting = status
-              }
+            model: {
+              value: _vm.connecting,
+              callback: function($$v) {
+                _vm.connecting = $$v
+              },
+              expression: "connecting"
             }
           }),
           _vm._v(" "),
@@ -53077,10 +52967,12 @@ var render = function() {
                 [
                   _c("connection-manager", {
                     ref: "connectionManager",
-                    on: {
-                      onConnectionChange: function(status) {
-                        _vm.loading = status
-                      }
+                    model: {
+                      value: _vm.loading,
+                      callback: function($$v) {
+                        _vm.loading = $$v
+                      },
+                      expression: "loading"
                     }
                   }),
                   _vm._v(" "),
@@ -53105,7 +52997,7 @@ var render = function() {
                         fn: function(props) {
                           return _c(
                             "v-flex",
-                            { attrs: { xs2: "" } },
+                            { attrs: { xs3: "" } },
                             [
                               _c(
                                 "v-card",
@@ -53215,117 +53107,90 @@ var render = function() {
                                     ? _c(
                                         "v-card-actions",
                                         [
-                                          _c("v-spacer"),
-                                          _vm._v(" "),
-                                          props.item.clientOrder
+                                          props.item.clientOrders.length
                                             ? _c(
-                                                "v-tooltip",
+                                                "v-badge",
                                                 {
                                                   attrs: {
-                                                    top: "",
-                                                    lazy: "",
-                                                    "max-width": "175px"
+                                                    small: "",
+                                                    color: "accent",
+                                                    overlap: ""
                                                   }
                                                 },
                                                 [
                                                   _c(
-                                                    "v-btn",
+                                                    "span",
                                                     {
-                                                      attrs: {
-                                                        slot: "activator",
-                                                        flat: "",
-                                                        color: "accent",
-                                                        small: "",
-                                                        outline: ""
-                                                      },
-                                                      slot: "activator"
+                                                      attrs: { slot: "badge" },
+                                                      slot: "badge"
                                                     },
                                                     [
                                                       _vm._v(
-                                                        "\n                                        " +
-                                                          _vm._s(
-                                                            props.item
-                                                              .clientOrder
-                                                              .status
-                                                          ) +
-                                                          "\n                                    "
+                                                        _vm._s(
+                                                          props.item
+                                                            .clientOrders.length
+                                                        )
                                                       )
                                                     ]
                                                   ),
                                                   _vm._v(" "),
-                                                  _c("span", [
-                                                    _c("span", [
-                                                      _vm._v(
-                                                        "Quantity: " +
-                                                          _vm._s(
-                                                            props.item
-                                                              .clientOrder
-                                                              .quantity
-                                                          )
-                                                      )
-                                                    ]),
-                                                    _c("br"),
-                                                    _vm._v(" "),
-                                                    _c("span", [
-                                                      _vm._v(
-                                                        "Status: " +
-                                                          _vm._s(
-                                                            props.item
-                                                              .clientOrder
-                                                              .status
-                                                          )
-                                                      )
-                                                    ]),
-                                                    _c("br"),
-                                                    _vm._v(" "),
-                                                    _c("span", [
-                                                      _vm._v(
-                                                        "Ordered At: " +
-                                                          _vm._s(
-                                                            props.item
-                                                              .clientOrder
-                                                              .createdAt
-                                                          )
-                                                      )
-                                                    ]),
-                                                    _c("br")
-                                                  ])
-                                                ],
-                                                1
-                                              )
-                                            : _c(
-                                                "v-btn",
-                                                {
-                                                  attrs: {
-                                                    flat: "",
-                                                    color: "primary",
-                                                    small: "",
-                                                    outline: ""
-                                                  },
-                                                  nativeOn: {
-                                                    click: function($event) {
-                                                      _vm.selectedProduct =
-                                                        props.item
-                                                    }
-                                                  }
-                                                },
-                                                [
                                                   _c(
-                                                    "v-icon",
-                                                    {
-                                                      attrs: {
-                                                        left: "",
-                                                        small: ""
-                                                      }
-                                                    },
-                                                    [_vm._v("shopping_basket")]
-                                                  ),
-                                                  _vm._v(
-                                                    "\n                                    Order\n                                "
+                                                    "v-btn",
+                                                    { attrs: { icon: "" } },
+                                                    [
+                                                      _c(
+                                                        "v-icon",
+                                                        {
+                                                          attrs: {
+                                                            color: "primary"
+                                                          }
+                                                        },
+                                                        [
+                                                          _vm._v(
+                                                            "shopping_basket"
+                                                          )
+                                                        ]
+                                                      )
+                                                    ],
+                                                    1
                                                   )
                                                 ],
                                                 1
                                               )
+                                            : _vm._e(),
+                                          _vm._v(" "),
+                                          _c("v-spacer"),
+                                          _vm._v(" "),
+                                          _c(
+                                            "v-btn",
+                                            {
+                                              attrs: {
+                                                flat: "",
+                                                color: "primary",
+                                                small: "",
+                                                outline: ""
+                                              },
+                                              nativeOn: {
+                                                click: function($event) {
+                                                  _vm.selectedProduct =
+                                                    props.item
+                                                }
+                                              }
+                                            },
+                                            [
+                                              _c(
+                                                "v-icon",
+                                                {
+                                                  attrs: { left: "", small: "" }
+                                                },
+                                                [_vm._v("shopping_cart")]
+                                              ),
+                                              _vm._v(
+                                                "\n                                    Order\n                                "
+                                              )
+                                            ],
+                                            1
+                                          )
                                         ],
                                         1
                                       )
@@ -53435,8 +53300,17 @@ var render = function() {
         ? _c(
             "v-btn",
             {
-              staticClass: "ml-5",
-              attrs: { color: "primary", loading: _vm.balance === 0 }
+              staticClass: "ml-5 text--white",
+              attrs: {
+                color:
+                  _vm.balance > 200 || _vm.balance === 0 ? "primary" : "error",
+                loading: _vm.balance === 0
+              },
+              nativeOn: {
+                click: function($event) {
+                  return _vm.refreshBalance($event)
+                }
+              }
             },
             [
               _c("v-icon", { attrs: { left: "" } }, [

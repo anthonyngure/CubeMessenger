@@ -6,9 +6,7 @@
                 <v-toolbar-title>Add Department</v-toolbar-title>
             </v-toolbar>
 
-            <connection-manager ref="connectionManager"
-                                @onConnectionChange="(status)=>{connecting = status}">
-            </connection-manager>
+            <connection-manager ref="connectionManager" v-model="connecting"></connection-manager>
 
             <v-card-text>
                 <v-layout row wrap>

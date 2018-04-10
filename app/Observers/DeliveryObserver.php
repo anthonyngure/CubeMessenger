@@ -28,20 +28,7 @@
 		 */
 		public function created(Delivery $delivery)
 		{
-			/**
-			 * Charge this delivery
-			 * The user associated with the delivery
-			 * @var \App\User $user
-			 */
-			$user = User::with('client')->findOrFail($delivery->user_id);
-			
-			Charge::updateOrCreate([
-				'client_id'       => $user->client_id,
-				'chargeable_id'   => $delivery->id,
-				'chargeable_type' => Delivery::class,
-			], [
-				'amount' => $delivery->estimated_cost,
-			]);
+		
 		}
 		
 		/**
@@ -86,6 +73,36 @@
 		public function saved(Delivery $delivery)
 		{
 			//code...
+			/**
+			 * Charge this delivery
+			 * The user associated with the delivery
+			 * @var \App\User $user
+			 */
+			$user = User::with('client')->findOrFail($delivery->user_id);
+			
+			/*$deliverItems = $delivery->items()->get();
+			
+			$stats = $delivery->getStatsAttribute();
+			
+			$statsSummary = array();
+			foreach ($stats as $stat) {
+				$statObject = (object)$stat;
+				$courierOptionObject = (object)$stat->courierOption;
+				array_push($statsSummary, $statObject->count . ' ' . $courierOptionObject->name);
+			}
+			
+			$description = 'Delivery of ' . count($deliverItems) . ' - ' . implode(",", $statsSummary);*/
+			
+			$description = 'Delivery';
+			
+			Charge::updateOrCreate([
+				'client_id'       => $user->client_id,
+				'chargeable_id'   => $delivery->id,
+				'chargeable_type' => Delivery::class,
+			], [
+				'description' => $description,
+				'amount'      => $delivery->estimated_cost,
+			]);
 		}
 		
 		/**

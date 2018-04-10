@@ -32,6 +32,7 @@
 		/**
 		 * @throws \App\Exceptions\WrappedException
 		 * @return \App\Client
+		 * @Deprecated
 		 */
 		protected function getClient()
 		{
@@ -41,6 +42,19 @@
 			}
 			
 			return $client;
+		}
+		
+		/**
+		 * @param $amount
+		 * @throws \App\Exceptions\WrappedException
+		 */
+		public function checkBalance($amount)
+		{
+			$client = Auth::user()->getClient();
+			$balance = $client->getBalance();
+			if ($balance < $amount) {
+				throw new WrappedException("Insufficient balance");
+			}
 		}
 		
 		/**

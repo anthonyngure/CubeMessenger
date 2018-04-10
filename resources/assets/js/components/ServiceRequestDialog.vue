@@ -11,7 +11,7 @@
             </v-toolbar>
             <v-card-text>
 
-                <connection-manager ref="connectionManager" @onConnectionChange="(val)=>{connecting = val}">
+                <connection-manager ref="connectionManager" v-model="connecting">
                 </connection-manager>
 
                 <v-select

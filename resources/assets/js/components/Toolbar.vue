@@ -2,7 +2,9 @@
     <v-toolbar fixed dense :color="darkTheme ? 'black' : 'white'" app clipped-left>
         <v-toolbar-side-icon @click.stop="onToolbarSideIconClick"></v-toolbar-side-icon>
         <img :src="'/img/logo.png'" height="32px" width="200px"/>
-        <v-btn color="primary" v-if="$auth.check()" class="ml-5" :loading="balance === 0">
+        <v-btn :color="(balance > 200 || balance === 0) ? 'primary' : 'error'"
+               v-if="$auth.check()" class="ml-5 text--white"
+               @click.native="refreshBalance" :loading="balance === 0">
             <v-icon left>account_balance_wallet</v-icon>
             Balance {{$utils.formatMoney(balance)}}
         </v-btn>

@@ -13,8 +13,7 @@
             </v-tabs>
             <v-card>
                 <v-container fluid grid-list-md>
-                    <connection-manager ref="connectionManager"
-                                        @onConnectionChange="(status)=> {loading = status}">
+                    <connection-manager ref="connectionManager" v-model="loading">
                     </connection-manager>
                     <v-data-iterator
                             content-tag="v-layout"
@@ -46,11 +45,6 @@
                                     </v-btn>
                                     <span>{{props.item.shopProduct.description}}</span>
                                 </v-tooltip>
-
-                                <!--<v-alert class="ma-2" type="info" :value="currentTab === 'pendingApproval'">
-                                    Pending <b>{{props.item.status === 'AT_DEPARTMENT_HEAD' ? 'Department' :
-                                    'Purchasing'}}</b> Head approval
-                                </v-alert>-->
 
                                 <v-chip v-if="props.item.status === 'AT_DEPARTMENT_HEAD' || props.item.status === 'AT_PURCHASING_HEAD'"
                                         label outline color="red" small>

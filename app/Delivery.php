@@ -53,6 +53,8 @@
 	class Delivery extends Model
 	{
 		
+		protected $appends = ['stats'];
+		
 		//
 		protected $casts = [
 			'urgent' => 'boolean',
@@ -88,5 +90,22 @@
 		public function charges()
 		{
 			return $this->morphMany(Charge::class, 'chargeable');
+		}
+		
+		public function getStatsAttribute()
+		{
+			$stats = array();
+			$courierOptionGroups = $this->items->groupBy('courier_option_id');
+			foreach ($courierOptionGroups as $courierOptionGroup) {
+				$totalQuantity = 0;
+				foreach ($courierOptionGroup as $courierOptionDeliveryItem) {
+					$totalQuantity += $courierOptionDeliveryItem->quantity;
+				}
+				array_push($stats, [
+					'courierOption' => $courierOptionGroup->first()->courierOption,
+					'count'         => $totalQuantity,
+				]);
+			}
+			return $stats;
 		}
 	}

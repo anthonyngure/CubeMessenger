@@ -1,27 +1,27 @@
 <template>
     <v-layout row wrap>
         <v-flex xs12>
-            <!--<h2 class="title px-3 py-4" style="text-transform: uppercase">
-                Reports -
-                <small>{{$auth.user().client.name}} - ({{$auth.user().client.email}})</small>
-            </h2>-->
+
             <v-tabs fixed-tabs
                     v-model="currentTab"
                     lazy
                     grow
                     icons-and-text>
                 <v-tabs-slider color="yellow"></v-tabs-slider>
-                <v-tab v-for="(tab, index) in tabs" :href="`#${tab.id}`" :key="index">
+                <v-tab v-for="(tab, index) in tabItems" :href="`#${tab.id}`" :key="index">
                     {{tab.title}}
                     <v-icon>{{tab.icon}}</v-icon>
                 </v-tab>
             </v-tabs>
 
-            <v-card class="pt-3" v-if="currentItem">
+            <connection-manager ref="connectionManager" v-model="connecting">
+            </connection-manager>
+
+            <v-card class="pt-3" v-if="currentTabItem">
                 <v-toolbar color="transparent" dense flat card>
                     <v-btn small flat outline color="accent">
                         <v-icon left>account_balance_wallet</v-icon>
-                        SPENT KES 0.00
+                        SPENT {{$utils.formatMoney(spent)}}
                     </v-btn>
                     <!--<v-icon left>account_balance_wallet</v-icon>
                     <v-toolbar-title class="text-xs-center">SPENT KES 200.52</v-toolbar-title>-->
@@ -56,20 +56,25 @@
                         Refresh
                     </v-btn>
                 </v-toolbar>
+
                 <v-data-table
-                        :headers="currentItem.headers"
+                        :headers="currentTabItem.headers"
                         :items="items"
                         :search="search"
                         :rows-per-page-items="rowsPerPageItems"
                         :pagination.sync="pagination">
                     <template slot="items" slot-scope="props">
 
-                        <td class="text-xs-center" v-for="(header, index) in currentItem.headers" :key="index">
-                            <!--{{ props.item[header.value] }}-->
-                            {{props.item[index]}}
+                        <td class="text-xs-left" v-for="(header, index) in currentTabItem.headers" :key="index">
+                            {{ header.isMoney ? $utils.formatMoney(props.item[header.value]) : props.item[header.value]
+                            }}
+                            <!--{{props.item[index]}}-->
+                            <!--{{props.item}}-->
+                            <!--{{header.value}}-->
                         </td>
                     </template>
                 </v-data-table>
+
             </v-card>
         </v-flex>
 
@@ -80,21 +85,22 @@
   import Base from './Base.vue'
   import DateInput from './DateInput'
   import moment from 'moment'
+  import ConnectionManager from './ConnectionManager'
 
   export default {
-    components: {DateInput},
+    components: {ConnectionManager, DateInput},
     name: 'dashboard',
     extends: Base,
     data () {
       return {
-        tabs: [
+        tabItems: [
           {
-            icon: 'data_usage', title: 'Ledger', id: 'ledger',
+            icon: 'data_usage', title: 'Charges', id: 'charges',
             headers: [
-              {text: 'Id', sortable: false, value: 'item'},
-              {text: 'Amount', sortable: false, value: 'quantity'},
-              {text: 'Description', sortable: false, value: 'quantity'},
-              {text: 'Date/Time', sortable: false, value: 'quantity'},
+              {text: 'Id', sortable: false, value: 'id'},
+              {text: 'Amount', sortable: false, value: 'amount', isMoney: true},
+              {text: 'Description', sortable: false, value: 'description'},
+              {text: 'Date/Time', sortable: false, value: 'createdAt'},
             ],
           },
           {
@@ -165,6 +171,7 @@
           },
         ],
         search: '',
+        connecting: false,
         month: null,
         minMonth: null,
         maxMonth: null,
@@ -173,27 +180,37 @@
           rowsPerPage: 6
         },
         currentTab: null,
-        currentItem: null,
-        items: []
+        currentTabItem: null,
+        items: [],
+        spent: 0
       }
     },
     methods: {
       refresh () {
-
+        this.items = []
+        let that = this
+        this.$refs.connectionManager.get('reports', {
+          onSuccess (response) {
+            that.items = that.items.concat(response.data.data)
+            that.spent = response.data.meta.spent
+          }
+        }, {filter: this.currentTabItem.id})
       }
     },
     watch: {
       month (month) {
-        if (month && this.currentTab && !this.connecting) {
+        if (month && this.currentTabItem && !this.connecting) {
           this.refresh()
         }
       },
       currentTab (val) {
         if (this.month && val && !this.connecting) {
-          this.currentItem = this.tabs.find(function (element) {
+          this.currentTabItem = this.tabItems.find(function (element) {
             return element.id === val
           })
-          this.refresh()
+          if (this.currentTabItem) {
+            this.refresh()
+          }
         }
       }
     },
@@ -207,7 +224,7 @@
         todayMonth = '0' + todayMonth
       }
       this.month = today.year() + '-' + todayMonth
-      this.currentTab = 'ledger'
+      this.currentTab = 'charges'
     }
 
   }

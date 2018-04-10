@@ -5,7 +5,7 @@
             permanent
             :disable-route-watcher="true"
             stateless
-            :width="200"
+            :width="250"
             :mini-variant.sync="mini"
             v-model="drawerOpen"
             app>
@@ -15,9 +15,8 @@
                     <img :src="$utils.imageUrl($auth.user().avatar)">
                 </v-list-tile-avatar>
                 <v-list-tile-content>
-                    <v-list-tile-sub-title>
-                        <b>{{$auth.user().name}}</b>
-                    </v-list-tile-sub-title>
+                    <v-list-tile-sub-title><b>{{$auth.user().name}}</b></v-list-tile-sub-title>
+                    <v-list-tile-sub-title>{{$auth.user().email}}</v-list-tile-sub-title>
                 </v-list-tile-content>
             </v-list-tile>
         </v-list>

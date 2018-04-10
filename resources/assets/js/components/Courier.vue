@@ -12,8 +12,7 @@
                 <v-tab href="#rejected">Rejected</v-tab>
             </v-tabs>
             <v-card>
-                <connection-manager ref="connectionManager"
-                                    @onConnectionChange="(status)=> {loading = status}">
+                <connection-manager ref="connectionManager" v-model="loading">
                 </connection-manager>
                 <v-data-iterator
                         content-tag="v-expansion-panel"
@@ -37,8 +36,8 @@
                                     {{ props.item.originFormattedAddress }}
                                 </v-list-tile-sub-title>
                             </v-list-tile-content>
-                            <v-chip color="accent" text-color="white">
-                                <b>{{$utils.formatMoney(props.item.estimatedCost)}}</b>
+                            <v-chip color="accent" label small text-color="white">
+                                <b>{{$utils.formatMoney(props.item.estimatedCost)}} incl. 16% VAT</b>
                             </v-chip>
                             <v-chip v-for="(stat,i) in props.item.stats" :key="i"
                                     small color="primary" text-color="white">

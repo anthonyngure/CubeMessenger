@@ -46,10 +46,10 @@
 		}
 		
 		/**
-		 * @return \Illuminate\Database\Eloquent\Relations\HasOne
+		 * @return \Illuminate\Database\Eloquent\Relations\HasMany
 		 */
-		public function clientOrder()
+		public function clientOrders()
 		{
-			return $this->hasOne(ShopOrder::class);
+			return $this->hasMany(ShopOrder::class);
 		}
 	}

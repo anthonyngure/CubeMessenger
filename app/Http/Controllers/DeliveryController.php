@@ -33,9 +33,45 @@
 			]);
 			
 			if ($request->filter == 'rider') {
-				return $this->riderDeliveries($request);
+				$deliveries = Delivery::whereHas('items', function (Builder $builder) use ($request) {
+					$builder->where('status', 'PENDING_DELIVERY');
+				})->with(['items' => function (HasMany $hasMany) {
+					$hasMany->with(['courierOption' => function (BelongsTo $belongsTo) {
+						$belongsTo->select(['id', 'name', 'plural_name', 'icon']);
+					}])->orderByDesc('id');
+				}])->orderByDesc('id')->get();
+				
+				
+				return $this->collectionResponse($deliveries);
 			} else {
-				return $this->clientDeliveries($request);
+				
+				$client = Auth::user()->getClient();
+				
+				$deliveries = Delivery::whereIn('user_id', $client->users->pluck('id'))
+					->whereHas('items', function (Builder $builder) use ($request) {
+						if ($request->filter == 'pendingApproval') {
+							$builder->where('status', 'AT_DEPARTMENT_HEAD')
+								->orWhere('status', 'AT_PURCHASING_HEAD');
+						} else if ($request->filter == 'pendingDelivery') {
+							$builder->where('status', 'PENDING_DELIVERY')
+								->orWhere('status', 'EN_ROUTE_TO_DESTINATION');
+						} else if ($request->filter == 'delivered') {
+							$builder->where('status', 'AT_DESTINATION');
+						} else {
+							$builder->where('status', 'REJECTED');
+						}
+					})
+					->with(['items' => function (HasMany $hasMany) {
+						$hasMany->with(['rejectedBy', 'courierOption' => function (BelongsTo $belongsTo) {
+							$belongsTo->select(['id', 'name', 'plural_name', 'icon']);
+						}])->orderByDesc('id');
+					}])->orderByDesc('id')
+					//->toSql();
+					->get();
+				
+				//dd($deliveries);
+				
+				return $this->collectionResponse($deliveries);
 			}
 		}
 		
@@ -73,6 +109,8 @@
 			
 			$scheduleDate = $request->json('scheduleDate');
 			$scheduleTime = $request->json('scheduleTime');
+			
+			$this->checkBalance($request->json('estimatedCost'));
 			
 			
 			$delivery = Delivery::create([
@@ -205,91 +243,5 @@
 			//
 		}
 		
-		/**
-		 * @param \Illuminate\Http\Request $request
-		 * @return \Illuminate\Http\Response
-		 * @throws \App\Exceptions\WrappedException
-		 */
-		private function clientDeliveries(Request $request)
-		{
-			$client = $this->getClient();
-			
-			$deliveries = Delivery::whereIn('user_id', $client->users->pluck('id'))
-				->whereHas('items', function (Builder $builder) use ($request) {
-					if ($request->filter == 'pendingApproval') {
-						$builder->where('status', 'AT_DEPARTMENT_HEAD')
-							->orWhere('status', 'AT_PURCHASING_HEAD');
-					} else if ($request->filter == 'pendingDelivery') {
-						$builder->where('status', 'PENDING_DELIVERY')
-							->orWhere('status', 'EN_ROUTE_TO_DESTINATION');
-					} else if ($request->filter == 'delivered') {
-						$builder->where('status', 'AT_DESTINATION');
-					} else {
-						$builder->where('status', 'REJECTED');
-					}
-				})
-				->with(['items' => function (HasMany $hasMany) {
-					$hasMany->with(['rejectedBy', 'courierOption' => function (BelongsTo $belongsTo) {
-						$belongsTo->select(['id', 'name', 'plural_name', 'icon']);
-					}])->orderByDesc('id');
-				}])->orderByDesc('id')
-				//->toSql();
-				->get();
-			
-			//dd($deliveries);
-			
-			$deliveries->each(function (Delivery $delivery) {
-				$stats = array();
-				$courierOptionGroups = $delivery->items->groupBy('courier_option_id');
-				foreach ($courierOptionGroups as $courierOptionGroup) {
-					$totalQuantity = 0;
-					foreach ($courierOptionGroup as $courierOptionDeliveryItem) {
-						$totalQuantity += $courierOptionDeliveryItem->quantity;
-					}
-					array_push($stats, [
-						'courierOption' => $courierOptionGroup->first()->courierOption,
-						'count'         => $totalQuantity,
-					]);
-				}
-				$delivery->stats = $stats;
-			});
-			
-			return $this->collectionResponse($deliveries);
-		}
 		
-		private function riderDeliveries($request)
-		{
-			$deliveries = Delivery::whereHas('items', function (Builder $builder) use ($request) {
-				$builder->where('status', 'PENDING_DELIVERY');
-			})->with(['items' => function (HasMany $hasMany) {
-				$hasMany->with(['courierOption' => function (BelongsTo $belongsTo) {
-					$belongsTo->select(['id', 'name', 'plural_name', 'icon']);
-				}])->orderByDesc('id');
-			}])->orderByDesc('id')->get();
-			
-			$deliveries->each(function (Delivery $delivery) {
-				$stats = array();
-				$courierOptionGroups = $delivery->items->groupBy('courier_option_id');
-				foreach ($courierOptionGroups as $courierOptionGroup) {
-					$totalQuantity = 0;
-					foreach ($courierOptionGroup as $courierOptionDeliveryItem) {
-						$totalQuantity += $courierOptionDeliveryItem->quantity;
-					}
-					array_push($stats, [
-						'courierOption' => $courierOptionGroup->first()->courierOption,
-						'count'         => $totalQuantity,
-					]);
-				}
-				$delivery->stats = $stats;
-			});
-			
-			return $this->collectionResponse($deliveries);
-		}
-		
-		private function calculateDeliveryEstimatedCost(DeliveryItem $deliveryItem)
-		{
-			$costPerItem = ($deliveryItem->estimated_distance / 1000) * 10;
-			
-			return ($deliveryItem->quantity * ($deliveryItem));
-		}
 	}

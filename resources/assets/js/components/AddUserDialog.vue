@@ -6,8 +6,7 @@
                 <v-toolbar-title>Add User</v-toolbar-title>
             </v-toolbar>
 
-            <connection-manager ref="connectionManager"
-                                @onConnectionChange="(status)=>{connecting = status}">
+            <connection-manager ref="connectionManager" v-model="connecting">
             </connection-manager>
 
             <v-card-text>

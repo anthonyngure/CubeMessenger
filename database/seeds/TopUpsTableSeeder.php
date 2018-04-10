@@ -15,7 +15,7 @@
 			
 			$testClient = \App\Client::where('name', 'Test Client')->firstOrFail();
 			$testClient->topUps()->save(new \App\TopUp([
-				'amount' => 50000,
+				'amount' => 5000,
 			]));
 		}
 	}
