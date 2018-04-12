@@ -20,7 +20,7 @@
 			\Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull::class,
 			\App\Http\Middleware\TrustProxies::class,
 			\Barryvdh\Cors\HandleCors::class,
-			\App\Http\Middleware\AddCostVariables::class,
+			\App\Http\Middleware\AddVariables::class,
 		];
 		
 		/**
@@ -40,7 +40,7 @@
 			],
 			
 			'api' => [
-				'throttle:60,1',
+				//'throttle:60,1',
 				'bindings',
 			],
 		];

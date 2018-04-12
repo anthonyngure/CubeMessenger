@@ -1,7 +1,7 @@
 <?php
 /**
  * A helper file for Laravel 5, to provide autocomplete information to your IDE
- * Generated for Laravel 5.5.22 on 2018-02-13.
+ * Generated for Laravel 5.5.39 on 2018-04-11.
  *
  * @author Barry vd. Heuvel <barryvdh@gmail.com>
  * @see https://github.com/barryvdh/laravel-ide-helper
@@ -894,7 +894,7 @@ namespace Illuminate\Support\Facades {
         /**
          * Register a binding with the container.
          *
-         * @param string|array $abstract
+         * @param string $abstract
          * @param \Closure|string|null $concrete
          * @param bool $shared
          * @return void 
@@ -980,7 +980,7 @@ namespace Illuminate\Support\Facades {
         /**
          * Register a shared binding in the container.
          *
-         * @param string|array $abstract
+         * @param string $abstract
          * @param \Closure|string|null $concrete
          * @return void 
          * @static 
@@ -1178,7 +1178,7 @@ namespace Illuminate\Support\Facades {
         /**
          * Register a new resolving callback.
          *
-         * @param string $abstract
+         * @param \Closure|string $abstract
          * @param \Closure|null $callback
          * @return void 
          * @static 
@@ -1192,7 +1192,7 @@ namespace Illuminate\Support\Facades {
         /**
          * Register a new after resolving callback for all types.
          *
-         * @param string $abstract
+         * @param \Closure|string $abstract
          * @param \Closure|null $callback
          * @return void 
          * @static 
@@ -1885,7 +1885,7 @@ namespace Illuminate\Support\Facades {
         /**
          * Get the session store used by the guard.
          *
-         * @return \Illuminate\Contracts\Session\Session. 
+         * @return \Illuminate\Contracts\Session\Session 
          * @static 
          */ 
         public static function getSession()
@@ -2179,6 +2179,17 @@ namespace Illuminate\Support\Facades {
         public static function setEchoFormat($format)
         {
             \Illuminate\View\Compilers\BladeCompiler::setEchoFormat($format);
+        }
+        
+        /**
+         * Set the echo format to double encode entities.
+         *
+         * @return void 
+         * @static 
+         */ 
+        public static function doubleEncode()
+        {
+            \Illuminate\View\Compilers\BladeCompiler::doubleEncode();
         }
         
         /**
@@ -2585,8 +2596,8 @@ namespace Illuminate\Support\Facades {
          * @param string $key The key of the item to store.
          * @param mixed $value The value of the item to store, must be serializable.
          * @param null|int|\DateInterval $ttl Optional. The TTL value of this item. If no value is sent and
-         *                                     the driver supports TTL then the library may set a default value
-         *                                     for it or let the driver take care of that.
+         *                                      the driver supports TTL then the library may set a default value
+         *                                      for it or let the driver take care of that.
          * @return bool True on success and false on failure.
          * @throws \Psr\SimpleCache\InvalidArgumentException
          *   MUST be thrown if the $key string is not a legal value.
@@ -2615,8 +2626,8 @@ namespace Illuminate\Support\Facades {
          *
          * @param \Psr\SimpleCache\iterable $values A list of key => value pairs for a multiple-set operation.
          * @param null|int|\DateInterval $ttl Optional. The TTL value of this item. If no value is sent and
-         *                                      the driver supports TTL then the library may set a default value
-         *                                      for it or let the driver take care of that.
+         *                                       the driver supports TTL then the library may set a default value
+         *                                       for it or let the driver take care of that.
          * @return bool True on success and false on failure.
          * @throws \Psr\SimpleCache\InvalidArgumentException
          *   MUST be thrown if $values is neither an array nor a Traversable,
@@ -3469,8 +3480,7 @@ namespace Illuminate\Support\Facades {
          */ 
         public static function getSchemaBuilder()
         {
-            //Method inherited from \Illuminate\Database\MySqlConnection            
-            return \Larapack\DoctrineSupport\Connections\MySqlConnection::getSchemaBuilder();
+            return \Illuminate\Database\MySqlConnection::getSchemaBuilder();
         }
         
         /**
@@ -3483,8 +3493,7 @@ namespace Illuminate\Support\Facades {
          */ 
         public static function bindValues($statement, $bindings)
         {
-            //Method inherited from \Illuminate\Database\MySqlConnection            
-            \Larapack\DoctrineSupport\Connections\MySqlConnection::bindValues($statement, $bindings);
+            \Illuminate\Database\MySqlConnection::bindValues($statement, $bindings);
         }
         
         /**
@@ -3496,7 +3505,7 @@ namespace Illuminate\Support\Facades {
         public static function useDefaultQueryGrammar()
         {
             //Method inherited from \Illuminate\Database\Connection            
-            \Larapack\DoctrineSupport\Connections\MySqlConnection::useDefaultQueryGrammar();
+            \Illuminate\Database\MySqlConnection::useDefaultQueryGrammar();
         }
         
         /**
@@ -3508,7 +3517,7 @@ namespace Illuminate\Support\Facades {
         public static function useDefaultSchemaGrammar()
         {
             //Method inherited from \Illuminate\Database\Connection            
-            \Larapack\DoctrineSupport\Connections\MySqlConnection::useDefaultSchemaGrammar();
+            \Illuminate\Database\MySqlConnection::useDefaultSchemaGrammar();
         }
         
         /**
@@ -3520,7 +3529,7 @@ namespace Illuminate\Support\Facades {
         public static function useDefaultPostProcessor()
         {
             //Method inherited from \Illuminate\Database\Connection            
-            \Larapack\DoctrineSupport\Connections\MySqlConnection::useDefaultPostProcessor();
+            \Illuminate\Database\MySqlConnection::useDefaultPostProcessor();
         }
         
         /**
@@ -3533,7 +3542,7 @@ namespace Illuminate\Support\Facades {
         public static function table($table)
         {
             //Method inherited from \Illuminate\Database\Connection            
-            return \Larapack\DoctrineSupport\Connections\MySqlConnection::table($table);
+            return \Illuminate\Database\MySqlConnection::table($table);
         }
         
         /**
@@ -3545,7 +3554,7 @@ namespace Illuminate\Support\Facades {
         public static function query()
         {
             //Method inherited from \Illuminate\Database\Connection            
-            return \Larapack\DoctrineSupport\Connections\MySqlConnection::query();
+            return \Illuminate\Database\MySqlConnection::query();
         }
         
         /**
@@ -3560,7 +3569,7 @@ namespace Illuminate\Support\Facades {
         public static function selectOne($query, $bindings = array(), $useReadPdo = true)
         {
             //Method inherited from \Illuminate\Database\Connection            
-            return \Larapack\DoctrineSupport\Connections\MySqlConnection::selectOne($query, $bindings, $useReadPdo);
+            return \Illuminate\Database\MySqlConnection::selectOne($query, $bindings, $useReadPdo);
         }
         
         /**
@@ -3574,7 +3583,7 @@ namespace Illuminate\Support\Facades {
         public static function selectFromWriteConnection($query, $bindings = array())
         {
             //Method inherited from \Illuminate\Database\Connection            
-            return \Larapack\DoctrineSupport\Connections\MySqlConnection::selectFromWriteConnection($query, $bindings);
+            return \Illuminate\Database\MySqlConnection::selectFromWriteConnection($query, $bindings);
         }
         
         /**
@@ -3589,7 +3598,7 @@ namespace Illuminate\Support\Facades {
         public static function select($query, $bindings = array(), $useReadPdo = true)
         {
             //Method inherited from \Illuminate\Database\Connection            
-            return \Larapack\DoctrineSupport\Connections\MySqlConnection::select($query, $bindings, $useReadPdo);
+            return \Illuminate\Database\MySqlConnection::select($query, $bindings, $useReadPdo);
         }
         
         /**
@@ -3604,7 +3613,7 @@ namespace Illuminate\Support\Facades {
         public static function cursor($query, $bindings = array(), $useReadPdo = true)
         {
             //Method inherited from \Illuminate\Database\Connection            
-            return \Larapack\DoctrineSupport\Connections\MySqlConnection::cursor($query, $bindings, $useReadPdo);
+            return \Illuminate\Database\MySqlConnection::cursor($query, $bindings, $useReadPdo);
         }
         
         /**
@@ -3618,7 +3627,7 @@ namespace Illuminate\Support\Facades {
         public static function insert($query, $bindings = array())
         {
             //Method inherited from \Illuminate\Database\Connection            
-            return \Larapack\DoctrineSupport\Connections\MySqlConnection::insert($query, $bindings);
+            return \Illuminate\Database\MySqlConnection::insert($query, $bindings);
         }
         
         /**
@@ -3632,7 +3641,7 @@ namespace Illuminate\Support\Facades {
         public static function update($query, $bindings = array())
         {
             //Method inherited from \Illuminate\Database\Connection            
-            return \Larapack\DoctrineSupport\Connections\MySqlConnection::update($query, $bindings);
+            return \Illuminate\Database\MySqlConnection::update($query, $bindings);
         }
         
         /**
@@ -3646,7 +3655,7 @@ namespace Illuminate\Support\Facades {
         public static function delete($query, $bindings = array())
         {
             //Method inherited from \Illuminate\Database\Connection            
-            return \Larapack\DoctrineSupport\Connections\MySqlConnection::delete($query, $bindings);
+            return \Illuminate\Database\MySqlConnection::delete($query, $bindings);
         }
         
         /**
@@ -3660,7 +3669,7 @@ namespace Illuminate\Support\Facades {
         public static function statement($query, $bindings = array())
         {
             //Method inherited from \Illuminate\Database\Connection            
-            return \Larapack\DoctrineSupport\Connections\MySqlConnection::statement($query, $bindings);
+            return \Illuminate\Database\MySqlConnection::statement($query, $bindings);
         }
         
         /**
@@ -3674,7 +3683,7 @@ namespace Illuminate\Support\Facades {
         public static function affectingStatement($query, $bindings = array())
         {
             //Method inherited from \Illuminate\Database\Connection            
-            return \Larapack\DoctrineSupport\Connections\MySqlConnection::affectingStatement($query, $bindings);
+            return \Illuminate\Database\MySqlConnection::affectingStatement($query, $bindings);
         }
         
         /**
@@ -3687,7 +3696,7 @@ namespace Illuminate\Support\Facades {
         public static function unprepared($query)
         {
             //Method inherited from \Illuminate\Database\Connection            
-            return \Larapack\DoctrineSupport\Connections\MySqlConnection::unprepared($query);
+            return \Illuminate\Database\MySqlConnection::unprepared($query);
         }
         
         /**
@@ -3700,7 +3709,7 @@ namespace Illuminate\Support\Facades {
         public static function pretend($callback)
         {
             //Method inherited from \Illuminate\Database\Connection            
-            return \Larapack\DoctrineSupport\Connections\MySqlConnection::pretend($callback);
+            return \Illuminate\Database\MySqlConnection::pretend($callback);
         }
         
         /**
@@ -3713,7 +3722,7 @@ namespace Illuminate\Support\Facades {
         public static function prepareBindings($bindings)
         {
             //Method inherited from \Illuminate\Database\Connection            
-            return \Larapack\DoctrineSupport\Connections\MySqlConnection::prepareBindings($bindings);
+            return \Illuminate\Database\MySqlConnection::prepareBindings($bindings);
         }
         
         /**
@@ -3728,7 +3737,7 @@ namespace Illuminate\Support\Facades {
         public static function logQuery($query, $bindings, $time = null)
         {
             //Method inherited from \Illuminate\Database\Connection            
-            \Larapack\DoctrineSupport\Connections\MySqlConnection::logQuery($query, $bindings, $time);
+            \Illuminate\Database\MySqlConnection::logQuery($query, $bindings, $time);
         }
         
         /**
@@ -3741,7 +3750,7 @@ namespace Illuminate\Support\Facades {
         public static function listen($callback)
         {
             //Method inherited from \Illuminate\Database\Connection            
-            \Larapack\DoctrineSupport\Connections\MySqlConnection::listen($callback);
+            \Illuminate\Database\MySqlConnection::listen($callback);
         }
         
         /**
@@ -3754,7 +3763,7 @@ namespace Illuminate\Support\Facades {
         public static function raw($value)
         {
             //Method inherited from \Illuminate\Database\Connection            
-            return \Larapack\DoctrineSupport\Connections\MySqlConnection::raw($value);
+            return \Illuminate\Database\MySqlConnection::raw($value);
         }
         
         /**
@@ -3767,7 +3776,7 @@ namespace Illuminate\Support\Facades {
         public static function recordsHaveBeenModified($value = true)
         {
             //Method inherited from \Illuminate\Database\Connection            
-            \Larapack\DoctrineSupport\Connections\MySqlConnection::recordsHaveBeenModified($value);
+            \Illuminate\Database\MySqlConnection::recordsHaveBeenModified($value);
         }
         
         /**
@@ -3779,7 +3788,7 @@ namespace Illuminate\Support\Facades {
         public static function isDoctrineAvailable()
         {
             //Method inherited from \Illuminate\Database\Connection            
-            return \Larapack\DoctrineSupport\Connections\MySqlConnection::isDoctrineAvailable();
+            return \Illuminate\Database\MySqlConnection::isDoctrineAvailable();
         }
         
         /**
@@ -3793,7 +3802,7 @@ namespace Illuminate\Support\Facades {
         public static function getDoctrineColumn($table, $column)
         {
             //Method inherited from \Illuminate\Database\Connection            
-            return \Larapack\DoctrineSupport\Connections\MySqlConnection::getDoctrineColumn($table, $column);
+            return \Illuminate\Database\MySqlConnection::getDoctrineColumn($table, $column);
         }
         
         /**
@@ -3805,7 +3814,7 @@ namespace Illuminate\Support\Facades {
         public static function getDoctrineSchemaManager()
         {
             //Method inherited from \Illuminate\Database\Connection            
-            return \Larapack\DoctrineSupport\Connections\MySqlConnection::getDoctrineSchemaManager();
+            return \Illuminate\Database\MySqlConnection::getDoctrineSchemaManager();
         }
         
         /**
@@ -3817,7 +3826,7 @@ namespace Illuminate\Support\Facades {
         public static function getDoctrineConnection()
         {
             //Method inherited from \Illuminate\Database\Connection            
-            return \Larapack\DoctrineSupport\Connections\MySqlConnection::getDoctrineConnection();
+            return \Illuminate\Database\MySqlConnection::getDoctrineConnection();
         }
         
         /**
@@ -3829,7 +3838,7 @@ namespace Illuminate\Support\Facades {
         public static function getPdo()
         {
             //Method inherited from \Illuminate\Database\Connection            
-            return \Larapack\DoctrineSupport\Connections\MySqlConnection::getPdo();
+            return \Illuminate\Database\MySqlConnection::getPdo();
         }
         
         /**
@@ -3841,7 +3850,7 @@ namespace Illuminate\Support\Facades {
         public static function getReadPdo()
         {
             //Method inherited from \Illuminate\Database\Connection            
-            return \Larapack\DoctrineSupport\Connections\MySqlConnection::getReadPdo();
+            return \Illuminate\Database\MySqlConnection::getReadPdo();
         }
         
         /**
@@ -3854,7 +3863,7 @@ namespace Illuminate\Support\Facades {
         public static function setPdo($pdo)
         {
             //Method inherited from \Illuminate\Database\Connection            
-            return \Larapack\DoctrineSupport\Connections\MySqlConnection::setPdo($pdo);
+            return \Illuminate\Database\MySqlConnection::setPdo($pdo);
         }
         
         /**
@@ -3867,7 +3876,7 @@ namespace Illuminate\Support\Facades {
         public static function setReadPdo($pdo)
         {
             //Method inherited from \Illuminate\Database\Connection            
-            return \Larapack\DoctrineSupport\Connections\MySqlConnection::setReadPdo($pdo);
+            return \Illuminate\Database\MySqlConnection::setReadPdo($pdo);
         }
         
         /**
@@ -3880,7 +3889,7 @@ namespace Illuminate\Support\Facades {
         public static function setReconnector($reconnector)
         {
             //Method inherited from \Illuminate\Database\Connection            
-            return \Larapack\DoctrineSupport\Connections\MySqlConnection::setReconnector($reconnector);
+            return \Illuminate\Database\MySqlConnection::setReconnector($reconnector);
         }
         
         /**
@@ -3892,7 +3901,7 @@ namespace Illuminate\Support\Facades {
         public static function getName()
         {
             //Method inherited from \Illuminate\Database\Connection            
-            return \Larapack\DoctrineSupport\Connections\MySqlConnection::getName();
+            return \Illuminate\Database\MySqlConnection::getName();
         }
         
         /**
@@ -3905,7 +3914,7 @@ namespace Illuminate\Support\Facades {
         public static function getConfig($option = null)
         {
             //Method inherited from \Illuminate\Database\Connection            
-            return \Larapack\DoctrineSupport\Connections\MySqlConnection::getConfig($option);
+            return \Illuminate\Database\MySqlConnection::getConfig($option);
         }
         
         /**
@@ -3917,7 +3926,7 @@ namespace Illuminate\Support\Facades {
         public static function getDriverName()
         {
             //Method inherited from \Illuminate\Database\Connection            
-            return \Larapack\DoctrineSupport\Connections\MySqlConnection::getDriverName();
+            return \Illuminate\Database\MySqlConnection::getDriverName();
         }
         
         /**
@@ -3929,7 +3938,7 @@ namespace Illuminate\Support\Facades {
         public static function getQueryGrammar()
         {
             //Method inherited from \Illuminate\Database\Connection            
-            return \Larapack\DoctrineSupport\Connections\MySqlConnection::getQueryGrammar();
+            return \Illuminate\Database\MySqlConnection::getQueryGrammar();
         }
         
         /**
@@ -3942,7 +3951,7 @@ namespace Illuminate\Support\Facades {
         public static function setQueryGrammar($grammar)
         {
             //Method inherited from \Illuminate\Database\Connection            
-            \Larapack\DoctrineSupport\Connections\MySqlConnection::setQueryGrammar($grammar);
+            \Illuminate\Database\MySqlConnection::setQueryGrammar($grammar);
         }
         
         /**
@@ -3954,7 +3963,7 @@ namespace Illuminate\Support\Facades {
         public static function getSchemaGrammar()
         {
             //Method inherited from \Illuminate\Database\Connection            
-            return \Larapack\DoctrineSupport\Connections\MySqlConnection::getSchemaGrammar();
+            return \Illuminate\Database\MySqlConnection::getSchemaGrammar();
         }
         
         /**
@@ -3967,7 +3976,7 @@ namespace Illuminate\Support\Facades {
         public static function setSchemaGrammar($grammar)
         {
             //Method inherited from \Illuminate\Database\Connection            
-            \Larapack\DoctrineSupport\Connections\MySqlConnection::setSchemaGrammar($grammar);
+            \Illuminate\Database\MySqlConnection::setSchemaGrammar($grammar);
         }
         
         /**
@@ -3979,7 +3988,7 @@ namespace Illuminate\Support\Facades {
         public static function getPostProcessor()
         {
             //Method inherited from \Illuminate\Database\Connection            
-            return \Larapack\DoctrineSupport\Connections\MySqlConnection::getPostProcessor();
+            return \Illuminate\Database\MySqlConnection::getPostProcessor();
         }
         
         /**
@@ -3992,7 +4001,7 @@ namespace Illuminate\Support\Facades {
         public static function setPostProcessor($processor)
         {
             //Method inherited from \Illuminate\Database\Connection            
-            \Larapack\DoctrineSupport\Connections\MySqlConnection::setPostProcessor($processor);
+            \Illuminate\Database\MySqlConnection::setPostProcessor($processor);
         }
         
         /**
@@ -4004,7 +4013,7 @@ namespace Illuminate\Support\Facades {
         public static function getEventDispatcher()
         {
             //Method inherited from \Illuminate\Database\Connection            
-            return \Larapack\DoctrineSupport\Connections\MySqlConnection::getEventDispatcher();
+            return \Illuminate\Database\MySqlConnection::getEventDispatcher();
         }
         
         /**
@@ -4017,7 +4026,7 @@ namespace Illuminate\Support\Facades {
         public static function setEventDispatcher($events)
         {
             //Method inherited from \Illuminate\Database\Connection            
-            \Larapack\DoctrineSupport\Connections\MySqlConnection::setEventDispatcher($events);
+            \Illuminate\Database\MySqlConnection::setEventDispatcher($events);
         }
         
         /**
@@ -4029,7 +4038,7 @@ namespace Illuminate\Support\Facades {
         public static function pretending()
         {
             //Method inherited from \Illuminate\Database\Connection            
-            return \Larapack\DoctrineSupport\Connections\MySqlConnection::pretending();
+            return \Illuminate\Database\MySqlConnection::pretending();
         }
         
         /**
@@ -4041,7 +4050,7 @@ namespace Illuminate\Support\Facades {
         public static function getQueryLog()
         {
             //Method inherited from \Illuminate\Database\Connection            
-            return \Larapack\DoctrineSupport\Connections\MySqlConnection::getQueryLog();
+            return \Illuminate\Database\MySqlConnection::getQueryLog();
         }
         
         /**
@@ -4053,7 +4062,7 @@ namespace Illuminate\Support\Facades {
         public static function flushQueryLog()
         {
             //Method inherited from \Illuminate\Database\Connection            
-            \Larapack\DoctrineSupport\Connections\MySqlConnection::flushQueryLog();
+            \Illuminate\Database\MySqlConnection::flushQueryLog();
         }
         
         /**
@@ -4065,7 +4074,7 @@ namespace Illuminate\Support\Facades {
         public static function enableQueryLog()
         {
             //Method inherited from \Illuminate\Database\Connection            
-            \Larapack\DoctrineSupport\Connections\MySqlConnection::enableQueryLog();
+            \Illuminate\Database\MySqlConnection::enableQueryLog();
         }
         
         /**
@@ -4077,7 +4086,7 @@ namespace Illuminate\Support\Facades {
         public static function disableQueryLog()
         {
             //Method inherited from \Illuminate\Database\Connection            
-            \Larapack\DoctrineSupport\Connections\MySqlConnection::disableQueryLog();
+            \Illuminate\Database\MySqlConnection::disableQueryLog();
         }
         
         /**
@@ -4089,7 +4098,7 @@ namespace Illuminate\Support\Facades {
         public static function logging()
         {
             //Method inherited from \Illuminate\Database\Connection            
-            return \Larapack\DoctrineSupport\Connections\MySqlConnection::logging();
+            return \Illuminate\Database\MySqlConnection::logging();
         }
         
         /**
@@ -4101,7 +4110,7 @@ namespace Illuminate\Support\Facades {
         public static function getDatabaseName()
         {
             //Method inherited from \Illuminate\Database\Connection            
-            return \Larapack\DoctrineSupport\Connections\MySqlConnection::getDatabaseName();
+            return \Illuminate\Database\MySqlConnection::getDatabaseName();
         }
         
         /**
@@ -4114,7 +4123,7 @@ namespace Illuminate\Support\Facades {
         public static function setDatabaseName($database)
         {
             //Method inherited from \Illuminate\Database\Connection            
-            return \Larapack\DoctrineSupport\Connections\MySqlConnection::setDatabaseName($database);
+            return \Illuminate\Database\MySqlConnection::setDatabaseName($database);
         }
         
         /**
@@ -4126,7 +4135,7 @@ namespace Illuminate\Support\Facades {
         public static function getTablePrefix()
         {
             //Method inherited from \Illuminate\Database\Connection            
-            return \Larapack\DoctrineSupport\Connections\MySqlConnection::getTablePrefix();
+            return \Illuminate\Database\MySqlConnection::getTablePrefix();
         }
         
         /**
@@ -4139,7 +4148,7 @@ namespace Illuminate\Support\Facades {
         public static function setTablePrefix($prefix)
         {
             //Method inherited from \Illuminate\Database\Connection            
-            \Larapack\DoctrineSupport\Connections\MySqlConnection::setTablePrefix($prefix);
+            \Illuminate\Database\MySqlConnection::setTablePrefix($prefix);
         }
         
         /**
@@ -4152,7 +4161,7 @@ namespace Illuminate\Support\Facades {
         public static function withTablePrefix($grammar)
         {
             //Method inherited from \Illuminate\Database\Connection            
-            return \Larapack\DoctrineSupport\Connections\MySqlConnection::withTablePrefix($grammar);
+            return \Illuminate\Database\MySqlConnection::withTablePrefix($grammar);
         }
         
         /**
@@ -4166,7 +4175,7 @@ namespace Illuminate\Support\Facades {
         public static function resolverFor($driver, $callback)
         {
             //Method inherited from \Illuminate\Database\Connection            
-            \Larapack\DoctrineSupport\Connections\MySqlConnection::resolverFor($driver, $callback);
+            \Illuminate\Database\MySqlConnection::resolverFor($driver, $callback);
         }
         
         /**
@@ -4179,7 +4188,7 @@ namespace Illuminate\Support\Facades {
         public static function getResolver($driver)
         {
             //Method inherited from \Illuminate\Database\Connection            
-            return \Larapack\DoctrineSupport\Connections\MySqlConnection::getResolver($driver);
+            return \Illuminate\Database\MySqlConnection::getResolver($driver);
         }
         
         /**
@@ -4194,7 +4203,7 @@ namespace Illuminate\Support\Facades {
         public static function transaction($callback, $attempts = 1)
         {
             //Method inherited from \Illuminate\Database\Connection            
-            return \Larapack\DoctrineSupport\Connections\MySqlConnection::transaction($callback, $attempts);
+            return \Illuminate\Database\MySqlConnection::transaction($callback, $attempts);
         }
         
         /**
@@ -4207,7 +4216,7 @@ namespace Illuminate\Support\Facades {
         public static function beginTransaction()
         {
             //Method inherited from \Illuminate\Database\Connection            
-            \Larapack\DoctrineSupport\Connections\MySqlConnection::beginTransaction();
+            \Illuminate\Database\MySqlConnection::beginTransaction();
         }
         
         /**
@@ -4219,7 +4228,7 @@ namespace Illuminate\Support\Facades {
         public static function commit()
         {
             //Method inherited from \Illuminate\Database\Connection            
-            \Larapack\DoctrineSupport\Connections\MySqlConnection::commit();
+            \Illuminate\Database\MySqlConnection::commit();
         }
         
         /**
@@ -4232,7 +4241,7 @@ namespace Illuminate\Support\Facades {
         public static function rollBack($toLevel = null)
         {
             //Method inherited from \Illuminate\Database\Connection            
-            \Larapack\DoctrineSupport\Connections\MySqlConnection::rollBack($toLevel);
+            \Illuminate\Database\MySqlConnection::rollBack($toLevel);
         }
         
         /**
@@ -4244,7 +4253,7 @@ namespace Illuminate\Support\Facades {
         public static function transactionLevel()
         {
             //Method inherited from \Illuminate\Database\Connection            
-            return \Larapack\DoctrineSupport\Connections\MySqlConnection::transactionLevel();
+            return \Illuminate\Database\MySqlConnection::transactionLevel();
         }
          
     }
@@ -5821,7 +5830,7 @@ namespace Illuminate\Support\Facades {
          *
          * @param string|array $view
          * @param array $data
-         * @return \Illuminate\View\View 
+         * @return string 
          * @static 
          */ 
         public static function render($view, $data = array())
@@ -6938,24 +6947,24 @@ namespace Illuminate\Support\Facades {
          * Merge new input into the current request's input array.
          *
          * @param array $input
-         * @return void 
+         * @return \Illuminate\Http\Request 
          * @static 
          */ 
         public static function merge($input)
         {
-            \Illuminate\Http\Request::merge($input);
+            return \Illuminate\Http\Request::merge($input);
         }
         
         /**
          * Replace the input for the current request.
          *
          * @param array $input
-         * @return void 
+         * @return \Illuminate\Http\Request 
          * @static 
          */ 
         public static function replace($input)
         {
-            \Illuminate\Http\Request::replace($input);
+            return \Illuminate\Http\Request::replace($input);
         }
         
         /**
@@ -6963,7 +6972,7 @@ namespace Illuminate\Support\Facades {
          *
          * @param string $key
          * @param mixed $default
-         * @return mixed 
+         * @return \Symfony\Component\HttpFoundation\ParameterBag|mixed 
          * @static 
          */ 
         public static function json($key = null, $default = null)
@@ -7063,7 +7072,7 @@ namespace Illuminate\Support\Facades {
         /**
          * Set the JSON payload for the request.
          *
-         * @param array $json
+         * @param \Symfony\Component\HttpFoundation\ParameterBag $json
          * @return $this 
          * @static 
          */ 
@@ -7189,7 +7198,7 @@ namespace Illuminate\Support\Facades {
          * @param array $cookies The COOKIE parameters
          * @param array $files The FILES parameters
          * @param array $server The SERVER parameters
-         * @param string|resource $content The raw body data
+         * @param string|resource|null $content The raw body data
          * @static 
          */ 
         public static function initialize($query = array(), $request = array(), $attributes = array(), $cookies = array(), $files = array(), $server = array(), $content = null)
@@ -7222,7 +7231,7 @@ namespace Illuminate\Support\Facades {
          * @param array $cookies The request cookies ($_COOKIE)
          * @param array $files The request files ($_FILES)
          * @param array $server The server parameters ($_SERVER)
-         * @param string $content The raw body data
+         * @param string|resource|null $content The raw body data
          * @return static 
          * @static 
          */ 
@@ -11017,6 +11026,17 @@ namespace Illuminate\Support\Facades {
         }
         
         /**
+         * Flush the Flysystem cache.
+         *
+         * @return void 
+         * @static 
+         */ 
+        public static function flushCache()
+        {
+            \Illuminate\Filesystem\FilesystemAdapter::flushCache();
+        }
+        
+        /**
          * Get the Flysystem driver.
          *
          * @return \League\Flysystem\FilesystemInterface 
@@ -11233,6 +11253,17 @@ namespace Illuminate\Support\Facades {
         public static function defaults($defaults)
         {
             \Illuminate\Routing\UrlGenerator::defaults($defaults);
+        }
+        
+        /**
+         * Get the default named parameters used by the URL generator.
+         *
+         * @return array 
+         * @static 
+         */ 
+        public static function getDefaultParameters()
+        {
+            return \Illuminate\Routing\UrlGenerator::getDefaultParameters();
         }
         
         /**
@@ -12287,505 +12318,6 @@ namespace Illuminate\Support\Facades {
  
 }
 
-namespace Tymon\JWTAuth\Facades { 
-
-    class JWTAuth {
-        
-        /**
-         * Attempt to authenticate the user and return the token.
-         *
-         * @param array $credentials
-         * @return false|string 
-         * @static 
-         */ 
-        public static function attempt($credentials)
-        {
-            return \Tymon\JWTAuth\JWTAuth::attempt($credentials);
-        }
-        
-        /**
-         * Authenticate a user via a token.
-         *
-         * @return \Tymon\JWTAuth\Contracts\JWTSubject|false 
-         * @static 
-         */ 
-        public static function authenticate()
-        {
-            return \Tymon\JWTAuth\JWTAuth::authenticate();
-        }
-        
-        /**
-         * Alias for authenticate().
-         *
-         * @return \Tymon\JWTAuth\Contracts\JWTSubject|false 
-         * @static 
-         */ 
-        public static function toUser()
-        {
-            return \Tymon\JWTAuth\JWTAuth::toUser();
-        }
-        
-        /**
-         * Get the authenticated user.
-         *
-         * @return \Tymon\JWTAuth\Contracts\JWTSubject 
-         * @static 
-         */ 
-        public static function user()
-        {
-            return \Tymon\JWTAuth\JWTAuth::user();
-        }
-        
-        /**
-         * Generate a token for a given subject.
-         *
-         * @param \Tymon\JWTAuth\Contracts\JWTSubject $subject
-         * @return string 
-         * @static 
-         */ 
-        public static function fromSubject($subject)
-        {
-            //Method inherited from \Tymon\JWTAuth\JWT            
-            return \Tymon\JWTAuth\JWTAuth::fromSubject($subject);
-        }
-        
-        /**
-         * Alias to generate a token for a given user.
-         *
-         * @param \Tymon\JWTAuth\Contracts\JWTSubject $user
-         * @return string 
-         * @static 
-         */ 
-        public static function fromUser($user)
-        {
-            //Method inherited from \Tymon\JWTAuth\JWT            
-            return \Tymon\JWTAuth\JWTAuth::fromUser($user);
-        }
-        
-        /**
-         * Refresh an expired token.
-         *
-         * @param bool $forceForever
-         * @param bool $resetClaims
-         * @return string 
-         * @static 
-         */ 
-        public static function refresh($forceForever = false, $resetClaims = false)
-        {
-            //Method inherited from \Tymon\JWTAuth\JWT            
-            return \Tymon\JWTAuth\JWTAuth::refresh($forceForever, $resetClaims);
-        }
-        
-        /**
-         * Invalidate a token (add it to the blacklist).
-         *
-         * @param bool $forceForever
-         * @return $this 
-         * @static 
-         */ 
-        public static function invalidate($forceForever = false)
-        {
-            //Method inherited from \Tymon\JWTAuth\JWT            
-            return \Tymon\JWTAuth\JWTAuth::invalidate($forceForever);
-        }
-        
-        /**
-         * Alias to get the payload, and as a result checks that
-         * the token is valid i.e. not expired or blacklisted.
-         *
-         * @throws \Tymon\JWTAuth\Exceptions\JWTException
-         * @return \Tymon\JWTAuth\Payload 
-         * @static 
-         */ 
-        public static function checkOrFail()
-        {
-            //Method inherited from \Tymon\JWTAuth\JWT            
-            return \Tymon\JWTAuth\JWTAuth::checkOrFail();
-        }
-        
-        /**
-         * Check that the token is valid.
-         *
-         * @param bool $getPayload
-         * @return \Tymon\JWTAuth\Payload|bool 
-         * @static 
-         */ 
-        public static function check($getPayload = false)
-        {
-            //Method inherited from \Tymon\JWTAuth\JWT            
-            return \Tymon\JWTAuth\JWTAuth::check($getPayload);
-        }
-        
-        /**
-         * Get the token.
-         *
-         * @return \Tymon\JWTAuth\Token|false 
-         * @static 
-         */ 
-        public static function getToken()
-        {
-            //Method inherited from \Tymon\JWTAuth\JWT            
-            return \Tymon\JWTAuth\JWTAuth::getToken();
-        }
-        
-        /**
-         * Parse the token from the request.
-         *
-         * @throws \Tymon\JWTAuth\Exceptions\JWTException
-         * @return $this 
-         * @static 
-         */ 
-        public static function parseToken()
-        {
-            //Method inherited from \Tymon\JWTAuth\JWT            
-            return \Tymon\JWTAuth\JWTAuth::parseToken();
-        }
-        
-        /**
-         * Get the raw Payload instance.
-         *
-         * @return \Tymon\JWTAuth\Payload 
-         * @static 
-         */ 
-        public static function getPayload()
-        {
-            //Method inherited from \Tymon\JWTAuth\JWT            
-            return \Tymon\JWTAuth\JWTAuth::getPayload();
-        }
-        
-        /**
-         * Alias for getPayload().
-         *
-         * @return \Tymon\JWTAuth\Payload 
-         * @static 
-         */ 
-        public static function payload()
-        {
-            //Method inherited from \Tymon\JWTAuth\JWT            
-            return \Tymon\JWTAuth\JWTAuth::payload();
-        }
-        
-        /**
-         * Convenience method to get a claim value.
-         *
-         * @param string $claim
-         * @return mixed 
-         * @static 
-         */ 
-        public static function getClaim($claim)
-        {
-            //Method inherited from \Tymon\JWTAuth\JWT            
-            return \Tymon\JWTAuth\JWTAuth::getClaim($claim);
-        }
-        
-        /**
-         * Create a Payload instance.
-         *
-         * @param \Tymon\JWTAuth\Contracts\JWTSubject $subject
-         * @return \Tymon\JWTAuth\Payload 
-         * @static 
-         */ 
-        public static function makePayload($subject)
-        {
-            //Method inherited from \Tymon\JWTAuth\JWT            
-            return \Tymon\JWTAuth\JWTAuth::makePayload($subject);
-        }
-        
-        /**
-         * Check if the provider matches the one saved in the token.
-         *
-         * @param string|object $provider
-         * @return bool 
-         * @static 
-         */ 
-        public static function checkProvider($provider)
-        {
-            //Method inherited from \Tymon\JWTAuth\JWT            
-            return \Tymon\JWTAuth\JWTAuth::checkProvider($provider);
-        }
-        
-        /**
-         * Set the token.
-         *
-         * @param \Tymon\JWTAuth\Token|string $token
-         * @return $this 
-         * @static 
-         */ 
-        public static function setToken($token)
-        {
-            //Method inherited from \Tymon\JWTAuth\JWT            
-            return \Tymon\JWTAuth\JWTAuth::setToken($token);
-        }
-        
-        /**
-         * Unset the current token.
-         *
-         * @return $this 
-         * @static 
-         */ 
-        public static function unsetToken()
-        {
-            //Method inherited from \Tymon\JWTAuth\JWT            
-            return \Tymon\JWTAuth\JWTAuth::unsetToken();
-        }
-        
-        /**
-         * Set the request instance.
-         *
-         * @param \Illuminate\Http\Request $request
-         * @return $this 
-         * @static 
-         */ 
-        public static function setRequest($request)
-        {
-            //Method inherited from \Tymon\JWTAuth\JWT            
-            return \Tymon\JWTAuth\JWTAuth::setRequest($request);
-        }
-        
-        /**
-         * Get the Manager instance.
-         *
-         * @return \Tymon\JWTAuth\Manager 
-         * @static 
-         */ 
-        public static function manager()
-        {
-            //Method inherited from \Tymon\JWTAuth\JWT            
-            return \Tymon\JWTAuth\JWTAuth::manager();
-        }
-        
-        /**
-         * Get the Parser instance.
-         *
-         * @return \Tymon\JWTAuth\Http\Parser\Parser 
-         * @static 
-         */ 
-        public static function parser()
-        {
-            //Method inherited from \Tymon\JWTAuth\JWT            
-            return \Tymon\JWTAuth\JWTAuth::parser();
-        }
-        
-        /**
-         * Get the Payload Factory.
-         *
-         * @return \Tymon\JWTAuth\Factory 
-         * @static 
-         */ 
-        public static function factory()
-        {
-            //Method inherited from \Tymon\JWTAuth\JWT            
-            return \Tymon\JWTAuth\JWTAuth::factory();
-        }
-        
-        /**
-         * Get the Blacklist.
-         *
-         * @return \Tymon\JWTAuth\Blacklist 
-         * @static 
-         */ 
-        public static function blacklist()
-        {
-            //Method inherited from \Tymon\JWTAuth\JWT            
-            return \Tymon\JWTAuth\JWTAuth::blacklist();
-        }
-        
-        /**
-         * Set the custom claims.
-         *
-         * @param array $customClaims
-         * @return $this 
-         * @static 
-         */ 
-        public static function customClaims($customClaims)
-        {
-            //Method inherited from \Tymon\JWTAuth\JWT            
-            return \Tymon\JWTAuth\JWTAuth::customClaims($customClaims);
-        }
-        
-        /**
-         * Alias to set the custom claims.
-         *
-         * @param array $customClaims
-         * @return $this 
-         * @static 
-         */ 
-        public static function claims($customClaims)
-        {
-            //Method inherited from \Tymon\JWTAuth\JWT            
-            return \Tymon\JWTAuth\JWTAuth::claims($customClaims);
-        }
-        
-        /**
-         * Get the custom claims.
-         *
-         * @return array 
-         * @static 
-         */ 
-        public static function getCustomClaims()
-        {
-            //Method inherited from \Tymon\JWTAuth\JWT            
-            return \Tymon\JWTAuth\JWTAuth::getCustomClaims();
-        }
-         
-    }
-
-    class JWTFactory {
-        
-        /**
-         * Create the Payload instance.
-         *
-         * @param bool $resetClaims
-         * @return \Tymon\JWTAuth\Payload 
-         * @static 
-         */ 
-        public static function make($resetClaims = false)
-        {
-            return \Tymon\JWTAuth\Factory::make($resetClaims);
-        }
-        
-        /**
-         * Empty the claims collection.
-         *
-         * @return $this 
-         * @static 
-         */ 
-        public static function emptyClaims()
-        {
-            return \Tymon\JWTAuth\Factory::emptyClaims();
-        }
-        
-        /**
-         * Build and get the Claims Collection.
-         *
-         * @return \Tymon\JWTAuth\Claims\Collection 
-         * @static 
-         */ 
-        public static function buildClaimsCollection()
-        {
-            return \Tymon\JWTAuth\Factory::buildClaimsCollection();
-        }
-        
-        /**
-         * Get a Payload instance with a claims collection.
-         *
-         * @param \Tymon\JWTAuth\Claims\Collection $claims
-         * @return \Tymon\JWTAuth\Payload 
-         * @static 
-         */ 
-        public static function withClaims($claims)
-        {
-            return \Tymon\JWTAuth\Factory::withClaims($claims);
-        }
-        
-        /**
-         * Set the default claims to be added to the Payload.
-         *
-         * @param array $claims
-         * @return $this 
-         * @static 
-         */ 
-        public static function setDefaultClaims($claims)
-        {
-            return \Tymon\JWTAuth\Factory::setDefaultClaims($claims);
-        }
-        
-        /**
-         * Helper to set the ttl.
-         *
-         * @param int $ttl
-         * @return $this 
-         * @static 
-         */ 
-        public static function setTTL($ttl)
-        {
-            return \Tymon\JWTAuth\Factory::setTTL($ttl);
-        }
-        
-        /**
-         * Helper to get the ttl.
-         *
-         * @return int 
-         * @static 
-         */ 
-        public static function getTTL()
-        {
-            return \Tymon\JWTAuth\Factory::getTTL();
-        }
-        
-        /**
-         * Get the default claims.
-         *
-         * @return array 
-         * @static 
-         */ 
-        public static function getDefaultClaims()
-        {
-            return \Tymon\JWTAuth\Factory::getDefaultClaims();
-        }
-        
-        /**
-         * Get the PayloadValidator instance.
-         *
-         * @return \Tymon\JWTAuth\Validators\PayloadValidator 
-         * @static 
-         */ 
-        public static function validator()
-        {
-            return \Tymon\JWTAuth\Factory::validator();
-        }
-        
-        /**
-         * Set the custom claims.
-         *
-         * @param array $customClaims
-         * @return $this 
-         * @static 
-         */ 
-        public static function customClaims($customClaims)
-        {
-            return \Tymon\JWTAuth\Factory::customClaims($customClaims);
-        }
-        
-        /**
-         * Alias to set the custom claims.
-         *
-         * @param array $customClaims
-         * @return $this 
-         * @static 
-         */ 
-        public static function claims($customClaims)
-        {
-            return \Tymon\JWTAuth\Factory::claims($customClaims);
-        }
-        
-        /**
-         * Get the custom claims.
-         *
-         * @return array 
-         * @static 
-         */ 
-        public static function getCustomClaims()
-        {
-            return \Tymon\JWTAuth\Factory::getCustomClaims();
-        }
-        
-        /**
-         * Set the refresh flow flag.
-         *
-         * @param bool $refreshFlow
-         * @return $this 
-         * @static 
-         */ 
-        public static function setRefreshFlow($refreshFlow = true)
-        {
-            return \Tymon\JWTAuth\Factory::setRefreshFlow($refreshFlow);
-        }
-         
-    }
- 
-}
-
 namespace Spatie\Fractal { 
 
     class FractalFacade {
@@ -13148,299 +12680,773 @@ namespace Intervention\Image\Facades {
  
 }
 
-namespace Arrilot\Widgets { 
+namespace Artisaninweb\SoapWrapper { 
 
     class Facade {
         
         /**
-         * Run widget without magic method.
+         * Add a new service to the wrapper
          *
+         * @param string $name
+         * @param \Closure $closure
+         * @return $this 
+         * @throws ServiceAlreadyExists
+         * @static 
+         */ 
+        public static function add($name, $closure)
+        {
+            return \Artisaninweb\SoapWrapper\SoapWrapper::add($name, $closure);
+        }
+        
+        /**
+         * Add services by array
+         *
+         * @param array $services
+         * @return $this 
+         * @throws ServiceAlreadyExists
+         * @throws ServiceMethodNotExists
+         * @static 
+         */ 
+        public static function addByArray($services = array())
+        {
+            return \Artisaninweb\SoapWrapper\SoapWrapper::addByArray($services);
+        }
+        
+        /**
+         * Get the client
+         *
+         * @param string $name
+         * @param \Closure $closure
+         * @return mixed 
+         * @throws ServiceNotFound
+         * @static 
+         */ 
+        public static function client($name, $closure = null)
+        {
+            return \Artisaninweb\SoapWrapper\SoapWrapper::client($name, $closure);
+        }
+        
+        /**
+         * A easy access call method
+         *
+         * @param string $call
+         * @param array $data
          * @return mixed 
          * @static 
          */ 
-        public static function run()
+        public static function call($call, $data = array())
         {
-            return \Arrilot\Widgets\Factories\WidgetFactory::run();
+            return \Artisaninweb\SoapWrapper\SoapWrapper::call($call, $data);
         }
         
         /**
-         * Encrypt widget params to be transported via HTTP.
+         * Check if wrapper has service
          *
-         * @param string $params
-         * @return string 
+         * @param string $name
+         * @return bool 
          * @static 
          */ 
-        public static function encryptWidgetParams($params)
+        public static function has($name)
         {
-            //Method inherited from \Arrilot\Widgets\Factories\AbstractWidgetFactory            
-            return \Arrilot\Widgets\Factories\WidgetFactory::encryptWidgetParams($params);
-        }
-        
-        /**
-         * Decrypt widget params that were transported via HTTP.
-         *
-         * @param string $params
-         * @return string 
-         * @static 
-         */ 
-        public static function decryptWidgetParams($params)
-        {
-            //Method inherited from \Arrilot\Widgets\Factories\AbstractWidgetFactory            
-            return \Arrilot\Widgets\Factories\WidgetFactory::decryptWidgetParams($params);
-        }
-         
-    }
-
-    class AsyncFacade {
-        
-        /**
-         * Run widget without magic method.
-         *
-         * @return mixed 
-         * @static 
-         */ 
-        public static function run()
-        {
-            return \Arrilot\Widgets\Factories\AsyncWidgetFactory::run();
-        }
-        
-        /**
-         * Encrypt widget params to be transported via HTTP.
-         *
-         * @param string $params
-         * @return string 
-         * @static 
-         */ 
-        public static function encryptWidgetParams($params)
-        {
-            //Method inherited from \Arrilot\Widgets\Factories\AbstractWidgetFactory            
-            return \Arrilot\Widgets\Factories\AsyncWidgetFactory::encryptWidgetParams($params);
-        }
-        
-        /**
-         * Decrypt widget params that were transported via HTTP.
-         *
-         * @param string $params
-         * @return string 
-         * @static 
-         */ 
-        public static function decryptWidgetParams($params)
-        {
-            //Method inherited from \Arrilot\Widgets\Factories\AbstractWidgetFactory            
-            return \Arrilot\Widgets\Factories\AsyncWidgetFactory::decryptWidgetParams($params);
+            return \Artisaninweb\SoapWrapper\SoapWrapper::has($name);
         }
          
     }
  
 }
 
-namespace TCG\Voyager\Facades { 
+namespace Tymon\JWTAuth\Facades { 
 
-    class Voyager {
+    class JWTAuth {
         
         /**
-         * 
+         * Attempt to authenticate the user and return the token.
          *
+         * @param array $credentials
+         * @return false|string 
          * @static 
          */ 
-        public static function model($name)
+        public static function attempt($credentials)
         {
-            return \TCG\Voyager\Voyager::model($name);
+            return \Tymon\JWTAuth\JWTAuth::attempt($credentials);
         }
         
         /**
-         * 
+         * Authenticate a user via a token.
          *
+         * @return \Tymon\JWTAuth\Contracts\JWTSubject|false 
          * @static 
          */ 
-        public static function modelClass($name)
+        public static function authenticate()
         {
-            return \TCG\Voyager\Voyager::modelClass($name);
+            return \Tymon\JWTAuth\JWTAuth::authenticate();
         }
         
         /**
-         * 
+         * Alias for authenticate().
          *
+         * @return \Tymon\JWTAuth\Contracts\JWTSubject|false 
          * @static 
          */ 
-        public static function useModel($name, $object)
+        public static function toUser()
         {
-            return \TCG\Voyager\Voyager::useModel($name, $object);
+            return \Tymon\JWTAuth\JWTAuth::toUser();
         }
         
         /**
-         * 
+         * Get the authenticated user.
          *
+         * @return \Tymon\JWTAuth\Contracts\JWTSubject 
          * @static 
          */ 
-        public static function view($name, $parameters = array())
+        public static function user()
         {
-            return \TCG\Voyager\Voyager::view($name, $parameters);
+            return \Tymon\JWTAuth\JWTAuth::user();
         }
         
         /**
-         * 
+         * Generate a token for a given subject.
          *
+         * @param \Tymon\JWTAuth\Contracts\JWTSubject $subject
+         * @return string 
          * @static 
          */ 
-        public static function onLoadingView($name, $closure)
+        public static function fromSubject($subject)
         {
-            return \TCG\Voyager\Voyager::onLoadingView($name, $closure);
+            //Method inherited from \Tymon\JWTAuth\JWT            
+            return \Tymon\JWTAuth\JWTAuth::fromSubject($subject);
         }
         
         /**
-         * 
+         * Alias to generate a token for a given user.
          *
+         * @param \Tymon\JWTAuth\Contracts\JWTSubject $user
+         * @return string 
          * @static 
          */ 
-        public static function formField($row, $dataType, $dataTypeContent)
+        public static function fromUser($user)
         {
-            return \TCG\Voyager\Voyager::formField($row, $dataType, $dataTypeContent);
+            //Method inherited from \Tymon\JWTAuth\JWT            
+            return \Tymon\JWTAuth\JWTAuth::fromUser($user);
         }
         
         /**
-         * 
+         * Refresh an expired token.
          *
+         * @param bool $forceForever
+         * @param bool $resetClaims
+         * @return string 
          * @static 
          */ 
-        public static function afterFormFields($row, $dataType, $dataTypeContent)
+        public static function refresh($forceForever = false, $resetClaims = false)
         {
-            return \TCG\Voyager\Voyager::afterFormFields($row, $dataType, $dataTypeContent);
+            //Method inherited from \Tymon\JWTAuth\JWT            
+            return \Tymon\JWTAuth\JWTAuth::refresh($forceForever, $resetClaims);
         }
         
         /**
-         * 
+         * Invalidate a token (add it to the blacklist).
          *
+         * @param bool $forceForever
+         * @return $this 
          * @static 
          */ 
-        public static function addFormField($handler)
+        public static function invalidate($forceForever = false)
         {
-            return \TCG\Voyager\Voyager::addFormField($handler);
+            //Method inherited from \Tymon\JWTAuth\JWT            
+            return \Tymon\JWTAuth\JWTAuth::invalidate($forceForever);
         }
         
         /**
-         * 
+         * Alias to get the payload, and as a result checks that
+         * the token is valid i.e. not expired or blacklisted.
          *
+         * @throws \Tymon\JWTAuth\Exceptions\JWTException
+         * @return \Tymon\JWTAuth\Payload 
          * @static 
          */ 
-        public static function addAfterFormField($handler)
+        public static function checkOrFail()
         {
-            return \TCG\Voyager\Voyager::addAfterFormField($handler);
+            //Method inherited from \Tymon\JWTAuth\JWT            
+            return \Tymon\JWTAuth\JWTAuth::checkOrFail();
         }
         
         /**
-         * 
+         * Check that the token is valid.
          *
+         * @param bool $getPayload
+         * @return \Tymon\JWTAuth\Payload|bool 
          * @static 
          */ 
-        public static function formFields()
+        public static function check($getPayload = false)
         {
-            return \TCG\Voyager\Voyager::formFields();
+            //Method inherited from \Tymon\JWTAuth\JWT            
+            return \Tymon\JWTAuth\JWTAuth::check($getPayload);
         }
         
         /**
-         * 
+         * Get the token.
          *
+         * @return \Tymon\JWTAuth\Token|null 
          * @static 
          */ 
-        public static function setting($key, $default = null)
+        public static function getToken()
         {
-            return \TCG\Voyager\Voyager::setting($key, $default);
+            //Method inherited from \Tymon\JWTAuth\JWT            
+            return \Tymon\JWTAuth\JWTAuth::getToken();
         }
         
         /**
-         * 
+         * Parse the token from the request.
          *
+         * @throws \Tymon\JWTAuth\Exceptions\JWTException
+         * @return $this 
          * @static 
          */ 
-        public static function image($file, $default = '')
+        public static function parseToken()
         {
-            return \TCG\Voyager\Voyager::image($file, $default);
+            //Method inherited from \Tymon\JWTAuth\JWT            
+            return \Tymon\JWTAuth\JWTAuth::parseToken();
         }
         
         /**
-         * 
+         * Get the raw Payload instance.
          *
+         * @return \Tymon\JWTAuth\Payload 
          * @static 
          */ 
-        public static function routes()
+        public static function getPayload()
         {
-            return \TCG\Voyager\Voyager::routes();
+            //Method inherited from \Tymon\JWTAuth\JWT            
+            return \Tymon\JWTAuth\JWTAuth::getPayload();
         }
         
         /**
-         * 
+         * Alias for getPayload().
          *
-         * @deprecated 
+         * @return \Tymon\JWTAuth\Payload 
          * @static 
          */ 
-        public static function can($permission)
+        public static function payload()
         {
-            return \TCG\Voyager\Voyager::can($permission);
+            //Method inherited from \Tymon\JWTAuth\JWT            
+            return \Tymon\JWTAuth\JWTAuth::payload();
         }
         
         /**
-         * 
+         * Convenience method to get a claim value.
          *
-         * @deprecated 
+         * @param string $claim
+         * @return mixed 
          * @static 
          */ 
-        public static function canOrFail($permission)
+        public static function getClaim($claim)
         {
-            return \TCG\Voyager\Voyager::canOrFail($permission);
+            //Method inherited from \Tymon\JWTAuth\JWT            
+            return \Tymon\JWTAuth\JWTAuth::getClaim($claim);
         }
         
         /**
-         * 
+         * Create a Payload instance.
          *
-         * @deprecated 
+         * @param \Tymon\JWTAuth\Contracts\JWTSubject $subject
+         * @return \Tymon\JWTAuth\Payload 
          * @static 
          */ 
-        public static function canOrAbort($permission, $statusCode = 403)
+        public static function makePayload($subject)
         {
-            return \TCG\Voyager\Voyager::canOrAbort($permission, $statusCode);
+            //Method inherited from \Tymon\JWTAuth\JWT            
+            return \Tymon\JWTAuth\JWTAuth::makePayload($subject);
         }
         
         /**
-         * 
+         * Check if the subject model matches the one saved in the token.
          *
-         * @static 
-         */ 
-        public static function getVersion()
-        {
-            return \TCG\Voyager\Voyager::getVersion();
-        }
-        
-        /**
-         * 
-         *
-         * @static 
-         */ 
-        public static function addAlert($alert)
-        {
-            return \TCG\Voyager\Voyager::addAlert($alert);
-        }
-        
-        /**
-         * 
-         *
-         * @static 
-         */ 
-        public static function alerts()
-        {
-            return \TCG\Voyager\Voyager::alerts();
-        }
-        
-        /**
-         * 
-         *
-         * @param string|\TCG\Voyager\Model|\TCG\Voyager\Collection $model
+         * @param string|object $model
          * @return bool 
          * @static 
          */ 
-        public static function translatable($model)
+        public static function checkSubjectModel($model)
         {
-            return \TCG\Voyager\Voyager::translatable($model);
+            //Method inherited from \Tymon\JWTAuth\JWT            
+            return \Tymon\JWTAuth\JWTAuth::checkSubjectModel($model);
+        }
+        
+        /**
+         * Set the token.
+         *
+         * @param \Tymon\JWTAuth\Token|string $token
+         * @return $this 
+         * @static 
+         */ 
+        public static function setToken($token)
+        {
+            //Method inherited from \Tymon\JWTAuth\JWT            
+            return \Tymon\JWTAuth\JWTAuth::setToken($token);
+        }
+        
+        /**
+         * Unset the current token.
+         *
+         * @return $this 
+         * @static 
+         */ 
+        public static function unsetToken()
+        {
+            //Method inherited from \Tymon\JWTAuth\JWT            
+            return \Tymon\JWTAuth\JWTAuth::unsetToken();
+        }
+        
+        /**
+         * Set the request instance.
+         *
+         * @param \Illuminate\Http\Request $request
+         * @return $this 
+         * @static 
+         */ 
+        public static function setRequest($request)
+        {
+            //Method inherited from \Tymon\JWTAuth\JWT            
+            return \Tymon\JWTAuth\JWTAuth::setRequest($request);
+        }
+        
+        /**
+         * Set whether the subject should be "locked".
+         *
+         * @param bool $lock
+         * @return $this 
+         * @static 
+         */ 
+        public static function lockSubject($lock)
+        {
+            //Method inherited from \Tymon\JWTAuth\JWT            
+            return \Tymon\JWTAuth\JWTAuth::lockSubject($lock);
+        }
+        
+        /**
+         * Get the Manager instance.
+         *
+         * @return \Tymon\JWTAuth\Manager 
+         * @static 
+         */ 
+        public static function manager()
+        {
+            //Method inherited from \Tymon\JWTAuth\JWT            
+            return \Tymon\JWTAuth\JWTAuth::manager();
+        }
+        
+        /**
+         * Get the Parser instance.
+         *
+         * @return \Tymon\JWTAuth\Http\Parser\Parser 
+         * @static 
+         */ 
+        public static function parser()
+        {
+            //Method inherited from \Tymon\JWTAuth\JWT            
+            return \Tymon\JWTAuth\JWTAuth::parser();
+        }
+        
+        /**
+         * Get the Payload Factory.
+         *
+         * @return \Tymon\JWTAuth\Factory 
+         * @static 
+         */ 
+        public static function factory()
+        {
+            //Method inherited from \Tymon\JWTAuth\JWT            
+            return \Tymon\JWTAuth\JWTAuth::factory();
+        }
+        
+        /**
+         * Get the Blacklist.
+         *
+         * @return \Tymon\JWTAuth\Blacklist 
+         * @static 
+         */ 
+        public static function blacklist()
+        {
+            //Method inherited from \Tymon\JWTAuth\JWT            
+            return \Tymon\JWTAuth\JWTAuth::blacklist();
+        }
+        
+        /**
+         * Set the custom claims.
+         *
+         * @param array $customClaims
+         * @return $this 
+         * @static 
+         */ 
+        public static function customClaims($customClaims)
+        {
+            //Method inherited from \Tymon\JWTAuth\JWT            
+            return \Tymon\JWTAuth\JWTAuth::customClaims($customClaims);
+        }
+        
+        /**
+         * Alias to set the custom claims.
+         *
+         * @param array $customClaims
+         * @return $this 
+         * @static 
+         */ 
+        public static function claims($customClaims)
+        {
+            //Method inherited from \Tymon\JWTAuth\JWT            
+            return \Tymon\JWTAuth\JWTAuth::claims($customClaims);
+        }
+        
+        /**
+         * Get the custom claims.
+         *
+         * @return array 
+         * @static 
+         */ 
+        public static function getCustomClaims()
+        {
+            //Method inherited from \Tymon\JWTAuth\JWT            
+            return \Tymon\JWTAuth\JWTAuth::getCustomClaims();
+        }
+         
+    }
+
+    class JWTFactory {
+        
+        /**
+         * Create the Payload instance.
+         *
+         * @param bool $resetClaims
+         * @return \Tymon\JWTAuth\Payload 
+         * @static 
+         */ 
+        public static function make($resetClaims = false)
+        {
+            return \Tymon\JWTAuth\Factory::make($resetClaims);
+        }
+        
+        /**
+         * Empty the claims collection.
+         *
+         * @return $this 
+         * @static 
+         */ 
+        public static function emptyClaims()
+        {
+            return \Tymon\JWTAuth\Factory::emptyClaims();
+        }
+        
+        /**
+         * Build and get the Claims Collection.
+         *
+         * @return \Tymon\JWTAuth\Claims\Collection 
+         * @static 
+         */ 
+        public static function buildClaimsCollection()
+        {
+            return \Tymon\JWTAuth\Factory::buildClaimsCollection();
+        }
+        
+        /**
+         * Get a Payload instance with a claims collection.
+         *
+         * @param \Tymon\JWTAuth\Claims\Collection $claims
+         * @return \Tymon\JWTAuth\Payload 
+         * @static 
+         */ 
+        public static function withClaims($claims)
+        {
+            return \Tymon\JWTAuth\Factory::withClaims($claims);
+        }
+        
+        /**
+         * Set the default claims to be added to the Payload.
+         *
+         * @param array $claims
+         * @return $this 
+         * @static 
+         */ 
+        public static function setDefaultClaims($claims)
+        {
+            return \Tymon\JWTAuth\Factory::setDefaultClaims($claims);
+        }
+        
+        /**
+         * Helper to set the ttl.
+         *
+         * @param int $ttl
+         * @return $this 
+         * @static 
+         */ 
+        public static function setTTL($ttl)
+        {
+            return \Tymon\JWTAuth\Factory::setTTL($ttl);
+        }
+        
+        /**
+         * Helper to get the ttl.
+         *
+         * @return int 
+         * @static 
+         */ 
+        public static function getTTL()
+        {
+            return \Tymon\JWTAuth\Factory::getTTL();
+        }
+        
+        /**
+         * Get the default claims.
+         *
+         * @return array 
+         * @static 
+         */ 
+        public static function getDefaultClaims()
+        {
+            return \Tymon\JWTAuth\Factory::getDefaultClaims();
+        }
+        
+        /**
+         * Get the PayloadValidator instance.
+         *
+         * @return \Tymon\JWTAuth\Validators\PayloadValidator 
+         * @static 
+         */ 
+        public static function validator()
+        {
+            return \Tymon\JWTAuth\Factory::validator();
+        }
+        
+        /**
+         * Set the custom claims.
+         *
+         * @param array $customClaims
+         * @return $this 
+         * @static 
+         */ 
+        public static function customClaims($customClaims)
+        {
+            return \Tymon\JWTAuth\Factory::customClaims($customClaims);
+        }
+        
+        /**
+         * Alias to set the custom claims.
+         *
+         * @param array $customClaims
+         * @return $this 
+         * @static 
+         */ 
+        public static function claims($customClaims)
+        {
+            return \Tymon\JWTAuth\Factory::claims($customClaims);
+        }
+        
+        /**
+         * Get the custom claims.
+         *
+         * @return array 
+         * @static 
+         */ 
+        public static function getCustomClaims()
+        {
+            return \Tymon\JWTAuth\Factory::getCustomClaims();
+        }
+        
+        /**
+         * Set the refresh flow flag.
+         *
+         * @param bool $refreshFlow
+         * @return $this 
+         * @static 
+         */ 
+        public static function setRefreshFlow($refreshFlow = true)
+        {
+            return \Tymon\JWTAuth\Factory::setRefreshFlow($refreshFlow);
+        }
+         
+    }
+ 
+}
+
+namespace Encore\Admin\Facades { 
+
+    class Admin {
+        
+        /**
+         * 
+         *
+         * @param $model
+         * @param \Closure $callable
+         * @return \Encore\Admin\Grid 
+         * @static 
+         */ 
+        public static function grid($model, $callable)
+        {
+            return \Encore\Admin\Admin::grid($model, $callable);
+        }
+        
+        /**
+         * 
+         *
+         * @param $model
+         * @param \Closure $callable
+         * @return \Encore\Admin\Form 
+         * @static 
+         */ 
+        public static function form($model, $callable)
+        {
+            return \Encore\Admin\Admin::form($model, $callable);
+        }
+        
+        /**
+         * Build a tree.
+         *
+         * @param $model
+         * @return \Encore\Admin\Tree 
+         * @static 
+         */ 
+        public static function tree($model, $callable = null)
+        {
+            return \Encore\Admin\Admin::tree($model, $callable);
+        }
+        
+        /**
+         * 
+         *
+         * @param \Closure $callable
+         * @return \Encore\Admin\Layout\Content 
+         * @static 
+         */ 
+        public static function content($callable = null)
+        {
+            return \Encore\Admin\Admin::content($callable);
+        }
+        
+        /**
+         * 
+         *
+         * @param $model
+         * @return mixed 
+         * @static 
+         */ 
+        public static function getModel($model)
+        {
+            return \Encore\Admin\Admin::getModel($model);
+        }
+        
+        /**
+         * Add css or get all css.
+         *
+         * @param null $css
+         * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View|void 
+         * @static 
+         */ 
+        public static function css($css = null)
+        {
+            return \Encore\Admin\Admin::css($css);
+        }
+        
+        /**
+         * Add js or get all js.
+         *
+         * @param null $js
+         * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View|void 
+         * @static 
+         */ 
+        public static function js($js = null)
+        {
+            return \Encore\Admin\Admin::js($js);
+        }
+        
+        /**
+         * 
+         *
+         * @param string $script
+         * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View|void 
+         * @static 
+         */ 
+        public static function script($script = '')
+        {
+            return \Encore\Admin\Admin::script($script);
+        }
+        
+        /**
+         * Left sider-bar menu.
+         *
+         * @return array 
+         * @static 
+         */ 
+        public static function menu()
+        {
+            return \Encore\Admin\Admin::menu();
+        }
+        
+        /**
+         * Get admin title.
+         *
+         * @return \Config 
+         * @static 
+         */ 
+        public static function title()
+        {
+            return \Encore\Admin\Admin::title();
+        }
+        
+        /**
+         * Get current login user.
+         *
+         * @return mixed 
+         * @static 
+         */ 
+        public static function user()
+        {
+            return \Encore\Admin\Admin::user();
+        }
+        
+        /**
+         * Set navbar.
+         *
+         * @param \Closure|null $builder
+         * @return \Encore\Admin\Navbar 
+         * @static 
+         */ 
+        public static function navbar($builder = null)
+        {
+            return \Encore\Admin\Admin::navbar($builder);
+        }
+        
+        /**
+         * Get navbar object.
+         *
+         * @return \Encore\Admin\Widgets\Navbar 
+         * @static 
+         */ 
+        public static function getNavbar()
+        {
+            return \Encore\Admin\Admin::getNavbar();
+        }
+        
+        /**
+         * Register the auth routes.
+         *
+         * @return void 
+         * @static 
+         */ 
+        public static function registerAuthRoutes()
+        {
+            \Encore\Admin\Admin::registerAuthRoutes();
+        }
+        
+        /**
+         * Extend a extension.
+         *
+         * @param string $name
+         * @param string $class
+         * @return void 
+         * @static 
+         */ 
+        public static function extend($name, $class)
+        {
+            \Encore\Admin\Admin::extend($name, $class);
         }
          
     }
@@ -14211,7 +14217,7 @@ namespace  {
              * Execute the query and get the first result.
              *
              * @param array $columns
-             * @return \Illuminate\Database\Eloquent\Model|static|null 
+             * @return \Illuminate\Database\Eloquent\Model|object|static|null 
              * @static 
              */ 
             public static function first($columns = array())
@@ -14588,6 +14594,21 @@ namespace  {
             public static function mergeWheres($wheres, $bindings)
             {    
                 \Illuminate\Database\Query\Builder::mergeWheres($wheres, $bindings);
+            }
+         
+            /**
+             * Prepare the value and operator for a where clause.
+             *
+             * @param string $value
+             * @param string $operator
+             * @param bool $useDefault
+             * @return array 
+             * @throws \InvalidArgumentException
+             * @static 
+             */ 
+            public static function prepareValueAndOperator($value, $operator, $useDefault = false)
+            {    
+                return \Illuminate\Database\Query\Builder::prepareValueAndOperator($value, $operator, $useDefault);
             }
          
             /**
@@ -15350,6 +15371,17 @@ namespace  {
             }
          
             /**
+             * Determine if no rows exist for the current query.
+             *
+             * @return bool 
+             * @static 
+             */ 
+            public static function doesntExist()
+            {    
+                return \Illuminate\Database\Query\Builder::doesntExist();
+            }
+         
+            /**
              * Retrieve the "count" result of the query.
              *
              * @param string $columns
@@ -15719,19 +15751,17 @@ namespace  {
 
     class View extends \Illuminate\Support\Facades\View {}
 
-    class JWTAuth extends \Tymon\JWTAuth\Facades\JWTAuth {}
-
-    class JWTFactory extends \Tymon\JWTAuth\Facades\JWTFactory {}
-
     class Fractal extends \Spatie\Fractal\FractalFacade {}
 
     class Image extends \Intervention\Image\Facades\Image {}
 
-    class Widget extends \Arrilot\Widgets\Facade {}
+    class SoapWrapper extends \Artisaninweb\SoapWrapper\Facade {}
 
-    class AsyncWidget extends \Arrilot\Widgets\AsyncFacade {}
+    class JWTAuth extends \Tymon\JWTAuth\Facades\JWTAuth {}
 
-    class Voyager extends \TCG\Voyager\Facades\Voyager {}
+    class JWTFactory extends \Tymon\JWTAuth\Facades\JWTFactory {}
+
+    class Admin extends \Encore\Admin\Facades\Admin {}
 
     class Iseed extends \Orangehill\Iseed\Facades\Iseed {}
  

@@ -59,8 +59,7 @@
 			Route::apiResource('departments', 'DepartmentController');
 			Route::apiResource('deliveries', 'DeliveryController');
 			Route::apiResource('deliveries.items', 'DeliveryItemController');
-			Route::apiResource('subscriptionTypes', 'SubscriptionTypeController')->only(['index']);
-			Route::apiResource('subscriptionSchedules', 'SubscriptionScheduleController')->only(['index']);
+			Route::apiResource('subscriptionOptions', 'SubscriptionOptionController')->only(['index']);
 			Route::apiResource('subscriptions', 'SubscriptionController');
 			Route::apiResource('appointments', 'AppointmentController');
 			Route::apiResource('shopProducts', 'ShopProductController');

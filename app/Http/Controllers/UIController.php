@@ -4,6 +4,7 @@
 	
 	use App\Delivery;
 	use App\ShopOrder;
+	use App\Subscription;
 	use Illuminate\Database\Eloquent\Builder;
 	
 	class UIController extends Controller
@@ -24,9 +25,15 @@
 					$builder->where('status', '!=', 'REJECTED')
 						->where('status', '!=', 'AT_DESTINATION');
 				})->count();
+			
+			$pendingSubscriptions = Subscription::whereIn('user_id', $client->users->pluck('id'))
+				->where('status', 'AT_DEPARTMENT_HEAD')
+				->orWhere('status', 'AT_PURCHASING_HEAD')
+				->count();
+			
 			$items = [
 				['icon' => 'dashboard', 'title' => 'Dashboard', 'route' => 'dashboard', 'pendingApprovals' => 0],
-				['icon' => 'schedule', 'title' => 'Subscriptions', 'route' => 'subscriptions', 'pendingApprovals' => 0],
+				['icon' => 'schedule', 'title' => 'Subscriptions', 'route' => 'subscriptions', 'pendingApprovals' => $pendingSubscriptions],
 				['icon' => 'date_range', 'title' => 'Appointments', 'route' => 'appointments', 'pendingApprovals' => 0],
 				['icon' => 'shopping_cart', 'title' => 'Shopping', 'route' => 'shopping', 'pendingApprovals' => 0],
 				['icon' => 'shopping_basket', 'title' => 'Orders', 'route' => 'orders', 'pendingApprovals' => $pendingShopOrders],

@@ -23,13 +23,11 @@
 		 * Create a new message instance.
 		 *
 		 * @param \App\User $user
-		 * @param string    $rawPassword
 		 */
-		public function __construct(User $user, string $rawPassword)
+		public function __construct(User $user)
 		{
 			//
 			$this->user = $user;
-			$this->rawPassword = $rawPassword;
 		}
 		
 		/**
@@ -39,11 +37,7 @@
 		 */
 		public function build()
 		{
-			return $this->from('support@cube-messenger.com')
-				->markdown('emails.password')
-				->with([
-					'user'        => $this->user,
-					'rawPassword' => $this->rawPassword,
-				]);
+			return $this->subject('Cube Messenger Password')
+				->markdown('emails.password');
 		}
 	}

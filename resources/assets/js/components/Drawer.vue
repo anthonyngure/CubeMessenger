@@ -121,6 +121,9 @@
       EventBus.$on(this.$actions.rejected, function () {
         that.refresh()
       })
+      EventBus.$on(this.$actions.addedSubscription, function () {
+        that.refresh()
+      })
       this.refresh()
     }
   }

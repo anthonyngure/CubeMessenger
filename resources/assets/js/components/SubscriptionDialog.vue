@@ -121,11 +121,11 @@
         let subscription = {
           subscriptionItemId: this.subscribeItem.id,
           quantity: this.quantity,
-          schedules: []
+          weekdays: []
         }
         for (let schedule of this.subscriptionSchedules) {
           if (schedule.selected || this.everydayCheckbox) {
-            subscription.schedules.push(schedule.id)
+            subscription.weekdays.push(schedule.id)
           }
         }
         this.$utils.log(subscription)
@@ -137,7 +137,7 @@
           }
         }, {
           subscriptionItemId: subscription.subscriptionItemId,
-          schedules: subscription.schedules,
+          weekdays: subscription.weekdays,
           quantity: subscription.quantity,
         })
       },

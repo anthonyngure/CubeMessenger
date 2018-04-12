@@ -60,7 +60,7 @@
         </v-flex>
 
         <v-fab-transition v-if="isDepartmentUser()">
-            <v-btn class="ma-3"
+            <v-btn class="ma-5"
                    color="accent"
                    fab
                    dark

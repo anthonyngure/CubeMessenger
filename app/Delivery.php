@@ -49,6 +49,7 @@
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Delivery whereUrgent($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Delivery whereUserId($value)
  * @mixin \Eloquent
+ * @property-read mixed $stats
  */
 	class Delivery extends Model
 	{

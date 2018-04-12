@@ -30,6 +30,7 @@
  * @method static \Illuminate\Database\Eloquent\Builder|\App\ShopProduct whereSlug($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\ShopProduct whereUpdatedAt($value)
  * @mixin \Eloquent
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\ShopOrder[] $clientOrders
  */
 	class ShopProduct extends Model
 	{

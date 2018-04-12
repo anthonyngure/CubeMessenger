@@ -3,75 +3,73 @@
 	namespace App;
 	
 	use App\Exceptions\WrappedException;
+	use Illuminate\Foundation\Auth\User as Authenticatable;
 	use Illuminate\Notifications\Notifiable;
 	use Tymon\JWTAuth\Contracts\JWTSubject;
 	
 	/**
-	 * App\User
-	 *
-	 * @property int
-	 *                   $id
-	 * @property int|null
-	 *                   $role_id
-	 * @property int|null
-	 *                   $client_id
-	 * @property int|null
-	 *                   $department_id
-	 * @property string
-	 *                   $name
-	 * @property string
-	 *                   $avatar
-	 * @property string|null
-	 *                   $email
-	 * @property string|null
-	 *                   $phone
-	 * @property string|null
-	 *                   $password
-	 * @property string|null
-	 *                   $password_recovery_code
-	 * @property string
-	 *                   $account_type
-	 * @property float|null
-	 *                   $latitude
-	 * @property float|null
-	 *                   $longitude
-	 * @property \Carbon\Carbon|null
-	 *                   $created_at
-	 * @property \Carbon\Carbon|null
-	 *                   $updated_at
-	 * @property string|null
-	 *                   $deleted_at
-	 * @property-read \Illuminate\Database\Eloquent\Collection|\App\Appointment[]
-	 *                        $appointments
-	 * @property-read \App\Client|null
-	 *                        $client
-	 * @property-read \Illuminate\Database\Eloquent\Collection|\App\Delivery[]
-	 *                        $deliveries
-	 * @property-read \Illuminate\Notifications\DatabaseNotificationCollection|\Illuminate\Notifications\DatabaseNotification[]
-	 *                $notifications
-	 * @property-read \TCG\Voyager\Models\Role|null
-	 *                        $role
-	 * @property-read \Illuminate\Database\Eloquent\Collection|\App\ServiceRequest[]
-	 *                        $serviceRequests
-	 * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereAccountType($value)
-	 * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereAvatar($value)
-	 * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereClientId($value)
-	 * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereCreatedAt($value)
-	 * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereDeletedAt($value)
-	 * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereDepartmentId($value)
-	 * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereEmail($value)
-	 * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereId($value)
-	 * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereLatitude($value)
-	 * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereLongitude($value)
-	 * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereName($value)
-	 * @method static \Illuminate\Database\Eloquent\Builder|\App\User wherePassword($value)
-	 * @method static \Illuminate\Database\Eloquent\Builder|\App\User wherePasswordRecoveryCode($value)
-	 * @method static \Illuminate\Database\Eloquent\Builder|\App\User wherePhone($value)
-	 * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereRoleId($value)
-	 * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereUpdatedAt($value)
-	 * @mixin \Eloquent
-	 */
-	class User extends \TCG\Voyager\Models\User implements JWTSubject
+ * App\User
+ *
+ * @property int
+ *                   $id
+ * @property int|null
+ *                   $client_id
+ * @property int|null
+ *                   $department_id
+ * @property string
+ *                   $name
+ * @property string|null
+ *                   $email
+ * @property string|null
+ *                   $phone
+ * @property string|null
+ *                   $password
+ * @property string|null
+ *                   $password_recovery_code
+ * @property string
+ *                   $account_type
+ * @property float|null
+ *                   $latitude
+ * @property float|null
+ *                   $longitude
+ * @property \Carbon\Carbon|null
+ *                   $created_at
+ * @property \Carbon\Carbon|null
+ *                   $updated_at
+ * @property string|null
+ *                   $deleted_at
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Appointment[]
+ *                        $appointments
+ * @property-read \App\Client|null
+ *                        $client
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Delivery[]
+ *                        $deliveries
+ * @property-read \Illuminate\Notifications\DatabaseNotificationCollection|\Illuminate\Notifications\DatabaseNotification[]
+ *                $notifications
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\ServiceRequest[]
+ *                        $serviceRequests
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereAccountType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereClientId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereDepartmentId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereEmail($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereLatitude($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereLongitude($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\User wherePassword($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\User wherePasswordRecoveryCode($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\User wherePhone($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereUpdatedAt($value)
+ * @mixin \Eloquent
+ * @property int $role_id
+ * @property string $avatar
+ * @property-read \App\Role $role
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereAvatar($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereRoleId($value)
+ */
+	class User extends Authenticatable implements JWTSubject
 	{
 		use Notifiable;
 		
@@ -84,6 +82,7 @@
 		 */
 		protected $hidden = [
 			'role_id',
+			'department_id',
 			'client_id',
 			'password',
 			'email_verified',
@@ -133,12 +132,21 @@
 			return $this->belongsTo(Client::class);
 		}
 		
+		
+		/**
+		 * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+		 */
+		public function role()
+		{
+			return $this->belongsTo(Role::class);
+		}
+		
 		/**
 		 * @return bool
 		 */
 		public function isClientAdmin()
 		{
-			return $this->account_type == 'CLIENT_ADMIN';
+			return $this->role->name == 'CLIENT_ADMIN';
 		}
 		
 		/**
@@ -161,7 +169,7 @@
 		 */
 		public function isPurchasingHead()
 		{
-			return $this->account_type == 'PURCHASING_HEAD';
+			return $this->role->name == 'PURCHASING_HEAD';
 		}
 		
 		/**
@@ -169,7 +177,7 @@
 		 */
 		public function isDepartmentHead()
 		{
-			return $this->account_type == 'DEPARTMENT_HEAD';
+			return $this->role->name == 'DEPARTMENT_HEAD';
 		}
 		
 		/**
@@ -177,7 +185,7 @@
 		 */
 		public function isRider()
 		{
-			return $this->account_type == 'CUBE_MESSENGER_RIDER';
+			return $this->role->name == 'RIDER';
 		}
 		
 		

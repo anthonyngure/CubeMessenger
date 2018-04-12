@@ -6,6 +6,7 @@
 	use App\ShopOrder;
 	use App\ShopProduct;
 	use Auth;
+	use Illuminate\Database\Eloquent\Relations\BelongsTo;
 	use Illuminate\Http\Request;
 	
 	class ShopOrderController extends Controller
@@ -22,7 +23,7 @@
 		{
 			$client = Auth::user()->getClient();
 			$this->validate($request, [
-				'filter' => 'required|in:count,pendingApproval,pendingDelivery,delivered,rejected',
+				'filter' => 'required|in:pendingApproval,pendingDelivery,delivered,rejected',
 			]);
 			
 			if ($request->filter === 'pendingApproval') {
@@ -45,7 +46,9 @@
 				$orders = ShopOrder::whereIn('user_id', $client->users->pluck('id'))
 					->where('status', 'REJECTED')
 					->with(['shopProduct', 'user'])
-					->with('rejectedBy')
+					->with(['rejectedBy'=>function(BelongsTo $belongsTo){
+						$belongsTo->with('role');
+					}])
 					->get();
 			}
 			

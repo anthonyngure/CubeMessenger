@@ -19,12 +19,6 @@
 
             <v-card class="pt-3" v-if="currentTabItem">
                 <v-toolbar color="transparent" dense flat card>
-                    <v-btn small flat outline color="accent">
-                        <v-icon left>account_balance_wallet</v-icon>
-                        SPENT {{$utils.formatMoney(spent)}}
-                    </v-btn>
-                    <!--<v-icon left>account_balance_wallet</v-icon>
-                    <v-toolbar-title class="text-xs-center">SPENT KES 200.52</v-toolbar-title>-->
                     <v-text-field
                             class="ml-5"
                             append-icon="search"
@@ -182,7 +176,6 @@
         currentTab: null,
         currentTabItem: null,
         items: [],
-        spent: 0
       }
     },
     methods: {
@@ -192,7 +185,6 @@
         this.$refs.connectionManager.get('reports', {
           onSuccess (response) {
             that.items = that.items.concat(response.data.data)
-            that.spent = response.data.meta.spent
           }
         }, {filter: this.currentTabItem.id})
       }

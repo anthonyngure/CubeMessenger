@@ -120,23 +120,6 @@
 					->get();
 				
 				//dd($deliveries);
-				
-				$deliveries->each(function (Delivery $delivery) {
-					$stats = array();
-					$courierOptionGroups = $delivery->items->groupBy('courier_option_id');
-					foreach ($courierOptionGroups as $courierOptionGroup) {
-						$totalQuantity = 0;
-						foreach ($courierOptionGroup as $courierOptionDeliveryItem) {
-							$totalQuantity += $courierOptionDeliveryItem->quantity;
-						}
-						array_push($stats, [
-							'courierOption' => $courierOptionGroup->first()->courierOption,
-							'count'         => $totalQuantity,
-						]);
-					}
-					$delivery->stats = $stats;
-				});
-				
 				return $this->collectionResponse($deliveries);
 				
 			} else {

@@ -154,24 +154,24 @@
         let subscription = {
           subscriptionItemId: this.subscriptionItem.id,
           quantity: this.subscriptionItem.clientSubscription.quantity,
-          schedules: []
+          weekdays: []
         }
         if (this.everydayCheckbox) {
           let everydaySchedule = this.subscriptionSchedules.find(function (element) {
             return element.name === 'Everyday'
           })
-          subscription.schedules.push(everydaySchedule.id)
+          subscription.weekdays.push(everydaySchedule.id)
         } else {
           for (let schedule of this.subscriptionSchedules) {
             if (schedule.selected) {
-              subscription.schedules.push(schedule.id)
+              subscription.weekdays.push(schedule.id)
             }
           }
         }
         this.$utils.log(subscription)
         this.axios.patch('/subscriptions/' + this.subscriptionItem.id, {
           subscriptionItemId: subscription.subscriptionItemId,
-          schedules: subscription.schedules,
+          weekdays: subscription.weekdays,
           quantity: subscription.quantity,
         }).then(response => {
           let subscriptionItem = response.data.data

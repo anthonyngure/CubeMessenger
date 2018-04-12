@@ -101,6 +101,7 @@ Vue.prototype.$appName = 'Cube Messenger'
 
 Vue.prototype.$actions = {
   addedDelivery: 'addedDelivery',
+  addedSubscription: 'addedSubscription',
   collapsedDrawer: 'collapsedDrawer',
   clickedToolbarSideIcon: 'clickedToolbarSideIcon',
   placedOrder: 'placedOrder',

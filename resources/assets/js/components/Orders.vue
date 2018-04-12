@@ -54,7 +54,8 @@
                                 </v-chip>
 
                                 <v-alert type="error" :value="true" v-if="props.item.status === 'REJECTED'" outline>
-                                    Rejected by {{props.item.rejectedBy.accountType}} <br/> {{props.item.rejectedBy.name}}
+                                    Rejected by {{props.item.rejectedBy.role.name}} <br/>
+                                    {{props.item.rejectedBy.name}}
                                 </v-alert>
 
                                 <div class="mx-3">
@@ -93,6 +94,20 @@
                 </v-container>
             </v-card>
         </v-flex>
+
+        <v-fab-transition v-if="isDepartmentUser()">
+            <v-btn class="ma-5"
+                   color="accent"
+                   fab
+                   dark
+                   fixed
+                   bottom
+                   :value="false"
+                   to="shopping"
+                   right>
+                <v-icon>add</v-icon>
+            </v-btn>
+        </v-fab-transition>
     </v-layout>
 </template>
 

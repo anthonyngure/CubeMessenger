@@ -15,7 +15,6 @@
 	use Auth;
 	use Hash;
 	use Illuminate\Database\Eloquent\Relations\BelongsTo;
-	use Illuminate\Database\Eloquent\Relations\HasMany;
 	use Illuminate\Http\Request;
 	use JWTAuth;
 	
@@ -29,9 +28,7 @@
 		 */
 		private function authenticateUser(User $user, array $meta = null)
 		{
-			$user = User::with(['client' => function (BelongsTo $belongsTo) {
-				$belongsTo->with(['users', 'departments']);
-			}])->findOrFail($user->getKey());
+			$user = User::with(['client', 'role'])->findOrFail($user->getKey());
 			$token = JWTAuth::fromUser($user);
 			
 			$user->token = $token;
@@ -72,18 +69,14 @@
 		
 		public function user()
 		{
-			$user = User::with(['client' => function (BelongsTo $belongsTo) {
-				$belongsTo->with(['users', 'departments']);
-			}])->findOrFail(Auth::user()->getKey());
+			$user = User::with(['client', 'role'])->findOrFail(Auth::user()->getKey());
 			
 			return $this->itemResponse($user);
 		}
 		
 		public function refresh()
 		{
-			$user = User::with(['client' => function (BelongsTo $belongsTo) {
-				$belongsTo->with(['users', 'departments']);
-			}])->findOrFail(Auth::user()->getKey());
+			$user = User::with(['client', 'role'])->findOrFail(Auth::user()->getKey());
 			
 			return $this->itemResponse($user);
 		}

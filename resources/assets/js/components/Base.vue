@@ -5,17 +5,17 @@
     name: 'base',
     methods: {
       isClientAdmin () {
-        return this.$auth.user().accountType === 'CLIENT_ADMIN'
+        return this.$auth.user().role.name === 'CLIENT_ADMIN'
       },
       isPurchasingHead () {
-        return this.$auth.user().accountType === 'PURCHASING_HEAD'
+        return this.$auth.user().role.name === 'PURCHASING_HEAD'
       },
       isDepartmentHead () {
-        return this.$auth.user().accountType === 'DEPARTMENT_HEAD'
+        return this.$auth.user().role.name === 'DEPARTMENT_HEAD'
       },
       isDepartmentUser () {
-        return this.$auth.user().accountType === 'DEPARTMENT_USER'
-      }
+        return this.$auth.user().role.name === 'DEPARTMENT_USER'
+      },
     },
     mounted () {
       let that = this

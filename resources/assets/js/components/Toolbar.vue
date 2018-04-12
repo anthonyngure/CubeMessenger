@@ -97,6 +97,9 @@
       EventBus.$on(this.$actions.placedOrder, function () {
         that.refreshBalance()
       })
+      EventBus.$on(this.$actions.addedSubscription, function () {
+        that.refreshBalance()
+      })
       this.refreshBalance()
     }
   }

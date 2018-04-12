@@ -4504,6 +4504,515 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 /***/ }),
 
+/***/ "./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}]],\"plugins\":[\"transform-object-rest-spread\",[\"transform-runtime\",{\"polyfill\":false,\"helpers\":false}]]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/js/components/AddSubscriptionDialog.vue":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__ConnectionManager__ = __webpack_require__("./resources/assets/js/components/ConnectionManager.vue");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__ConnectionManager___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__ConnectionManager__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_moment__ = __webpack_require__("./node_modules/moment/moment.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_moment___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_moment__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__event_bus__ = __webpack_require__("./resources/assets/js/event-bus.js");
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+
+
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  name: 'AddSubscriptionDialog',
+  components: { ConnectionManager: __WEBPACK_IMPORTED_MODULE_0__ConnectionManager___default.a },
+  props: {
+    show: {
+      type: Boolean,
+      required: true
+    }
+  },
+  data: function data() {
+    return {
+      showSubscriptionPeriodGuide: false,
+      connecting: false,
+      showSelectTerminationDateDialog: false,
+      dialog: false,
+      step: 1,
+      options: [],
+      option: null,
+      optionId: null,
+      selectedOptionItem: null,
+      weekdays: [],
+      quantity: null,
+      terminationDate: null,
+      renewEveryMonth: true,
+      daysToDeliver: 0
+    };
+  },
+
+  watch: {
+    show: function show(val) {
+      this.dialog = !!val;
+      if (val && this.options.length === 0) {
+        var that = this;
+        setTimeout(function () {
+          that.loadSubscriptionOptions();
+        }, 300);
+      }
+    },
+    optionId: function optionId(val) {
+      if (val) {
+
+        this.option = this.options.find(function (element) {
+          return element.id === val;
+        });
+        this.selectedOptionItem = null;
+      }
+    },
+    showSubscriptionPeriodGuide: function showSubscriptionPeriodGuide(val) {
+      if (val) {
+        var that = this;
+        setTimeout(function () {
+          that.showSubscriptionPeriodGuide = false;
+        }, 5000);
+      }
+    },
+    step: function step(val) {
+      if (val === 3) {
+        this.updateDays();
+        this.showSubscriptionPeriodGuide = true;
+      }
+    },
+    renewEveryMonth: function renewEveryMonth(val) {
+      this.showSubscriptionPeriodGuide = true;
+      this.updateDays();
+    },
+    terminationDate: function terminationDate(val) {
+      if (val) {
+        this.showSelectTerminationDateDialog = false;
+        this.renewEveryMonth = false;
+        this.showSubscriptionPeriodGuide = true;
+        this.updateDays();
+      }
+    }
+  },
+  computed: {
+    renewEveryMonthHint: function renewEveryMonthHint() {
+      return this.renewEveryMonth ? 'Un check "Renew every month" to specify a date to terminate this subscription' : 'Check "Renew every month" to renew this subscription every month';
+    },
+    costsDescription: function costsDescription() {
+      return 'Above are costs ' + (this.renewEveryMonth ? ' for this month' : ' between now and ' + this.terminationDate) + ' (' + this.daysToDeliver + ' days)';
+    },
+    selectedWeekdays: function selectedWeekdays() {
+      var selected = 0;
+      var _iteratorNormalCompletion = true;
+      var _didIteratorError = false;
+      var _iteratorError = undefined;
+
+      try {
+        for (var _iterator = this.weekdays[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+          var schedule = _step.value;
+
+          if (schedule.selected) {
+            selected++;
+          }
+        }
+      } catch (err) {
+        _didIteratorError = true;
+        _iteratorError = err;
+      } finally {
+        try {
+          if (!_iteratorNormalCompletion && _iterator.return) {
+            _iterator.return();
+          }
+        } finally {
+          if (_didIteratorError) {
+            throw _iteratorError;
+          }
+        }
+      }
+
+      return selected;
+    },
+    costs: function costs() {
+
+      if (this.step === 3) {
+        this.daysToDeliver = 0;
+
+        var _iteratorNormalCompletion2 = true;
+        var _didIteratorError2 = false;
+        var _iteratorError2 = undefined;
+
+        try {
+          for (var _iterator2 = this.weekdays[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+            var weekday = _step2.value;
+
+            if (weekday.selected) {
+              this.daysToDeliver += weekday.days;
+            }
+          }
+        } catch (err) {
+          _didIteratorError2 = true;
+          _iteratorError2 = err;
+        } finally {
+          try {
+            if (!_iteratorNormalCompletion2 && _iterator2.return) {
+              _iterator2.return();
+            }
+          } finally {
+            if (_didIteratorError2) {
+              throw _iteratorError2;
+            }
+          }
+        }
+
+        return {
+          item: this.selectedOptionItem.price * this.quantity * this.daysToDeliver,
+          delivery: this.option.deliveryCost * this.quantity * this.daysToDeliver
+        };
+      } else {
+        return {
+          item: 0,
+          delivery: 0
+        };
+      }
+    }
+  },
+  methods: {
+    onClose: function onClose(val) {
+      this.step = 1;
+      this.optionId = null;
+      this.option = null;
+      this.selectedOptionItem = null;
+      this.terminationDate = null;
+      this.renewEveryMonth = true;
+      this.quantity = null;
+      this.options = [];
+      for (var i = 0; i < this.weekdays.length; i++) {
+        this.weekdays[i].selected = false;
+      }
+      this.$emit('onClose', val);
+    },
+    allowedDates: function allowedDates(date) {
+      //YYYY/MM/DD
+      var givenDate = __WEBPACK_IMPORTED_MODULE_1_moment___default()(date);
+      return __WEBPACK_IMPORTED_MODULE_1_moment___default()().diff(givenDate, 'days') <= 0;
+      //const [, , day] = date.split('-')
+      //return parseInt(day, 10) % 2 === 0
+    },
+    resetDays: function resetDays() {
+      //Initialize days of weekdays in the subscribed period
+      for (var i = 0; i < this.weekdays.length; i++) {
+        this.weekdays[i].days = 0;
+      }
+    },
+    updateDays: function updateDays() {
+
+      this.resetDays();
+
+      if (this.renewEveryMonth) {
+
+        //Date today
+        var currentDayOfThisMonth = __WEBPACK_IMPORTED_MODULE_1_moment___default()(this.systemVariables.date).date();
+        this.$utils.log('currentDayOfThisMonth = ' + currentDayOfThisMonth);
+
+        //Date of the last day of this month
+        var lastDayOfThisMonth = __WEBPACK_IMPORTED_MODULE_1_moment___default()(this.systemVariables.date).endOf('month').date();
+        this.$utils.log('lastDayOfThisMonth = ' + lastDayOfThisMonth);
+
+        //Add one to #currentDayOfThisMonth so as not to include today
+        for (var i = currentDayOfThisMonth + 1; i <= lastDayOfThisMonth; i++) {
+          //Weekday number of the date
+          var weekdayNumber = __WEBPACK_IMPORTED_MODULE_1_moment___default()().date(i).weekday();
+          //Updates number of days of the weekday number in the current month
+          this.updateWeekdayDays(weekdayNumber);
+        }
+      } else if (this.terminationDate) {
+        //Calculate days to deliver until the termination date
+
+        var terminationDayOfYear = __WEBPACK_IMPORTED_MODULE_1_moment___default()(this.terminationDate).dayOfYear();
+        var currentDayOfYear = __WEBPACK_IMPORTED_MODULE_1_moment___default()().dayOfYear();
+
+        //Add one to #currentDayOfYear so as not to include today
+        for (var _i = currentDayOfYear + 1; _i <= terminationDayOfYear; _i++) {
+          //Weekday number of the day of year
+          var _weekdayNumber = __WEBPACK_IMPORTED_MODULE_1_moment___default()().dayOfYear(_i).weekday();
+          //Updates number of days of the weekday number in the current month
+          this.updateWeekdayDays(_weekdayNumber);
+        }
+      }
+    },
+    updateWeekdayDays: function updateWeekdayDays(weekdayNumber) {
+      //Check if weekday number is selected, if selected update days of that weekday in the subscription period
+      for (var i = 0; i < this.weekdays.length; i++) {
+        var weekday = this.weekdays[i];
+        if (weekday.number === weekdayNumber && weekday.selected) {
+          this.weekdays[i].days++;
+          break;
+        }
+      }
+    },
+    submit: function submit() {
+      var selectedWeekdayNumbers = [];
+      var _iteratorNormalCompletion3 = true;
+      var _didIteratorError3 = false;
+      var _iteratorError3 = undefined;
+
+      try {
+        for (var _iterator3 = this.weekdays[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
+          var weekday = _step3.value;
+
+          if (weekday.selected) {
+            selectedWeekdayNumbers.push(weekday.number);
+          }
+        }
+      } catch (err) {
+        _didIteratorError3 = true;
+        _iteratorError3 = err;
+      } finally {
+        try {
+          if (!_iteratorNormalCompletion3 && _iterator3.return) {
+            _iterator3.return();
+          }
+        } finally {
+          if (_didIteratorError3) {
+            throw _iteratorError3;
+          }
+        }
+      }
+
+      var subscription = {
+        renewEveryMonth: this.renewEveryMonth,
+        terminationDate: this.terminationDate,
+        weekdays: selectedWeekdayNumbers.join('#'),
+        quantity: this.quantity,
+        deliveryCost: this.costs.delivery,
+        itemCost: this.costs.item,
+        optionItemId: this.selectedOptionItem.id,
+        optionId: this.optionId
+      };
+
+      var that = this;
+
+      this.$refs.connectionManager.post('subscriptions', {
+        onSuccess: function onSuccess(response) {
+          __WEBPACK_IMPORTED_MODULE_2__event_bus__["a" /* default */].$emit(that.$actions.addedSubscription);
+          that.onClose(true);
+        }
+      }, subscription);
+    },
+    loadSubscriptionOptions: function loadSubscriptionOptions() {
+      var that = this;
+      this.$refs.connectionManager.get('subscriptionOptions', {
+        onSuccess: function onSuccess(response) {
+          that.options = [];
+          that.options = that.options.concat(response.data.data);
+          that.systemVariables = response.data.systemVariables;
+          that.weekdays = [];
+          that.weekdays.push({ name: 'Monday', number: 1, days: 0 });
+          that.weekdays.push({ name: 'Tuesday', number: 2, days: 0 });
+          that.weekdays.push({ name: 'Wednesday', number: 3, days: 0 });
+          that.weekdays.push({ name: 'Thursday', number: 4, days: 0 });
+          that.weekdays.push({ name: 'Friday', number: 5, days: 0 });
+          that.weekdays.push({ name: 'Saturday', number: 6, days: 0 });
+          that.weekdays.push({ name: 'Sunday', number: 0, days: 0 });
+        }
+      }, { withSystemVariables: true });
+    }
+  }
+});
+
+/***/ }),
+
 /***/ "./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}]],\"plugins\":[\"transform-object-rest-spread\",[\"transform-runtime\",{\"polyfill\":false,\"helpers\":false}]]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/js/components/AddToCartDialog.vue":
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -4866,6 +5375,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
 
 
 
@@ -4972,16 +5486,16 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
   name: 'base',
   methods: {
     isClientAdmin: function isClientAdmin() {
-      return this.$auth.user().accountType === 'CLIENT_ADMIN';
+      return this.$auth.user().role.name === 'CLIENT_ADMIN';
     },
     isPurchasingHead: function isPurchasingHead() {
-      return this.$auth.user().accountType === 'PURCHASING_HEAD';
+      return this.$auth.user().role.name === 'PURCHASING_HEAD';
     },
     isDepartmentHead: function isDepartmentHead() {
-      return this.$auth.user().accountType === 'DEPARTMENT_HEAD';
+      return this.$auth.user().role.name === 'DEPARTMENT_HEAD';
     },
     isDepartmentUser: function isDepartmentUser() {
-      return this.$auth.user().accountType === 'DEPARTMENT_USER';
+      return this.$auth.user().role.name === 'DEPARTMENT_USER';
     }
   },
   mounted: function mounted() {
@@ -5531,12 +6045,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
-//
-//
-//
-//
-//
 
 
 
@@ -5579,8 +6087,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       },
       currentTab: null,
       currentTabItem: null,
-      items: [],
-      spent: 0
+      items: []
     };
   },
 
@@ -5591,7 +6098,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       this.$refs.connectionManager.get('reports', {
         onSuccess: function onSuccess(response) {
           that.items = that.items.concat(response.data.data);
-          that.spent = response.data.meta.spent;
         }
       }, { filter: this.currentTabItem.id });
     }
@@ -5668,6 +6174,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
 
 
 
@@ -5675,6 +6182,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
   name: 'date-input',
   props: {
     disabled: {
+      type: Boolean,
+      default: false
+    },
+    noTitle: {
       type: Boolean,
       default: false
     },
@@ -5947,7 +6458,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     return {
       urgent: false,
       courierOptions: [],
-      systemVariables: [],
+      costVariables: [],
       originInput: '',
       originName: null,
       originFormattedAddress: null,
@@ -6113,13 +6624,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         var costPerKM = void 0;
         var baseCost = void 0;
         if (this.urgent) {
-          costPerMinute = this.systemVariables.URGENT_COST_PER_KM * (this.itemWithLongestDistance.distance / 60);
-          costPerKM = this.systemVariables.URGENT_COST_PER_MIN * (this.itemWithLongestDistance.duration / 1000);
-          baseCost = this.systemVariables.URGENT_BASE_COST;
+          costPerMinute = this.costVariables.URGENT_COST_PER_KM * (this.itemWithLongestDistance.distance / 60);
+          costPerKM = this.costVariables.URGENT_COST_PER_MIN * (this.itemWithLongestDistance.duration / 1000);
+          baseCost = this.costVariables.URGENT_BASE_COST;
         } else {
-          costPerMinute = this.systemVariables.NON_URGENT_COST_PER_KM * (this.itemWithLongestDistance.distance / 60);
-          costPerKM = this.systemVariables.NON_URGENT_COST_PER_MIN * (this.itemWithLongestDistance.duration / 1000);
-          baseCost = this.systemVariables.NON_URGENT_BASE_COST;
+          costPerMinute = this.costVariables.NON_URGENT_COST_PER_KM * (this.itemWithLongestDistance.distance / 60);
+          costPerKM = this.costVariables.NON_URGENT_COST_PER_MIN * (this.itemWithLongestDistance.duration / 1000);
+          baseCost = this.costVariables.NON_URGENT_BASE_COST;
         }
 
         var totalCost = baseCost + costPerMinute + costPerKM;
@@ -6216,10 +6727,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       onSuccess: function onSuccess(response) {
         that.$utils.log(response.data.data);
         that.$utils.log(response.data.variables);
-        that.systemVariables = response.data.variables;
+        that.costVariables = response.data.costVariables;
         that.courierOptions = that.courierOptions.concat(response.data.data);
       }
-    }, { withVariables: true });
+    }, { withCostVariables: true });
   }
 });
 
@@ -6847,315 +7358,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     __WEBPACK_IMPORTED_MODULE_0__event_bus__["a" /* default */].$on(this.$actions.rejected, function () {
       that.refresh();
     });
+    __WEBPACK_IMPORTED_MODULE_0__event_bus__["a" /* default */].$on(this.$actions.addedSubscription, function () {
+      that.refresh();
+    });
     this.refresh();
-  }
-});
-
-/***/ }),
-
-/***/ "./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}]],\"plugins\":[\"transform-object-rest-spread\",[\"transform-runtime\",{\"polyfill\":false,\"helpers\":false}]]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/js/components/EditSubscriptionDialog.vue":
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-
-/* harmony default export */ __webpack_exports__["default"] = ({
-  name: 'edit-subscription-dialog',
-  props: {
-    subscriptionItem: {
-      required: true
-    },
-    subscriptionSchedules: {
-      required: true
-    }
-  },
-  data: function data() {
-    return {
-      connecting: false,
-      error: null,
-      errorText: '',
-      dialog: false,
-      everydayCheckbox: false
-    };
-  },
-
-  watch: {
-    subscriptionItem: function subscriptionItem(_subscriptionItem) {
-      var _this = this;
-
-      this.dialog = !!_subscriptionItem;
-      var scheduledCount = 0;
-
-      var _loop = function _loop(weekday) {
-        var scheduled = _this.subscriptionSchedules.find(function (element) {
-          return element.name === weekday.name;
-        });
-        if (scheduled) {
-          weekday.selected = true;
-          scheduledCount++;
-        } else {
-          weekday.selected = false;
-        }
-      };
-
-      var _iteratorNormalCompletion = true;
-      var _didIteratorError = false;
-      var _iteratorError = undefined;
-
-      try {
-        for (var _iterator = this.subscriptionSchedules[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-          var weekday = _step.value;
-
-          _loop(weekday);
-        }
-      } catch (err) {
-        _didIteratorError = true;
-        _iteratorError = err;
-      } finally {
-        try {
-          if (!_iteratorNormalCompletion && _iterator.return) {
-            _iterator.return();
-          }
-        } finally {
-          if (_didIteratorError) {
-            throw _iteratorError;
-          }
-        }
-      }
-
-      if (scheduledCount === 5) {
-        this.everydayCheckbox = true;
-      }
-    },
-    everydayCheckbox: function everydayCheckbox(_everydayCheckbox) {
-      this.$utils.log('everydayCheckbox ' + _everydayCheckbox);
-      if (_everydayCheckbox) {
-        var _iteratorNormalCompletion2 = true;
-        var _didIteratorError2 = false;
-        var _iteratorError2 = undefined;
-
-        try {
-          for (var _iterator2 = this.subscriptionSchedules[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
-            var weekday = _step2.value;
-
-            weekday.selected = false;
-          }
-        } catch (err) {
-          _didIteratorError2 = true;
-          _iteratorError2 = err;
-        } finally {
-          try {
-            if (!_iteratorNormalCompletion2 && _iterator2.return) {
-              _iterator2.return();
-            }
-          } finally {
-            if (_didIteratorError2) {
-              throw _iteratorError2;
-            }
-          }
-        }
-      }
-    },
-
-    subscriptionSchedules: {
-      handler: function handler(after, before) {
-        // Return the object that changed
-        /*let changed = after.filter(function (p, idx) {
-            return Object.keys(p).some(function (prop) {
-                return p[prop] !== before[idx][prop]
-            })
-        })
-        // Log it
-        console.log(changed)
-        */
-        this.$utils.log(this.subscriptionSchedules);
-        var selected = 0;
-        var _iteratorNormalCompletion3 = true;
-        var _didIteratorError3 = false;
-        var _iteratorError3 = undefined;
-
-        try {
-          for (var _iterator3 = this.subscriptionSchedules[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
-            var weekday = _step3.value;
-
-            this.$utils.log('weekday = ' + weekday.name + ', selected = ' + weekday.selected);
-            if (weekday.selected) {
-              selected = selected + 1;
-            }
-          }
-        } catch (err) {
-          _didIteratorError3 = true;
-          _iteratorError3 = err;
-        } finally {
-          try {
-            if (!_iteratorNormalCompletion3 && _iterator3.return) {
-              _iterator3.return();
-            }
-          } finally {
-            if (_didIteratorError3) {
-              throw _iteratorError3;
-            }
-          }
-        }
-
-        if (selected > 0 && this.everydayCheckbox) {
-          this.everydayCheckbox = false;
-        }
-
-        if (selected === 5 || selected === 0) {
-          this.everydayCheckbox = true;
-        }
-      },
-      deep: true
-    }
-  },
-  methods: {
-    reset: function reset() {
-      this.connecting = false;
-      this.quantity = null;
-      this.everydayCheckbox = false;
-      var _iteratorNormalCompletion4 = true;
-      var _didIteratorError4 = false;
-      var _iteratorError4 = undefined;
-
-      try {
-        for (var _iterator4 = this.subscriptionSchedules[Symbol.iterator](), _step4; !(_iteratorNormalCompletion4 = (_step4 = _iterator4.next()).done); _iteratorNormalCompletion4 = true) {
-          var schedule = _step4.value;
-
-          schedule.selected = false;
-        }
-      } catch (err) {
-        _didIteratorError4 = true;
-        _iteratorError4 = err;
-      } finally {
-        try {
-          if (!_iteratorNormalCompletion4 && _iterator4.return) {
-            _iterator4.return();
-          }
-        } finally {
-          if (_didIteratorError4) {
-            throw _iteratorError4;
-          }
-        }
-      }
-    },
-    onClose: function onClose() {
-      this.reset();
-      this.$emit('onClose');
-    },
-    subscribe: function subscribe() {
-      var _this2 = this;
-
-      this.connecting = true;
-      var subscription = {
-        subscriptionItemId: this.subscriptionItem.id,
-        quantity: this.subscriptionItem.clientSubscription.quantity,
-        schedules: []
-      };
-      if (this.everydayCheckbox) {
-        var everydaySchedule = this.subscriptionSchedules.find(function (element) {
-          return element.name === 'Everyday';
-        });
-        subscription.schedules.push(everydaySchedule.id);
-      } else {
-        var _iteratorNormalCompletion5 = true;
-        var _didIteratorError5 = false;
-        var _iteratorError5 = undefined;
-
-        try {
-          for (var _iterator5 = this.subscriptionSchedules[Symbol.iterator](), _step5; !(_iteratorNormalCompletion5 = (_step5 = _iterator5.next()).done); _iteratorNormalCompletion5 = true) {
-            var schedule = _step5.value;
-
-            if (schedule.selected) {
-              subscription.schedules.push(schedule.id);
-            }
-          }
-        } catch (err) {
-          _didIteratorError5 = true;
-          _iteratorError5 = err;
-        } finally {
-          try {
-            if (!_iteratorNormalCompletion5 && _iterator5.return) {
-              _iterator5.return();
-            }
-          } finally {
-            if (_didIteratorError5) {
-              throw _iteratorError5;
-            }
-          }
-        }
-      }
-      this.$utils.log(subscription);
-      this.axios.patch('/subscriptions/' + this.subscriptionItem.id, {
-        subscriptionItemId: subscription.subscriptionItemId,
-        schedules: subscription.schedules,
-        quantity: subscription.quantity
-      }).then(function (response) {
-        var subscriptionItem = response.data.data;
-        _this2.$emit('onClose', subscriptionItem);
-        _this2.reset();
-      }).catch(function (error) {});
-    }
   }
 });
 
@@ -7683,6 +7889,21 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__ConnectionManager___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__ConnectionManager__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Base_vue__ = __webpack_require__("./resources/assets/js/components/Base.vue");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Base_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__Base_vue__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -8943,13 +9164,19 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 /***/ }),
 
-/***/ "./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}]],\"plugins\":[\"transform-object-rest-spread\",[\"transform-runtime\",{\"polyfill\":false,\"helpers\":false}]]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/js/components/SubscriptionDialog.vue":
+/***/ "./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}]],\"plugins\":[\"transform-object-rest-spread\",[\"transform-runtime\",{\"polyfill\":false,\"helpers\":false}]]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/js/components/Subscriptions.vue":
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__ConnectionManager__ = __webpack_require__("./resources/assets/js/components/ConnectionManager.vue");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__ConnectionManager___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__ConnectionManager__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Base_vue__ = __webpack_require__("./resources/assets/js/components/Base.vue");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Base_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__Base_vue__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__AddSubscriptionDialog__ = __webpack_require__("./resources/assets/js/components/AddSubscriptionDialog.vue");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__AddSubscriptionDialog___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__AddSubscriptionDialog__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_moment__ = __webpack_require__("./node_modules/moment/moment.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_moment___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_moment__);
 //
 //
 //
@@ -9006,59 +9233,102 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+
 
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-  name: 'subscription-dialog',
-  components: { ConnectionManager: __WEBPACK_IMPORTED_MODULE_0__ConnectionManager___default.a },
-  props: {
-    subscribeItem: {
-      required: true
-    }
+  extends: __WEBPACK_IMPORTED_MODULE_1__Base_vue___default.a,
+  components: {
+    AddSubscriptionDialog: __WEBPACK_IMPORTED_MODULE_2__AddSubscriptionDialog___default.a,
+    ConnectionManager: __WEBPACK_IMPORTED_MODULE_0__ConnectionManager___default.a
   },
+  name: 'subscriptions',
   data: function data() {
     return {
+      showAddSubscriptionDialog: false,
       connecting: false,
-      error: null,
-      errorText: '',
-      dialog: false,
-      everydayCheckbox: true,
-      quantity: null,
-      subscriptionSchedules: []
+      currentTab: null,
+      items: [],
+      headers: [{ text: 'Item', sortable: false, value: 'optionItem.name' }, { text: 'Weekdays', sortable: false, value: 'weekdays' }, { text: 'Quantity', sortable: false, value: 'quantity' }, { text: 'Item Cost', sortable: false, value: 'item_cost' }, { text: 'Delivery Cost', sortable: false, value: 'deliveryCost' }, { text: 'Total Cost', sortable: false, value: 'amount' }, { text: 'Duration', sortable: false, value: '' }, { text: 'Action', sortable: false, value: '' }]
+
     };
   },
 
   watch: {
-    subscribeItem: function subscribeItem(val) {
-      this.everydayCheckbox = true;
-      this.dialog = !!val;
-      if (this.dialog && this.subscriptionSchedules.length === 0 && val) {
-        this.loadSubscriptionSchedules();
-      }
-    },
-    everydayCheckbox: function everydayCheckbox(val) {
-      this.$utils.log('everydayCheckbox ' + val);
+    currentTab: function currentTab(val) {
       if (val) {
-        for (var i = 0; i < this.subscriptionSchedules.length; i++) {
-          this.subscriptionSchedules[i].selected = false;
-        }
+        this.refresh();
       }
+    }
+  },
+  methods: {
+    showApprovalActions: function showApprovalActions(item) {
+      return this.currentTab === 'pendingApproval' && (this.isPurchasingHead() && item.status === 'AT_PURCHASING_HEAD' || this.isDepartmentHead() && item.status === 'AT_DEPARTMENT_HEAD');
     },
-    subscriptionSchedules: function subscriptionSchedules(val) {
-      this.$utils.log(val);
-      var selected = 0;
+    confirm: function confirm(item) {
+      this.items = [];
+      var that = this;
+      this.$refs.connectionManager.patch('subscriptions/' + item.id, {
+        onSuccess: function onSuccess(response) {
+          that.items = [];
+          that.items = that.items.concat(response.data.data);
+        }
+      }, {
+        action: 'approve'
+      });
+    },
+    reject: function reject(item) {
+      this.items = [];
+      var that = this;
+      this.$refs.connectionManager.patch('subscriptions/' + item.id, {
+        onSuccess: function onSuccess(response) {
+          that.items = [];
+          that.items = that.items.concat(response.data.data);
+        }
+      }, {
+        action: 'reject'
+      });
+    },
+    transformWeekdays: function transformWeekdays(weekdays) {
+      var weekdayNumbers = weekdays.split('#');
+      var weekdayNames = [];
       var _iteratorNormalCompletion = true;
       var _didIteratorError = false;
       var _iteratorError = undefined;
 
       try {
-        for (var _iterator = this.subscriptionSchedules[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-          var schedule = _step.value;
+        for (var _iterator = weekdayNumbers[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+          var weekdayNumber = _step.value;
 
-          if (schedule.selected) {
-            selected++;
-          }
+          weekdayNames.push(__WEBPACK_IMPORTED_MODULE_3_moment___default()().weekday(weekdayNumber).format('dddd'));
         }
       } catch (err) {
         _didIteratorError = true;
@@ -9075,277 +9345,31 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         }
       }
 
-      this.$utils.log(selected);
-
-      if (selected === this.subscriptionSchedules.length) {
-        this.everydayCheckbox = true;
-      }
-    }
-  },
-  methods: {
-    reset: function reset() {
-      this.quantity = null;
-      this.everydayCheckbox = true;
+      return weekdayNames.join(',');
     },
-    close: function close(val) {
-      this.reset();
-      this.$emit('onClose', val);
-    },
-    subscribe: function subscribe() {
-      this.connecting = true;
-      var subscription = {
-        subscriptionItemId: this.subscribeItem.id,
-        quantity: this.quantity,
-        schedules: []
-      };
-      var _iteratorNormalCompletion2 = true;
-      var _didIteratorError2 = false;
-      var _iteratorError2 = undefined;
-
-      try {
-        for (var _iterator2 = this.subscriptionSchedules[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
-          var schedule = _step2.value;
-
-          if (schedule.selected || this.everydayCheckbox) {
-            subscription.schedules.push(schedule.id);
-          }
-        }
-      } catch (err) {
-        _didIteratorError2 = true;
-        _iteratorError2 = err;
-      } finally {
-        try {
-          if (!_iteratorNormalCompletion2 && _iterator2.return) {
-            _iterator2.return();
-          }
-        } finally {
-          if (_didIteratorError2) {
-            throw _iteratorError2;
-          }
-        }
-      }
-
-      this.$utils.log(subscription);
-      var that = this;
-      this.$refs.connectionManager.post('/subscriptions', {
-        onSuccess: function onSuccess(response) {
-          //let subscriptionItem = response.data.data
-          that.close(true);
-        }
-      }, {
-        subscriptionItemId: subscription.subscriptionItemId,
-        schedules: subscription.schedules,
-        quantity: subscription.quantity
-      });
-    },
-    loadSubscriptionSchedules: function loadSubscriptionSchedules() {
-      var that = this;
-      this.$refs.connectionManager.get('subscriptionSchedules', {
-        onSuccess: function onSuccess(response) {
-          that.subscriptionSchedules = that.subscriptionSchedules.concat(response.data.data);
-        }
-      });
-    }
-  }
-});
-
-/***/ }),
-
-/***/ "./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}]],\"plugins\":[\"transform-object-rest-spread\",[\"transform-runtime\",{\"polyfill\":false,\"helpers\":false}]]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/js/components/Subscriptions.vue":
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__SubscriptionDialog__ = __webpack_require__("./resources/assets/js/components/SubscriptionDialog.vue");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__SubscriptionDialog___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__SubscriptionDialog__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__EditSubscriptionDialog__ = __webpack_require__("./resources/assets/js/components/EditSubscriptionDialog.vue");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__EditSubscriptionDialog___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__EditSubscriptionDialog__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__ConnectionManager__ = __webpack_require__("./resources/assets/js/components/ConnectionManager.vue");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__ConnectionManager___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__ConnectionManager__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__Base_vue__ = __webpack_require__("./resources/assets/js/components/Base.vue");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__Base_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3__Base_vue__);
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-
-
-
-
-
-
-/* harmony default export */ __webpack_exports__["default"] = ({
-  extends: __WEBPACK_IMPORTED_MODULE_3__Base_vue___default.a,
-  components: {
-    ConnectionManager: __WEBPACK_IMPORTED_MODULE_2__ConnectionManager___default.a,
-    EditSubscriptionDialog: __WEBPACK_IMPORTED_MODULE_1__EditSubscriptionDialog___default.a,
-    SubscriptionDialog: __WEBPACK_IMPORTED_MODULE_0__SubscriptionDialog___default.a
-  },
-  name: 'subscriptions',
-  data: function data() {
-    return {
-      connecting: false,
-      unSubscribing: 0,
-      currentTab: null,
-      subscribeItem: null,
-      editItem: null,
-      subscriptionTypes: [],
-      subscriptionItems: [],
-      subscriptionSchedules: [],
-      headers: [{ text: 'Name', sortable: false, value: 'name' }, { text: 'Quantity Subscribed', sortable: false, value: '' }, { text: 'Schedule', sortable: false, value: '' }, { text: 'Subscription Date', sortable: false, value: '' }, { text: 'Total Deliveries', sortable: false, value: '' }, { text: 'Total Cost', sortable: false, value: '' }, { text: 'Action', sortable: false, value: '' }]
-
-    };
-  },
-
-  watch: {
-    currentTab: function currentTab(val) {
-      this.$utils.log(val);
-      this.$utils.log(this.connecting);
+    onCloseAddSubscriptionDialog: function onCloseAddSubscriptionDialog(val) {
+      this.showAddSubscriptionDialog = false;
       if (val) {
-        var subscriptionType = this.subscriptionTypes.find(function (element) {
-          return element.name === val;
-        });
-        this.subscriptionItems = [];
-        this.subscriptionItems = this.subscriptionItems.concat(subscriptionType.subscriptionItems);
-      }
-    },
-    subscribeItem: function subscribeItem(_subscribeItem) {
-      this.dialog = !!_subscribeItem;
-    }
-  },
-  methods: {
-    unsubscribe: function unsubscribe(subscriptionItem) {
-      this.unSubscribing = subscriptionItem.id;
-      var that = this;
-      this.$refs.connectionManager.delete('/subscriptions/' + subscriptionItem.id, {
-        onSuccess: function onSuccess(response) {
-          that.unSubscribing = 0;
-          that.loadSubscriptionTypes();
+        if (this.currentTab !== 'pendingApproval') {
+          this.currentTab = 'pendingApproval';
+        } else {
+          this.refresh();
         }
-      });
-    },
-    onCloseSubscriptionDialog: function onCloseSubscriptionDialog(subscribedItem) {
-      this.$utils.log('onCloseSubscriptionDialog');
-      this.$utils.log(subscribedItem);
-      this.subscribeItem = null;
-      if (subscribedItem) {
-        this.loadSubscriptionTypes(true);
       }
     },
-    onCloseEditSubscriptionDialog: function onCloseEditSubscriptionDialog(subscribedItem) {
-      if (subscribedItem) {
-        this.loadSubscriptionTypes(true);
-      }
-      this.subscribeItem = null;
-    },
-    loadSubscriptionTypes: function loadSubscriptionTypes(refreshing) {
+    refresh: function refresh() {
       var that = this;
-      this.subscriptionItems = [];
-      this.$refs.connectionManager.get('subscriptionTypes', {
+      that.items = [];
+      this.$refs.connectionManager.get('subscriptions', {
         onSuccess: function onSuccess(response) {
-          that.subscriptionTypes = [];
-          that.subscriptionTypes = that.subscriptionTypes.concat(response.data.data);
-          if (refreshing) {
-            var subscriptionType = that.subscriptionTypes.find(function (element) {
-              return element.name === that.currentTab;
-            });
-            that.subscriptionItems = [];
-            that.subscriptionItems = that.subscriptionItems.concat(subscriptionType.subscriptionItems);
-          } else {
-            that.currentTab = null;
-            that.currentTab = that.subscriptionTypes[0].name;
-          }
+          that.items = [];
+          that.items = that.items.concat(response.data.data);
         }
-      });
+      }, { filter: this.currentTab });
     }
   },
   mounted: function mounted() {
-    this.loadSubscriptionTypes(false);
+    this.currentTab = 'active';
   }
 });
 
@@ -9546,6 +9570,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       that.refreshBalance();
     });
     __WEBPACK_IMPORTED_MODULE_0__event_bus__["a" /* default */].$on(this.$actions.placedOrder, function () {
+      that.refreshBalance();
+    });
+    __WEBPACK_IMPORTED_MODULE_0__event_bus__["a" /* default */].$on(this.$actions.addedSubscription, function () {
       that.refreshBalance();
     });
     this.refreshBalance();
@@ -10487,6 +10514,21 @@ exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\
 
 /***/ }),
 
+/***/ "./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-0f58d542\",\"scoped\":true,\"hasInlineConfig\":true}!./node_modules/vue-loader/lib/selector.js?type=styles&index=0!./resources/assets/js/components/AddSubscriptionDialog.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__("./node_modules/css-loader/lib/css-base.js")(false);
+// imports
+
+
+// module
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+
+// exports
+
+
+/***/ }),
+
 /***/ "./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-12e1658c\",\"scoped\":true,\"hasInlineConfig\":true}!./node_modules/vue-loader/lib/selector.js?type=styles&index=0!./resources/assets/js/components/Departments.vue":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -10525,7 +10567,7 @@ exports = module.exports = __webpack_require__("./node_modules/css-loader/lib/cs
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -10556,21 +10598,6 @@ exports = module.exports = __webpack_require__("./node_modules/css-loader/lib/cs
 
 // module
 exports.push([module.i, "\n.vue-map-container {\n  position: relative;\n}\n.vue-map-container .vue-map {\n  left: 0; right: 0; top: 0; bottom: 0;\n  position: absolute;\n}\n.vue-map-hidden {\n  display: none;\n}\n", ""]);
-
-// exports
-
-
-/***/ }),
-
-/***/ "./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-361369fc\",\"scoped\":true,\"hasInlineConfig\":true}!./node_modules/vue-loader/lib/selector.js?type=styles&index=0!./resources/assets/js/components/SubscriptionDialog.vue":
-/***/ (function(module, exports, __webpack_require__) {
-
-exports = module.exports = __webpack_require__("./node_modules/css-loader/lib/css-base.js")(false);
-// imports
-
-
-// module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -10675,7 +10702,7 @@ exports = module.exports = __webpack_require__("./node_modules/css-loader/lib/cs
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -10705,7 +10732,7 @@ exports = module.exports = __webpack_require__("./node_modules/css-loader/lib/cs
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -10720,7 +10747,7 @@ exports = module.exports = __webpack_require__("./node_modules/css-loader/lib/cs
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -10810,7 +10837,7 @@ exports = module.exports = __webpack_require__("./node_modules/css-loader/lib/cs
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -10847,21 +10874,6 @@ exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\
 
 /***/ }),
 
-/***/ "./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-7e254db4\",\"scoped\":true,\"hasInlineConfig\":true}!./node_modules/vue-loader/lib/selector.js?type=styles&index=0!./resources/assets/js/components/EditSubscriptionDialog.vue":
-/***/ (function(module, exports, __webpack_require__) {
-
-exports = module.exports = __webpack_require__("./node_modules/css-loader/lib/css-base.js")(false);
-// imports
-
-
-// module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
-
-// exports
-
-
-/***/ }),
-
 /***/ "./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-81aaaab0\",\"scoped\":true,\"hasInlineConfig\":true}!./node_modules/vue-loader/lib/selector.js?type=styles&index=0!./resources/assets/js/components/Drawer.vue":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -10870,7 +10882,7 @@ exports = module.exports = __webpack_require__("./node_modules/css-loader/lib/cs
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -11005,7 +11017,7 @@ exports = module.exports = __webpack_require__("./node_modules/css-loader/lib/cs
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -45644,23 +45656,6 @@ var render = function() {
                                           ),
                                           _vm._v(" "),
                                           _c(
-                                            "v-list-tile-sub-title",
-                                            {
-                                              staticClass:
-                                                "caption accent--text"
-                                            },
-                                            [
-                                              _vm._v(
-                                                "\n                                        " +
-                                                  _vm._s(
-                                                    item.destinationFormattedAddress
-                                                  ) +
-                                                  "\n                                    "
-                                              )
-                                            ]
-                                          ),
-                                          _vm._v(" "),
-                                          _c(
                                             "div",
                                             [
                                               item.status === "REJECTED"
@@ -45975,7 +45970,7 @@ var render = function() {
               _c(
                 "v-btn",
                 {
-                  staticClass: "ma-3",
+                  staticClass: "ma-5",
                   attrs: {
                     color: "accent",
                     fab: "",
@@ -46029,6 +46024,860 @@ if (false) {
   module.hot.accept()
   if (module.hot.data) {
     require("vue-hot-reload-api")      .rerender("data-v-0c4b6f5c", module.exports)
+  }
+}
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-0f58d542\",\"hasScoped\":true,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/components/AddSubscriptionDialog.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "v-dialog",
+    {
+      attrs: { persistent: "", "max-width": "600px" },
+      model: {
+        value: _vm.dialog,
+        callback: function($$v) {
+          _vm.dialog = $$v
+        },
+        expression: "dialog"
+      }
+    },
+    [
+      _c(
+        "v-stepper",
+        {
+          model: {
+            value: _vm.step,
+            callback: function($$v) {
+              _vm.step = $$v
+            },
+            expression: "step"
+          }
+        },
+        [
+          _c(
+            "v-stepper-header",
+            [
+              _c(
+                "v-stepper-step",
+                { attrs: { step: "1", complete: _vm.step > 1 } },
+                [_vm._v("Option")]
+              ),
+              _vm._v(" "),
+              _c("v-divider"),
+              _vm._v(" "),
+              _c(
+                "v-stepper-step",
+                { attrs: { step: "2", complete: _vm.step > 2 } },
+                [_vm._v("Days")]
+              ),
+              _vm._v(" "),
+              _c("v-divider"),
+              _vm._v(" "),
+              _c("v-stepper-step", { attrs: { step: "3" } }, [
+                _vm._v("Quantity")
+              ])
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c(
+            "v-stepper-items",
+            [
+              _c("connection-manager", {
+                ref: "connectionManager",
+                model: {
+                  value: _vm.connecting,
+                  callback: function($$v) {
+                    _vm.connecting = $$v
+                  },
+                  expression: "connecting"
+                }
+              }),
+              _vm._v(" "),
+              _c(
+                "v-stepper-content",
+                { attrs: { step: "1" } },
+                [
+                  _c("v-select", {
+                    staticClass: "mb-1",
+                    attrs: {
+                      items: _vm.options,
+                      "hide-details": "",
+                      "item-text": "name",
+                      "item-value": "id",
+                      label: "Select a subscription option",
+                      placeholder: "Subscription option"
+                    },
+                    model: {
+                      value: _vm.optionId,
+                      callback: function($$v) {
+                        _vm.optionId = $$v
+                      },
+                      expression: "optionId"
+                    }
+                  }),
+                  _vm._v(" "),
+                  _c(
+                    "v-slide-y-transition",
+                    [
+                      _vm.option
+                        ? _c(
+                            "v-card",
+                            { attrs: { flat: "", tile: "" } },
+                            [
+                              _c(
+                                "v-list",
+                                {
+                                  staticClass: "scroll-y",
+                                  style:
+                                    "max-height: " +
+                                    _vm.$vuetify.breakpoint.height * 0.3 +
+                                    "px;"
+                                },
+                                [
+                                  _vm._l(_vm.option.items, function(
+                                    optionItem,
+                                    index
+                                  ) {
+                                    return [
+                                      _c(
+                                        "v-list-tile",
+                                        {
+                                          key: index,
+                                          on: {
+                                            click: function($event) {
+                                              _vm.selectedOptionItem = optionItem
+                                            }
+                                          }
+                                        },
+                                        [
+                                          _c(
+                                            "v-list-tile-content",
+                                            [
+                                              _c("v-list-tile-title", [
+                                                _vm._v(_vm._s(optionItem.name))
+                                              ]),
+                                              _vm._v(" "),
+                                              _c("v-list-tile-sub-title", [
+                                                _vm._v(
+                                                  _vm._s(
+                                                    _vm.$utils.formatMoney(
+                                                      optionItem.price
+                                                    )
+                                                  ) +
+                                                    "\n                                        "
+                                                )
+                                              ])
+                                            ],
+                                            1
+                                          )
+                                        ],
+                                        1
+                                      ),
+                                      _vm._v(" "),
+                                      index < _vm.option.items.length
+                                        ? _c("v-divider", {
+                                            key: _vm.option.items.length + index
+                                          })
+                                        : _vm._e()
+                                    ]
+                                  })
+                                ],
+                                2
+                              ),
+                              _vm._v(" "),
+                              _c(
+                                "v-chip",
+                                {
+                                  staticClass: "mt-3",
+                                  attrs: {
+                                    label: "",
+                                    outline: "",
+                                    color: "info",
+                                    small: ""
+                                  }
+                                },
+                                [
+                                  _c("v-icon", { attrs: { left: "" } }, [
+                                    _vm._v("info")
+                                  ]),
+                                  _vm._v(
+                                    "\n                            Select " +
+                                      _vm._s(_vm.option.name) +
+                                      " to subscribe to from the above list\n                        "
+                                  )
+                                ],
+                                1
+                              )
+                            ],
+                            1
+                          )
+                        : _vm._e()
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "v-card",
+                    [
+                      _c(
+                        "v-card-actions",
+                        [
+                          _c("v-spacer"),
+                          _vm._v(" "),
+                          _c(
+                            "v-btn",
+                            {
+                              attrs: { flat: "", color: "red" },
+                              nativeOn: {
+                                click: function($event) {
+                                  _vm.onClose(false)
+                                }
+                              }
+                            },
+                            [_vm._v("Cancel")]
+                          ),
+                          _vm._v(" "),
+                          _vm.selectedOptionItem
+                            ? _c(
+                                "v-btn",
+                                {
+                                  attrs: { color: "primary" },
+                                  nativeOn: {
+                                    click: function($event) {
+                                      _vm.step = 2
+                                    }
+                                  }
+                                },
+                                [
+                                  _vm._v(
+                                    "\n                            Subscribe for " +
+                                      _vm._s(_vm.selectedOptionItem.name) +
+                                      "\n                        "
+                                  )
+                                ]
+                              )
+                            : _vm._e()
+                        ],
+                        1
+                      )
+                    ],
+                    1
+                  )
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "v-stepper-content",
+                { attrs: { step: "2" } },
+                [
+                  _c(
+                    "v-slide-y-transition",
+                    [
+                      _vm.weekdays.length && _vm.step === 2
+                        ? _c(
+                            "v-card",
+                            [
+                              _c(
+                                "v-list",
+                                {
+                                  staticClass: "scroll-y",
+                                  style:
+                                    "max-height: " +
+                                    _vm.$vuetify.breakpoint.height * 0.45 +
+                                    "px;",
+                                  attrs: { dense: "" }
+                                },
+                                _vm._l(_vm.weekdays, function(item) {
+                                  return _c(
+                                    "v-list-tile",
+                                    { key: item.id },
+                                    [
+                                      _c(
+                                        "v-list-tile-content",
+                                        [
+                                          _c("v-list-tile-title", [
+                                            _vm._v(_vm._s(item.name))
+                                          ])
+                                        ],
+                                        1
+                                      ),
+                                      _vm._v(" "),
+                                      _c(
+                                        "v-list-tile-action",
+                                        [
+                                          _c("v-checkbox", {
+                                            model: {
+                                              value: item.selected,
+                                              callback: function($$v) {
+                                                _vm.$set(item, "selected", $$v)
+                                              },
+                                              expression: "item.selected"
+                                            }
+                                          })
+                                        ],
+                                        1
+                                      )
+                                    ],
+                                    1
+                                  )
+                                })
+                              ),
+                              _vm._v(" "),
+                              _c(
+                                "v-chip",
+                                {
+                                  staticClass: "mt-3 caption",
+                                  attrs: {
+                                    label: "",
+                                    outline: "",
+                                    color: "info",
+                                    small: ""
+                                  }
+                                },
+                                [
+                                  _c("v-icon", { attrs: { left: "" } }, [
+                                    _vm._v("info")
+                                  ]),
+                                  _vm._v(
+                                    "\n                            Select on which days we should deliver your subscription from the above list\n                        "
+                                  )
+                                ],
+                                1
+                              ),
+                              _vm._v(" "),
+                              _c(
+                                "v-card-actions",
+                                [
+                                  _c(
+                                    "v-btn",
+                                    {
+                                      attrs: { flat: "" },
+                                      nativeOn: {
+                                        click: function($event) {
+                                          _vm.step = 1
+                                        }
+                                      }
+                                    },
+                                    [
+                                      _c("v-icon", { attrs: { left: "" } }, [
+                                        _vm._v("arrow_back")
+                                      ]),
+                                      _vm._v(
+                                        "\n                                Back\n                            "
+                                      )
+                                    ],
+                                    1
+                                  ),
+                                  _vm._v(" "),
+                                  _c("v-spacer"),
+                                  _vm._v(" "),
+                                  _vm.selectedOptionItem
+                                    ? _c(
+                                        "v-btn",
+                                        {
+                                          attrs: { color: "primary", flat: "" },
+                                          on: {
+                                            click: function($event) {
+                                              _vm.step = 1
+                                            }
+                                          }
+                                        },
+                                        [
+                                          _c(
+                                            "v-icon",
+                                            { attrs: { left: "" } },
+                                            [_vm._v("check_circle")]
+                                          ),
+                                          _vm._v(
+                                            "\n                                " +
+                                              _vm._s(
+                                                _vm.selectedOptionItem.name
+                                              ) +
+                                              " @ " +
+                                              _vm._s(
+                                                _vm.$utils.formatMoney(
+                                                  _vm.selectedOptionItem.price
+                                                )
+                                              ) +
+                                              "\n                            "
+                                          )
+                                        ],
+                                        1
+                                      )
+                                    : _vm._e(),
+                                  _vm._v(" "),
+                                  _c(
+                                    "v-btn",
+                                    {
+                                      attrs: { flat: "", color: "red" },
+                                      nativeOn: {
+                                        click: function($event) {
+                                          _vm.onClose(false)
+                                        }
+                                      }
+                                    },
+                                    [_vm._v("Cancel")]
+                                  ),
+                                  _vm._v(" "),
+                                  _c(
+                                    "v-btn",
+                                    {
+                                      attrs: {
+                                        color: "primary",
+                                        disabled: _vm.selectedWeekdays <= 0
+                                      },
+                                      nativeOn: {
+                                        click: function($event) {
+                                          _vm.step = 3
+                                        }
+                                      }
+                                    },
+                                    [
+                                      _vm._v(
+                                        "\n                                Continue\n                            "
+                                      )
+                                    ]
+                                  )
+                                ],
+                                1
+                              )
+                            ],
+                            1
+                          )
+                        : _vm._e()
+                    ],
+                    1
+                  )
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "v-stepper-content",
+                { attrs: { step: "3" } },
+                [
+                  _c(
+                    "v-card",
+                    { attrs: { flat: "", tile: "" } },
+                    [
+                      _c(
+                        "v-layout",
+                        {
+                          attrs: {
+                            row: "",
+                            wrap: "",
+                            "align-center": "",
+                            "justify-center": ""
+                          }
+                        },
+                        [
+                          _c("v-flex", { attrs: { xs12: "" } }, [
+                            _vm.showSubscriptionPeriodGuide
+                              ? _c(
+                                  "p",
+                                  {
+                                    staticClass:
+                                      "caption accent text--white px-5"
+                                  },
+                                  [
+                                    _vm._v(
+                                      "\n                                " +
+                                        _vm._s(_vm.renewEveryMonthHint) +
+                                        "\n                            "
+                                    )
+                                  ]
+                                )
+                              : _vm._e()
+                          ]),
+                          _vm._v(" "),
+                          _c(
+                            "v-flex",
+                            { attrs: { xs5: "" } },
+                            [
+                              _c("v-text-field", {
+                                attrs: {
+                                  required: "",
+                                  mask: "###",
+                                  label: "Enter quantity",
+                                  disabled: _vm.connecting,
+                                  "hide-details": _vm.renewEveryMonth,
+                                  placeholder: "Quantity to be delivered"
+                                },
+                                model: {
+                                  value: _vm.quantity,
+                                  callback: function($$v) {
+                                    _vm.quantity = $$v
+                                  },
+                                  expression: "quantity"
+                                }
+                              })
+                            ],
+                            1
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "v-flex",
+                            { staticClass: "pl-5", attrs: { xs7: "" } },
+                            [
+                              _c("v-checkbox", {
+                                attrs: {
+                                  label: "Renew every month",
+                                  disabled: _vm.connecting,
+                                  "hide-details": ""
+                                },
+                                model: {
+                                  value: _vm.renewEveryMonth,
+                                  callback: function($$v) {
+                                    _vm.renewEveryMonth = $$v
+                                  },
+                                  expression: "renewEveryMonth"
+                                }
+                              })
+                            ],
+                            1
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "v-flex",
+                            { attrs: { xs12: "" } },
+                            [
+                              !_vm.renewEveryMonth
+                                ? _c("v-text-field", {
+                                    attrs: {
+                                      required: !_vm.renewEveryMonth,
+                                      disabled: _vm.connecting,
+                                      "hide-details": "",
+                                      label:
+                                        "Select date to terminate this subscription",
+                                      placeholder:
+                                        "Date to terminate this subscription"
+                                    },
+                                    on: {
+                                      focus: function($event) {
+                                        _vm.showSelectTerminationDateDialog = true
+                                      }
+                                    },
+                                    model: {
+                                      value: _vm.terminationDate,
+                                      callback: function($$v) {
+                                        _vm.terminationDate = $$v
+                                      },
+                                      expression: "terminationDate"
+                                    }
+                                  })
+                                : _vm._e()
+                            ],
+                            1
+                          )
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "v-dialog",
+                        {
+                          attrs: { "max-width": "290px", lazy: "" },
+                          model: {
+                            value: _vm.showSelectTerminationDateDialog,
+                            callback: function($$v) {
+                              _vm.showSelectTerminationDateDialog = $$v
+                            },
+                            expression: "showSelectTerminationDateDialog"
+                          }
+                        },
+                        [
+                          _c(
+                            "v-card",
+                            { attrs: { tile: "", flat: "" } },
+                            [
+                              _c("v-date-picker", {
+                                attrs: { "allowed-dates": _vm.allowedDates },
+                                model: {
+                                  value: _vm.terminationDate,
+                                  callback: function($$v) {
+                                    _vm.terminationDate = $$v
+                                  },
+                                  expression: "terminationDate"
+                                }
+                              })
+                            ],
+                            1
+                          )
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _vm.terminationDate || _vm.renewEveryMonth
+                        ? _c(
+                            "v-list",
+                            {
+                              staticClass: "scroll-y",
+                              style:
+                                "max-height: " +
+                                _vm.$vuetify.breakpoint.height * 0.3 +
+                                "px;",
+                              attrs: { dense: "" }
+                            },
+                            _vm._l(_vm.weekdays, function(item) {
+                              return item.selected
+                                ? _c(
+                                    "v-list-tile",
+                                    { key: item.id },
+                                    [
+                                      _c(
+                                        "v-list-tile-content",
+                                        [
+                                          _c("v-list-tile-sub-title", [
+                                            _vm._v(
+                                              "\n                                    " +
+                                                _vm._s(
+                                                  item.days +
+                                                    " " +
+                                                    item.name +
+                                                    "" +
+                                                    (item.days > 1 ? "s" : "")
+                                                ) +
+                                                "\n                                    "
+                                            ),
+                                            _c("b", [
+                                              _vm._v(
+                                                "\n                                        " +
+                                                  _vm._s(
+                                                    _vm.renewEveryMonth
+                                                      ? " this month "
+                                                      : " between now and " +
+                                                        _vm.terminationDate
+                                                  ) +
+                                                  "\n                                    "
+                                              )
+                                            ])
+                                          ])
+                                        ],
+                                        1
+                                      )
+                                    ],
+                                    1
+                                  )
+                                : _vm._e()
+                            })
+                          )
+                        : _vm._e(),
+                      _vm._v(" "),
+                      _c("v-slide-y-transition", [
+                        _vm.terminationDate || _vm.renewEveryMonth
+                          ? _c(
+                              "div",
+                              [
+                                _c(
+                                  "v-btn",
+                                  {
+                                    attrs: {
+                                      color: "primary",
+                                      small: "",
+                                      flat: "",
+                                      outline: ""
+                                    }
+                                  },
+                                  [
+                                    _vm._v(
+                                      "\n                                Total Item Cost : "
+                                    ),
+                                    _c("b", [
+                                      _vm._v(
+                                        " " +
+                                          _vm._s(
+                                            _vm.$utils.formatMoney(
+                                              _vm.costs.item
+                                            )
+                                          )
+                                      )
+                                    ])
+                                  ]
+                                ),
+                                _vm._v(" "),
+                                _c(
+                                  "v-btn",
+                                  {
+                                    attrs: {
+                                      color: "primary",
+                                      small: "",
+                                      flat: "",
+                                      outline: ""
+                                    }
+                                  },
+                                  [
+                                    _vm._v(
+                                      "\n                                Total Delivery Cost : "
+                                    ),
+                                    _c("b", [
+                                      _vm._v(
+                                        " " +
+                                          _vm._s(
+                                            _vm.$utils.formatMoney(
+                                              _vm.costs.delivery
+                                            )
+                                          )
+                                      )
+                                    ])
+                                  ]
+                                ),
+                                _vm._v(" "),
+                                _c(
+                                  "v-chip",
+                                  {
+                                    staticClass: "mt-3 caption",
+                                    attrs: {
+                                      label: "",
+                                      outline: "",
+                                      color: "info",
+                                      small: ""
+                                    }
+                                  },
+                                  [
+                                    _c("v-icon", { attrs: { left: "" } }, [
+                                      _vm._v("info")
+                                    ]),
+                                    _vm._v(
+                                      "\n                                " +
+                                        _vm._s(_vm.costsDescription) +
+                                        "\n                            "
+                                    )
+                                  ],
+                                  1
+                                )
+                              ],
+                              1
+                            )
+                          : _vm._e()
+                      ]),
+                      _vm._v(" "),
+                      _c(
+                        "v-card-actions",
+                        [
+                          _c(
+                            "v-btn",
+                            {
+                              attrs: { flat: "" },
+                              nativeOn: {
+                                click: function($event) {
+                                  _vm.step = 2
+                                }
+                              }
+                            },
+                            [
+                              _c("v-icon", { attrs: { left: "" } }, [
+                                _vm._v("arrow_back")
+                              ]),
+                              _vm._v(
+                                "\n                            Back\n                        "
+                              )
+                            ],
+                            1
+                          ),
+                          _vm._v(" "),
+                          _c("v-spacer"),
+                          _vm._v(" "),
+                          _vm.selectedOptionItem
+                            ? _c(
+                                "v-btn",
+                                {
+                                  attrs: { color: "primary", flat: "" },
+                                  on: {
+                                    click: function($event) {
+                                      _vm.step = 1
+                                    }
+                                  }
+                                },
+                                [
+                                  _c("v-icon", { attrs: { left: "" } }, [
+                                    _vm._v("check_circle")
+                                  ]),
+                                  _vm._v(
+                                    "\n                            " +
+                                      _vm._s(_vm.selectedOptionItem.name) +
+                                      " @ " +
+                                      _vm._s(
+                                        _vm.$utils.formatMoney(
+                                          _vm.selectedOptionItem.price
+                                        )
+                                      ) +
+                                      "\n                        "
+                                  )
+                                ],
+                                1
+                              )
+                            : _vm._e(),
+                          _vm._v(" "),
+                          _c(
+                            "v-btn",
+                            {
+                              attrs: { flat: "", color: "red" },
+                              nativeOn: {
+                                click: function($event) {
+                                  _vm.onClose(false)
+                                }
+                              }
+                            },
+                            [_vm._v("Cancel")]
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "v-btn",
+                            {
+                              attrs: {
+                                color: "primary",
+                                disabled:
+                                  !_vm.quantity ||
+                                  _vm.connecting ||
+                                  (!_vm.terminationDate && !_vm.renewEveryMonth)
+                              },
+                              nativeOn: {
+                                click: function($event) {
+                                  return _vm.submit($event)
+                                }
+                              }
+                            },
+                            [
+                              _vm._v(
+                                "\n                            Continue\n                        "
+                              )
+                            ]
+                          )
+                        ],
+                        1
+                      )
+                    ],
+                    1
+                  )
+                ],
+                1
+              )
+            ],
+            1
+          )
+        ],
+        1
+      )
+    ],
+    1
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-0f58d542", module.exports)
   }
 }
 
@@ -46599,7 +47448,7 @@ var render = function() {
               _c(
                 "v-btn",
                 {
-                  staticClass: "ma-3",
+                  staticClass: "ma-5",
                   attrs: {
                     color: "accent",
                     fab: "",
@@ -46658,272 +47507,244 @@ var render = function() {
         "v-flex",
         { attrs: { xs12: "" } },
         [
+          _c("connection-manager", {
+            ref: "connectionManager",
+            model: {
+              value: _vm.connecting,
+              callback: function($$v) {
+                _vm.connecting = $$v
+              },
+              expression: "connecting"
+            }
+          }),
+          _vm._v(" "),
+          _c(
+            "v-tabs",
+            {
+              attrs: {
+                "fixed-tabs": "",
+                "slider-color": "accent",
+                lazy: "",
+                grow: ""
+              },
+              model: {
+                value: _vm.currentTab,
+                callback: function($$v) {
+                  _vm.currentTab = $$v
+                },
+                expression: "currentTab"
+              }
+            },
+            [
+              _c("v-tab", { attrs: { href: "#pendingApproval" } }, [
+                _vm._v("Pending Approval")
+              ]),
+              _vm._v(" "),
+              _c("v-tab", { attrs: { href: "#active" } }, [_vm._v("Active")]),
+              _vm._v(" "),
+              _c("v-tab", { attrs: { href: "#rejected" } }, [
+                _vm._v("Rejected")
+              ])
+            ],
+            1
+          ),
+          _vm._v(" "),
           _c(
             "v-card",
             [
-              _c(
-                "v-card-text",
-                [
-                  _c("connection-manager", {
-                    ref: "connectionManager",
-                    model: {
-                      value: _vm.connecting,
-                      callback: function($$v) {
-                        _vm.connecting = $$v
-                      },
-                      expression: "connecting"
-                    }
-                  }),
-                  _vm._v(" "),
-                  _c(
-                    "v-tabs",
-                    {
-                      attrs: {
-                        "fixed-tabs": "",
-                        "slider-color": "accent",
-                        lazy: "",
-                        grow: ""
-                      },
-                      model: {
-                        value: _vm.currentTab,
-                        callback: function($$v) {
-                          _vm.currentTab = $$v
-                        },
-                        expression: "currentTab"
-                      }
-                    },
-                    _vm._l(_vm.subscriptionTypes, function(
-                      subscriptionType,
-                      index
-                    ) {
-                      return _c(
-                        "v-tab",
-                        {
-                          key: index,
-                          attrs: { href: "#" + subscriptionType.name }
-                        },
-                        [
+              _c("v-data-table", {
+                attrs: {
+                  headers: _vm.headers,
+                  items: _vm.items,
+                  "hide-actions": ""
+                },
+                scopedSlots: _vm._u([
+                  {
+                    key: "items",
+                    fn: function(props) {
+                      return [
+                        _c("td", [_vm._v(_vm._s(props.item.optionItem.name))]),
+                        _vm._v(" "),
+                        _c("td", { staticClass: "text-xs-center" }, [
+                          _vm._v(
+                            _vm._s(_vm.transformWeekdays(props.item.weekdays))
+                          )
+                        ]),
+                        _vm._v(" "),
+                        _c("td", { staticClass: "text-xs-center" }, [
+                          _vm._v(_vm._s(props.item.quantity))
+                        ]),
+                        _vm._v(" "),
+                        _c("td", { staticClass: "text-xs-center" }, [
+                          _vm._v(
+                            _vm._s(_vm.$utils.formatMoney(props.item.itemCost))
+                          )
+                        ]),
+                        _vm._v(" "),
+                        _c("td", { staticClass: "text-xs-center" }, [
+                          _vm._v(
+                            _vm._s(
+                              _vm.$utils.formatMoney(props.item.deliveryCost)
+                            )
+                          )
+                        ]),
+                        _vm._v(" "),
+                        _c("td", { staticClass: "text-xs-center" }, [
                           _vm._v(
                             "\n                        " +
-                              _vm._s(subscriptionType.name) +
+                              _vm._s(
+                                _vm.$utils.formatMoney(
+                                  props.item.itemCost + props.item.deliveryCost
+                                )
+                              ) +
                               "\n                    "
                           )
-                        ]
-                      )
-                    })
-                  ),
-                  _vm._v(" "),
-                  _c("v-data-table", {
-                    attrs: {
-                      headers: _vm.headers,
-                      items: _vm.subscriptionItems,
-                      "hide-actions": ""
-                    },
-                    scopedSlots: _vm._u([
-                      {
-                        key: "items",
-                        fn: function(props) {
-                          return [
-                            _c("td", [_vm._v(_vm._s(props.item.name))]),
-                            _vm._v(" "),
-                            _c("td", { staticClass: "text-xs-center" }, [
-                              _vm._v(
-                                _vm._s(
-                                  props.item.clientSubscription
-                                    ? props.item.clientSubscription.quantity
-                                    : 0
-                                ) + "\n                        "
-                              )
-                            ]),
-                            _vm._v(" "),
-                            _c("td", { staticClass: "text-xs-center" }, [
-                              props.item.clientSubscription
-                                ? _c(
-                                    "div",
-                                    [
-                                      _vm._l(
-                                        props.item.clientSubscription
-                                          .subscriptionSchedules,
-                                        function(schedule, index) {
-                                          return [
-                                            _c("span", { key: index }, [
-                                              _vm._v(_vm._s(schedule.name))
-                                            ]),
-                                            _vm._v(" "),
-                                            index !==
-                                            props.item.clientSubscription
-                                              .subscriptionSchedules.length -
-                                              1
-                                              ? _c(
-                                                  "span",
-                                                  {
-                                                    key:
-                                                      index +
-                                                      props.item
-                                                        .clientSubscription
-                                                        .subscriptionSchedules
-                                                        .length
-                                                  },
-                                                  [_vm._v(",")]
-                                                )
-                                              : _vm._e()
-                                          ]
-                                        }
-                                      )
-                                    ],
-                                    2
-                                  )
-                                : _c("div", [_vm._v("N/A")])
-                            ]),
-                            _vm._v(" "),
-                            _c("td", { staticClass: "text-xs-center" }, [
-                              _vm._v(
-                                _vm._s(
-                                  props.item.clientSubscription
-                                    ? props.item.clientSubscription.createdAt
-                                    : "N/A"
-                                ) + "\n                        "
-                              )
-                            ]),
-                            _vm._v(" "),
-                            _c("td", { staticClass: "text-xs-center" }, [
-                              _vm._v(
-                                _vm._s(props.item.clientSubscription ? 0 : 0) +
-                                  "\n                        "
-                              )
-                            ]),
-                            _vm._v(" "),
-                            _c("td", { staticClass: "text-xs-center" }, [
-                              _vm._v(
-                                "KES. " +
-                                  _vm._s(
-                                    props.item.clientSubscription ? 0 : 0
-                                  ) +
-                                  "\n                        "
-                              )
-                            ]),
-                            _vm._v(" "),
-                            _c(
-                              "td",
-                              { staticClass: "text-xs-center" },
-                              [
-                                _c(
-                                  "v-layout",
-                                  { attrs: { row: "", wrap: "" } },
+                        ]),
+                        _vm._v(" "),
+                        _c("td", { staticClass: "text-xs-center" }, [
+                          props.item.renewEveryMonth
+                            ? _c("span", [_vm._v("Renew monthly")])
+                            : _c("span", [
+                                _vm._v(
+                                  "Up to " + _vm._s(props.item.terminationDate)
+                                )
+                              ])
+                        ]),
+                        _vm._v(" "),
+                        _c(
+                          "td",
+                          { staticClass: "text-xs-center" },
+                          [
+                            props.item.status === "AT_DEPARTMENT_HEAD" ||
+                            props.item.status === "AT_PURCHASING_HEAD"
+                              ? _c(
+                                  "v-chip",
+                                  {
+                                    attrs: {
+                                      label: "",
+                                      outline: "",
+                                      color: "red",
+                                      small: ""
+                                    }
+                                  },
                                   [
-                                    props.item.clientSubscription
-                                      ? _c(
-                                          "v-flex",
-                                          {
-                                            attrs: { "d-inline": "", xs12: "" }
-                                          },
-                                          [
-                                            _c(
-                                              "v-btn",
-                                              {
-                                                attrs: {
-                                                  flat: "",
-                                                  icon: "",
-                                                  color: "red",
-                                                  loading:
-                                                    _vm.unSubscribing ===
-                                                    props.item.id,
-                                                  disabled:
-                                                    _vm.unSubscribing > 0
-                                                },
-                                                nativeOn: {
-                                                  click: function($event) {
-                                                    _vm.unsubscribe(props.item)
-                                                  }
-                                                }
-                                              },
-                                              [
-                                                _c(
-                                                  "span",
-                                                  {
-                                                    attrs: { slot: "loader" },
-                                                    slot: "loader"
-                                                  },
-                                                  [_vm._v("Removing...")]
-                                                ),
-                                                _vm._v(" "),
-                                                _c("v-icon", [
-                                                  _vm._v("delete_forever")
-                                                ])
-                                              ],
-                                              1
-                                            ),
-                                            _vm._v(" "),
-                                            _c(
-                                              "v-btn",
-                                              {
-                                                attrs: {
-                                                  disabled:
-                                                    _vm.unSubscribing > 0,
-                                                  flat: "",
-                                                  icon: "",
-                                                  color: "primary"
-                                                },
-                                                nativeOn: {
-                                                  click: function($event) {
-                                                    _vm.editItem = props.item
-                                                  }
-                                                }
-                                              },
-                                              [_c("v-icon", [_vm._v("edit")])],
-                                              1
-                                            )
-                                          ],
-                                          1
-                                        )
-                                      : _vm._e(),
-                                    _vm._v(" "),
-                                    !props.item.clientSubscription
-                                      ? _c(
-                                          "v-flex",
-                                          { attrs: { xs12: "" } },
-                                          [
-                                            _c(
-                                              "v-btn",
-                                              {
-                                                attrs: {
-                                                  disabled:
-                                                    _vm.unSubscribing > 0,
-                                                  small: "",
-                                                  outline: "",
-                                                  color: "primary"
-                                                },
-                                                nativeOn: {
-                                                  click: function($event) {
-                                                    _vm.subscribeItem =
-                                                      props.item
-                                                  }
-                                                }
-                                              },
-                                              [
-                                                _vm._v(
-                                                  "\n                                        Subscribe\n                                    "
-                                                )
-                                              ]
-                                            )
-                                          ],
-                                          1
-                                        )
-                                      : _vm._e()
+                                    _c("v-icon", { attrs: { left: "" } }, [
+                                      _vm._v("info")
+                                    ]),
+                                    _vm._v(
+                                      "\n                            Pending " +
+                                        _vm._s(
+                                          props.item.status ===
+                                          "AT_DEPARTMENT_HEAD"
+                                            ? " Department "
+                                            : " Purchasing "
+                                        ) +
+                                        " Head approval\n                        "
+                                    )
                                   ],
                                   1
                                 )
-                              ],
-                              1
-                            )
-                          ]
-                        }
-                      }
-                    ])
-                  })
-                ],
-                1
-              )
+                              : _vm._e(),
+                            _vm._v(" "),
+                            props.item.status === "REJECTED"
+                              ? _c(
+                                  "v-alert",
+                                  {
+                                    attrs: {
+                                      type: "error",
+                                      value: true,
+                                      outline: ""
+                                    }
+                                  },
+                                  [
+                                    _vm._v(
+                                      "\n                            Rejected by " +
+                                        _vm._s(
+                                          props.item.rejectedBy.role.name
+                                        ) +
+                                        " "
+                                    ),
+                                    _c("br"),
+                                    _vm._v(
+                                      "\n                            " +
+                                        _vm._s(props.item.rejectedBy.name) +
+                                        "\n                        "
+                                    )
+                                  ]
+                                )
+                              : _vm._e(),
+                            _vm._v(" "),
+                            _vm.showApprovalActions(props.item)
+                              ? _c(
+                                  "div",
+                                  [
+                                    _c(
+                                      "v-btn",
+                                      {
+                                        attrs: {
+                                          flat: "",
+                                          color: "red",
+                                          small: "",
+                                          outline: ""
+                                        },
+                                        nativeOn: {
+                                          click: function($event) {
+                                            _vm.reject(props.item)
+                                          }
+                                        }
+                                      },
+                                      [
+                                        _c(
+                                          "v-icon",
+                                          { attrs: { left: "", small: "" } },
+                                          [_vm._v("close")]
+                                        ),
+                                        _vm._v(
+                                          "\n                                Reject\n                            "
+                                        )
+                                      ],
+                                      1
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "v-btn",
+                                      {
+                                        attrs: {
+                                          flat: "",
+                                          color: "success",
+                                          small: "",
+                                          outline: ""
+                                        },
+                                        nativeOn: {
+                                          click: function($event) {
+                                            _vm.confirm(props.item)
+                                          }
+                                        }
+                                      },
+                                      [
+                                        _c(
+                                          "v-icon",
+                                          { attrs: { left: "", small: "" } },
+                                          [_vm._v("check_circle")]
+                                        ),
+                                        _vm._v(
+                                          "\n                                Confirm\n                            "
+                                        )
+                                      ],
+                                      1
+                                    )
+                                  ],
+                                  1
+                                )
+                              : _vm._e()
+                          ],
+                          1
+                        )
+                      ]
+                    }
+                  }
+                ])
+              })
             ],
             1
           )
@@ -46931,25 +47752,40 @@ var render = function() {
         1
       ),
       _vm._v(" "),
-      _c(
-        "v-flex",
-        { attrs: { xs12: "" } },
-        [
-          _c("subscription-dialog", {
-            attrs: { subscribeItem: _vm.subscribeItem },
-            on: { onClose: _vm.onCloseSubscriptionDialog }
-          }),
-          _vm._v(" "),
-          _c("edit-subscription-dialog", {
-            attrs: {
-              subscriptionItem: _vm.editItem,
-              subscriptionSchedules: _vm.subscriptionSchedules
-            },
-            on: { onClose: _vm.onCloseEditSubscriptionDialog }
-          })
-        ],
-        1
-      )
+      _c("add-subscription-dialog", {
+        attrs: { show: _vm.showAddSubscriptionDialog },
+        on: { onClose: _vm.onCloseAddSubscriptionDialog }
+      }),
+      _vm._v(" "),
+      _vm.isDepartmentUser()
+        ? _c(
+            "v-fab-transition",
+            [
+              _c(
+                "v-btn",
+                {
+                  staticClass: "ma-5",
+                  attrs: {
+                    color: "accent",
+                    fab: "",
+                    dark: "",
+                    fixed: "",
+                    bottom: "",
+                    right: ""
+                  },
+                  nativeOn: {
+                    click: function($event) {
+                      _vm.showAddSubscriptionDialog = true
+                    }
+                  }
+                },
+                [_c("v-icon", [_vm._v("add")])],
+                1
+              )
+            ],
+            1
+          )
+        : _vm._e()
     ],
     1
   )
@@ -47630,231 +48466,6 @@ if (false) {
   module.hot.accept()
   if (module.hot.data) {
     require("vue-hot-reload-api")      .rerender("data-v-2b10bb2e", module.exports)
-  }
-}
-
-/***/ }),
-
-/***/ "./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-361369fc\",\"hasScoped\":true,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/components/SubscriptionDialog.vue":
-/***/ (function(module, exports, __webpack_require__) {
-
-var render = function() {
-  var _vm = this
-  var _h = _vm.$createElement
-  var _c = _vm._self._c || _h
-  return _c(
-    "v-dialog",
-    {
-      attrs: { persistent: "", "max-width": "600px" },
-      model: {
-        value: _vm.dialog,
-        callback: function($$v) {
-          _vm.dialog = $$v
-        },
-        expression: "dialog"
-      }
-    },
-    [
-      _c(
-        "v-card",
-        [
-          _c(
-            "v-toolbar",
-            {
-              attrs: {
-                dark: "",
-                dense: "",
-                card: "",
-                flat: "",
-                color: "primary"
-              }
-            },
-            [_c("v-toolbar-title", [_vm._v("Subscribe")])],
-            1
-          ),
-          _vm._v(" "),
-          _c("connection-manager", {
-            ref: "connectionManager",
-            model: {
-              value: _vm.connecting,
-              callback: function($$v) {
-                _vm.connecting = $$v
-              },
-              expression: "connecting"
-            }
-          }),
-          _vm._v(" "),
-          _c(
-            "v-card-text",
-            [
-              _c("v-text-field", {
-                attrs: {
-                  required: "",
-                  mask: "###",
-                  label: "Enter quantity",
-                  disabled: _vm.connecting,
-                  placeholder: "Quantity to be delivered to you"
-                },
-                model: {
-                  value: _vm.quantity,
-                  callback: function($$v) {
-                    _vm.quantity = $$v
-                  },
-                  expression: "quantity"
-                }
-              }),
-              _vm._v(" "),
-              _c(
-                "v-list",
-                { attrs: { subheader: "", dense: "" } },
-                [
-                  _c("v-subheader", [_vm._v("Deliver everyday")]),
-                  _vm._v(" "),
-                  _c(
-                    "v-list-tile",
-                    [
-                      _c(
-                        "v-list-tile-content",
-                        [
-                          _c("v-list-tile-title", [_vm._v("Everyday")]),
-                          _vm._v(" "),
-                          _c("v-list-tile-sub-title", [
-                            _vm._v("Deliver everyday")
-                          ])
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "v-list-tile-action",
-                        [
-                          _c("v-checkbox", {
-                            attrs: { disabled: _vm.connecting },
-                            model: {
-                              value: _vm.everydayCheckbox,
-                              callback: function($$v) {
-                                _vm.everydayCheckbox = $$v
-                              },
-                              expression: "everydayCheckbox"
-                            }
-                          })
-                        ],
-                        1
-                      )
-                    ],
-                    1
-                  ),
-                  _vm._v(" "),
-                  _c("v-divider", { staticClass: "mt-2" }),
-                  _vm._v(" "),
-                  !_vm.everydayCheckbox
-                    ? _c("v-subheader", [_vm._v("Deliver on specific day(s)")])
-                    : _vm._e(),
-                  _vm._v(" "),
-                  _vm._l(_vm.subscriptionSchedules, function(item) {
-                    return !_vm.everydayCheckbox
-                      ? _c(
-                          "v-list-tile",
-                          { key: item.name },
-                          [
-                            _c(
-                              "v-list-tile-content",
-                              [
-                                _c("v-list-tile-title", [
-                                  _vm._v(_vm._s(item.name))
-                                ]),
-                                _vm._v(" "),
-                                _c("v-list-tile-sub-title", [
-                                  _vm._v(_vm._s(item.description))
-                                ])
-                              ],
-                              1
-                            ),
-                            _vm._v(" "),
-                            _c(
-                              "v-list-tile-action",
-                              [
-                                _c("v-checkbox", {
-                                  attrs: { disabled: _vm.connecting },
-                                  model: {
-                                    value: item.selected,
-                                    callback: function($$v) {
-                                      _vm.$set(item, "selected", $$v)
-                                    },
-                                    expression: "item.selected"
-                                  }
-                                })
-                              ],
-                              1
-                            )
-                          ],
-                          1
-                        )
-                      : _vm._e()
-                  })
-                ],
-                2
-              )
-            ],
-            1
-          ),
-          _vm._v(" "),
-          _c(
-            "v-card-actions",
-            [
-              _c("v-spacer"),
-              _vm._v(" "),
-              _c(
-                "v-btn",
-                {
-                  attrs: {
-                    color: "primary",
-                    flat: "",
-                    disabled: _vm.connecting
-                  },
-                  on: {
-                    click: function($event) {
-                      $event.stopPropagation()
-                      _vm.close(false)
-                    }
-                  }
-                },
-                [_vm._v("Cancel")]
-              ),
-              _vm._v(" "),
-              _c(
-                "v-btn",
-                {
-                  attrs: {
-                    color: "primary",
-                    disabled: _vm.connecting || !_vm.quantity
-                  },
-                  on: {
-                    click: function($event) {
-                      $event.stopPropagation()
-                      return _vm.subscribe($event)
-                    }
-                  }
-                },
-                [_vm._v("\n                Continue\n            ")]
-              )
-            ],
-            1
-          )
-        ],
-        1
-      )
-    ],
-    1
-  )
-}
-var staticRenderFns = []
-render._withStripped = true
-module.exports = { render: render, staticRenderFns: staticRenderFns }
-if (false) {
-  module.hot.accept()
-  if (module.hot.data) {
-    require("vue-hot-reload-api")      .rerender("data-v-361369fc", module.exports)
   }
 }
 
@@ -48793,7 +49404,7 @@ var render = function() {
                                             _vm._v(
                                               "Urgent Cost Per Kilometer: KES " +
                                                 _vm._s(
-                                                  _vm.systemVariables
+                                                  _vm.costVariables
                                                     .URGENT_COST_PER_KM
                                                 )
                                             )
@@ -48804,7 +49415,7 @@ var render = function() {
                                             _vm._v(
                                               "Non Urgent Cost Per Kilometer: KES " +
                                                 _vm._s(
-                                                  _vm.systemVariables
+                                                  _vm.costVariables
                                                     .NON_URGENT_COST_PER_KM
                                                 )
                                             )
@@ -48818,7 +49429,7 @@ var render = function() {
                                             _vm._v(
                                               "Urgent Cost Per Minute: KES " +
                                                 _vm._s(
-                                                  _vm.systemVariables
+                                                  _vm.costVariables
                                                     .URGENT_COST_PER_MIN
                                                 )
                                             )
@@ -48829,7 +49440,7 @@ var render = function() {
                                             _vm._v(
                                               "Non Cost Per Minute: KES " +
                                                 _vm._s(
-                                                  _vm.systemVariables
+                                                  _vm.costVariables
                                                     .NON_URGENT_COST_PER_MIN
                                                 )
                                             )
@@ -49742,14 +50353,13 @@ var render = function() {
                                           _vm._v(
                                             "\n                                Rejected by " +
                                               _vm._s(
-                                                props.item.rejectedBy
-                                                  .accountType
+                                                props.item.rejectedBy.role.name
                                               ) +
                                               " "
                                           ),
                                           _c("br"),
                                           _vm._v(
-                                            " " +
+                                            "\n                                " +
                                               _vm._s(
                                                 props.item.rejectedBy.name
                                               ) +
@@ -49911,7 +50521,34 @@ var render = function() {
           )
         ],
         1
-      )
+      ),
+      _vm._v(" "),
+      _vm.isDepartmentUser()
+        ? _c(
+            "v-fab-transition",
+            [
+              _c(
+                "v-btn",
+                {
+                  staticClass: "ma-5",
+                  attrs: {
+                    color: "accent",
+                    fab: "",
+                    dark: "",
+                    fixed: "",
+                    bottom: "",
+                    value: false,
+                    to: "shopping",
+                    right: ""
+                  }
+                },
+                [_c("v-icon", [_vm._v("add")])],
+                1
+              )
+            ],
+            1
+          )
+        : _vm._e()
     ],
     1
   )
@@ -50212,7 +50849,7 @@ var render = function() {
           _c(
             "v-btn",
             {
-              staticClass: "ma-3",
+              staticClass: "ma-5",
               attrs: {
                 color: "accent",
                 fab: "",
@@ -50266,6 +50903,7 @@ var render = function() {
         transition: "scale-transition",
         "offset-y": "",
         "full-width": "",
+        "no-title": _vm.noTitle,
         disabled: _vm.disabled,
         "nudge-right": 40,
         "max-width": "290px",
@@ -51223,29 +51861,6 @@ var render = function() {
                       }
                     },
                     [
-                      _c(
-                        "v-btn",
-                        {
-                          attrs: {
-                            small: "",
-                            flat: "",
-                            outline: "",
-                            color: "accent"
-                          }
-                        },
-                        [
-                          _c("v-icon", { attrs: { left: "" } }, [
-                            _vm._v("account_balance_wallet")
-                          ]),
-                          _vm._v(
-                            "\n                    SPENT " +
-                              _vm._s(_vm.$utils.formatMoney(_vm.spent)) +
-                              "\n                "
-                          )
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
                       _c("v-text-field", {
                         staticClass: "ml-5",
                         attrs: {
@@ -51654,270 +52269,6 @@ if (false) {
   module.hot.accept()
   if (module.hot.data) {
     require("vue-hot-reload-api")      .rerender("data-v-7daa2d21", module.exports)
-  }
-}
-
-/***/ }),
-
-/***/ "./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-7e254db4\",\"hasScoped\":true,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/components/EditSubscriptionDialog.vue":
-/***/ (function(module, exports, __webpack_require__) {
-
-var render = function() {
-  var _vm = this
-  var _h = _vm.$createElement
-  var _c = _vm._self._c || _h
-  return _c(
-    "v-dialog",
-    {
-      attrs: { lazy: "", persistent: "", "max-width": "500px" },
-      model: {
-        value: _vm.dialog,
-        callback: function($$v) {
-          _vm.dialog = $$v
-        },
-        expression: "dialog"
-      }
-    },
-    [
-      _vm.subscriptionItem
-        ? _c(
-            "v-card",
-            [
-              _c(
-                "v-toolbar",
-                {
-                  attrs: {
-                    dark: "",
-                    dense: "",
-                    card: "",
-                    flat: "",
-                    color: "primary"
-                  }
-                },
-                [
-                  _c("v-toolbar-title", [
-                    _vm._v(
-                      "Edit Subscription to " +
-                        _vm._s(_vm.subscriptionItem.name)
-                    )
-                  ])
-                ],
-                1
-              ),
-              _vm._v(" "),
-              _c(
-                "v-card-text",
-                [
-                  _c("v-progress-linear", {
-                    directives: [
-                      {
-                        name: "show",
-                        rawName: "v-show",
-                        value: _vm.connecting,
-                        expression: "connecting"
-                      }
-                    ],
-                    attrs: { indeterminate: true }
-                  }),
-                  _vm._v(" "),
-                  _c(
-                    "v-alert",
-                    {
-                      attrs: {
-                        type: "error",
-                        dismissible: "",
-                        icon: "warning",
-                        dark: ""
-                      },
-                      model: {
-                        value: _vm.error,
-                        callback: function($$v) {
-                          _vm.error = $$v
-                        },
-                        expression: "error"
-                      }
-                    },
-                    [
-                      _vm._v(
-                        "\n                " +
-                          _vm._s(_vm.errorText) +
-                          "\n            "
-                      )
-                    ]
-                  ),
-                  _vm._v(" "),
-                  _c("v-text-field", {
-                    attrs: {
-                      required: "",
-                      label: "Changer quantity",
-                      disabled: _vm.connecting,
-                      placeholder: "Quantity to be delivered to you"
-                    },
-                    model: {
-                      value: _vm.subscriptionItem.clientSubscription.quantity,
-                      callback: function($$v) {
-                        _vm.$set(
-                          _vm.subscriptionItem.clientSubscription,
-                          "quantity",
-                          $$v
-                        )
-                      },
-                      expression: "subscriptionItem.clientSubscription.quantity"
-                    }
-                  }),
-                  _vm._v(" "),
-                  _c(
-                    "v-list",
-                    { attrs: { subheader: "", dense: "" } },
-                    [
-                      _c("v-subheader", [_vm._v("Deliver everyday")]),
-                      _vm._v(" "),
-                      _c(
-                        "v-list-tile",
-                        [
-                          _c(
-                            "v-list-tile-content",
-                            [
-                              _c("v-list-tile-title", [_vm._v("Everyday")]),
-                              _vm._v(" "),
-                              _c("v-list-tile-sub-title", [
-                                _vm._v("Deliver everyday")
-                              ])
-                            ],
-                            1
-                          ),
-                          _vm._v(" "),
-                          _c(
-                            "v-list-tile-action",
-                            [
-                              _c("v-checkbox", {
-                                attrs: { disabled: _vm.connecting },
-                                model: {
-                                  value: _vm.everydayCheckbox,
-                                  callback: function($$v) {
-                                    _vm.everydayCheckbox = $$v
-                                  },
-                                  expression: "everydayCheckbox"
-                                }
-                              })
-                            ],
-                            1
-                          )
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c("v-divider", { staticClass: "mt-2" }),
-                      _vm._v(" "),
-                      _c("v-subheader", [_vm._v("Deliver on specific day(s)")]),
-                      _vm._v(" "),
-                      _vm._l(_vm.subscriptionSchedules, function(item) {
-                        return item.name !== "Everyday"
-                          ? _c(
-                              "v-list-tile",
-                              { key: item.name, attrs: { avatar: "" } },
-                              [
-                                _c(
-                                  "v-list-tile-content",
-                                  [
-                                    _c("v-list-tile-title", [
-                                      _vm._v(_vm._s(item.name))
-                                    ]),
-                                    _vm._v(" "),
-                                    _c("v-list-tile-sub-title", [
-                                      _vm._v(_vm._s(item.description))
-                                    ])
-                                  ],
-                                  1
-                                ),
-                                _vm._v(" "),
-                                _c(
-                                  "v-list-tile-action",
-                                  [
-                                    _c("v-checkbox", {
-                                      attrs: { disabled: _vm.connecting },
-                                      model: {
-                                        value: item.selected,
-                                        callback: function($$v) {
-                                          _vm.$set(item, "selected", $$v)
-                                        },
-                                        expression: "item.selected"
-                                      }
-                                    })
-                                  ],
-                                  1
-                                )
-                              ],
-                              1
-                            )
-                          : _vm._e()
-                      })
-                    ],
-                    2
-                  )
-                ],
-                1
-              ),
-              _vm._v(" "),
-              _c(
-                "v-card-actions",
-                [
-                  _c("v-spacer"),
-                  _vm._v(" "),
-                  _c(
-                    "v-btn",
-                    {
-                      attrs: {
-                        color: "primary",
-                        flat: "",
-                        disabled: _vm.connecting
-                      },
-                      on: {
-                        click: function($event) {
-                          $event.stopPropagation()
-                          return _vm.onClose($event)
-                        }
-                      }
-                    },
-                    [_vm._v("Cancel")]
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "v-btn",
-                    {
-                      attrs: {
-                        color: "primary",
-                        disabled:
-                          _vm.connecting ||
-                          !_vm.subscriptionItem.clientSubscription.quantity
-                      },
-                      on: {
-                        click: function($event) {
-                          $event.stopPropagation()
-                          return _vm.subscribe($event)
-                        }
-                      }
-                    },
-                    [_vm._v("\n                Update\n            ")]
-                  )
-                ],
-                1
-              )
-            ],
-            1
-          )
-        : _vm._e()
-    ],
-    1
-  )
-}
-var staticRenderFns = []
-render._withStripped = true
-module.exports = { render: render, staticRenderFns: staticRenderFns }
-if (false) {
-  module.hot.accept()
-  if (module.hot.data) {
-    require("vue-hot-reload-api")      .rerender("data-v-7e254db4", module.exports)
   }
 }
 
@@ -56285,6 +56636,33 @@ if(false) {
 
 /***/ }),
 
+/***/ "./node_modules/vue-style-loader/index.js!./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-0f58d542\",\"scoped\":true,\"hasInlineConfig\":true}!./node_modules/vue-loader/lib/selector.js?type=styles&index=0!./resources/assets/js/components/AddSubscriptionDialog.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__("./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-0f58d542\",\"scoped\":true,\"hasInlineConfig\":true}!./node_modules/vue-loader/lib/selector.js?type=styles&index=0!./resources/assets/js/components/AddSubscriptionDialog.vue");
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__("./node_modules/vue-style-loader/lib/addStylesClient.js")("71610664", content, false, {});
+// Hot Module Replacement
+if(false) {
+ // When the styles change, update the <style> tags
+ if(!content.locals) {
+   module.hot.accept("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-0f58d542\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./AddSubscriptionDialog.vue", function() {
+     var newContent = require("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-0f58d542\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./AddSubscriptionDialog.vue");
+     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+     update(newContent);
+   });
+ }
+ // When the module is disposed, remove the <style> tags
+ module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+
 /***/ "./node_modules/vue-style-loader/index.js!./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-12e1658c\",\"scoped\":true,\"hasInlineConfig\":true}!./node_modules/vue-loader/lib/selector.js?type=styles&index=0!./resources/assets/js/components/Departments.vue":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -56410,33 +56788,6 @@ if(false) {
  if(!content.locals) {
    module.hot.accept("!!../../../css-loader/index.js!../../../vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-2b10bb2e\",\"scoped\":false,\"hasInlineConfig\":true}!../../../vue-loader/lib/selector.js?type=styles&index=0!./map.vue", function() {
      var newContent = require("!!../../../css-loader/index.js!../../../vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-2b10bb2e\",\"scoped\":false,\"hasInlineConfig\":true}!../../../vue-loader/lib/selector.js?type=styles&index=0!./map.vue");
-     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-     update(newContent);
-   });
- }
- // When the module is disposed, remove the <style> tags
- module.hot.dispose(function() { update(); });
-}
-
-/***/ }),
-
-/***/ "./node_modules/vue-style-loader/index.js!./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-361369fc\",\"scoped\":true,\"hasInlineConfig\":true}!./node_modules/vue-loader/lib/selector.js?type=styles&index=0!./resources/assets/js/components/SubscriptionDialog.vue":
-/***/ (function(module, exports, __webpack_require__) {
-
-// style-loader: Adds some css to the DOM by adding a <style> tag
-
-// load the styles
-var content = __webpack_require__("./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-361369fc\",\"scoped\":true,\"hasInlineConfig\":true}!./node_modules/vue-loader/lib/selector.js?type=styles&index=0!./resources/assets/js/components/SubscriptionDialog.vue");
-if(typeof content === 'string') content = [[module.i, content, '']];
-if(content.locals) module.exports = content.locals;
-// add the styles to the DOM
-var update = __webpack_require__("./node_modules/vue-style-loader/lib/addStylesClient.js")("bdd1815e", content, false, {});
-// Hot Module Replacement
-if(false) {
- // When the styles change, update the <style> tags
- if(!content.locals) {
-   module.hot.accept("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-361369fc\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./SubscriptionDialog.vue", function() {
-     var newContent = require("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-361369fc\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./SubscriptionDialog.vue");
      if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
      update(newContent);
    });
@@ -56923,33 +57274,6 @@ if(false) {
  if(!content.locals) {
    module.hot.accept("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-7daa2d21\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Users.vue", function() {
      var newContent = require("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-7daa2d21\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Users.vue");
-     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-     update(newContent);
-   });
- }
- // When the module is disposed, remove the <style> tags
- module.hot.dispose(function() { update(); });
-}
-
-/***/ }),
-
-/***/ "./node_modules/vue-style-loader/index.js!./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-7e254db4\",\"scoped\":true,\"hasInlineConfig\":true}!./node_modules/vue-loader/lib/selector.js?type=styles&index=0!./resources/assets/js/components/EditSubscriptionDialog.vue":
-/***/ (function(module, exports, __webpack_require__) {
-
-// style-loader: Adds some css to the DOM by adding a <style> tag
-
-// load the styles
-var content = __webpack_require__("./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-7e254db4\",\"scoped\":true,\"hasInlineConfig\":true}!./node_modules/vue-loader/lib/selector.js?type=styles&index=0!./resources/assets/js/components/EditSubscriptionDialog.vue");
-if(typeof content === 'string') content = [[module.i, content, '']];
-if(content.locals) module.exports = content.locals;
-// add the styles to the DOM
-var update = __webpack_require__("./node_modules/vue-style-loader/lib/addStylesClient.js")("3c4b2a57", content, false, {});
-// Hot Module Replacement
-if(false) {
- // When the styles change, update the <style> tags
- if(!content.locals) {
-   module.hot.accept("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-7e254db4\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./EditSubscriptionDialog.vue", function() {
-     var newContent = require("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-7e254db4\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./EditSubscriptionDialog.vue");
      if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
      update(newContent);
    });
@@ -88441,6 +88765,7 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.prototype.$appName = 'Cube Messenger
 
 __WEBPACK_IMPORTED_MODULE_0_vue___default.a.prototype.$actions = {
   addedDelivery: 'addedDelivery',
+  addedSubscription: 'addedSubscription',
   collapsedDrawer: 'collapsedDrawer',
   clickedToolbarSideIcon: 'clickedToolbarSideIcon',
   placedOrder: 'placedOrder',
@@ -88588,6 +88913,58 @@ if (false) {(function () {
     hotAPI.createRecord("data-v-8ef18c58", Component.options)
   } else {
     hotAPI.reload("data-v-8ef18c58", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+
+/***/ "./resources/assets/js/components/AddSubscriptionDialog.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+function injectStyle (ssrContext) {
+  if (disposed) return
+  __webpack_require__("./node_modules/vue-style-loader/index.js!./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-0f58d542\",\"scoped\":true,\"hasInlineConfig\":true}!./node_modules/vue-loader/lib/selector.js?type=styles&index=0!./resources/assets/js/components/AddSubscriptionDialog.vue")
+}
+var normalizeComponent = __webpack_require__("./node_modules/vue-loader/lib/component-normalizer.js")
+/* script */
+var __vue_script__ = __webpack_require__("./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}]],\"plugins\":[\"transform-object-rest-spread\",[\"transform-runtime\",{\"polyfill\":false,\"helpers\":false}]]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/js/components/AddSubscriptionDialog.vue")
+/* template */
+var __vue_template__ = __webpack_require__("./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-0f58d542\",\"hasScoped\":true,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/components/AddSubscriptionDialog.vue")
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = injectStyle
+/* scopeId */
+var __vue_scopeId__ = "data-v-0f58d542"
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources\\assets\\js\\components\\AddSubscriptionDialog.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-0f58d542", Component.options)
+  } else {
+    hotAPI.reload("data-v-0f58d542", Component.options)
   }
   module.hot.dispose(function (data) {
     disposed = true
@@ -89327,58 +89704,6 @@ module.exports = Component.exports
 
 /***/ }),
 
-/***/ "./resources/assets/js/components/EditSubscriptionDialog.vue":
-/***/ (function(module, exports, __webpack_require__) {
-
-var disposed = false
-function injectStyle (ssrContext) {
-  if (disposed) return
-  __webpack_require__("./node_modules/vue-style-loader/index.js!./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-7e254db4\",\"scoped\":true,\"hasInlineConfig\":true}!./node_modules/vue-loader/lib/selector.js?type=styles&index=0!./resources/assets/js/components/EditSubscriptionDialog.vue")
-}
-var normalizeComponent = __webpack_require__("./node_modules/vue-loader/lib/component-normalizer.js")
-/* script */
-var __vue_script__ = __webpack_require__("./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}]],\"plugins\":[\"transform-object-rest-spread\",[\"transform-runtime\",{\"polyfill\":false,\"helpers\":false}]]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/js/components/EditSubscriptionDialog.vue")
-/* template */
-var __vue_template__ = __webpack_require__("./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-7e254db4\",\"hasScoped\":true,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/components/EditSubscriptionDialog.vue")
-/* template functional */
-var __vue_template_functional__ = false
-/* styles */
-var __vue_styles__ = injectStyle
-/* scopeId */
-var __vue_scopeId__ = "data-v-7e254db4"
-/* moduleIdentifier (server only) */
-var __vue_module_identifier__ = null
-var Component = normalizeComponent(
-  __vue_script__,
-  __vue_template__,
-  __vue_template_functional__,
-  __vue_styles__,
-  __vue_scopeId__,
-  __vue_module_identifier__
-)
-Component.options.__file = "resources\\assets\\js\\components\\EditSubscriptionDialog.vue"
-
-/* hot reload */
-if (false) {(function () {
-  var hotAPI = require("vue-hot-reload-api")
-  hotAPI.install(require("vue"), false)
-  if (!hotAPI.compatible) return
-  module.hot.accept()
-  if (!module.hot.data) {
-    hotAPI.createRecord("data-v-7e254db4", Component.options)
-  } else {
-    hotAPI.reload("data-v-7e254db4", Component.options)
-  }
-  module.hot.dispose(function (data) {
-    disposed = true
-  })
-})()}
-
-module.exports = Component.exports
-
-
-/***/ }),
-
 /***/ "./resources/assets/js/components/GooglePlaceInput.vue":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -89884,58 +90209,6 @@ if (false) {(function () {
     hotAPI.createRecord("data-v-3c3f4cf9", Component.options)
   } else {
     hotAPI.reload("data-v-3c3f4cf9", Component.options)
-  }
-  module.hot.dispose(function (data) {
-    disposed = true
-  })
-})()}
-
-module.exports = Component.exports
-
-
-/***/ }),
-
-/***/ "./resources/assets/js/components/SubscriptionDialog.vue":
-/***/ (function(module, exports, __webpack_require__) {
-
-var disposed = false
-function injectStyle (ssrContext) {
-  if (disposed) return
-  __webpack_require__("./node_modules/vue-style-loader/index.js!./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-361369fc\",\"scoped\":true,\"hasInlineConfig\":true}!./node_modules/vue-loader/lib/selector.js?type=styles&index=0!./resources/assets/js/components/SubscriptionDialog.vue")
-}
-var normalizeComponent = __webpack_require__("./node_modules/vue-loader/lib/component-normalizer.js")
-/* script */
-var __vue_script__ = __webpack_require__("./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}]],\"plugins\":[\"transform-object-rest-spread\",[\"transform-runtime\",{\"polyfill\":false,\"helpers\":false}]]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/js/components/SubscriptionDialog.vue")
-/* template */
-var __vue_template__ = __webpack_require__("./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-361369fc\",\"hasScoped\":true,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/components/SubscriptionDialog.vue")
-/* template functional */
-var __vue_template_functional__ = false
-/* styles */
-var __vue_styles__ = injectStyle
-/* scopeId */
-var __vue_scopeId__ = "data-v-361369fc"
-/* moduleIdentifier (server only) */
-var __vue_module_identifier__ = null
-var Component = normalizeComponent(
-  __vue_script__,
-  __vue_template__,
-  __vue_template_functional__,
-  __vue_styles__,
-  __vue_scopeId__,
-  __vue_module_identifier__
-)
-Component.options.__file = "resources\\assets\\js\\components\\SubscriptionDialog.vue"
-
-/* hot reload */
-if (false) {(function () {
-  var hotAPI = require("vue-hot-reload-api")
-  hotAPI.install(require("vue"), false)
-  if (!hotAPI.compatible) return
-  module.hot.accept()
-  if (!module.hot.data) {
-    hotAPI.createRecord("data-v-361369fc", Component.options)
-  } else {
-    hotAPI.reload("data-v-361369fc", Component.options)
   }
   module.hot.dispose(function (data) {
     disposed = true

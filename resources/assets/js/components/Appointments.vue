@@ -73,7 +73,12 @@
         </v-flex>
 
         <v-fab-transition>
-            <v-btn class="ma-3" color="accent" fab dark fixed bottom
+            <v-btn class="ma-5"
+                   color="accent"
+                   fab
+                   dark
+                   fixed
+                   bottom
                    @click.native="appointmentFullDialog = true"
                    right>
                 <v-icon>add</v-icon>

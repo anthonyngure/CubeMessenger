@@ -1,13 +1,9 @@
 @component('mail::message')
-    # Order Shipped
+    # Introduction
+    The body of your message.
 
-    Your order has been shipped!
-    @component('mail::button', ['url' => config('app.url')])
-        View Order
-    @endcomponent
-
-    @component('mail::panel')
-        This is the panel content.
+    @component('mail::button', ['url' => ''])
+        Button Text
     @endcomponent
 
     Thanks,<br>

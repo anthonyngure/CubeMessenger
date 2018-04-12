@@ -22,13 +22,11 @@
 			]);
 			
 			if ($request->filter == 'charges') {
-				$spent = $client->charges()->sum('amount');
 				$data = $client->charges()->get();
 			} else {
-				$spent = 0;
 				$data = DeliveryItem::all();
 			}
 			
-			return $this->collectionResponse($data, null, ['spent' => $spent]);
+			return $this->collectionResponse($data);
 		}
 	}

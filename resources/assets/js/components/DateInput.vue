@@ -7,6 +7,7 @@
             transition="scale-transition"
             offset-y
             full-width
+            :no-title="noTitle"
             :disabled="disabled"
             :nudge-right="40"
             max-width="290px"
@@ -37,6 +38,10 @@
     name: 'date-input',
     props: {
       disabled: {
+        type: Boolean,
+        default: false
+      },
+      noTitle: {
         type: Boolean,
         default: false
       },

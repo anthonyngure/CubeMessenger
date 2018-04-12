@@ -12,9 +12,11 @@
 	use App\Observers\ProductObserver;
 	use App\Item;
 	use App\Observers\ShopOrderObserver;
+	use App\Observers\SubscriptionObserver;
 	use App\Observers\TopUpObserver;
 	use App\Observers\UserObserver;
 	use App\ShopOrder;
+	use App\Subscription;
 	use App\TopUp;
 	use App\User;
 	use Illuminate\Support\ServiceProvider;
@@ -37,6 +39,7 @@
 			Charge::observe(ChargeObserver::class);
 			Delivery::observe(DeliveryObserver::class);
 			ShopOrder::observe(ShopOrderObserver::class);
+			Subscription::observe(SubscriptionObserver::class);
 			
 			Schema::defaultStringLength(191);
 		}

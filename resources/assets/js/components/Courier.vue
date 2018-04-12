@@ -68,9 +68,9 @@
                                         <v-list-tile-sub-title class="caption primary--text">
                                             <b>To: </b>{{item.destinationName}}
                                         </v-list-tile-sub-title>
-                                        <v-list-tile-sub-title class="caption accent--text">
+                                        <!--<v-list-tile-sub-title class="caption accent&#45;&#45;text">
                                             {{item.destinationFormattedAddress}}
-                                        </v-list-tile-sub-title>
+                                        </v-list-tile-sub-title>-->
                                         <div>
                                             <v-chip v-if="item.status === 'REJECTED'"
                                                     label outline color="red" small>
@@ -142,7 +142,7 @@
         <delivery-item-q-r-dialog :item="printingItem" @onClose="printingItem = null"></delivery-item-q-r-dialog>
 
         <v-fab-transition v-if="isDepartmentUser()">
-            <v-btn class="ma-3"
+            <v-btn class="ma-5"
                    color="accent"
                    fab
                    dark

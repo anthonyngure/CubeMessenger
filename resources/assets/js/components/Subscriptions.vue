@@ -1,123 +1,111 @@
 <template>
     <v-layout row wrap>
         <v-flex xs12>
+            <connection-manager ref="connectionManager" v-model="connecting"></connection-manager>
+            <v-tabs fixed-tabs
+                    v-model="currentTab"
+                    slider-color="accent"
+                    lazy
+                    grow>
+                <v-tab href="#pendingApproval">Pending Approval</v-tab>
+                <v-tab href="#active">Active</v-tab>
+                <v-tab href="#rejected">Rejected</v-tab>
+            </v-tabs>
             <v-card>
-                <v-card-text>
-                    <connection-manager ref="connectionManager" v-model="connecting"></connection-manager>
-                    <v-tabs fixed-tabs
-                            v-model="currentTab"
-                            slider-color="accent"
-                            lazy
-                            grow>
-                        <v-tab v-for="(subscriptionType, index) in subscriptionTypes"
-                               :key="index"
-                               :href="`#${subscriptionType.name}`">
-                            {{subscriptionType.name}}
-                        </v-tab>
-                    </v-tabs>
-                    <v-data-table
-                            :headers="headers"
-                            :items="subscriptionItems"
-                            hide-actions>
-                        <template slot="items" slot-scope="props">
-                            <td>{{ props.item.name }}</td>
-                            <td class="text-xs-center">{{ props.item.clientSubscription ?
-                                props.item.clientSubscription.quantity
-                                : 0 }}
-                            </td>
-                            <td class="text-xs-center">
-                                <div v-if="props.item.clientSubscription">
-                                    <template
-                                            v-for="(schedule, index) in props.item.clientSubscription.subscriptionSchedules">
-                                        <span :key="index">{{schedule.name}}</span>
-                                        <span v-if="index !== (props.item.clientSubscription.subscriptionSchedules.length - 1)"
-                                              :key="index+props.item.clientSubscription.subscriptionSchedules.length">,</span>
-                                    </template>
-                                </div>
-                                <div v-else>N/A</div>
-                            </td>
-                            <td class="text-xs-center">{{ props.item.clientSubscription ?
-                                props.item.clientSubscription.createdAt
-                                : 'N/A' }}
-                            </td>
-                            <td class="text-xs-center">{{ props.item.clientSubscription ? 0
-                                : 0 }}
-                            </td>
-                            <td class="text-xs-center">KES. {{ props.item.clientSubscription ? 0
-                                : 0 }}
-                            </td>
-                            <td class="text-xs-center">
-                                <v-layout row wrap>
-                                    <v-flex d-inline xs12 v-if="props.item.clientSubscription">
-                                        <v-btn flat icon color="red"
-                                               @click.native="unsubscribe(props.item)"
-                                               :loading="unSubscribing === props.item.id"
-                                               :disabled="unSubscribing > 0">
-                                            <span slot="loader">Removing...</span>
-                                            <v-icon>delete_forever</v-icon>
-                                        </v-btn>
-                                        <v-btn @click.native="editItem = props.item"
-                                               :disabled="unSubscribing > 0"
-                                               flat icon color="primary">
-                                            <v-icon>edit</v-icon>
-                                        </v-btn>
-                                    </v-flex>
-                                    <v-flex xs12 v-if="!props.item.clientSubscription">
-                                        <v-btn @click.native="subscribeItem = props.item"
-                                               :disabled="unSubscribing > 0"
-                                               small outline color="primary">
-                                            Subscribe
-                                        </v-btn>
-                                    </v-flex>
-                                </v-layout>
-                            </td>
-                        </template>
-                    </v-data-table>
-                </v-card-text>
+                <v-data-table
+                        :headers="headers"
+                        :items="items"
+                        hide-actions>
+                    <template slot="items" slot-scope="props">
+                        <td>{{ props.item.optionItem.name }}</td>
+                        <td class="text-xs-center">{{ transformWeekdays(props.item.weekdays) }}</td>
+                        <td class="text-xs-center">{{props.item.quantity}}</td>
+                        <td class="text-xs-center">{{ $utils.formatMoney(props.item.itemCost) }}</td>
+                        <td class="text-xs-center">{{ $utils.formatMoney(props.item.deliveryCost) }}</td>
+                        <td class="text-xs-center">
+                            {{ $utils.formatMoney(props.item.itemCost+props.item.deliveryCost)}}
+                        </td>
+                        <td class="text-xs-center">
+                            <span v-if="props.item.renewEveryMonth">Renew monthly</span>
+                            <span v-else>Up to {{ props.item.terminationDate}}</span>
+                        </td>
+                        <td class="text-xs-center">
+                            <v-chip v-if="props.item.status === 'AT_DEPARTMENT_HEAD' || props.item.status === 'AT_PURCHASING_HEAD'"
+                                    label outline color="red" small>
+                                <v-icon left>info</v-icon>
+                                Pending {{props.item.status === 'AT_DEPARTMENT_HEAD' ? ' Department ' :
+                                ' Purchasing '}} Head approval
+                            </v-chip>
+                            <v-alert type="error" :value="true" v-if="props.item.status === 'REJECTED'" outline>
+                                Rejected by {{props.item.rejectedBy.role.name}} <br/>
+                                {{props.item.rejectedBy.name}}
+                            </v-alert>
+                            <div v-if="showApprovalActions(props.item)">
+                                <v-btn flat color="red" small outline
+                                       @click.native="reject(props.item)">
+                                    <v-icon left small>close</v-icon>
+                                    Reject
+                                </v-btn>
+                                <v-btn flat color="success" small outline
+                                       @click.native="confirm(props.item)">
+                                    <v-icon left small>check_circle</v-icon>
+                                    Confirm
+                                </v-btn>
+                            </div>
+
+                        </td>
+                    </template>
+                </v-data-table>
             </v-card>
         </v-flex>
-        <v-flex xs12>
-            <subscription-dialog :subscribeItem="subscribeItem" @onClose="onCloseSubscriptionDialog">
-            </subscription-dialog>
-            <edit-subscription-dialog :subscriptionItem="editItem"
-                                      @onClose="onCloseEditSubscriptionDialog"
-                                      :subscriptionSchedules="subscriptionSchedules">
-            </edit-subscription-dialog>
-        </v-flex>
+
+        <add-subscription-dialog :show="showAddSubscriptionDialog"
+                                 @onClose="onCloseAddSubscriptionDialog">
+        </add-subscription-dialog>
+
+        <v-fab-transition v-if="isDepartmentUser()">
+            <v-btn class="ma-5"
+                   color="accent"
+                   fab
+                   dark
+                   fixed
+                   bottom
+                   @click.native="showAddSubscriptionDialog = true"
+                   right>
+                <v-icon>add</v-icon>
+            </v-btn>
+        </v-fab-transition>
+
     </v-layout>
 </template>
 
 <script>
-  import SubscriptionDialog from './SubscriptionDialog'
-  import EditSubscriptionDialog from './EditSubscriptionDialog'
   import ConnectionManager from './ConnectionManager'
   import Base from './Base.vue'
+  import AddSubscriptionDialog from './AddSubscriptionDialog'
+  import moment from 'moment'
 
   export default {
     extends: Base,
     components: {
-      ConnectionManager,
-      EditSubscriptionDialog,
-      SubscriptionDialog
+      AddSubscriptionDialog,
+      ConnectionManager
     },
     name: 'subscriptions',
     data () {
       return {
+        showAddSubscriptionDialog: false,
         connecting: false,
-        unSubscribing: 0,
         currentTab: null,
-        subscribeItem: null,
-        editItem: null,
-        subscriptionTypes: [],
-        subscriptionItems: [],
-        subscriptionSchedules: [],
+        items: [],
         headers: [
-          {text: 'Name', sortable: false, value: 'name'},
-          {text: 'Quantity Subscribed', sortable: false, value: ''},
-          {text: 'Schedule', sortable: false, value: ''},
-          {text: 'Subscription Date', sortable: false, value: ''},
-          {text: 'Total Deliveries', sortable: false, value: ''},
-          {text: 'Total Cost', sortable: false, value: ''},
+          {text: 'Item', sortable: false, value: 'optionItem.name'},
+          {text: 'Weekdays', sortable: false, value: 'weekdays'},
+          {text: 'Quantity', sortable: false, value: 'quantity'},
+          {text: 'Item Cost', sortable: false, value: 'item_cost'},
+          {text: 'Delivery Cost', sortable: false, value: 'deliveryCost'},
+          {text: 'Total Cost', sortable: false, value: 'amount'},
+          {text: 'Duration', sortable: false, value: ''},
           {text: 'Action', sortable: false, value: ''},
         ],
 
@@ -125,70 +113,73 @@
     },
     watch: {
       currentTab (val) {
-        this.$utils.log(val)
-        this.$utils.log(this.connecting)
         if (val) {
-          let subscriptionType = this.subscriptionTypes.find(function (element) {
-            return element.name === val
-          })
-          this.subscriptionItems = []
-          this.subscriptionItems = this.subscriptionItems.concat(subscriptionType.subscriptionItems)
+          this.refresh()
         }
-      },
-      subscribeItem (subscribeItem) {
-        this.dialog = !!subscribeItem
-      },
+      }
     },
     methods: {
-      unsubscribe (subscriptionItem) {
-        this.unSubscribing = subscriptionItem.id
+      showApprovalActions (item) {
+        return this.currentTab === 'pendingApproval' && (
+          (this.isPurchasingHead() && item.status === 'AT_PURCHASING_HEAD')
+          || (this.isDepartmentHead() && item.status === 'AT_DEPARTMENT_HEAD')
+        )
+      },
+      confirm (item) {
+        this.items = []
         let that = this
-        this.$refs.connectionManager.delete('/subscriptions/' + subscriptionItem.id, {
+        this.$refs.connectionManager.patch('subscriptions/' + item.id, {
           onSuccess (response) {
-            that.unSubscribing = 0
-            that.loadSubscriptionTypes()
+            that.items = []
+            that.items = that.items.concat(response.data.data)
           }
+        }, {
+          action: 'approve'
         })
       },
-      onCloseSubscriptionDialog (subscribedItem) {
-        this.$utils.log('onCloseSubscriptionDialog')
-        this.$utils.log(subscribedItem)
-        this.subscribeItem = null
-        if (subscribedItem) {
-          this.loadSubscriptionTypes(true)
-        }
-      },
-      onCloseEditSubscriptionDialog (subscribedItem) {
-        if (subscribedItem) {
-          this.loadSubscriptionTypes(true)
-        }
-        this.subscribeItem = null
-      },
-
-      loadSubscriptionTypes (refreshing) {
+      reject (item) {
+        this.items = []
         let that = this
-        this.subscriptionItems = []
-        this.$refs.connectionManager.get('subscriptionTypes', {
+        this.$refs.connectionManager.patch('subscriptions/' + item.id, {
           onSuccess (response) {
-            that.subscriptionTypes = []
-            that.subscriptionTypes = that.subscriptionTypes.concat(response.data.data)
-            if (refreshing) {
-              let subscriptionType = that.subscriptionTypes.find(function (element) {
-                return element.name === that.currentTab
-              })
-              that.subscriptionItems = []
-              that.subscriptionItems = that.subscriptionItems.concat(subscriptionType.subscriptionItems)
-            } else {
-              that.currentTab = null
-              that.currentTab = that.subscriptionTypes[0].name
-            }
-
+            that.items = []
+            that.items = that.items.concat(response.data.data)
           }
+        }, {
+          action: 'reject'
         })
+      },
+      transformWeekdays (weekdays) {
+        let weekdayNumbers = weekdays.split('#')
+        let weekdayNames = []
+        for (let weekdayNumber of weekdayNumbers) {
+          weekdayNames.push(moment().weekday(weekdayNumber).format('dddd'))
+        }
+        return weekdayNames.join(',')
+      },
+      onCloseAddSubscriptionDialog (val) {
+        this.showAddSubscriptionDialog = false
+        if (val) {
+          if (this.currentTab !== 'pendingApproval') {
+            this.currentTab = 'pendingApproval'
+          } else {
+            this.refresh()
+          }
+        }
+      },
+      refresh () {
+        let that = this
+        that.items = []
+        this.$refs.connectionManager.get('subscriptions', {
+          onSuccess (response) {
+            that.items = []
+            that.items = that.items.concat(response.data.data)
+          }
+        }, {filter: this.currentTab})
       }
     },
     mounted () {
-      this.loadSubscriptionTypes(false)
+      this.currentTab = 'active'
     }
   }
 </script>

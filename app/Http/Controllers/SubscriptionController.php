@@ -2,12 +2,11 @@
 	
 	namespace App\Http\Controllers;
 	
-	use App\ClientSubscription;
-	use App\ClientSubscriptionSchedule;
-	use App\SubscriptionItem;
-	use App\SubscriptionSchedule;
-	use App\SubscriptionType;
-	use Illuminate\Database\Eloquent\Relations\HasMany;
+	use App\Exceptions\WrappedException;
+	use App\Subscription;
+	use App\SubscriptionOptionItem;
+	use Auth;
+	use Illuminate\Database\Eloquent\Relations\BelongsTo;
 	use Illuminate\Database\Eloquent\Relations\HasOne;
 	use Illuminate\Http\Request;
 	
@@ -16,27 +15,39 @@
 		/**
 		 * Display a listing of the resource.
 		 *
+		 * @param \Illuminate\Http\Request $request
 		 * @return \Illuminate\Http\Response
 		 * @throws \App\Exceptions\WrappedException
 		 */
-		public function index()
+		public function index(Request $request)
 		{
-			$client = $this->getClient();
+			$client = Auth::user()->getClient();
+			$this->validate($request, [
+				'filter' => 'required|in:active,pendingApproval,rejected',
+			]);
 			
-			$subscriptionTypes = SubscriptionType::with(['subscriptionItems' => function (HasMany $hasMany) use ($client) {
-				$hasMany->with(['clientSubscription' => function (HasOne $hasOne) use ($client) {
-					$hasOne->where('client_id', $client->getKey())->with('subscriptionSchedules');
-				}]);
-			}])->get();
+			if ($request->filter === 'pendingApproval') {
+				$subscriptions = Subscription::whereIn('user_id', $client->users->pluck('id'))
+					->where('status', 'AT_DEPARTMENT_HEAD')
+					->orWhere('status', 'AT_PURCHASING_HEAD')
+					->with(['optionItem'])
+					->get();
+			} else if ($request->filter === 'rejected') {
+				$subscriptions = Subscription::whereIn('user_id', $client->users->pluck('id'))
+					->where('status', 'REJECTED')
+					->with(['optionItem'])
+					->with(['rejectedBy' => function (BelongsTo $belongsTo) {
+						$belongsTo->with('role');
+					}])
+					->get();
+			} else {
+				$subscriptions = Subscription::whereIn('user_id', $client->users->pluck('id'))
+					->where('status', 'ACTIVE')
+					->with(['optionItem'])
+					->get();
+			}
 			
-			$subscriptionSchedules = SubscriptionSchedule::all();
-			
-			$data = [
-				'subscriptionTypes'     => $subscriptionTypes,
-				'subscriptionSchedules' => $subscriptionSchedules,
-			];
-			
-			return $this->arrayResponse($data);
+			return $this->collectionResponse($subscriptions);
 		}
 		
 		/**
@@ -51,32 +62,32 @@
 		{
 			//
 			\Validator::validate($request->json()->all(), [
-				'subscriptionItemId' => 'required|exists:subscription_items,id',
-				'quantity'           => 'required|numeric',
-				'schedules'          => 'required',
+				'optionId'        => 'required|exists:subscription_options,id',
+				'optionItemId'    => 'required|exists:subscription_option_items,id',
+				'quantity'        => 'required|numeric',
+				'weekdays'        => 'required',
+				'itemCost'        => 'required|numeric',
+				'deliveryCost'    => 'required|numeric',
+				'renewEveryMonth' => 'required_without:terminationDate|boolean',
+				'terminationDate' => 'required_without:renewEveryMonth',
 			]);
 			
+			$amountToCharge = $request->json('itemCost') + $request->json('deliveryCost');
 			
-			$client = $this->getClient();
-			$clientSubscription = ClientSubscription::firstOrCreate([
-				'client_id'            => $client->getKey(),
-				'quantity'             => $request->json('quantity'),
-				'subscription_item_id' => $request->json('subscriptionItemId'),
+			$this->checkBalance($amountToCharge);
+			
+			$subscription = Subscription::create([
+				'user_id'                     => \Auth::user()->getKey(),
+				'quantity'                    => $request->json('quantity'),
+				'subscription_option_item_id' => $request->json('optionItemId'),
+				'weekdays'                    => $request->json('weekdays'),
+				'renew_every_month'           => $request->json('renewEveryMonth'),
+				'termination_date'            => $request->json('terminationDate'),
+				'item_cost'                   => $request->json('itemCost'),
+				'delivery_cost'               => $request->json('deliveryCost'),
 			]);
 			
-			$schedules = $request->json('schedules');
-			foreach ($schedules as $schedule) {
-				ClientSubscriptionSchedule::firstOrCreate([
-					'client_subscription_id'   => $clientSubscription->getKey(),
-					'subscription_schedule_id' => $schedule,
-				]);
-			}
-			
-			$subscriptionItem = SubscriptionItem::with(['clientSubscription' => function (HasOne $hasOne) use ($client) {
-				$hasOne->where('client_id', $client->getKey())->with('subscriptionSchedules');
-			}])->findOrFail($request->json('subscriptionItemId'));
-			
-			return $this->itemCreatedResponse($subscriptionItem);
+			return $this->itemCreatedResponse($subscription);
 		}
 		
 		/**
@@ -89,7 +100,7 @@
 		public function show($id)
 		{
 			$client = $this->getClient();
-			$subscriptionItem = SubscriptionItem::with(['clientSubscription' => function (HasOne $hasOne) use ($client) {
+			$subscriptionItem = SubscriptionOptionItem::with(['clientSubscription' => function (HasOne $hasOne) use ($client) {
 				$hasOne->where('client_id', $client->getKey())->with('subscriptionSchedules');
 			}])->findOrFail($id);
 			
@@ -104,47 +115,40 @@
 		 * @param  int                      $id
 		 * @return \Illuminate\Http\Response
 		 * @throws \App\Exceptions\WrappedException
-		 * @throws \Illuminate\Validation\ValidationException
 		 */
 		public function update(Request $request, $id)
 		{
-			\Validator::validate($request->json()->all(), [
-				'subscriptionItemId' => 'required|exists:subscription_items,id',
-				'quantity'           => 'required|numeric',
-				'schedules'          => 'required',
+			
+			$this->validate($request, [
+				'action' => 'required|in:approve,reject',
 			]);
 			
-			$client = $this->getClient();
-			$clientSubscription = ClientSubscription::whereClientId($client->getKey())
-				->where('subscription_item_id', $id)->firstOrFail();
+			$subscription = Subscription::findOrFail($id);
+			$user = \Auth::user();
 			
-			//Delete schedules
-			ClientSubscriptionSchedule::whereClientSubscriptionId($clientSubscription->getKey())->delete();
-			
-			//Delete the subscription now
-			$clientSubscription->delete();
-			
-			//Create new client subscription
-			$clientSubscription = ClientSubscription::firstOrCreate([
-				'client_id'            => $client->getKey(),
-				'quantity'             => $request->json('quantity'),
-				'subscription_item_id' => $request->json('subscriptionItemId'),
-			]);
-			
-			//Add schedules
-			$schedules = $request->json('schedules');
-			foreach ($schedules as $schedule) {
-				ClientSubscriptionSchedule::firstOrCreate([
-					'client_subscription_id'   => $clientSubscription->getKey(),
-					'subscription_schedule_id' => $schedule,
-				]);
+			if ($request->action == 'reject') {
+				$subscription->rejected_by_id = $user->getKey();
 			}
 			
-			$subscriptionItem = SubscriptionItem::with(['clientSubscription' => function (HasOne $hasOne) use ($client) {
-				$hasOne->where('client_id', $client->getKey())->with('subscriptionSchedules');
-			}])->findOrFail($id);
+			if (($subscription->status == 'AT_DEPARTMENT_HEAD' && $user->isDepartmentHead())) {
+				$subscription->status = $request->action == 'approve' ? 'AT_PURCHASING_HEAD' : 'REJECTED';
+				$subscription->save();
+			} else if (($subscription->status == 'AT_PURCHASING_HEAD' && $user->isPurchasingHead())) {
+				$subscription->status = $request->action == 'approve' ? 'ACTIVE' : 'REJECTED';
+				$subscription->save();
+			} else {
+				throw new WrappedException("You are not allowed to perform the requested operation");
+			}
 			
-			return $this->itemDeletedResponse($subscriptionItem);
+			$client = Auth::user()->getClient();
+			
+			$subscriptions = Subscription::whereIn('user_id', $client->users->pluck('id'))
+				->where('status', 'AT_DEPARTMENT_HEAD')
+				->orWhere('status', 'AT_PURCHASING_HEAD')
+				->with(['optionItem'])
+				->get();
+			
+			return $this->itemDeletedResponse($subscriptions);
 		}
 		
 		/**
@@ -157,19 +161,20 @@
 		public function destroy($id)
 		{
 			$client = $this->getClient();
-			$clientSubscription = ClientSubscription::whereClientId($client->getKey())
+			$clientSubscription = Subscription::whereClientId($client->getKey())
 				->where('subscription_item_id', $id)->firstOrFail();
 			
-			//Delete schedules
+			//Delete weekdays
 			ClientSubscriptionSchedule::whereClientSubscriptionId($clientSubscription->getKey())->delete();
 			
 			//Delete the subscription now
 			$clientSubscription->delete();
 			
-			$subscriptionItem = SubscriptionItem::with(['clientSubscription' => function (HasOne $hasOne) use ($client) {
+			$subscriptionItem = SubscriptionOptionItem::with(['clientSubscription' => function (HasOne $hasOne) use ($client) {
 				$hasOne->where('client_id', $client->getKey())->with('subscriptionSchedules');
 			}])->findOrFail($id);
 			
 			return $this->itemDeletedResponse($subscriptionItem);
 		}
+		
 	}

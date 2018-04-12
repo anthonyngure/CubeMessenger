@@ -139,12 +139,12 @@
                                         <br/>
                                         <br/>
                                         <!--<span>Estimate Max Time: {{estimatedMaxDuration/60}}min</span><br/>-->
-                                        <span>Urgent Cost Per Kilometer: KES {{systemVariables.URGENT_COST_PER_KM}}</span><br/>
-                                        <span>Non Urgent Cost Per Kilometer: KES {{systemVariables.NON_URGENT_COST_PER_KM}}</span>
+                                        <span>Urgent Cost Per Kilometer: KES {{costVariables.URGENT_COST_PER_KM}}</span><br/>
+                                        <span>Non Urgent Cost Per Kilometer: KES {{costVariables.NON_URGENT_COST_PER_KM}}</span>
                                         <br/>
                                         <br/>
-                                        <span>Urgent Cost Per Minute: KES {{systemVariables.URGENT_COST_PER_MIN}}</span><br/>
-                                        <span>Non Cost Per Minute: KES {{systemVariables.NON_URGENT_COST_PER_MIN}}</span>
+                                        <span>Urgent Cost Per Minute: KES {{costVariables.URGENT_COST_PER_MIN}}</span><br/>
+                                        <span>Non Cost Per Minute: KES {{costVariables.NON_URGENT_COST_PER_MIN}}</span>
                                         <br/>
                                         <br/>
                                         <span>Estimate Total Cost: {{$utils.formatMoney(estimatedCost)}}</span>
@@ -203,7 +203,7 @@
     data: () => ({
       urgent: false,
       courierOptions: [],
-      systemVariables: [],
+      costVariables: [],
       originInput: '',
       originName: null,
       originFormattedAddress: null,
@@ -351,13 +351,13 @@
           let costPerKM
           let baseCost
           if (this.urgent) {
-            costPerMinute = this.systemVariables.URGENT_COST_PER_KM * (this.itemWithLongestDistance.distance / 60)
-            costPerKM = this.systemVariables.URGENT_COST_PER_MIN * (this.itemWithLongestDistance.duration / 1000)
-            baseCost = this.systemVariables.URGENT_BASE_COST
+            costPerMinute = this.costVariables.URGENT_COST_PER_KM * (this.itemWithLongestDistance.distance / 60)
+            costPerKM = this.costVariables.URGENT_COST_PER_MIN * (this.itemWithLongestDistance.duration / 1000)
+            baseCost = this.costVariables.URGENT_BASE_COST
           } else {
-            costPerMinute = this.systemVariables.NON_URGENT_COST_PER_KM * (this.itemWithLongestDistance.distance / 60)
-            costPerKM = this.systemVariables.NON_URGENT_COST_PER_MIN * (this.itemWithLongestDistance.duration / 1000)
-            baseCost = this.systemVariables.NON_URGENT_BASE_COST
+            costPerMinute = this.costVariables.NON_URGENT_COST_PER_KM * (this.itemWithLongestDistance.distance / 60)
+            costPerKM = this.costVariables.NON_URGENT_COST_PER_MIN * (this.itemWithLongestDistance.duration / 1000)
+            baseCost = this.costVariables.NON_URGENT_BASE_COST
           }
 
           let totalCost = baseCost + costPerMinute + costPerKM
@@ -432,10 +432,10 @@
         onSuccess (response) {
           that.$utils.log(response.data.data)
           that.$utils.log(response.data.variables)
-          that.systemVariables = response.data.variables
+          that.costVariables = response.data.costVariables
           that.courierOptions = that.courierOptions.concat(response.data.data)
         }
-      }, {withVariables: true})
+      }, {withCostVariables: true})
     }
   }
 </script>
