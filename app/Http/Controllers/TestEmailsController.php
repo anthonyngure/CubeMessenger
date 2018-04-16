@@ -2,9 +2,9 @@
 	
 	namespace App\Http\Controllers;
 	
+	use App\Client;
 	use App\Mail\AccountTopUp;
 	use App\Mail\Demo;
-	use App\User;
 	use App\Utils;
 	use Mail;
 	
@@ -12,28 +12,20 @@
 	{
 		//
 		
-		private $user;
+		private $testClient;
 		
 		/**
 		 * EmailTester constructor.
 		 */
 		public function __construct()
 		{
-			$password = str_random(5);
-			
-			$this->user = new User([
-				'department_id' => 1,
-				'name'          => 'Anthony Ngure',
-				'email'         => 'thinksynergy@thinksynergy.co.ke',
-				'password'      => bcrypt($password),
-				'rawPassword'   => $password,
-			]);
+			$this->testClient = Client::where('name', 'Test Client')->firstOrFail();
 		}
 		
 		
 		public function topUp()
 		{
-			//Mail::to($this->user)->send(new AccountTopUp());
+			Mail::to($this->testClient)->send(new AccountTopUp());
 			
 			return new AccountTopUp();
 		}
