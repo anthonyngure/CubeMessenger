@@ -4,7 +4,6 @@
 	
 	use App\Charge;
 	use App\Transaction;
-	use App\User;
 	use App\Utils;
 	
 	class ChargeObserver
@@ -53,8 +52,9 @@
 			//code...
 			
 			//Send email if it is a settlement
-			if ($charge->status == 'SETTLED'){
-				Utils::sendDemoEmail('Charge Settled');
+			if ($charge->status == 'SETTLED') {
+				$context = 'KSH ' . $charge->amount . '  ####### ' . $charge->description;
+				Utils::sendDemoEmail($context);
 			}
 		}
 		
