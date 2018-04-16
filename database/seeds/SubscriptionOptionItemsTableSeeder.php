@@ -35,5 +35,11 @@
 			array_push($milkSubscriptionOptionItems, new \App\SubscriptionOptionItem(['name' => 'Molo Milk 500 ML', 'price' => 55]));
 			
 			$milkSubscriptionOption->items()->saveMany($milkSubscriptionOptionItems);
+			
+			$waterSubscriptionOption = \App\SubscriptionOption::where('name', 'Water')->firstOrFail();
+			$waterSubscriptionOptionItems = array();
+			array_push($waterSubscriptionOptionItems, new \App\SubscriptionOptionItem(['name' => 'Aqua', 'price' => 200]));
+			
+			$waterSubscriptionOption->items()->saveMany($waterSubscriptionOptionItems);
 		}
 	}

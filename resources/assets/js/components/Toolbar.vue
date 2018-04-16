@@ -2,39 +2,62 @@
     <v-toolbar fixed dense :color="darkTheme ? 'black' : 'white'" app clipped-left>
         <v-toolbar-side-icon @click.stop="onToolbarSideIconClick"></v-toolbar-side-icon>
         <img :src="'/img/logo.png'" height="32px" width="200px"/>
-        <v-btn :color="(balance > 200 || balance === 0) ? 'primary' : 'error'"
-               v-if="$auth.check()" class="ml-5 text--white"
-               @click.native="refreshBalance" :loading="balance === 0">
-            <v-icon left>account_balance_wallet</v-icon>
-            Balance {{$utils.formatMoney(balance)}}
-        </v-btn>
         <v-spacer></v-spacer>
-        <v-toolbar-items v-if="$auth.check()">
-            <v-btn small flat>
-                <v-icon color="primary" left>check_circle</v-icon>
-                Home / {{$route.name}}
-            </v-btn>
-        </v-toolbar-items>
-        <v-spacer></v-spacer>
-        <v-switch v-model="darkTheme" hide-details></v-switch>
-        <v-menu offset-y bottom>
-            <v-btn icon v-if="$auth.check()" slot="activator">
-                <v-badge overlap left small color="accent">
-                    <span slot="badge">0</span>
-                    <v-icon color="primary">notifications</v-icon>
-                </v-badge>
-            </v-btn>
-            <v-card>
-                <v-card-text>
-                    <span>No notifications</span>
-                </v-card-text>
-            </v-card>
-        </v-menu>
-        <v-toolbar-items v-if="!$auth.check()">
-            <v-btn to="signIn" flat>
+        <v-toolbar-items>
+            <v-btn to="signIn" flat v-if="!$auth.check()">
                 <v-icon left>person</v-icon>
                 Sign In
             </v-btn>
+            <v-btn small flat v-if="$auth.check()">
+                <v-icon color="primary" left>check_circle</v-icon>
+                Home / {{$route.name}}
+            </v-btn>
+            <v-menu offset-y bottom v-if="$auth.check()">
+                <v-btn flat
+                       :color="(balance.actual > 200 || balance.actual === 0) ? 'primary' : 'error'"
+                       slot="activator">
+                    <v-icon left>account_balance_wallet</v-icon>
+                    Account
+                    <v-icon right>keyboard_arrow_down</v-icon>
+                </v-btn>
+                <v-list>
+                    <v-list-tile>
+                        <v-list-tile-content>
+                            <v-list-tile-title class="body-2">Balance {{$utils.formatMoney(balance.actual)}}
+                            </v-list-tile-title>
+                            <v-list-tile-sub-title class="caption text--accent">
+                                Description here
+                            </v-list-tile-sub-title>
+                        </v-list-tile-content>
+                    </v-list-tile>
+                    <v-list-tile>
+                        <v-list-tile-content>
+                            <v-list-tile-title class="body-2">Limit {{$utils.formatMoney(balance.limit)}}
+                            </v-list-tile-title>
+                            <v-list-tile-sub-title class="caption text--accent">
+                                Description here
+                            </v-list-tile-sub-title>
+                        </v-list-tile-content>
+                    </v-list-tile>
+                    <v-divider class="my-2"></v-divider>
+                    <v-list-tile>
+                        <v-list-tile-content>
+                            <v-list-tile-title class="body-2">Spent {{$utils.formatMoney(balance.spent)}}
+                            </v-list-tile-title>
+                            <v-list-tile-sub-title class="caption text--accent-1">Description here
+                            </v-list-tile-sub-title>
+                        </v-list-tile-content>
+                    </v-list-tile>
+                    <v-list-tile>
+                        <v-list-tile-content>
+                            <v-list-tile-title class="body-2">Blocked {{$utils.formatMoney(balance.blocked)}}
+                            </v-list-tile-title>
+                            <v-list-tile-sub-title class="caption text--accent">Description here</v-list-tile-sub-title>
+                        </v-list-tile-content>
+                    </v-list-tile>
+                </v-list>
+            </v-menu>
+
         </v-toolbar-items>
         <v-menu offset-y bottom>
             <v-btn icon slot="activator">
@@ -84,7 +107,7 @@
       refreshBalance () {
         this.balance = 0
         this.axios.get('balance').then(response => {
-          this.balance = response.data.data.balance
+          this.balance = response.data.data
         })
       }
     },

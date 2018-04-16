@@ -42,6 +42,7 @@
 				['icon' => 'local_shipping', 'title' => 'Courier', 'route' => 'courier', 'pendingApprovals' => $pendingDeliveries],
 				['icon' => 'group', 'title' => 'Users', 'route' => 'users', 'pendingApprovals' => 0],
 				['icon' => 'group_work', 'title' => 'Departments', 'route' => 'departments', 'pendingApprovals' => 0],
+				['icon' => 'settings', 'title' => 'Settings', 'route' => 'settings', 'pendingApprovals' => 0],
 			];
 			
 			return $this->arrayResponse($items);
@@ -57,7 +58,10 @@
 			$client = $this->getClient();
 			
 			$data = [
-				'balance' => $client->getBalance(),
+				'actual'  => $client->getBalance(),
+				'limit'   => $client->limit,
+				'spent'   => $client->getSpent(),
+				'blocked' => $client->getBlocked(),
 			];
 			
 			return $this->arrayResponse($data);

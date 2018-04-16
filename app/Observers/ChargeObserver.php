@@ -5,6 +5,7 @@
 	use App\Charge;
 	use App\Transaction;
 	use App\User;
+	use App\Utils;
 	
 	class ChargeObserver
 	{
@@ -50,6 +51,11 @@
 		public function updating(Charge $charge)
 		{
 			//code...
+			
+			//Send email if it is a settlement
+			if ($charge->status == 'SETTLED'){
+				Utils::sendDemoEmail('Charge Settled');
+			}
 		}
 		
 		/**
@@ -61,6 +67,7 @@
 		public function updated(Charge $charge)
 		{
 			//code...
+			
 		}
 		
 		/**

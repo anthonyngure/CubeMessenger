@@ -1,12 +1,20 @@
 @component('mail::message')
-# Introduction
+# Account Top Up
 
-The body of your message.
+Your account has been topped up with KSH. 20,0000
 
 @component('mail::button', ['url' => ''])
 Button Text
 @endcomponent
 
-Thanks,<br>
-{{ config('app.name') }}
+@component('mail::table')
+    |A      |A      |A      |
+    |-------|:-------|:-------|
+    |baoao  |baoao  |baoao  |
+    |baoao  |baoao  |baoao  |
+    |baoao  |baoao  |baoao  |
+    |baoao  |baoao  |baoao  |
+@endcomponent
+
+Thanks you,<br>{{ config('app.name') }}
 @endcomponent

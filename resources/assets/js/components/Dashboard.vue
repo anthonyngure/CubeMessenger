@@ -45,7 +45,7 @@
                         <v-icon left>file_download</v-icon>
                         Download
                     </v-btn>
-                    <v-btn small flat outline color="primary">
+                    <v-btn small flat outline @click="refresh" color="primary">
                         <v-icon left>refresh</v-icon>
                         Refresh
                     </v-btn>

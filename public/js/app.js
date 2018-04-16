@@ -5838,7 +5838,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
 
 
 
@@ -7889,6 +7888,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__ConnectionManager___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__ConnectionManager__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Base_vue__ = __webpack_require__("./resources/assets/js/components/Base.vue");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Base_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__Base_vue__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__event_bus__ = __webpack_require__("./resources/assets/js/event-bus.js");
 //
 //
 //
@@ -8002,6 +8002,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+
 
 
 
@@ -8047,6 +8048,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         onSuccess: function onSuccess(response) {
           that.orders = [];
           that.orders = that.orders.concat(response.data.data);
+          __WEBPACK_IMPORTED_MODULE_2__event_bus__["a" /* default */].$emit(that.$actions.approved);
         }
       }, {
         action: 'approve'
@@ -8059,6 +8061,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         onSuccess: function onSuccess(response) {
           that.orders = [];
           that.orders = that.orders.concat(response.data.data);
+          __WEBPACK_IMPORTED_MODULE_2__event_bus__["a" /* default */].$emit(that.$actions.approved);
         }
       }, {
         action: 'reject'
@@ -9177,6 +9180,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__AddSubscriptionDialog___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__AddSubscriptionDialog__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_moment__ = __webpack_require__("./node_modules/moment/moment.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_moment___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_moment__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__event_bus__ = __webpack_require__("./resources/assets/js/event-bus.js");
 //
 //
 //
@@ -9258,6 +9262,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+
 
 
 
@@ -9300,6 +9305,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         onSuccess: function onSuccess(response) {
           that.items = [];
           that.items = that.items.concat(response.data.data);
+          __WEBPACK_IMPORTED_MODULE_4__event_bus__["a" /* default */].$emit(that.$actions.approved);
         }
       }, {
         action: 'approve'
@@ -9312,6 +9318,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         onSuccess: function onSuccess(response) {
           that.items = [];
           that.items = that.items.concat(response.data.data);
+          __WEBPACK_IMPORTED_MODULE_4__event_bus__["a" /* default */].$emit(that.$actions.approved);
         }
       }, {
         action: 'reject'
@@ -9521,6 +9528,29 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -9559,7 +9589,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
       this.balance = 0;
       this.axios.get('balance').then(function (response) {
-        _this.balance = response.data.data.balance;
+        _this.balance = response.data.data;
       });
     }
   },
@@ -10507,7 +10537,7 @@ exports = module.exports = __webpack_require__("./node_modules/css-loader/lib/cs
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -10567,7 +10597,7 @@ exports = module.exports = __webpack_require__("./node_modules/css-loader/lib/cs
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -10702,7 +10732,7 @@ exports = module.exports = __webpack_require__("./node_modules/css-loader/lib/cs
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -11017,7 +11047,7 @@ exports = module.exports = __webpack_require__("./node_modules/css-loader/lib/cs
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -45442,20 +45472,20 @@ var render = function() {
             1
           ),
           _vm._v(" "),
+          _c("connection-manager", {
+            ref: "connectionManager",
+            model: {
+              value: _vm.loading,
+              callback: function($$v) {
+                _vm.loading = $$v
+              },
+              expression: "loading"
+            }
+          }),
+          _vm._v(" "),
           _c(
             "v-card",
             [
-              _c("connection-manager", {
-                ref: "connectionManager",
-                model: {
-                  value: _vm.loading,
-                  callback: function($$v) {
-                    _vm.loading = $$v
-                  },
-                  expression: "loading"
-                }
-              }),
-              _vm._v(" "),
               _c("v-data-iterator", {
                 attrs: {
                   "content-tag": "v-expansion-panel",
@@ -46087,20 +46117,20 @@ var render = function() {
             1
           ),
           _vm._v(" "),
+          _c("connection-manager", {
+            ref: "connectionManager",
+            model: {
+              value: _vm.connecting,
+              callback: function($$v) {
+                _vm.connecting = $$v
+              },
+              expression: "connecting"
+            }
+          }),
+          _vm._v(" "),
           _c(
             "v-stepper-items",
             [
-              _c("connection-manager", {
-                ref: "connectionManager",
-                model: {
-                  value: _vm.connecting,
-                  callback: function($$v) {
-                    _vm.connecting = $$v
-                  },
-                  expression: "connecting"
-                }
-              }),
-              _vm._v(" "),
               _c(
                 "v-stepper-content",
                 { attrs: { step: "1" } },
@@ -51955,7 +51985,8 @@ var render = function() {
                             flat: "",
                             outline: "",
                             color: "primary"
-                          }
+                          },
+                          on: { click: _vm.refresh }
                         },
                         [
                           _c("v-icon", { attrs: { left: "" } }, [
@@ -53647,43 +53678,25 @@ var render = function() {
         attrs: { src: "/img/logo.png", height: "32px", width: "200px" }
       }),
       _vm._v(" "),
-      _vm.$auth.check()
-        ? _c(
-            "v-btn",
-            {
-              staticClass: "ml-5 text--white",
-              attrs: {
-                color:
-                  _vm.balance > 200 || _vm.balance === 0 ? "primary" : "error",
-                loading: _vm.balance === 0
-              },
-              nativeOn: {
-                click: function($event) {
-                  return _vm.refreshBalance($event)
-                }
-              }
-            },
-            [
-              _c("v-icon", { attrs: { left: "" } }, [
-                _vm._v("account_balance_wallet")
-              ]),
-              _vm._v(
-                "\n        Balance " +
-                  _vm._s(_vm.$utils.formatMoney(_vm.balance)) +
-                  "\n    "
-              )
-            ],
-            1
-          )
-        : _vm._e(),
-      _vm._v(" "),
       _c("v-spacer"),
       _vm._v(" "),
-      _vm.$auth.check()
-        ? _c(
-            "v-toolbar-items",
-            [
-              _c(
+      _c(
+        "v-toolbar-items",
+        [
+          !_vm.$auth.check()
+            ? _c(
+                "v-btn",
+                { attrs: { to: "signIn", flat: "" } },
+                [
+                  _c("v-icon", { attrs: { left: "" } }, [_vm._v("person")]),
+                  _vm._v("\n            Sign In\n        ")
+                ],
+                1
+              )
+            : _vm._e(),
+          _vm._v(" "),
+          _vm.$auth.check()
+            ? _c(
                 "v-btn",
                 { attrs: { small: "", flat: "" } },
                 [
@@ -53698,85 +53711,200 @@ var render = function() {
                 ],
                 1
               )
-            ],
-            1
-          )
-        : _vm._e(),
-      _vm._v(" "),
-      _c("v-spacer"),
-      _vm._v(" "),
-      _c("v-switch", {
-        attrs: { "hide-details": "" },
-        model: {
-          value: _vm.darkTheme,
-          callback: function($$v) {
-            _vm.darkTheme = $$v
-          },
-          expression: "darkTheme"
-        }
-      }),
-      _vm._v(" "),
-      _c(
-        "v-menu",
-        { attrs: { "offset-y": "", bottom: "" } },
-        [
+            : _vm._e(),
+          _vm._v(" "),
           _vm.$auth.check()
             ? _c(
-                "v-btn",
-                { attrs: { slot: "activator", icon: "" }, slot: "activator" },
+                "v-menu",
+                { attrs: { "offset-y": "", bottom: "" } },
                 [
                   _c(
-                    "v-badge",
+                    "v-btn",
                     {
                       attrs: {
-                        overlap: "",
-                        left: "",
-                        small: "",
-                        color: "accent"
-                      }
+                        slot: "activator",
+                        flat: "",
+                        color:
+                          _vm.balance.actual > 200 || _vm.balance.actual === 0
+                            ? "primary"
+                            : "error"
+                      },
+                      slot: "activator"
                     },
                     [
-                      _c("span", { attrs: { slot: "badge" }, slot: "badge" }, [
-                        _vm._v("0")
+                      _c("v-icon", { attrs: { left: "" } }, [
+                        _vm._v("account_balance_wallet")
                       ]),
-                      _vm._v(" "),
-                      _c("v-icon", { attrs: { color: "primary" } }, [
-                        _vm._v("notifications")
+                      _vm._v("\n                Account\n                "),
+                      _c("v-icon", { attrs: { right: "" } }, [
+                        _vm._v("keyboard_arrow_down")
                       ])
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "v-list",
+                    [
+                      _c(
+                        "v-list-tile",
+                        [
+                          _c(
+                            "v-list-tile-content",
+                            [
+                              _c(
+                                "v-list-tile-title",
+                                { staticClass: "body-2" },
+                                [
+                                  _vm._v(
+                                    "Balance " +
+                                      _vm._s(
+                                        _vm.$utils.formatMoney(
+                                          _vm.balance.actual
+                                        )
+                                      ) +
+                                      "\n                        "
+                                  )
+                                ]
+                              ),
+                              _vm._v(" "),
+                              _c(
+                                "v-list-tile-sub-title",
+                                { staticClass: "caption text--accent" },
+                                [
+                                  _vm._v(
+                                    "\n                            Description here\n                        "
+                                  )
+                                ]
+                              )
+                            ],
+                            1
+                          )
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "v-list-tile",
+                        [
+                          _c(
+                            "v-list-tile-content",
+                            [
+                              _c(
+                                "v-list-tile-title",
+                                { staticClass: "body-2" },
+                                [
+                                  _vm._v(
+                                    "Limit " +
+                                      _vm._s(
+                                        _vm.$utils.formatMoney(
+                                          _vm.balance.limit
+                                        )
+                                      ) +
+                                      "\n                        "
+                                  )
+                                ]
+                              ),
+                              _vm._v(" "),
+                              _c(
+                                "v-list-tile-sub-title",
+                                { staticClass: "caption text--accent" },
+                                [
+                                  _vm._v(
+                                    "\n                            Description here\n                        "
+                                  )
+                                ]
+                              )
+                            ],
+                            1
+                          )
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c("v-divider", { staticClass: "my-2" }),
+                      _vm._v(" "),
+                      _c(
+                        "v-list-tile",
+                        [
+                          _c(
+                            "v-list-tile-content",
+                            [
+                              _c(
+                                "v-list-tile-title",
+                                { staticClass: "body-2" },
+                                [
+                                  _vm._v(
+                                    "Spent " +
+                                      _vm._s(
+                                        _vm.$utils.formatMoney(
+                                          _vm.balance.spent
+                                        )
+                                      ) +
+                                      "\n                        "
+                                  )
+                                ]
+                              ),
+                              _vm._v(" "),
+                              _c(
+                                "v-list-tile-sub-title",
+                                { staticClass: "caption text--accent-1" },
+                                [
+                                  _vm._v(
+                                    "Description here\n                        "
+                                  )
+                                ]
+                              )
+                            ],
+                            1
+                          )
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "v-list-tile",
+                        [
+                          _c(
+                            "v-list-tile-content",
+                            [
+                              _c(
+                                "v-list-tile-title",
+                                { staticClass: "body-2" },
+                                [
+                                  _vm._v(
+                                    "Blocked " +
+                                      _vm._s(
+                                        _vm.$utils.formatMoney(
+                                          _vm.balance.blocked
+                                        )
+                                      ) +
+                                      "\n                        "
+                                  )
+                                ]
+                              ),
+                              _vm._v(" "),
+                              _c(
+                                "v-list-tile-sub-title",
+                                { staticClass: "caption text--accent" },
+                                [_vm._v("Description here")]
+                              )
+                            ],
+                            1
+                          )
+                        ],
+                        1
+                      )
                     ],
                     1
                   )
                 ],
                 1
               )
-            : _vm._e(),
-          _vm._v(" "),
-          _c(
-            "v-card",
-            [_c("v-card-text", [_c("span", [_vm._v("No notifications")])])],
-            1
-          )
+            : _vm._e()
         ],
         1
       ),
-      _vm._v(" "),
-      !_vm.$auth.check()
-        ? _c(
-            "v-toolbar-items",
-            [
-              _c(
-                "v-btn",
-                { attrs: { to: "signIn", flat: "" } },
-                [
-                  _c("v-icon", { attrs: { left: "" } }, [_vm._v("person")]),
-                  _vm._v("\n            Sign In\n        ")
-                ],
-                1
-              )
-            ],
-            1
-          )
-        : _vm._e(),
       _vm._v(" "),
       _c(
         "v-menu",
@@ -88676,7 +88804,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 
-var DEBUG = false;
+var DEBUG = true;
 
 var GOOGLE_MAPS_KEY = 'AIzaSyAS_9BsQpqTP8EVuMZ7rQ9gMCl0wmqhm7k';
 var PRIMARY_COLOR = '#1A75BA';

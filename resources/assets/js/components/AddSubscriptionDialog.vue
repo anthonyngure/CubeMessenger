@@ -8,8 +8,8 @@
                 <v-divider></v-divider>
                 <v-stepper-step step="3">Quantity</v-stepper-step>
             </v-stepper-header>
+            <connection-manager ref="connectionManager" v-model="connecting"></connection-manager>
             <v-stepper-items>
-                <connection-manager ref="connectionManager" v-model="connecting"></connection-manager>
                 <v-stepper-content step="1">
                     <v-select v-model="optionId"
                               :items="options"

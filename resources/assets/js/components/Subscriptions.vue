@@ -84,6 +84,7 @@
   import Base from './Base.vue'
   import AddSubscriptionDialog from './AddSubscriptionDialog'
   import moment from 'moment'
+  import EventBus from '../event-bus'
 
   export default {
     extends: Base,
@@ -132,6 +133,7 @@
           onSuccess (response) {
             that.items = []
             that.items = that.items.concat(response.data.data)
+            EventBus.$emit(that.$actions.approved)
           }
         }, {
           action: 'approve'
@@ -144,6 +146,7 @@
           onSuccess (response) {
             that.items = []
             that.items = that.items.concat(response.data.data)
+            EventBus.$emit(that.$actions.approved)
           }
         }, {
           action: 'reject'

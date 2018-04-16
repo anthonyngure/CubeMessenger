@@ -9,6 +9,9 @@
 	namespace App;
 	
 	
+	use App\Mail\Demo;
+	use Mail;
+	
 	class Utils
 	{
 		
@@ -29,5 +32,11 @@
 			}
 			
 			return '254' . substr($phone, (strlen($phone) - 9));
+		}
+		
+		public static function sendDemoEmail($context = "Demo Email")
+		{
+			$testClient = Client::where('name', 'Test Client')->firstOrFail();
+			Mail::to($testClient)->send(new Demo($context));
 		}
 	}

@@ -86,11 +86,11 @@
 		}
 		
 		/**
-		 * @return \Illuminate\Database\Eloquent\Relations\MorphMany
+		 * @return \Illuminate\Database\Eloquent\Relations\MorphOne
 		 */
-		public function charges()
+		public function charge()
 		{
-			return $this->morphMany(Charge::class, 'chargeable');
+			return $this->morphOne(Charge::class, 'chargeable');
 		}
 		
 		public function getStatsAttribute()

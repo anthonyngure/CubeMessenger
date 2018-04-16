@@ -114,6 +114,7 @@
 <script>
   import ConnectionManager from './ConnectionManager'
   import Base from './Base.vue'
+  import EventBus from '../event-bus'
 
   export default {
     extends: Base,
@@ -158,6 +159,7 @@
           onSuccess (response) {
             that.orders = []
             that.orders = that.orders.concat(response.data.data)
+            EventBus.$emit(that.$actions.approved)
           }
         }, {
           action: 'approve'
@@ -170,6 +172,7 @@
           onSuccess (response) {
             that.orders = []
             that.orders = that.orders.concat(response.data.data)
+            EventBus.$emit(that.$actions.approved)
           }
         }, {
           action: 'reject'

@@ -17,8 +17,7 @@
 	
 	
 	Route::group(['prefix' => 'emails'], function () {
-		Route::get('/', 'TestEmailsController@structure');
-		Route::get('/structure', 'TestEmailsController@structure');
-		Route::get('/password', 'TestEmailsController@password');
+		Route::get('/', 'TestEmailsController@demo');
+		Route::get('/demo', 'TestEmailsController@demo');
 		Route::get('/topUp', 'TestEmailsController@topUp');
 	});

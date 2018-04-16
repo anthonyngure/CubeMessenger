@@ -3,6 +3,7 @@
 	namespace App\Http\Controllers;
 	
 	use App\Mail\AccountTopUp;
+	use App\Mail\Demo;
 	use App\Mail\Password;
 	use App\Mail\StructureTest;
 	use App\User;
@@ -29,12 +30,6 @@
 			]);
 		}
 		
-		public function password()
-		{
-			//Mail::to($this->user)->send(new Password($this->user));
-			
-			return new Password($this->user);
-		}
 		
 		public function topUp()
 		{
@@ -43,10 +38,10 @@
 			return new AccountTopUp();
 		}
 		
-		public function structure()
+		public function demo()
 		{
 			//Mail::to($this->user)->send(new StructureTest());
 			
-			return new StructureTest();
+			return new Demo();
 		}
 	}

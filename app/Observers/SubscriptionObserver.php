@@ -51,6 +51,13 @@
 		public function updated(Subscription $subscription)
 		{
 			//code...
+			if ($subscription->status === 'REJECTED') {
+				$subscription->charge()->delete();
+			} else if ($subscription->status === 'ACTIVE') {
+				$subscription->charge()->update([
+					'status' => 'SETTLED',
+				]);
+			}
 		}
 		
 		/**
@@ -84,6 +91,7 @@
 			$amount = $subscription->item_cost + $subscription->delivery_fee;
 			
 			$description = 'Subscription for ' . $subscription->optionItem()->firstOrFail(['name'])->name;
+			
 			
 			Charge::updateOrCreate([
 				'client_id'       => $user->client_id,

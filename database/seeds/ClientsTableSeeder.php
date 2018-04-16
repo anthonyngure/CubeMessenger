@@ -15,7 +15,7 @@
 			\App\Client::create([
 				'name'  => 'Test Client',
 				'logo'  => 'clients/default.jpg',
-				'email' => 'testclient@cubemessenger.com',
+				'email' => 'thinksynergy@thinksynergy.co.ke',
 				'phone' => '0700000001',
 			]);
 		}

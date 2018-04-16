@@ -2,32 +2,27 @@
 	
 	namespace App\Mail;
 	
-	use App\User;
 	use Illuminate\Bus\Queueable;
 	use Illuminate\Mail\Mailable;
 	use Illuminate\Queue\SerializesModels;
 	
-	class Password extends Mailable
+	class Demo extends Mailable
 	{
 		use Queueable, SerializesModels;
 		/**
-		 * @var \App\User
-		 */
-		private $user;
-		/**
 		 * @var string
 		 */
-		private $rawPassword;
+		private $context;
 		
 		/**
 		 * Create a new message instance.
 		 *
-		 * @param \App\User $user
+		 * @param string $context
 		 */
-		public function __construct(User $user)
+		public function __construct(string $context = 'Demo Email')
 		{
 			//
-			$this->user = $user;
+			$this->context = $context;
 		}
 		
 		/**
@@ -37,7 +32,6 @@
 		 */
 		public function build()
 		{
-			return $this->subject('Cube Messenger Password')
-				->markdown('emails.password');
+			return $this->markdown('emails.demo')->with(['context' => $this->context]);
 		}
 	}

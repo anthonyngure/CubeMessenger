@@ -11,9 +11,8 @@
                 <v-tab href="#delivered">Delivered</v-tab>
                 <v-tab href="#rejected">Rejected</v-tab>
             </v-tabs>
+            <connection-manager ref="connectionManager" v-model="loading"></connection-manager>
             <v-card>
-                <connection-manager ref="connectionManager" v-model="loading">
-                </connection-manager>
                 <v-data-iterator
                         content-tag="v-expansion-panel"
                         content-class="elevation-0"
