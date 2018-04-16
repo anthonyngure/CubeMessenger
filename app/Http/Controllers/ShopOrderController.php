@@ -110,26 +110,11 @@
 			$order = ShopOrder::findOrFail($id);
 			$client = $this->getClient();
 			
-			/** @var \App\User $user */
-			$user = Auth::user();
-			
 			$this->validate($request, [
 				'action' => 'required|in:approve,reject',
 			]);
 			
-			if ($request->action == 'reject') {
-				$order->rejected_by_id = $user->getKey();
-			}
-			
-			if (($order->status == 'AT_DEPARTMENT_HEAD' && $user->isDepartmentHead())) {
-				$order->status = $request->action == 'approve' ? 'AT_PURCHASING_HEAD' : 'REJECTED';
-				$order->save();
-			} else if (($order->status == 'AT_PURCHASING_HEAD' && $user->isPurchasingHead())) {
-				$order->status = $request->action == 'approve' ? 'PENDING_DELIVERY' : 'REJECTED';
-				$order->save();
-			} else {
-				throw new WrappedException("You are not allowed to perform the requested operation");
-			}
+			$this->handleApprovals($request, $order, 'PENDING_DELIVERY');
 			
 			$orders = ShopOrder::whereIn('user_id', $client->users->pluck('id'))
 				->where('status', 'AT_DEPARTMENT_HEAD')

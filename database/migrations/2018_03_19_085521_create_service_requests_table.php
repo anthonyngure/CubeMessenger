@@ -23,17 +23,16 @@
 				
 				$table->enum('type', ['IT', 'REPAIR']);
 				$table->enum('status', ['AT_DEPARTMENT_HEAD', 'AT_PURCHASING_HEAD',
-					'PENDING', 'ATTENDED', 'REJECTED'])->default('AT_DEPARTMENT_HEAD');
+					'PENDING_QUOTE', 'PENDING_ATTENDANCE', 'ATTENDED', 'REJECTED'])->default('AT_DEPARTMENT_HEAD');
 				$table->unsignedInteger('rejected_by_id', false)->nullable();
 				$table->foreign('rejected_by_id')->references('id')->on('users');
-				$table->mediumText('details');
+				$table->longText('details');
 				$table->string('note')->nullable();
-				$table->double('cost', 8, 2)->default(0);
 				$table->date('schedule_date')->nullable();
 				$table->time('schedule_time')->nullable();
 				
-				$table->timestamp('department_head_approved_at')->nullable();
-				$table->timestamp('purchasing_head_approved_at')->nullable();
+				$table->timestamp('department_head_acted_at')->nullable();
+				$table->timestamp('purchasing_head_acted_at')->nullable();
 				$table->timestamp('attended_at')->nullable();
 				$table->timestamp('completed_at')->nullable();
 				$table->timestamps();

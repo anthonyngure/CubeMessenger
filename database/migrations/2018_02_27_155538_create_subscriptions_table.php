@@ -26,6 +26,8 @@
 				$table->unsignedMediumInteger('quantity', false);
 				$table->enum('status', ['AT_DEPARTMENT_HEAD', 'AT_PURCHASING_HEAD', 'REJECTED', 'EXPIRED', 'ACTIVE'])
 					->default('AT_DEPARTMENT_HEAD');
+				$table->timestamp('department_head_acted_at')->nullable();
+				$table->timestamp('purchasing_head_acted_at')->nullable();
 				$table->unsignedInteger('rejected_by_id', false)->nullable();
 				$table->foreign('rejected_by_id')->references('id')->on('users');
 				$table->timestamps();

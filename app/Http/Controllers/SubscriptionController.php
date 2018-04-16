@@ -2,7 +2,6 @@
 	
 	namespace App\Http\Controllers;
 	
-	use App\Exceptions\WrappedException;
 	use App\Subscription;
 	use App\SubscriptionOptionItem;
 	use Auth;
@@ -124,25 +123,11 @@
 			]);
 			
 			$subscription = Subscription::findOrFail($id);
-			$user = \Auth::user();
 			
-			if ($request->action == 'reject') {
-				$subscription->rejected_by_id = $user->getKey();
-			}
+			$this->handleApprovals($request, $subscription,'ACTIVE');
 			
-			if (($subscription->status == 'AT_DEPARTMENT_HEAD' && $user->isDepartmentHead())) {
-				$subscription->status = $request->action == 'approve' ? 'AT_PURCHASING_HEAD' : 'REJECTED';
-				$subscription->save();
-			} else if (($subscription->status == 'AT_PURCHASING_HEAD' && $user->isPurchasingHead())) {
-				$subscription->status = $request->action == 'approve' ? 'ACTIVE' : 'REJECTED';
-				$subscription->save();
-			} else {
-				throw new WrappedException("You are not allowed to perform the requested operation");
-			}
-			
-			$client = Auth::user()->getClient();
-			
-			$subscriptions = Subscription::whereIn('user_id', $client->users->pluck('id'))
+			$subscriptions = Subscription::whereIn('user_id',
+				Auth::user()->getClient()->users->pluck('id'))
 				->where('status', 'AT_DEPARTMENT_HEAD')
 				->orWhere('status', 'AT_PURCHASING_HEAD')
 				->with(['optionItem'])
@@ -160,21 +145,7 @@
 		 */
 		public function destroy($id)
 		{
-			$client = $this->getClient();
-			$clientSubscription = Subscription::whereClientId($client->getKey())
-				->where('subscription_item_id', $id)->firstOrFail();
-			
-			//Delete weekdays
-			ClientSubscriptionSchedule::whereClientSubscriptionId($clientSubscription->getKey())->delete();
-			
-			//Delete the subscription now
-			$clientSubscription->delete();
-			
-			$subscriptionItem = SubscriptionOptionItem::with(['clientSubscription' => function (HasOne $hasOne) use ($client) {
-				$hasOne->where('client_id', $client->getKey())->with('subscriptionSchedules');
-			}])->findOrFail($id);
-			
-			return $this->itemDeletedResponse($subscriptionItem);
+		
 		}
 		
 	}

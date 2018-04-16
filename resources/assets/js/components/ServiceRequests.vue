@@ -23,7 +23,7 @@
                     <template slot="items" slot-scope="props">
                         <!--<td>{{ props.item.id }}</td>-->
                         <td>
-                            <p class="ma-2">{{ props.item.details }}</p>
+                            <p class="ma-2">{{ props.item.details.replace(/#/g , ', ') }}</p>
                             <div>
                                 <v-chip v-if="props.item.status === 'AT_DEPARTMENT_HEAD' || props.item.status === 'AT_PURCHASING_HEAD'"
                                         label outline color="info" small>
@@ -31,7 +31,12 @@
                                     Pending {{props.item.status === 'AT_DEPARTMENT_HEAD' ? ' Department ' :
                                     ' Purchasing '}} Head approval
                                 </v-chip>
-                                <v-chip v-if="props.item.status === 'REJECTED'"
+                                <v-chip v-if="currentTab==='pending'"
+                                        label outline color="red" small>
+                                    <v-icon left>info</v-icon>
+                                    {{props.item.status}}
+                                </v-chip>
+                                <v-chip v-if="currentTab==='rejected'"
                                         label outline color="red" small>
                                     <v-icon left>info</v-icon>
                                     Rejected by {{props.item.rejectedBy.accountType}} - {{props.item.rejectedBy.name}}
@@ -85,6 +90,7 @@
   import ConnectionManager from './ConnectionManager'
   import ServiceRequestDialog from './ServiceRequestDialog'
   import Base from './Base.vue'
+  import EventBus from '../event-bus'
 
   export default {
     extends: Base,
@@ -140,6 +146,7 @@
           onSuccess (response) {
             that.serviceRequests = []
             that.serviceRequests = that.serviceRequests.concat(response.data.data)
+            EventBus.$emit(that.$actions.approved)
           }
         }, {
           action: 'approve',
@@ -153,6 +160,7 @@
           onSuccess (response) {
             that.serviceRequests = []
             that.serviceRequests = that.serviceRequests.concat(response.data.data)
+            EventBus.$emit(that.$actions.approved)
           }
         }, {
           action: 'reject',

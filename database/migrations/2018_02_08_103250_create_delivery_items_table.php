@@ -31,6 +31,8 @@
 				$table->double('estimated_duration', 8, 2);
 				$table->enum('status', ['AT_DEPARTMENT_HEAD', 'AT_PURCHASING_HEAD', 'PENDING_DELIVERY', 'REJECTED',
 					'EN_ROUTE_TO_DESTINATION', 'AT_DESTINATION'])->default('AT_DEPARTMENT_HEAD');
+				$table->timestamp('department_head_acted_at')->nullable();
+				$table->timestamp('purchasing_head_acted_at')->nullable();
 				$table->unsignedInteger('rejected_by_id', false)->nullable();
 				$table->foreign('rejected_by_id')->references('id')->on('users');
 				$table->timestamp('estimated_arrival_time')->nullable();

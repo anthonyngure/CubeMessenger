@@ -89,24 +89,10 @@
 				
 				//It is an update from the web
 				
-				if ($request->action == 'reject') {
-					$deliveryItem->rejected_by_id = Auth::user()->getKey();
-				}
+				$this->handleApprovals($request, $deliveryItem, 'PENDING_DELIVERY');
 				
-				//This is an update from the web, either
-				$client = $this->getClient();
-				$user = Auth::user();
-				if (($deliveryItem->status == 'AT_DEPARTMENT_HEAD' && $user->isDepartmentHead())) {
-					$deliveryItem->status = $request->action == 'approve' ? 'AT_PURCHASING_HEAD' : 'REJECTED';
-					$deliveryItem->save();
-				} else if (($deliveryItem->status == 'AT_PURCHASING_HEAD' && $user->isPurchasingHead())) {
-					$deliveryItem->status = $request->action == 'approve' ? 'PENDING_DELIVERY' : 'REJECTED';
-					$deliveryItem->save();
-				} else {
-					throw new WrappedException("You are not allowed to perform the requested operation");
-				}
-				
-				$deliveries = Delivery::whereIn('user_id', $client->users->pluck('id'))
+				$deliveries = Delivery::whereIn('user_id',
+					Auth::user()->getClient()->users->pluck('id'))
 					->whereHas('items', function (Builder $builder) use ($request) {
 						$builder->where('status', 'AT_DEPARTMENT_HEAD')
 							->orWhere('status', 'AT_PURCHASING_HEAD');

@@ -8686,6 +8686,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__ServiceRequestDialog___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__ServiceRequestDialog__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__Base_vue__ = __webpack_require__("./resources/assets/js/components/Base.vue");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__Base_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__Base_vue__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__event_bus__ = __webpack_require__("./resources/assets/js/event-bus.js");
 //
 //
 //
@@ -8769,6 +8770,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+
 
 
 
@@ -8821,6 +8828,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         onSuccess: function onSuccess(response) {
           that.serviceRequests = [];
           that.serviceRequests = that.serviceRequests.concat(response.data.data);
+          __WEBPACK_IMPORTED_MODULE_3__event_bus__["a" /* default */].$emit(that.$actions.approved);
         }
       }, {
         action: 'approve',
@@ -8834,6 +8842,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         onSuccess: function onSuccess(response) {
           that.serviceRequests = [];
           that.serviceRequests = that.serviceRequests.concat(response.data.data);
+          __WEBPACK_IMPORTED_MODULE_3__event_bus__["a" /* default */].$emit(that.$actions.approved);
         }
       }, {
         action: 'reject',
@@ -10582,7 +10591,7 @@ exports = module.exports = __webpack_require__("./node_modules/css-loader/lib/cs
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -47306,7 +47315,9 @@ var render = function() {
                       return [
                         _c("td", [
                           _c("p", { staticClass: "ma-2" }, [
-                            _vm._v(_vm._s(props.item.details))
+                            _vm._v(
+                              _vm._s(props.item.details.replace(/#/g, ", "))
+                            )
                           ]),
                           _vm._v(" "),
                           _c(
@@ -47343,7 +47354,32 @@ var render = function() {
                                   )
                                 : _vm._e(),
                               _vm._v(" "),
-                              props.item.status === "REJECTED"
+                              _vm.currentTab === "pending"
+                                ? _c(
+                                    "v-chip",
+                                    {
+                                      attrs: {
+                                        label: "",
+                                        outline: "",
+                                        color: "red",
+                                        small: ""
+                                      }
+                                    },
+                                    [
+                                      _c("v-icon", { attrs: { left: "" } }, [
+                                        _vm._v("info")
+                                      ]),
+                                      _vm._v(
+                                        "\n                                " +
+                                          _vm._s(props.item.status) +
+                                          "\n                            "
+                                      )
+                                    ],
+                                    1
+                                  )
+                                : _vm._e(),
+                              _vm._v(" "),
+                              _vm.currentTab === "rejected"
                                 ? _c(
                                     "v-chip",
                                     {
@@ -88804,7 +88840,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 
-var DEBUG = false;
+var DEBUG = true;
 
 var GOOGLE_MAPS_KEY = 'AIzaSyAS_9BsQpqTP8EVuMZ7rQ9gMCl0wmqhm7k';
 var PRIMARY_COLOR = '#1A75BA';

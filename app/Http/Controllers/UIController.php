@@ -3,6 +3,7 @@
 	namespace App\Http\Controllers;
 	
 	use App\Delivery;
+	use App\ServiceRequest;
 	use App\ShopOrder;
 	use App\Subscription;
 	use Illuminate\Database\Eloquent\Builder;
@@ -27,9 +28,20 @@
 				})->count();
 			
 			$pendingSubscriptions = Subscription::whereIn('user_id', $client->users->pluck('id'))
-				->where('status', 'AT_DEPARTMENT_HEAD')
-				->orWhere('status', 'AT_PURCHASING_HEAD')
+				->where('status', '!=', 'REJECTED')
+				->Where('status', '!=', 'EXPIRED')
+				->Where('status', '!=', 'ACTIVE')
 				->count();
+			
+			$pendingITServiceRequests = ServiceRequest::whereIn('user_id', $client->users->pluck('id'))
+				->where('status', '!=', 'ATTENDED')
+				->where('status', '!=', 'REJECTED')
+				->whereType('IT')->count();
+			
+			$pendingRepairServiceRequests = ServiceRequest::whereIn('user_id', $client->users->pluck('id'))
+				->where('status', '!=', 'ATTENDED')
+				->where('status', '!=', 'REJECTED')
+				->whereType('REPAIR')->count();
 			
 			$items = [
 				['icon' => 'dashboard', 'title' => 'Dashboard', 'route' => 'dashboard', 'pendingApprovals' => 0],
@@ -37,8 +49,8 @@
 				['icon' => 'date_range', 'title' => 'Appointments', 'route' => 'appointments', 'pendingApprovals' => 0],
 				['icon' => 'shopping_cart', 'title' => 'Shopping', 'route' => 'shopping', 'pendingApprovals' => 0],
 				['icon' => 'shopping_basket', 'title' => 'Orders', 'route' => 'orders', 'pendingApprovals' => $pendingShopOrders],
-				['icon' => 'computer', 'title' => 'IT Services', 'route' => 'it', 'pendingApprovals' => 0],
-				['icon' => 'build', 'title' => 'Repair Services', 'route' => 'repairs', 'pendingApprovals' => 0],
+				['icon' => 'computer', 'title' => 'IT Services', 'route' => 'it', 'pendingApprovals' => $pendingITServiceRequests],
+				['icon' => 'build', 'title' => 'Repair Services', 'route' => 'repairs', 'pendingApprovals' => $pendingRepairServiceRequests],
 				['icon' => 'local_shipping', 'title' => 'Courier', 'route' => 'courier', 'pendingApprovals' => $pendingDeliveries],
 				['icon' => 'group', 'title' => 'Users', 'route' => 'users', 'pendingApprovals' => 0],
 				['icon' => 'group_work', 'title' => 'Departments', 'route' => 'departments', 'pendingApprovals' => 0],

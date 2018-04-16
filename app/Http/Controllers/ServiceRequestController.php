@@ -20,14 +20,17 @@
 		{
 			//
 			
-			$client = $this->getClient();
 			
 			$this->validate($request, [
-				'filter' => 'required|in:pendingApproval,pending,attended,rejected',
-				'type'   => 'required|in:it,repair',
+				'filter' => 'required|in:pendingApproval,pending,attended,rejected,rider',
+				'type'   => 'required_unless:filter,rider|in:it,repair',
 			]);
 			
-			if ($request->filter === 'pendingApproval') {
+			if ($request->filter == 'rider') {
+				$services = ServiceRequest::where('status', 'PENDING_QUOTE')
+					->orWhere('status', 'PENDING_ATTENDANCE')->get();
+			} else if ($request->filter === 'pendingApproval') {
+				$client = $this->getClient();
 				$services = ServiceRequest::whereIn('user_id', $client->users->pluck('id'))
 					->where(function ($query) {
 						$query->where('status', 'AT_DEPARTMENT_HEAD')
@@ -35,14 +38,20 @@
 					})
 					->whereType(strtoupper($request->type))->get();
 			} else if ($request->filter === 'pending') {
+				$client = $this->getClient();
 				$services = ServiceRequest::whereIn('user_id', $client->users->pluck('id'))
-					->where('status', 'PENDING')
+					->where(function ($query) {
+						$query->where('status', 'PENDING_QUOTE')
+							->orWhere('status', 'PENDING_ATTENDANCE');
+					})
 					->whereType(strtoupper($request->type))->get();
 			} else if ($request->filter === 'attended') {
+				$client = $this->getClient();
 				$services = ServiceRequest::whereIn('user_id', $client->users->pluck('id'))
 					->where('status', 'ATTENDED')
 					->whereType(strtoupper($request->type))->get();
 			} else {
+				$client = $this->getClient();
 				$services = ServiceRequest::whereIn('user_id', $client->users->pluck('id'))
 					->where('status', 'REJECTED')
 					->whereType(strtoupper($request->type))
@@ -109,27 +118,12 @@
 			$serviceRequest = ServiceRequest::findOrFail($id);
 			$client = $this->getClient();
 			
-			/** @var \App\User $user */
-			$user = Auth::user();
-			
 			$this->validate($request, [
 				'action' => 'required|in:approve,reject',
 				'type'   => 'required|in:it,repair',
 			]);
 			
-			if ($request->action == 'reject'){
-				$serviceRequest->rejected_by_id = $user->getKey();
-			}
-			
-			if (($serviceRequest->status == 'AT_DEPARTMENT_HEAD' && $user->isDepartmentHead())) {
-				$serviceRequest->status = $request->action == 'approve' ? 'AT_PURCHASING_HEAD' : 'REJECTED';
-				$serviceRequest->save();
-			} else if (($serviceRequest->status == 'AT_PURCHASING_HEAD' && $user->isPurchasingHead())) {
-				$serviceRequest->status = $request->action == 'approve' ? 'PENDING' : 'REJECTED';
-				$serviceRequest->save();
-			} else {
-				throw new WrappedException("You are not allowed to perform the requested operation");
-			}
+			$this->handleApprovals($request, $serviceRequest, 'PENDING_QUOTE');
 			
 			$services = ServiceRequest::whereIn('user_id', $client->users->pluck('id'))
 				->where(function ($query) {
