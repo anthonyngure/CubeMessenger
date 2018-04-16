@@ -32,6 +32,8 @@
 		 */
 		public function build()
 		{
-			return $this->markdown('emails.demo')->with(['context' => $this->context]);
+			return $this->subject($this->context)
+				->markdown('emails.demo')
+				->with(['context' => $this->context]);
 		}
 	}
