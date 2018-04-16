@@ -51,11 +51,7 @@
 		{
 			//code...
 			
-			//Send email if it is a settlement
-			if ($charge->status == 'SETTLED') {
-				$context = 'KSH ' . $charge->amount . '  ####### ' . $charge->description;
-				Utils::sendDemoEmail($context);
-			}
+			
 		}
 		
 		/**
@@ -67,6 +63,12 @@
 		public function updated(Charge $charge)
 		{
 			//code...
+			
+			//Send email if it is a settlement
+			if ($charge->status == 'SETTLED') {
+				$context = 'KSH ' . $charge->amount . '  ####### ' . $charge->description;
+				Utils::sendDemoEmail($context);
+			}
 			
 		}
 		

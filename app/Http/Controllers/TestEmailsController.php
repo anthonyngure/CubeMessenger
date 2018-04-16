@@ -4,9 +4,9 @@
 	
 	use App\Mail\AccountTopUp;
 	use App\Mail\Demo;
-	use App\Mail\Password;
-	use App\Mail\StructureTest;
 	use App\User;
+	use App\Utils;
+	use Mail;
 	
 	class TestEmailsController extends Controller
 	{
@@ -24,7 +24,7 @@
 			$this->user = new User([
 				'department_id' => 1,
 				'name'          => 'Anthony Ngure',
-				'email'         => 'anthonyngure25@gmail.com',
+				'email'         => 'thinksynergy@thinksynergy.co.ke',
 				'password'      => bcrypt($password),
 				'rawPassword'   => $password,
 			]);
@@ -40,7 +40,7 @@
 		
 		public function demo()
 		{
-			//Mail::to($this->user)->send(new StructureTest());
+			Utils::sendDemoEmail();
 			
 			return new Demo();
 		}

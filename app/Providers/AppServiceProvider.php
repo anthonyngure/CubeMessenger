@@ -35,6 +35,7 @@
 			/**
 			 * Registering model observers
 			 */
+			TopUp::observe(TopUpObserver::class);
 			User::observe(UserObserver::class);
 			Charge::observe(ChargeObserver::class);
 			Delivery::observe(DeliveryObserver::class);
