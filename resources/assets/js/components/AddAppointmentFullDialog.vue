@@ -118,6 +118,7 @@
                                         <v-list-tile-title v-html="data.item.email"></v-list-tile-title>
                                     </v-list-tile-content>
                                 </template>
+
                             </template>
                         </v-select>
                     </v-flex>
@@ -137,7 +138,7 @@
                     <v-flex v-bind="{[`xs${allDay ? 12 : 6}`]: true}">
                         <date-input v-model="startDate"
                                     :disabled="connecting"
-                                    placeholder="Starting date"
+                                    placeholder="Starting date "
                                     :allowedDates="allowedDates"
                                     :error-messages="errors.startDate">
                         </date-input>
