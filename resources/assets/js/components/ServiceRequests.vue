@@ -7,7 +7,8 @@
                     lazy
                     grow>
                 <v-tab href="#pendingApproval">Pending Approval</v-tab>
-                <v-tab href="#pending">Pending/On Progress</v-tab>
+                <v-tab href="#pendingQuotes">Pending/Rejected Quotes</v-tab>
+                <v-tab href="#pendingAttendance">Pending Attendance</v-tab>
                 <v-tab href="#attended">Attended</v-tab>
                 <v-tab href="#rejected">Rejected</v-tab>
             </v-tabs>
@@ -31,7 +32,7 @@
                                     Pending {{props.item.status === 'AT_DEPARTMENT_HEAD' ? ' Department ' :
                                     ' Purchasing '}} Head approval
                                 </v-chip>
-                                <v-chip v-if="currentTab==='pending'"
+                                <v-chip v-if="currentTab==='pendingQuotes'"
                                         label outline color="red" small>
                                     <v-icon left>info</v-icon>
                                     {{props.item.status}}
@@ -39,7 +40,7 @@
                                 <v-chip v-if="currentTab==='rejected'"
                                         label outline color="red" small>
                                     <v-icon left>info</v-icon>
-                                    Rejected by {{props.item.rejectedBy.accountType}} - {{props.item.rejectedBy.name}}
+                                    Rejected by {{props.item.rejectedBy.role.name}} - {{props.item.rejectedBy.name}}
                                 </v-chip>
                                 <v-btn flat color="red" small outline
                                        v-if="showApprovalActions(props.item)"
@@ -55,8 +56,7 @@
                                 </v-btn>
                             </div>
                         </td>
-                        <td>{{ props.item.assignedTo ? props.item.assignedTo.name : 'N/A' }}</td>
-                        <td>{{ currentTab === 'complete' ? props.item.cost : 'N/A' }}</td>
+                        <td>{{ props.item.note }}</td>
                         <td>{{ props.item.scheduleDate }}</td>
                         <td>{{ props.item.scheduleTime }}</td>
                     </template>
@@ -117,8 +117,7 @@
         headers: [
           /*{text: 'ID', value: 'id'},*/
           {text: 'Details', value: 'details'},
-          {text: 'Assigned To', value: 'assignedTo'},
-          {text: 'Cost', value: 'cost'},
+          {text: 'Note', value: 'note'},
           {text: 'Scheduled Date', value: 'scheduleDate'},
           {text: 'Scheduled Time', value: 'scheduleTime'},
         ],

@@ -20,4 +20,8 @@
 		Route::get('/', 'TestEmailsController@demo');
 		Route::get('/demo', 'TestEmailsController@demo');
 		Route::get('/topUp', 'TestEmailsController@topUp');
+		Route::get('/serviceRequestQuote', 'TestEmailsController@serviceRequestQuote');
 	});
+	
+	Route::get('acceptServiceRequestQuote/{id}', 'ServiceRequestQuoteController@acceptQuote');
+	Route::get('rejectServiceRequestQuote/{id}', 'ServiceRequestQuoteController@rejectQuote');

@@ -67,7 +67,7 @@
 			//Send email if it is a settlement
 			if ($charge->status == 'SETTLED') {
 				$context = 'KSH ' . $charge->amount . '  ####### ' . $charge->description;
-				Utils::sendDemoEmail($context);
+				//Utils::sendDemoEmail($context);
 			}
 			
 		}

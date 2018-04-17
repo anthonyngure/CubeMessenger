@@ -36,6 +36,10 @@
  * @property int|null $rejected_by_id
  * @method static \Illuminate\Database\Eloquent\Builder|\App\ShopOrder whereRejectedById($value)
  * @property-read \App\User|null $rejectedBy
+ * @property string|null $department_head_acted_at
+ * @property string|null $purchasing_head_acted_at
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\ShopOrder whereDepartmentHeadActedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\ShopOrder wherePurchasingHeadActedAt($value)
  */
 	class ShopOrder extends Model
 	{

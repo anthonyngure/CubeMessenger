@@ -50,6 +50,7 @@
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Delivery whereUserId($value)
  * @mixin \Eloquent
  * @property-read mixed $stats
+ * @property-read \App\Charge $charge
  */
 	class Delivery extends Model
 	{

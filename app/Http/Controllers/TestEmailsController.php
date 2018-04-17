@@ -5,8 +5,10 @@
 	use App\Client;
 	use App\Mail\AccountTopUp;
 	use App\Mail\Demo;
-	use App\Utils;
-	use Mail;
+	use App\Mail\ServiceRequestQuote;
+	use App\ServiceRequest;
+	use Illuminate\Database\Eloquent\Relations\BelongsTo;
+	use Illuminate\Database\Eloquent\Relations\HasOne;
 	
 	class TestEmailsController extends Controller
 	{
@@ -25,15 +27,26 @@
 		
 		public function topUp()
 		{
-			Mail::to($this->testClient)->send(new AccountTopUp());
+			//Mail::to($this->testClient)->send(new AccountTopUp());
 			
 			return new AccountTopUp();
 		}
 		
 		public function demo()
 		{
-			Utils::sendDemoEmail();
+			//Utils::sendDemoEmail();
 			
 			return new Demo();
+		}
+		
+		public function serviceRequestQuote()
+		{
+			$serviceRequest = ServiceRequest::with(['quote' => function (HasOne $hasOne) {
+				$hasOne->with('items');
+			}, 'user'                                       => function (BelongsTo $belongsTo) {
+				$belongsTo->with('client');
+			}])->firstOrFail();
+			
+			return new ServiceRequestQuote($serviceRequest);
 		}
 	}

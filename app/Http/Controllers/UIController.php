@@ -6,7 +6,9 @@
 	use App\ServiceRequest;
 	use App\ShopOrder;
 	use App\Subscription;
+	use Auth;
 	use Illuminate\Database\Eloquent\Builder;
+	use Illuminate\Http\Request;
 	
 	class UIController extends Controller
 	{
@@ -78,5 +80,28 @@
 			
 			return $this->arrayResponse($data);
 			
+		}
+		
+		/**
+		 * @param \Illuminate\Http\Request $request
+		 * @return \Illuminate\Http\Response
+		 * @throws \App\Exceptions\WrappedException
+		 */
+		public function userSuggestions(Request $request)
+		{
+			$client = Auth::user()->getClient();
+			
+			$this->validate($request, [
+				'search' => 'required',
+			]);
+			
+			$query = $request->search . '';
+			//dd($query);
+			$suggestions = $client->users()
+				->where('name', 'LIKE', '%' . $query . '%')
+				->where('email', 'LIKE', '%' . $query . '%')
+				->get();
+			
+			return $this->collectionResponse($suggestions);
 		}
 	}

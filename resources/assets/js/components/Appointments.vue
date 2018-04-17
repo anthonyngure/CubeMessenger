@@ -66,11 +66,15 @@
         </v-flex>
 
         <v-flex xs12>
-            <add-appointment-full-dialog :appointmentFullDialog.sync="appointmentFullDialog"
+            <!--<add-appointment-full-dialog :appointmentFullDialog.sync="appointmentFullDialog"
                                          :selectedCell="selectedCell"
                                          @onClose="onCloseDialog">
-            </add-appointment-full-dialog>
+            </add-appointment-full-dialog>-->
         </v-flex>
+
+        <add-appointment-dialog :show="addingAppointment"
+                                @onClose="addingAppointment = false">
+        </add-appointment-dialog>
 
         <v-fab-transition>
             <v-btn class="ma-5"
@@ -79,7 +83,7 @@
                    dark
                    fixed
                    bottom
-                   @click.native="appointmentFullDialog = true"
+                   @click.native="addingAppointment = true"
                    right>
                 <v-icon>add</v-icon>
             </v-btn>
@@ -97,12 +101,14 @@
 
   import {extendMoment} from 'moment-range'
   import ConnectionManager from './ConnectionManager'
+  import AddAppointmentDialog from './AddAppointmentDialog'
 
   const moment = extendMoment(Moment)
 
   export default {
     extends: Base,
     components: {
+      AddAppointmentDialog,
       ConnectionManager,
       AddAppointmentFullDialog,
       FullCalendar
@@ -115,8 +121,7 @@
         pagination: {
           rowsPerPage: 5
         },
-        appointmentFullDialog: false,
-        selectedCell: null,
+        addingAppointment: false,
         appointments: [],
         appointmentDates: [],
       }

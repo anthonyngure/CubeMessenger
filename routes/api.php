@@ -55,6 +55,7 @@
 			Route::get('auth/user', 'AuthController@user');
 			Route::get('drawerItems', 'UIController@drawerItems');
 			Route::get('balance', 'UIController@balance');
+			Route::get('userSuggestions', 'UIController@userSuggestions');
 			Route::apiResource('users', 'UserController');
 			Route::apiResource('departments', 'DepartmentController');
 			Route::apiResource('deliveries', 'DeliveryController');
@@ -65,6 +66,7 @@
 			Route::apiResource('shopProducts', 'ShopProductController');
 			Route::apiResource('shopCategories', 'ShopCategoryController');
 			Route::apiResource('serviceRequests', 'ServiceRequestController');
+			Route::apiResource('serviceRequestQuotes', 'ServiceRequestQuoteController');
 			Route::apiResource('serviceRequestOptions', 'ServiceRequestOptionController');
 			Route::apiResource('shopOrders', 'ShopOrderController');
 			Route::apiResource('reports', 'ReportsController')->only(['index']);

@@ -58,6 +58,10 @@
  * @method static \Illuminate\Database\Eloquent\Builder|\App\DeliveryItem whereStatus($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\DeliveryItem whereUpdatedAt($value)
  * @mixin \Eloquent
+ * @property string|null $department_head_acted_at
+ * @property string|null $purchasing_head_acted_at
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DeliveryItem whereDepartmentHeadActedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DeliveryItem wherePurchasingHeadActedAt($value)
  */
 	class DeliveryItem extends Model
 	{

@@ -22,8 +22,9 @@
 				$table->foreign('assigned_to')->references('id')->on('users');
 				
 				$table->enum('type', ['IT', 'REPAIR']);
-				$table->enum('status', ['AT_DEPARTMENT_HEAD', 'AT_PURCHASING_HEAD',
-					'PENDING_QUOTE', 'PENDING_ATTENDANCE', 'ATTENDED', 'REJECTED'])->default('AT_DEPARTMENT_HEAD');
+				$table->enum('status', ['AT_DEPARTMENT_HEAD', 'AT_PURCHASING_HEAD', 'PENDING_QUOTE',
+					'PENDING_QUOTE_CONFIRMATION', 'QUOTE_REJECTED', 'PENDING_ATTENDANCE', 'ATTENDED', 'REJECTED'])
+					->default('AT_DEPARTMENT_HEAD');
 				$table->unsignedInteger('rejected_by_id', false)->nullable();
 				$table->foreign('rejected_by_id')->references('id')->on('users');
 				$table->longText('details');

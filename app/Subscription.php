@@ -42,6 +42,11 @@
  * @property float $delivery_cost
  * @property-read \App\User|null $rejectedBy
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Subscription whereDeliveryCost($value)
+ * @property string|null $department_head_acted_at
+ * @property string|null $purchasing_head_acted_at
+ * @property-read \App\Charge $charge
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Subscription whereDepartmentHeadActedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Subscription wherePurchasingHeadActedAt($value)
  */
 	class Subscription extends Model
 	{

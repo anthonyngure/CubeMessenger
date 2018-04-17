@@ -3930,6 +3930,508 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 /***/ }),
 
+/***/ "./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}]],\"plugins\":[\"transform-object-rest-spread\",[\"transform-runtime\",{\"polyfill\":false,\"helpers\":false}]]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/js/components/AddAppointmentDialog.vue":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__BaseDialog__ = __webpack_require__("./resources/assets/js/components/BaseDialog.vue");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__BaseDialog___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__BaseDialog__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__GooglePlaceInput__ = __webpack_require__("./resources/assets/js/components/GooglePlaceInput.vue");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__GooglePlaceInput___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__GooglePlaceInput__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__ConnectionManager__ = __webpack_require__("./resources/assets/js/components/ConnectionManager.vue");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__ConnectionManager___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__ConnectionManager__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__DateInput__ = __webpack_require__("./resources/assets/js/components/DateInput.vue");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__DateInput___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3__DateInput__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__TimeInput__ = __webpack_require__("./resources/assets/js/components/TimeInput.vue");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__TimeInput___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4__TimeInput__);
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+
+
+
+
+
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  extends: __WEBPACK_IMPORTED_MODULE_0__BaseDialog___default.a,
+  components: { TimeInput: __WEBPACK_IMPORTED_MODULE_4__TimeInput___default.a, DateInput: __WEBPACK_IMPORTED_MODULE_3__DateInput___default.a, ConnectionManager: __WEBPACK_IMPORTED_MODULE_2__ConnectionManager___default.a, GooglePlaceInput: __WEBPACK_IMPORTED_MODULE_1__GooglePlaceInput___default.a, BaseDialog: __WEBPACK_IMPORTED_MODULE_0__BaseDialog___default.a },
+  name: 'AddAppointmentDialog',
+  props: {
+    show: {
+      type: Boolean,
+      required: true
+    }
+  },
+  data: function data() {
+    return {
+      dialog: false,
+      connecting: false,
+      step: 0,
+      venueType: null,
+      venueTypes: [{
+        text: 'On site i.e In office, boardroom or a room',
+        value: 1
+      }, {
+        text: 'Off site i.e In a building or hotel',
+        value: 2
+      }],
+      venue: null,
+      rules: {
+        required: function required(value) {
+          return !!value || 'Required.';
+        },
+        contact: function contact(value) {
+          return !!value && ('' + value).length === 10 || 'Contact contact must be 10 characters';
+        }
+      },
+      addressData: null,
+      placeResultData: null,
+      title: null,
+      internalParticipants: [],
+      search: null,
+      loadingUsers: false,
+      users: [],
+      externalParticipants: [],
+      itemsToDiscuss: [],
+      allDay: false,
+      startDate: null,
+      startTime: null,
+      endDate: null,
+      endTime: null,
+      allowedDates: {
+        dates: function dates(date) {
+          //YYYY/MM/DD
+          var givenDate = moment(date, 'YYYY/MM/DD');
+          return moment().diff(givenDate, 'days') <= 0;
+          //const [, , day] = date.split('-')
+          //return parseInt(day, 10) % 2 === 0
+        }
+      },
+      allowedTimes: {
+        hours: function hours(value) {
+          return value >= moment().hour() && value <= 22;
+        },
+        minutes: function minutes(value) {
+          return value % 30 === 0;
+        }
+      }
+    };
+  },
+
+  watch: {
+    show: function show(val) {
+      this.dialog = !!val;
+    },
+    venueType: function venueType(val) {
+      this.venue = null;
+    },
+    search: function search(val) {
+      val && this.queryUsers(val);
+    }
+  },
+  computed: {
+    maxWidth: function maxWidth() {
+      return this.$vuetify.breakpoint.width * 0.65 + 'px';
+    },
+    externalParticipantsValidate: function externalParticipantsValidate() {
+      var pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
+      var validParticipants = 0;
+
+      var _iteratorNormalCompletion = true;
+      var _didIteratorError = false;
+      var _iteratorError = undefined;
+
+      try {
+        for (var _iterator = this.externalParticipants[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+          var participant = _step.value;
+
+
+          if (participant.email && pattern.test(participant.email)) {
+            participant.errors.email = [];
+          } else {
+            participant.errors.email = ['Enter a valid email address'];
+          }
+
+          if (participant.phone && ('' + participant.phone).length === 10) {
+            participant.errors.phone = [];
+          } else {
+            participant.errors.phone = ['Enter a valid phone number'];
+          }
+
+          if (participant.email && pattern.test(participant.email) && ('' + participant.phone).length === 10) {
+            validParticipants++;
+          }
+        }
+      } catch (err) {
+        _didIteratorError = true;
+        _iteratorError = err;
+      } finally {
+        try {
+          if (!_iteratorNormalCompletion && _iterator.return) {
+            _iterator.return();
+          }
+        } finally {
+          if (_didIteratorError) {
+            throw _iteratorError;
+          }
+        }
+      }
+
+      return validParticipants === this.externalParticipants.length;
+    }
+  },
+  methods: {
+    queryUsers: function queryUsers(val) {
+      var _this = this;
+
+      this.loadingUsers = true;
+      this.axios.get('userSuggestions', {
+        params: {
+          search: val
+        }
+      }).then(function (response) {
+        _this.users = [];
+        var _iteratorNormalCompletion2 = true;
+        var _didIteratorError2 = false;
+        var _iteratorError2 = undefined;
+
+        try {
+          for (var _iterator2 = response.data.data[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+            var item = _step2.value;
+
+            _this.users.push(item.name);
+          }
+        } catch (err) {
+          _didIteratorError2 = true;
+          _iteratorError2 = err;
+        } finally {
+          try {
+            if (!_iteratorNormalCompletion2 && _iterator2.return) {
+              _iterator2.return();
+            }
+          } finally {
+            if (_didIteratorError2) {
+              throw _iteratorError2;
+            }
+          }
+        }
+
+        _this.loadingUsers = false;
+      }).catch(function (error) {
+        _this.loadingUsers = false;
+        _this.$utils.log(error);
+      });
+    },
+    onCancel: function onCancel() {
+      this.venueType = null;
+      this.venue = null;
+      this.step = 0;
+      this.$emit('onClose');
+    },
+    onLocationEntered: function onLocationEntered(addressData, placeResultData) {
+      this.addressData = addressData;
+      this.placeResultData = placeResultData;
+      this.venue = placeResultData.formatted_address;
+    },
+    removeExternalParticipant: function removeExternalParticipant(participant) {
+      this.externalParticipants.splice(this.externalParticipants.indexOf(participant), 1);
+      this.externalParticipants = [].concat(_toConsumableArray(this.externalParticipants));
+    },
+    addExternalParticipant: function addExternalParticipant() {
+      this.externalParticipants.push({
+        email: null,
+        phone: null,
+        errors: {
+          email: [],
+          phone: []
+        }
+      });
+    },
+    removeItemToDiscuss: function removeItemToDiscuss(itemToDiscuss) {
+      this.itemsToDiscuss.splice(this.itemsToDiscuss.indexOf(itemToDiscuss), 1);
+      this.itemsToDiscuss = [].concat(_toConsumableArray(this.itemsToDiscuss));
+    },
+    addItemToDiscuss: function addItemToDiscuss() {
+      this.itemsToDiscuss.push({
+        error: null,
+        text: null
+      });
+    }
+  }
+});
+
+/***/ }),
+
 /***/ "./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}]],\"plugins\":[\"transform-object-rest-spread\",[\"transform-runtime\",{\"polyfill\":false,\"helpers\":false}]]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/js/components/AddAppointmentFullDialog.vue":
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -5291,6 +5793,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_moment_range___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_moment_range__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__ConnectionManager__ = __webpack_require__("./resources/assets/js/components/ConnectionManager.vue");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__ConnectionManager___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5__ConnectionManager__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__AddAppointmentDialog__ = __webpack_require__("./resources/assets/js/components/AddAppointmentDialog.vue");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__AddAppointmentDialog___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_6__AddAppointmentDialog__);
 //
 //
 //
@@ -5381,6 +5885,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+
 
 
 
@@ -5396,6 +5905,7 @@ var moment = Object(__WEBPACK_IMPORTED_MODULE_4_moment_range__["extendMoment"])(
 /* harmony default export */ __webpack_exports__["default"] = ({
   extends: __WEBPACK_IMPORTED_MODULE_3__Base_vue___default.a,
   components: {
+    AddAppointmentDialog: __WEBPACK_IMPORTED_MODULE_6__AddAppointmentDialog___default.a,
     ConnectionManager: __WEBPACK_IMPORTED_MODULE_5__ConnectionManager___default.a,
     AddAppointmentFullDialog: __WEBPACK_IMPORTED_MODULE_2__AddAppointmentFullDialog___default.a,
     FullCalendar: __WEBPACK_IMPORTED_MODULE_0_vue_fullcalendar_src_fullCalendar___default.a
@@ -5408,8 +5918,7 @@ var moment = Object(__WEBPACK_IMPORTED_MODULE_4_moment_range__["extendMoment"])(
       pagination: {
         rowsPerPage: 5
       },
-      appointmentFullDialog: false,
-      selectedCell: null,
+      addingAppointment: false,
       appointments: [],
       appointmentDates: []
     };
@@ -5505,6 +6014,25 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       __WEBPACK_IMPORTED_MODULE_0__event_bus__["a" /* default */].$emit(that.$actions.collapsedDrawer);
     }, 1000);
   }
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}]],\"plugins\":[\"transform-object-rest-spread\",[\"transform-runtime\",{\"polyfill\":false,\"helpers\":false}]]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/js/components/BaseDialog.vue":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Base__ = __webpack_require__("./resources/assets/js/components/Base.vue");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Base___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__Base__);
+
+
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  extends: __WEBPACK_IMPORTED_MODULE_0__Base___default.a,
+  components: { Base: __WEBPACK_IMPORTED_MODULE_0__Base___default.a },
+  name: 'BaseDialog',
+  computed: {}
 });
 
 /***/ }),
@@ -8806,7 +9334,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       addingServiceRequest: false,
       headers: [
       /*{text: 'ID', value: 'id'},*/
-      { text: 'Details', value: 'details' }, { text: 'Assigned To', value: 'assignedTo' }, { text: 'Cost', value: 'cost' }, { text: 'Scheduled Date', value: 'scheduleDate' }, { text: 'Scheduled Time', value: 'scheduleTime' }],
+      { text: 'Details', value: 'details' }, { text: 'Note', value: 'note' }, { text: 'Scheduled Date', value: 'scheduleDate' }, { text: 'Scheduled Time', value: 'scheduleTime' }],
       serviceRequests: []
     };
   },
@@ -10584,6 +11112,21 @@ exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\
 
 /***/ }),
 
+/***/ "./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-180bc7c6\",\"scoped\":true,\"hasInlineConfig\":true}!./node_modules/vue-loader/lib/selector.js?type=styles&index=0!./resources/assets/js/components/AddAppointmentDialog.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__("./node_modules/css-loader/lib/css-base.js")(false);
+// imports
+
+
+// module
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+
+// exports
+
+
+/***/ }),
+
 /***/ "./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-195786f2\",\"scoped\":true,\"hasInlineConfig\":true}!./node_modules/vue-loader/lib/selector.js?type=styles&index=0!./resources/assets/js/components/ServiceRequests.vue":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -10592,7 +11135,7 @@ exports = module.exports = __webpack_require__("./node_modules/css-loader/lib/cs
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -10719,6 +11262,21 @@ exports.push([module.i, "\n.full-calendar-body {\n  margin-top: 20px;\n}\n.full-
 
 /***/ }),
 
+/***/ "./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-4c19d4a0\",\"scoped\":true,\"hasInlineConfig\":true}!./node_modules/vue-loader/lib/selector.js?type=styles&index=0!./resources/assets/js/components/BaseDialog.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__("./node_modules/css-loader/lib/css-base.js")(false);
+// imports
+
+
+// module
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+
+// exports
+
+
+/***/ }),
+
 /***/ "./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-55fbc07d\",\"scoped\":true,\"hasInlineConfig\":true}!./node_modules/vue-loader/lib/selector.js?type=styles&index=0!./resources/assets/js/components/AddToCartDialog.vue":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -10772,7 +11330,7 @@ exports = module.exports = __webpack_require__("./node_modules/css-loader/lib/cs
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -47235,6 +47793,979 @@ if (false) {
 
 /***/ }),
 
+/***/ "./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-180bc7c6\",\"hasScoped\":true,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/components/AddAppointmentDialog.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "v-dialog",
+    {
+      attrs: { "max-width": _vm.maxWidth, persistent: "" },
+      model: {
+        value: _vm.dialog,
+        callback: function($$v) {
+          _vm.dialog = $$v
+        },
+        expression: "dialog"
+      }
+    },
+    [
+      _c(
+        "v-stepper",
+        {
+          attrs: { "alt-labels": "" },
+          model: {
+            value: _vm.step,
+            callback: function($$v) {
+              _vm.step = $$v
+            },
+            expression: "step"
+          }
+        },
+        [
+          _c(
+            "v-stepper-header",
+            [
+              _c(
+                "v-stepper-step",
+                { attrs: { step: "1", complete: _vm.step > 1 } },
+                [_vm._v("Venue")]
+              ),
+              _vm._v(" "),
+              _c("v-divider"),
+              _vm._v(" "),
+              _c(
+                "v-stepper-step",
+                { attrs: { step: "2", complete: _vm.step > 2 } },
+                [_vm._v("Internal Participants")]
+              ),
+              _vm._v(" "),
+              _c("v-divider"),
+              _vm._v(" "),
+              _c(
+                "v-stepper-step",
+                { attrs: { step: "3", complete: _vm.step > 3 } },
+                [_vm._v("External Participants")]
+              ),
+              _vm._v(" "),
+              _c("v-divider"),
+              _vm._v(" "),
+              _c(
+                "v-stepper-step",
+                { attrs: { step: "4", complete: _vm.step > 4 } },
+                [_vm._v("Meeting Details")]
+              ),
+              _vm._v(" "),
+              _c("v-divider"),
+              _vm._v(" "),
+              _c("v-stepper-step", { attrs: { step: "5" } }, [
+                _vm._v("Scheduling")
+              ])
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c("connection-manager", {
+            ref: "connectionManager",
+            model: {
+              value: _vm.connecting,
+              callback: function($$v) {
+                _vm.connecting = $$v
+              },
+              expression: "connecting"
+            }
+          }),
+          _vm._v(" "),
+          _c(
+            "v-stepper-items",
+            [
+              _c(
+                "v-stepper-content",
+                { attrs: { step: "1" } },
+                [
+                  _c(
+                    "v-card",
+                    { attrs: { flat: "" } },
+                    [
+                      _c(
+                        "v-layout",
+                        { attrs: { row: "", wrap: "" } },
+                        [
+                          _c(
+                            "v-flex",
+                            { attrs: { xs4: "" } },
+                            [
+                              _c("v-subheader", { staticClass: "mt-2" }, [
+                                _vm._v("Appointment/Meeting venue type")
+                              ])
+                            ],
+                            1
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "v-flex",
+                            { attrs: { xs8: "" } },
+                            [
+                              _c("v-select", {
+                                attrs: {
+                                  items: _vm.venueTypes,
+                                  disabled: _vm.connecting,
+                                  clearable: "",
+                                  "item-text": "text",
+                                  "item-value": "value",
+                                  label: "Select venue type",
+                                  "validate-on-blur": "",
+                                  "single-line": ""
+                                },
+                                model: {
+                                  value: _vm.venueType,
+                                  callback: function($$v) {
+                                    _vm.venueType = $$v
+                                  },
+                                  expression: "venueType"
+                                }
+                              })
+                            ],
+                            1
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "v-flex",
+                            { attrs: { xs12: "" } },
+                            [
+                              _vm.venueType === 2
+                                ? _c("google-place-input", {
+                                    ref: "locationInput",
+                                    attrs: {
+                                      disabled: _vm.connecting,
+                                      id: "destination",
+                                      country: "KE",
+                                      clearable: false,
+                                      "enable-geolocation": true,
+                                      label: "Enter location",
+                                      placeholder: "Location",
+                                      "prepend-icon": "edit_location",
+                                      required: true,
+                                      rules: [_vm.rules.required],
+                                      "load-google-api": false,
+                                      "google-api-key":
+                                        _vm.$utils.googleMapsKey,
+                                      hint: !_vm.placeResultData
+                                        ? ""
+                                        : _vm.placeResultData.formatted_address,
+                                      "persistent-hint": "",
+                                      "hide-details": false,
+                                      types: "establishment"
+                                    },
+                                    on: { placechanged: _vm.onLocationEntered }
+                                  })
+                                : _vm._e(),
+                              _vm._v(" "),
+                              _vm.venueType === 1
+                                ? _c("v-text-field", {
+                                    attrs: {
+                                      disabled: _vm.connecting,
+                                      required: "",
+                                      label: "Enter appointment/Meeting venue",
+                                      placeholder:
+                                        "Appointment/Meeting venue e.g Office, Boardroom or Room 10",
+                                      "prepend-icon": "edit_location"
+                                    },
+                                    model: {
+                                      value: _vm.venue,
+                                      callback: function($$v) {
+                                        _vm.venue = $$v
+                                      },
+                                      expression: "venue"
+                                    }
+                                  })
+                                : _vm._e()
+                            ],
+                            1
+                          )
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "v-card-actions",
+                        [
+                          _c("v-spacer"),
+                          _vm._v(" "),
+                          _c(
+                            "v-btn",
+                            {
+                              attrs: { color: "red", flat: "" },
+                              nativeOn: {
+                                click: function($event) {
+                                  return _vm.onCancel($event)
+                                }
+                              }
+                            },
+                            [_vm._v("Cancel")]
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "v-btn",
+                            {
+                              attrs: { color: "primary", disabled: !_vm.venue },
+                              nativeOn: {
+                                click: function($event) {
+                                  _vm.step = 2
+                                }
+                              }
+                            },
+                            [_vm._v("Continue")]
+                          )
+                        ],
+                        1
+                      )
+                    ],
+                    1
+                  )
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "v-stepper-content",
+                { attrs: { step: "2" } },
+                [
+                  _c(
+                    "v-card",
+                    { attrs: { flat: "" } },
+                    [
+                      _c("v-subheader", [
+                        _vm._v("Select meeting internal participants")
+                      ]),
+                      _vm._v(" "),
+                      _c("v-select", {
+                        attrs: {
+                          items: _vm.users,
+                          label: "Select internal participants",
+                          "deletable-chips": "",
+                          disabled: _vm.connecting,
+                          clearable: "",
+                          multiple: "",
+                          required: "",
+                          rules: [
+                            function() {
+                              return (
+                                _vm.internalParticipants.length > 0 ||
+                                "You must choose at least one"
+                              )
+                            }
+                          ],
+                          "persistent-hint": "",
+                          chips: "",
+                          tags: "",
+                          "search-input": _vm.search,
+                          loading: _vm.loadingUsers
+                        },
+                        on: {
+                          "update:searchInput": function($event) {
+                            _vm.search = $event
+                          }
+                        },
+                        model: {
+                          value: _vm.internalParticipants,
+                          callback: function($$v) {
+                            _vm.internalParticipants = $$v
+                          },
+                          expression: "internalParticipants"
+                        }
+                      }),
+                      _vm._v(" "),
+                      _c(
+                        "v-card-actions",
+                        [
+                          _c(
+                            "v-btn",
+                            {
+                              attrs: { flat: "" },
+                              nativeOn: {
+                                click: function($event) {
+                                  _vm.step = 1
+                                }
+                              }
+                            },
+                            [
+                              _c("v-icon", { attrs: { left: "" } }, [
+                                _vm._v("arrow_back")
+                              ]),
+                              _vm._v(
+                                "\n                            Back\n                        "
+                              )
+                            ],
+                            1
+                          ),
+                          _vm._v(" "),
+                          _c("v-spacer"),
+                          _vm._v(" "),
+                          _c(
+                            "v-btn",
+                            {
+                              attrs: { color: "red", flat: "" },
+                              nativeOn: {
+                                click: function($event) {
+                                  return _vm.onCancel($event)
+                                }
+                              }
+                            },
+                            [_vm._v("Cancel")]
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "v-btn",
+                            {
+                              attrs: {
+                                color: "primary",
+                                disabled: !_vm.internalParticipants.length
+                              },
+                              nativeOn: {
+                                click: function($event) {
+                                  _vm.step = 3
+                                }
+                              }
+                            },
+                            [
+                              _vm._v(
+                                "\n                            Continue\n                        "
+                              )
+                            ]
+                          )
+                        ],
+                        1
+                      )
+                    ],
+                    1
+                  )
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "v-stepper-content",
+                { attrs: { step: "3" } },
+                [
+                  _c(
+                    "v-card",
+                    { attrs: { flat: "" } },
+                    [
+                      _c("v-subheader", [
+                        _vm._v("Add meeting external participants")
+                      ]),
+                      _vm._v(" "),
+                      _vm._l(_vm.externalParticipants, function(
+                        participant,
+                        index
+                      ) {
+                        return [
+                          _c(
+                            "v-layout",
+                            { key: index, attrs: { row: "", wrap: "" } },
+                            [
+                              _c(
+                                "v-flex",
+                                { attrs: { xs6: "" } },
+                                [
+                                  _c("v-text-field", {
+                                    attrs: {
+                                      disabled: _vm.connecting,
+                                      placeholder: "Participant email address",
+                                      label: "Enter participant email address",
+                                      "error-messages":
+                                        participant.errors.email,
+                                      "prepend-icon": "email"
+                                    },
+                                    model: {
+                                      value: participant.email,
+                                      callback: function($$v) {
+                                        _vm.$set(participant, "email", $$v)
+                                      },
+                                      expression: "participant.email"
+                                    }
+                                  })
+                                ],
+                                1
+                              ),
+                              _vm._v(" "),
+                              _c(
+                                "v-flex",
+                                { staticClass: "pl-5", attrs: { xs5: "" } },
+                                [
+                                  _c("v-text-field", {
+                                    attrs: {
+                                      disabled: _vm.connecting,
+                                      placeholder: "Participant phone number",
+                                      label: "Enter participant phone number",
+                                      "error-messages":
+                                        participant.errors.phone,
+                                      mask: "##########",
+                                      "prepend-icon": "phone"
+                                    },
+                                    model: {
+                                      value: participant.phone,
+                                      callback: function($$v) {
+                                        _vm.$set(participant, "phone", $$v)
+                                      },
+                                      expression: "participant.phone"
+                                    }
+                                  })
+                                ],
+                                1
+                              ),
+                              _vm._v(" "),
+                              _c(
+                                "v-flex",
+                                { attrs: { xs1: "" } },
+                                [
+                                  _c(
+                                    "v-btn",
+                                    {
+                                      attrs: {
+                                        icon: "",
+                                        disabled: _vm.connecting
+                                      },
+                                      nativeOn: {
+                                        click: function($event) {
+                                          _vm.removeExternalParticipant(
+                                            participant
+                                          )
+                                        }
+                                      }
+                                    },
+                                    [_c("v-icon", [_vm._v("close")])],
+                                    1
+                                  )
+                                ],
+                                1
+                              )
+                            ],
+                            1
+                          )
+                        ]
+                      }),
+                      _vm._v(" "),
+                      _c(
+                        "v-btn",
+                        {
+                          attrs: {
+                            block: "",
+                            flat: "",
+                            color: "primary",
+                            disabled: _vm.connecting
+                          },
+                          nativeOn: {
+                            click: function($event) {
+                              return _vm.addExternalParticipant($event)
+                            }
+                          }
+                        },
+                        [
+                          _c("v-icon", { attrs: { left: "", dark: "" } }, [
+                            _vm._v("add")
+                          ]),
+                          _vm._v(
+                            "\n                        Add participant\n                    "
+                          )
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "v-card-actions",
+                        [
+                          _c(
+                            "v-btn",
+                            {
+                              attrs: { flat: "" },
+                              nativeOn: {
+                                click: function($event) {
+                                  _vm.step = 2
+                                }
+                              }
+                            },
+                            [
+                              _c("v-icon", { attrs: { left: "" } }, [
+                                _vm._v("arrow_back")
+                              ]),
+                              _vm._v(
+                                "\n                            Back\n                        "
+                              )
+                            ],
+                            1
+                          ),
+                          _vm._v(" "),
+                          _c("v-spacer"),
+                          _vm._v(" "),
+                          _c(
+                            "v-btn",
+                            {
+                              attrs: { color: "red", flat: "" },
+                              nativeOn: {
+                                click: function($event) {
+                                  return _vm.onCancel($event)
+                                }
+                              }
+                            },
+                            [_vm._v("Cancel")]
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "v-btn",
+                            {
+                              attrs: {
+                                color: "primary",
+                                disabled: !_vm.externalParticipantsValidate
+                              },
+                              nativeOn: {
+                                click: function($event) {
+                                  _vm.step = 4
+                                }
+                              }
+                            },
+                            [
+                              _vm._v(
+                                "\n                            Continue\n                        "
+                              )
+                            ]
+                          )
+                        ],
+                        1
+                      )
+                    ],
+                    2
+                  )
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "v-stepper-content",
+                { attrs: { step: "4" } },
+                [
+                  _c(
+                    "v-card",
+                    { attrs: { flat: "" } },
+                    [
+                      _c("v-text-field", {
+                        attrs: {
+                          label: "Enter meeting title/subject",
+                          disabled: _vm.connecting,
+                          placeholder:
+                            "Title/Subject e.g Website development progress meeting",
+                          required: "",
+                          "prepend-icon": "title"
+                        },
+                        model: {
+                          value: _vm.title,
+                          callback: function($$v) {
+                            _vm.title = $$v
+                          },
+                          expression: "title"
+                        }
+                      }),
+                      _vm._v(" "),
+                      _c("v-slide-y-transition", [
+                        _vm.title
+                          ? _c(
+                              "div",
+                              [
+                                _vm._l(_vm.itemsToDiscuss, function(
+                                  itemToDiscuss,
+                                  index
+                                ) {
+                                  return [
+                                    _c(
+                                      "v-layout",
+                                      { attrs: { row: "", wrap: "" } },
+                                      [
+                                        _c(
+                                          "v-flex",
+                                          { attrs: { xs11: "" } },
+                                          [
+                                            _c("v-text-field", {
+                                              attrs: {
+                                                disabled: _vm.connecting,
+                                                placeholder:
+                                                  "An item to discuss",
+                                                label: "Enter item to discuss",
+                                                "error-messages":
+                                                  itemToDiscuss.error,
+                                                "prepend-icon": "note"
+                                              },
+                                              model: {
+                                                value: itemToDiscuss.text,
+                                                callback: function($$v) {
+                                                  _vm.$set(
+                                                    itemToDiscuss,
+                                                    "text",
+                                                    $$v
+                                                  )
+                                                },
+                                                expression: "itemToDiscuss.text"
+                                              }
+                                            })
+                                          ],
+                                          1
+                                        ),
+                                        _vm._v(" "),
+                                        _c(
+                                          "v-flex",
+                                          { attrs: { xs1: "" } },
+                                          [
+                                            _c(
+                                              "v-btn",
+                                              {
+                                                attrs: {
+                                                  icon: "",
+                                                  disabled: _vm.connecting
+                                                },
+                                                nativeOn: {
+                                                  click: function($event) {
+                                                    _vm.removeItemToDiscuss(
+                                                      itemToDiscuss
+                                                    )
+                                                  }
+                                                }
+                                              },
+                                              [_c("v-icon", [_vm._v("close")])],
+                                              1
+                                            )
+                                          ],
+                                          1
+                                        )
+                                      ],
+                                      1
+                                    )
+                                  ]
+                                }),
+                                _vm._v(" "),
+                                _c(
+                                  "v-btn",
+                                  {
+                                    attrs: {
+                                      block: "",
+                                      flat: "",
+                                      color: "primary",
+                                      disabled: _vm.connecting
+                                    },
+                                    nativeOn: {
+                                      click: function($event) {
+                                        return _vm.addItemToDiscuss($event)
+                                      }
+                                    }
+                                  },
+                                  [
+                                    _c(
+                                      "v-icon",
+                                      { attrs: { left: "", dark: "" } },
+                                      [_vm._v("add")]
+                                    ),
+                                    _vm._v(
+                                      "\n                                Add item to discuss\n                            "
+                                    )
+                                  ],
+                                  1
+                                )
+                              ],
+                              2
+                            )
+                          : _vm._e()
+                      ]),
+                      _vm._v(" "),
+                      _c(
+                        "v-card-actions",
+                        [
+                          _c(
+                            "v-btn",
+                            {
+                              attrs: { flat: "" },
+                              nativeOn: {
+                                click: function($event) {
+                                  _vm.step = 3
+                                }
+                              }
+                            },
+                            [
+                              _c("v-icon", { attrs: { left: "" } }, [
+                                _vm._v("arrow_back")
+                              ]),
+                              _vm._v(
+                                "\n                            Back\n                        "
+                              )
+                            ],
+                            1
+                          ),
+                          _vm._v(" "),
+                          _c("v-spacer"),
+                          _vm._v(" "),
+                          _c(
+                            "v-btn",
+                            {
+                              attrs: { color: "red", flat: "" },
+                              nativeOn: {
+                                click: function($event) {
+                                  return _vm.onCancel($event)
+                                }
+                              }
+                            },
+                            [_vm._v("Cancel")]
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "v-btn",
+                            {
+                              attrs: { color: "primary" },
+                              nativeOn: {
+                                click: function($event) {
+                                  _vm.step = 5
+                                }
+                              }
+                            },
+                            [_vm._v("Continue")]
+                          )
+                        ],
+                        1
+                      )
+                    ],
+                    1
+                  )
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "v-stepper-content",
+                { attrs: { step: "5" } },
+                [
+                  _c(
+                    "v-card",
+                    { attrs: { flat: "" } },
+                    [
+                      _c(
+                        "v-layout",
+                        { attrs: { row: "", wrap: "" } },
+                        [
+                          _c(
+                            "v-flex",
+                            _vm._b(
+                              {},
+                              "v-flex",
+                              ((_obj = {}),
+                              (_obj["xs" + (_vm.allDay ? 12 : 6)] = true),
+                              _obj),
+                              false
+                            ),
+                            [
+                              _c("date-input", {
+                                attrs: {
+                                  disabled: _vm.connecting,
+                                  placeholder: "Starting date ",
+                                  allowedDates: _vm.allowedDates
+                                },
+                                model: {
+                                  value: _vm.startDate,
+                                  callback: function($$v) {
+                                    _vm.startDate = $$v
+                                  },
+                                  expression: "startDate"
+                                }
+                              })
+                            ],
+                            1
+                          ),
+                          _vm._v(" "),
+                          !_vm.allDay
+                            ? _c(
+                                "v-flex",
+                                { staticClass: "pl-5", attrs: { xs6: "" } },
+                                [
+                                  _c("time-input", {
+                                    attrs: {
+                                      disabled: _vm.connecting,
+                                      placeholder: "Starting time",
+                                      allowedTimes: _vm.allowedTimes
+                                    },
+                                    model: {
+                                      value: _vm.startTime,
+                                      callback: function($$v) {
+                                        _vm.startTime = $$v
+                                      },
+                                      expression: "startTime"
+                                    }
+                                  })
+                                ],
+                                1
+                              )
+                            : _vm._e(),
+                          _vm._v(" "),
+                          _c(
+                            "v-flex",
+                            _vm._b(
+                              {},
+                              "v-flex",
+                              ((_obj$1 = {}),
+                              (_obj$1["xs" + (_vm.allDay ? 12 : 6)] = true),
+                              _obj$1),
+                              false
+                            ),
+                            [
+                              _c("date-input", {
+                                attrs: {
+                                  disabled: _vm.connecting,
+                                  placeholder: "Ending date",
+                                  allowedDates: _vm.allowedDates
+                                },
+                                model: {
+                                  value: _vm.endDate,
+                                  callback: function($$v) {
+                                    _vm.endDate = $$v
+                                  },
+                                  expression: "endDate"
+                                }
+                              })
+                            ],
+                            1
+                          ),
+                          _vm._v(" "),
+                          !_vm.allDay
+                            ? _c(
+                                "v-flex",
+                                { staticClass: "pl-5", attrs: { xs6: "" } },
+                                [
+                                  _c("time-input", {
+                                    attrs: {
+                                      disabled: _vm.connecting,
+                                      placeholder: "Ending time",
+                                      allowedTimes: _vm.allowedTimes
+                                    },
+                                    model: {
+                                      value: _vm.endTime,
+                                      callback: function($$v) {
+                                        _vm.endTime = $$v
+                                      },
+                                      expression: "endTime"
+                                    }
+                                  })
+                                ],
+                                1
+                              )
+                            : _vm._e(),
+                          _vm._v(" "),
+                          _c(
+                            "v-flex",
+                            { attrs: { xs10: "", "offset-xs1": "" } },
+                            [
+                              _c("v-checkbox", {
+                                attrs: {
+                                  label: "All day",
+                                  "hide-details": "",
+                                  disabled: _vm.connecting
+                                },
+                                model: {
+                                  value: _vm.allDay,
+                                  callback: function($$v) {
+                                    _vm.allDay = $$v
+                                  },
+                                  expression: "allDay"
+                                }
+                              })
+                            ],
+                            1
+                          )
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "v-card-actions",
+                        [
+                          _c(
+                            "v-btn",
+                            {
+                              attrs: { flat: "" },
+                              nativeOn: {
+                                click: function($event) {
+                                  _vm.step = 4
+                                }
+                              }
+                            },
+                            [
+                              _c("v-icon", { attrs: { left: "" } }, [
+                                _vm._v("arrow_back")
+                              ]),
+                              _vm._v(
+                                "\n                            Back\n                        "
+                              )
+                            ],
+                            1
+                          ),
+                          _vm._v(" "),
+                          _c("v-spacer"),
+                          _vm._v(" "),
+                          _c(
+                            "v-btn",
+                            {
+                              attrs: { color: "red", flat: "" },
+                              nativeOn: {
+                                click: function($event) {
+                                  return _vm.onCancel($event)
+                                }
+                              }
+                            },
+                            [_vm._v("Cancel")]
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "v-btn",
+                            {
+                              attrs: { color: "primary" },
+                              nativeOn: {
+                                click: function($event) {
+                                  _vm.step = 1
+                                }
+                              }
+                            },
+                            [_vm._v("Continue")]
+                          )
+                        ],
+                        1
+                      )
+                    ],
+                    1
+                  )
+                ],
+                1
+              )
+            ],
+            1
+          )
+        ],
+        1
+      )
+    ],
+    1
+  )
+  var _obj
+  var _obj$1
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-180bc7c6", module.exports)
+  }
+}
+
+/***/ }),
+
 /***/ "./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-195786f2\",\"hasScoped\":true,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/components/ServiceRequests.vue":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -47272,8 +48803,12 @@ var render = function() {
                 _vm._v("Pending Approval")
               ]),
               _vm._v(" "),
-              _c("v-tab", { attrs: { href: "#pending" } }, [
-                _vm._v("Pending/On Progress")
+              _c("v-tab", { attrs: { href: "#pendingQuotes" } }, [
+                _vm._v("Pending/Rejected Quotes")
+              ]),
+              _vm._v(" "),
+              _c("v-tab", { attrs: { href: "#pendingAttendance" } }, [
+                _vm._v("Pending Attendance")
               ]),
               _vm._v(" "),
               _c("v-tab", { attrs: { href: "#attended" } }, [
@@ -47355,7 +48890,7 @@ var render = function() {
                                   )
                                 : _vm._e(),
                               _vm._v(" "),
-                              _vm.currentTab === "pending"
+                              _vm.currentTab === "pendingQuotes"
                                 ? _c(
                                     "v-chip",
                                     {
@@ -47398,7 +48933,7 @@ var render = function() {
                                       _vm._v(
                                         "\n                                Rejected by " +
                                           _vm._s(
-                                            props.item.rejectedBy.accountType
+                                            props.item.rejectedBy.role.name
                                           ) +
                                           " - " +
                                           _vm._s(props.item.rejectedBy.name) +
@@ -47473,25 +49008,7 @@ var render = function() {
                           )
                         ]),
                         _vm._v(" "),
-                        _c("td", [
-                          _vm._v(
-                            _vm._s(
-                              props.item.assignedTo
-                                ? props.item.assignedTo.name
-                                : "N/A"
-                            )
-                          )
-                        ]),
-                        _vm._v(" "),
-                        _c("td", [
-                          _vm._v(
-                            _vm._s(
-                              _vm.currentTab === "complete"
-                                ? props.item.cost
-                                : "N/A"
-                            )
-                          )
-                        ]),
+                        _c("td", [_vm._v(_vm._s(props.item.note))]),
                         _vm._v(" "),
                         _c("td", [_vm._v(_vm._s(props.item.scheduleDate))]),
                         _vm._v(" "),
@@ -50890,25 +52407,16 @@ var render = function() {
         1
       ),
       _vm._v(" "),
-      _c(
-        "v-flex",
-        { attrs: { xs12: "" } },
-        [
-          _c("add-appointment-full-dialog", {
-            attrs: {
-              appointmentFullDialog: _vm.appointmentFullDialog,
-              selectedCell: _vm.selectedCell
-            },
-            on: {
-              "update:appointmentFullDialog": function($event) {
-                _vm.appointmentFullDialog = $event
-              },
-              onClose: _vm.onCloseDialog
-            }
-          })
-        ],
-        1
-      ),
+      _c("v-flex", { attrs: { xs12: "" } }),
+      _vm._v(" "),
+      _c("add-appointment-dialog", {
+        attrs: { show: _vm.addingAppointment },
+        on: {
+          onClose: function($event) {
+            _vm.addingAppointment = false
+          }
+        }
+      }),
       _vm._v(" "),
       _c(
         "v-fab-transition",
@@ -50927,7 +52435,7 @@ var render = function() {
               },
               nativeOn: {
                 click: function($event) {
-                  _vm.appointmentFullDialog = true
+                  _vm.addingAppointment = true
                 }
               }
             },
@@ -56855,6 +58363,33 @@ if(false) {
 
 /***/ }),
 
+/***/ "./node_modules/vue-style-loader/index.js!./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-180bc7c6\",\"scoped\":true,\"hasInlineConfig\":true}!./node_modules/vue-loader/lib/selector.js?type=styles&index=0!./resources/assets/js/components/AddAppointmentDialog.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__("./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-180bc7c6\",\"scoped\":true,\"hasInlineConfig\":true}!./node_modules/vue-loader/lib/selector.js?type=styles&index=0!./resources/assets/js/components/AddAppointmentDialog.vue");
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__("./node_modules/vue-style-loader/lib/addStylesClient.js")("719b5090", content, false, {});
+// Hot Module Replacement
+if(false) {
+ // When the styles change, update the <style> tags
+ if(!content.locals) {
+   module.hot.accept("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-180bc7c6\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./AddAppointmentDialog.vue", function() {
+     var newContent = require("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-180bc7c6\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./AddAppointmentDialog.vue");
+     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+     update(newContent);
+   });
+ }
+ // When the module is disposed, remove the <style> tags
+ module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+
 /***/ "./node_modules/vue-style-loader/index.js!./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-195786f2\",\"scoped\":true,\"hasInlineConfig\":true}!./node_modules/vue-loader/lib/selector.js?type=styles&index=0!./resources/assets/js/components/ServiceRequests.vue":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -57088,6 +58623,33 @@ if(false) {
  if(!content.locals) {
    module.hot.accept("!!../../../css-loader/index.js!../../../vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-47638a3c\",\"scoped\":false,\"hasInlineConfig\":true}!../../../sass-loader/lib/loader.js!../../../vue-loader/lib/selector.js?type=styles&index=0!./body.vue", function() {
      var newContent = require("!!../../../css-loader/index.js!../../../vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-47638a3c\",\"scoped\":false,\"hasInlineConfig\":true}!../../../sass-loader/lib/loader.js!../../../vue-loader/lib/selector.js?type=styles&index=0!./body.vue");
+     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+     update(newContent);
+   });
+ }
+ // When the module is disposed, remove the <style> tags
+ module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+
+/***/ "./node_modules/vue-style-loader/index.js!./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-4c19d4a0\",\"scoped\":true,\"hasInlineConfig\":true}!./node_modules/vue-loader/lib/selector.js?type=styles&index=0!./resources/assets/js/components/BaseDialog.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__("./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-4c19d4a0\",\"scoped\":true,\"hasInlineConfig\":true}!./node_modules/vue-loader/lib/selector.js?type=styles&index=0!./resources/assets/js/components/BaseDialog.vue");
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__("./node_modules/vue-style-loader/lib/addStylesClient.js")("65fef608", content, false, {});
+// Hot Module Replacement
+if(false) {
+ // When the styles change, update the <style> tags
+ if(!content.locals) {
+   module.hot.accept("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-4c19d4a0\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./BaseDialog.vue", function() {
+     var newContent = require("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-4c19d4a0\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./BaseDialog.vue");
      if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
      update(newContent);
    });
@@ -88985,6 +90547,58 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.prototype.$utils = {
 
 /***/ }),
 
+/***/ "./resources/assets/js/components/AddAppointmentDialog.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+function injectStyle (ssrContext) {
+  if (disposed) return
+  __webpack_require__("./node_modules/vue-style-loader/index.js!./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-180bc7c6\",\"scoped\":true,\"hasInlineConfig\":true}!./node_modules/vue-loader/lib/selector.js?type=styles&index=0!./resources/assets/js/components/AddAppointmentDialog.vue")
+}
+var normalizeComponent = __webpack_require__("./node_modules/vue-loader/lib/component-normalizer.js")
+/* script */
+var __vue_script__ = __webpack_require__("./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}]],\"plugins\":[\"transform-object-rest-spread\",[\"transform-runtime\",{\"polyfill\":false,\"helpers\":false}]]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/js/components/AddAppointmentDialog.vue")
+/* template */
+var __vue_template__ = __webpack_require__("./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-180bc7c6\",\"hasScoped\":true,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/components/AddAppointmentDialog.vue")
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = injectStyle
+/* scopeId */
+var __vue_scopeId__ = "data-v-180bc7c6"
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources\\assets\\js\\components\\AddAppointmentDialog.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-180bc7c6", Component.options)
+  } else {
+    hotAPI.reload("data-v-180bc7c6", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+
 /***/ "./resources/assets/js/components/AddAppointmentFullDialog.vue":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -89338,6 +90952,58 @@ if (false) {(function () {
     hotAPI.createRecord("data-v-73672448", Component.options)
   } else {
     hotAPI.reload("data-v-73672448", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+
+/***/ "./resources/assets/js/components/BaseDialog.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+function injectStyle (ssrContext) {
+  if (disposed) return
+  __webpack_require__("./node_modules/vue-style-loader/index.js!./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-4c19d4a0\",\"scoped\":true,\"hasInlineConfig\":true}!./node_modules/vue-loader/lib/selector.js?type=styles&index=0!./resources/assets/js/components/BaseDialog.vue")
+}
+var normalizeComponent = __webpack_require__("./node_modules/vue-loader/lib/component-normalizer.js")
+/* script */
+var __vue_script__ = __webpack_require__("./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}]],\"plugins\":[\"transform-object-rest-spread\",[\"transform-runtime\",{\"polyfill\":false,\"helpers\":false}]]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/js/components/BaseDialog.vue")
+/* template */
+var __vue_template__ = null
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = injectStyle
+/* scopeId */
+var __vue_scopeId__ = "data-v-4c19d4a0"
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources\\assets\\js\\components\\BaseDialog.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-4c19d4a0", Component.options)
+  } else {
+    hotAPI.reload("data-v-4c19d4a0", Component.options)
   }
   module.hot.dispose(function (data) {
     disposed = true

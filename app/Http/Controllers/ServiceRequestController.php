@@ -2,9 +2,7 @@
 	
 	namespace App\Http\Controllers;
 	
-	use App\Exceptions\WrappedException;
 	use App\ServiceRequest;
-	use Auth;
 	use Illuminate\Http\Request;
 	
 	class ServiceRequestController extends Controller
@@ -19,16 +17,13 @@
 		public function index(Request $request)
 		{
 			//
-			
-			
 			$this->validate($request, [
-				'filter' => 'required|in:pendingApproval,pending,attended,rejected,rider',
+				'filter' => 'required|in:pendingApproval,pendingQuotes,pendingAttendance,attended,rejected,rider',
 				'type'   => 'required_unless:filter,rider|in:it,repair',
 			]);
 			
 			if ($request->filter == 'rider') {
-				$services = ServiceRequest::where('status', 'PENDING_QUOTE')
-					->orWhere('status', 'PENDING_ATTENDANCE')->get();
+				$services = ServiceRequest::where('status', 'PENDING_QUOTE')->get();
 			} else if ($request->filter === 'pendingApproval') {
 				$client = $this->getClient();
 				$services = ServiceRequest::whereIn('user_id', $client->users->pluck('id'))
@@ -37,13 +32,19 @@
 							->orWhere('status', 'AT_PURCHASING_HEAD');
 					})
 					->whereType(strtoupper($request->type))->get();
-			} else if ($request->filter === 'pending') {
+			} else if ($request->filter === 'pendingQuotes') {
 				$client = $this->getClient();
 				$services = ServiceRequest::whereIn('user_id', $client->users->pluck('id'))
 					->where(function ($query) {
 						$query->where('status', 'PENDING_QUOTE')
-							->orWhere('status', 'PENDING_ATTENDANCE');
+							->orWhere('status', 'PENDING_QUOTE_CONFIRMATION')
+							->orWhere('status', 'QUOTE_REJECTED');
 					})
+					->whereType(strtoupper($request->type))->get();
+			} else if ($request->filter === 'pendingAttendance') {
+				$client = $this->getClient();
+				$services = ServiceRequest::whereIn('user_id', $client->users->pluck('id'))
+					->where('status', 'PENDING_ATTENDANCE')
 					->whereType(strtoupper($request->type))->get();
 			} else if ($request->filter === 'attended') {
 				$client = $this->getClient();
