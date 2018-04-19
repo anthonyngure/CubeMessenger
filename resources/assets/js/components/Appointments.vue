@@ -77,7 +77,7 @@
         </v-flex>
 
         <add-appointment-dialog :show="addingAppointment"
-                                @onClose="addingAppointment = false">
+                                @onClose="onCloseDialog">
         </add-appointment-dialog>
 
         <v-fab-transition>
@@ -153,7 +153,7 @@
         })
       },
       onCloseDialog (addedAppointmentSuccessfully) {
-        this.appointmentFullDialog = false
+        this.addingAppointment = false
         this.$utils.log('addedAppointmentSuccessfully: ' + addedAppointmentSuccessfully)
         if (addedAppointmentSuccessfully) {
           this.refresh()
