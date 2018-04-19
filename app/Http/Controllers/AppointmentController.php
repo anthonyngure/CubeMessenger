@@ -75,9 +75,10 @@
 			$internalParticipants = $request->internalParticipants;
 			if (!empty($internalParticipants)) {
 				foreach ($internalParticipants as $participant) {
-					$appointment->internalParticipants()->save(new AppointmentInternalParticipant([
+					AppointmentInternalParticipant::create([
+						'appointment_id'=> $appointment->id,
 						'user_id' => $participant,
-					]));
+					]);
 				}
 			}
 			
