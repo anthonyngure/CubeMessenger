@@ -415,7 +415,16 @@
       onCancel (successful) {
         this.venueType = null
         this.venue = null
-        this.step = 0
+        this.step = 1
+        this.title = null
+        this.startDate = null
+        this.startTime = null
+        this.endDate = null
+        this.endTime = null
+        this.allDay = null
+        this.internalParticipants = []
+        this.externalParticipants = []
+        this.itemsToDiscuss = []
         this.$emit('onClose', successful)
       },
       onLocationEntered (addressData, placeResultData) {
