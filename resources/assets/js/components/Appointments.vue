@@ -15,7 +15,7 @@
                         :items="appointments"
                         :rows-per-page-items="rowsPerPageItems"
                         :pagination.sync="pagination">
-                        <span slot="no-data">
+                        <span slot="no-data" class="pa-5">
                             <p>No appointments or meetings found for {{date}}</p>
                         </span>
                     <template slot="item" slot-scope="props">
@@ -24,24 +24,28 @@
                                 <v-list-tile-action>
                                     <v-chip label small color="accent" text-color="white">
                                         <v-icon left>access_time</v-icon>
-                                        {{props.item.allDay ? 'All day long'
+                                        {{props.item.allDay ? 'All day'
                                         : props.item.startTime+' -'+props.item.endTime}}
                                     </v-chip>
                                 </v-list-tile-action>
                                 <v-list-tile-content>
                                     <v-list-tile-title>
-                                        {{ props.item.user.name }} -
                                         <span class="caption">{{ props.item.title }}</span>
                                     </v-list-tile-title>
-                                    <v-list-tile-sub-title>{{ props.item.venue }} -
+                                    <v-list-tile-sub-title>
+                                        {{ props.item.venue }} -
                                         <strong>
-                                            {{ props.item.participants.length }} participants
+                                            {{ props.item.internalParticipants.length }} Internal Participants
+                                        </strong>
+                                        ,
+                                        <strong>
+                                            {{ props.item.externalParticipants.length }} External Participants
                                         </strong>
                                     </v-list-tile-sub-title>
                                 </v-list-tile-content>
                             </v-list-tile>
 
-                            <v-list-tile v-for="participant in props.item.participants" :key="participant.id">
+                            <v-list-tile v-for="participant in props.item.internalParticipants" :key="participant.id">
                                 <v-list-tile-action>
                                     <v-icon color="primary">person</v-icon>
                                 </v-list-tile-action>
@@ -49,7 +53,7 @@
                                     <v-list-tile-title>{{ participant.email }}</v-list-tile-title>
                                     <v-list-tile-sub-title>{{participant.phone}}</v-list-tile-sub-title>
                                 </v-list-tile-content>
-                                <v-list-tile-action>
+                                <v-list-tile-action class="hidden-lg-and-down">
                                     <v-btn icon @click.native="">
                                         <v-icon color="red">close</v-icon>
                                     </v-btn>

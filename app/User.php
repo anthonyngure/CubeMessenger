@@ -66,6 +66,7 @@
 			'email_verification_code',
 			'phone_verification_code',
 			'remember_token',
+			'pivot'
 		];
 		
 		/**

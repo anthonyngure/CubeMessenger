@@ -3,7 +3,9 @@
 	namespace App\Http\Controllers;
 	
 	use App\Appointment;
-	use App\AppointmentParticipant;
+	use App\AppointmentExternalParticipant;
+	use App\AppointmentInternalParticipant;
+	use App\AppointmentItem;
 	use Auth;
 	use Illuminate\Http\Request;
 	
@@ -27,10 +29,12 @@
 			
 			$appointments = Appointment::whereIn('user_id', $client->users->pluck('id'))
 				->where('start_date', $date)
-				->with(['participants', 'user'])
+				->with('internalParticipants', 'externalParticipants', 'items')
 				->orderBy('start_date')
 				->orderBy('start_time')
 				->get();
+			
+			//dd(Appointment::firstOrFail()->internalParticipants()->toSql());
 			
 			return $this->collectionResponse($appointments);
 		}
@@ -45,43 +49,60 @@
 		 */
 		public function store(Request $request)
 		{
-			$client = $this->getClient();
 			
 			\Validator::validate($request->json()->all(), [
-				'venue'     => 'required',
-				'with'      => 'required|exists:users,id',
-				'title'     => 'required',
-				'startDate' => 'required',
-				'startTime' => 'required_if:allDay,false',
-				'endDate'   => 'required',
-				'endTime'   => 'required_if:allDay,false',
-				'allDay'    => 'required',
+				'venue'                => 'required',
+				'internalParticipants' => 'required',
+				'title'                => 'required',
+				'startDate'            => 'required',
+				'startTime'            => 'required_if:allDay,false',
+				'endDate'              => 'required',
+				'endTime'              => 'required_if:allDay,false',
+				'allDay'               => 'required',
 			]);
 			
 			$appointment = Appointment::create([
 				'user_id'    => Auth::user()->getKey(),
 				'venue'      => $request->venue,
-				'with_id'    => $request->with,
 				'title'      => $request->title,
 				'start_date' => $request->startDate,
 				'start_time' => $request->startTime,
 				'end_date'   => $request->endDate,
 				'end_time'   => $request->endTime,
 				'all_day'    => $request->allDay,
-				'note'       => $request->note,
 			]);
 			
-			$participants = $request->participants;
-			if (!empty($participants)) {
-				foreach ($participants as $participant) {
-					$appointment->participants()->save(new AppointmentParticipant([
+			$internalParticipants = $request->internalParticipants;
+			if (!empty($internalParticipants)) {
+				foreach ($internalParticipants as $participant) {
+					$appointment->internalParticipants()->save(new AppointmentInternalParticipant([
+						'user_id' => $participant,
+					]));
+				}
+			}
+			
+			$externalParticipants = $request->externalParticipants;
+			if (!empty($externalParticipants)) {
+				foreach ($externalParticipants as $participant) {
+					$appointment->externalParticipants()->save(new AppointmentExternalParticipant([
 						'email' => $participant['email'],
 						'phone' => $participant['phone'],
 					]));
 				}
 			}
 			
-			return $this->itemCreatedResponse($appointment);
+			$itemsToDiscuss = $request->itemsToDiscuss;
+			if (!empty($itemsToDiscuss)) {
+				foreach ($itemsToDiscuss as $itemToDiscuss) {
+					$appointment->items()->save(new AppointmentItem([
+						'details' => $itemToDiscuss,
+					]));
+				}
+			}
+			$data = Appointment::with('internalParticipants', 'externalParticipants', 'items')
+				->findOrFail($appointment->id);
+			
+			return $this->itemCreatedResponse($data);
 		}
 		
 		/**

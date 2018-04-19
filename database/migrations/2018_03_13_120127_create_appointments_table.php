@@ -20,12 +20,9 @@
 				$table->time('start_time')->nullable();
 				$table->date('end_date');
 				$table->time('end_time')->nullable();
-				$table->unsignedInteger('with_id', false);
-				$table->foreign('with_id')->references('id')->on('users');
 				$table->string('venue');
 				$table->string('title');
 				$table->boolean('all_day')->default(false);
-				$table->string('note')->nullable();
 				$table->timestamps();
 			});
 		}

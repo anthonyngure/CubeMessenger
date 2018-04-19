@@ -1,265 +1,263 @@
 <template>
     <v-dialog v-model="dialog" :max-width="maxWidth" persistent>
-        <v-stepper v-model="step" alt-labels>
-            <v-stepper-header>
-                <v-stepper-step step="1" :complete="step > 1">Venue</v-stepper-step>
-                <v-divider></v-divider>
-                <v-stepper-step step="2" :complete="step > 2">Internal Participants</v-stepper-step>
-                <v-divider></v-divider>
-                <v-stepper-step step="3" :complete="step > 3">External Participants</v-stepper-step>
-                <v-divider></v-divider>
-                <v-stepper-step step="4" :complete="step > 4">Meeting Details</v-stepper-step>
-                <v-divider></v-divider>
-                <v-stepper-step step="5">Scheduling</v-stepper-step>
-            </v-stepper-header>
-            <connection-manager ref="connectionManager" v-model="connecting">
-            </connection-manager>
-            <v-stepper-items>
-                <v-stepper-content step="1">
-                    <v-card flat>
-                        <v-layout row wrap>
-                            <v-flex xs4>
-                                <v-subheader class="mt-2">Appointment/Meeting venue type</v-subheader>
-                            </v-flex>
-                            <v-flex xs8>
-                                <v-select
-                                        :items="venueTypes"
-                                        v-model="venueType"
-                                        :disabled="connecting"
-                                        clearable
-                                        item-text="text"
-                                        item-value="value"
-                                        label="Select venue type"
-                                        validate-on-blur
-                                        single-line>
-                                </v-select>
-                            </v-flex>
-                            <v-flex xs12>
-                                <google-place-input
-                                        :disabled="connecting"
-                                        v-if="venueType === 2"
-                                        id="destination"
-                                        country="KE"
-                                        :clearable="false"
-                                        :enable-geolocation="true"
-                                        label="Enter location"
-                                        placeholder="Location"
-                                        prepend-icon="edit_location"
-                                        :required="true"
-                                        :rules="[rules.required]"
-                                        :load-google-api="false"
-                                        :google-api-key="$utils.googleMapsKey"
-                                        ref="locationInput"
-                                        :hint="!placeResultData ? '' : placeResultData.formatted_address"
-                                        persistent-hint
-                                        :hide-details="false"
-                                        types="establishment"
-                                        v-on:placechanged="onLocationEntered">
-                                </google-place-input>
-                                <v-text-field
-                                        v-if="venueType === 1"
-                                        :disabled="connecting"
-                                        required
-                                        label="Enter appointment/Meeting venue"
-                                        placeholder="Appointment/Meeting venue e.g Office, Boardroom or Room 10"
-                                        v-model="venue"
-                                        prepend-icon="edit_location">
-                                </v-text-field>
-
-                            </v-flex>
-                        </v-layout>
-                        <v-card-actions>
-                            <v-spacer></v-spacer>
-                            <v-btn color="red" @click.native="onCancel" flat>Cancel</v-btn>
-                            <v-btn color="primary" :disabled="!venue" @click.native="step = 2">Continue</v-btn>
-                        </v-card-actions>
-                    </v-card>
-                </v-stepper-content>
-                <v-stepper-content step="2">
-                    <v-card flat>
-                        <v-subheader>Select meeting internal participants</v-subheader>
-                        <v-select
-                                :items="users"
-                                v-model="internalParticipants"
-                                label="Select internal participants"
-                                deletable-chips
-                                :disabled="connecting"
-                                clearable
-                                multiple
-                                required
-                                :rules="[() => internalParticipants.length > 0 || 'You must choose at least one']"
-                                persistent-hint
-                                chips
-                                tags
-                                :search-input.sync="search"
-                                :loading="loadingUsers">
-                        </v-select>
-                        <v-card-actions>
-                            <v-btn flat @click.native="step = 1">
-                                <v-icon left>arrow_back</v-icon>
-                                Back
-                            </v-btn>
-                            <v-spacer></v-spacer>
-                            <v-btn @click.native="onCancel" color="red" flat>Cancel</v-btn>
-                            <v-btn color="primary" :disabled="!internalParticipants.length" @click.native="step = 3">
-                                Continue
-                            </v-btn>
-                        </v-card-actions>
-                    </v-card>
-                </v-stepper-content>
-                <v-stepper-content step="3">
-                    <v-card flat>
-                        <v-subheader>Add meeting external participants</v-subheader>
-                        <template v-for="(participant, index) in externalParticipants">
-                            <v-layout row wrap :key="index">
-                                <v-flex xs6>
-                                    <v-text-field
-                                            :disabled="connecting"
-                                            placeholder="Participant email address"
-                                            label="Enter participant email address"
-                                            v-model="participant.email"
-                                            :error-messages="participant.errors.email"
-                                            prepend-icon="email">
-                                    </v-text-field>
-                                </v-flex>
-                                <v-flex xs5 class="pl-5">
-                                    <v-text-field
-                                            :disabled="connecting"
-                                            placeholder="Participant phone number"
-                                            label="Enter participant phone number"
-                                            v-model="participant.phone"
-                                            :error-messages="participant.errors.phone"
-                                            mask="##########"
-                                            prepend-icon="phone">
-                                    </v-text-field>
-                                </v-flex>
-                                <v-flex xs1>
-                                    <v-btn icon :disabled="connecting"
-                                           @click.native="removeExternalParticipant(participant)">
-                                        <v-icon>close</v-icon>
-                                    </v-btn>
-                                </v-flex>
-                            </v-layout>
+        <v-stepper v-model="step" vertical>
+            <v-stepper-step step="1" :complete="step > 1">Venue</v-stepper-step>
+            <v-stepper-content step="1">
+                <v-card flat>
+                    <v-select
+                            :items="venueTypes"
+                            v-model="venueType"
+                            :disabled="connecting"
+                            clearable
+                            item-text="text"
+                            item-value="value"
+                            label="Select appointment/meeting venue type venue type"
+                            validate-on-blur
+                            single-line>
+                    </v-select>
+                    <google-place-input
+                            :disabled="connecting"
+                            v-if="venueType === 2"
+                            id="destination"
+                            country="KE"
+                            :clearable="false"
+                            :enable-geolocation="true"
+                            label="Enter location"
+                            placeholder="Location"
+                            prepend-icon="edit_location"
+                            :required="true"
+                            :rules="[rules.required]"
+                            :load-google-api="false"
+                            :google-api-key="$utils.googleMapsKey"
+                            ref="locationInput"
+                            :hint="!placeResultData ? '' : placeResultData.formatted_address"
+                            persistent-hint
+                            :hide-details="false"
+                            types="establishment"
+                            v-on:placechanged="onLocationEntered">
+                    </google-place-input>
+                    <v-text-field
+                            v-if="venueType === 1"
+                            :disabled="connecting"
+                            required
+                            label="Enter appointment/Meeting venue"
+                            placeholder="Appointment/Meeting venue e.g Office, Boardroom or Room 10"
+                            v-model="venue"
+                            prepend-icon="edit_location">
+                    </v-text-field>
+                    <v-card-actions>
+                        <v-spacer></v-spacer>
+                        <v-btn color="red" @click.native="onCancel" flat>Cancel</v-btn>
+                        <v-btn color="primary" :disabled="!venue" @click.native="step = 2">Continue</v-btn>
+                    </v-card-actions>
+                </v-card>
+            </v-stepper-content>
+            <v-stepper-step step="2" :complete="step > 2">Internal Participants</v-stepper-step>
+            <v-stepper-content step="2">
+                <v-card flat>
+                    <v-select
+                            :items="users"
+                            v-model="internalParticipants"
+                            label="Select internal participants"
+                            deletable-chips
+                            :disabled="connecting"
+                            clearable
+                            item-text="name"
+                            multiple
+                            required
+                            :rules="[() => internalParticipants.length > 0 || 'You must choose at least one']"
+                            persistent-hint
+                            chips
+                            tags
+                            :search-input.sync="search"
+                            :loading="loadingUsers">
+                        <template slot="selection" slot-scope="data">
+                            <v-chip close
+                                    @input="data.parent.selectItem(data.item)"
+                                    :selected="data.selected"
+                                    class="chip--select-multi"
+                                    :key="JSON.stringify(data.item)">
+                                <v-avatar>
+                                    <img :src="$utils.imageUrl(data.item.avatar)">
+                                </v-avatar>
+                                {{ data.item.name }}
+                            </v-chip>
                         </template>
-
-                        <v-btn block flat color="primary" @click.native="addExternalParticipant"
-                               :disabled="connecting">
-                            <v-icon left dark>add</v-icon>
-                            Add participant
+                    </v-select>
+                    <v-card-actions>
+                        <v-btn flat @click.native="step = 1">
+                            <v-icon left>arrow_back</v-icon>
+                            Back
                         </v-btn>
-                        <v-card-actions>
-                            <v-btn flat @click.native="step = 2">
-                                <v-icon left>arrow_back</v-icon>
-                                Back
-                            </v-btn>
-                            <v-spacer></v-spacer>
-                            <v-btn @click.native="onCancel" color="red" flat>Cancel</v-btn>
-                            <v-btn color="primary" :disabled="!externalParticipantsValidate" @click.native="step = 4">
-                                Continue
-                            </v-btn>
-                        </v-card-actions>
-                    </v-card>
-                </v-stepper-content>
-                <v-stepper-content step="4">
-                    <v-card flat>
-                        <v-text-field
-                                label="Enter meeting title/subject"
-                                :disabled="connecting"
-                                placeholder="Title/Subject e.g Website development progress meeting"
-                                v-model="title"
-                                required
-                                prepend-icon="title">
-                        </v-text-field>
-                        <v-slide-y-transition>
-                            <div v-if="title">
-                                <template v-for="(itemToDiscuss, index) in itemsToDiscuss">
-                                    <v-layout row wrap>
-                                        <v-flex xs11>
-                                            <v-text-field
-                                                    :disabled="connecting"
-                                                    placeholder="An item to discuss"
-                                                    label="Enter item to discuss"
-                                                    v-model="itemToDiscuss.text"
-                                                    :error-messages="itemToDiscuss.error"
-                                                    prepend-icon="note">
-                                            </v-text-field>
-                                        </v-flex>
-                                        <v-flex xs1>
-                                            <v-btn icon :disabled="connecting"
-                                                   @click.native="removeItemToDiscuss(itemToDiscuss)">
-                                                <v-icon>close</v-icon>
-                                            </v-btn>
-                                        </v-flex>
-                                    </v-layout>
-                                </template>
-
-                                <v-btn block flat color="primary" @click.native="addItemToDiscuss"
-                                       :disabled="connecting">
-                                    <v-icon left dark>add</v-icon>
-                                    Add item to discuss
+                        <v-spacer></v-spacer>
+                        <v-btn @click.native="onCancel" color="red" flat>Cancel</v-btn>
+                        <v-btn color="primary" :disabled="!internalParticipants.length"
+                               @click.native="step = 3">
+                            Continue
+                        </v-btn>
+                    </v-card-actions>
+                </v-card>
+            </v-stepper-content>
+            <v-stepper-step step="3" :complete="step > 3">External Participants</v-stepper-step>
+            <v-stepper-content step="3">
+                <v-card flat>
+                    <template v-for="(participant, index) in externalParticipants">
+                        <v-layout row wrap :key="index">
+                            <v-flex xs6>
+                                <v-text-field
+                                        :disabled="connecting"
+                                        placeholder="Participant email address"
+                                        label="Enter participant email address"
+                                        v-model="participant.email"
+                                        :error-messages="participant.errors.email"
+                                        prepend-icon="email">
+                                </v-text-field>
+                            </v-flex>
+                            <v-flex xs5 class="pl-5">
+                                <v-text-field
+                                        :disabled="connecting"
+                                        placeholder="Participant phone number"
+                                        label="Enter participant phone number"
+                                        v-model="participant.phone"
+                                        :error-messages="participant.errors.phone"
+                                        mask="##########"
+                                        prepend-icon="phone">
+                                </v-text-field>
+                            </v-flex>
+                            <v-flex xs1>
+                                <v-btn icon :disabled="connecting"
+                                       @click.native="removeExternalParticipant(participant)">
+                                    <v-icon>close</v-icon>
                                 </v-btn>
-                            </div>
-                        </v-slide-y-transition>
-                        <v-card-actions>
-                            <v-btn flat @click.native="step = 3">
-                                <v-icon left>arrow_back</v-icon>
-                                Back
-                            </v-btn>
-                            <v-spacer></v-spacer>
-                            <v-btn @click.native="onCancel" color="red" flat>Cancel</v-btn>
-                            <v-btn color="primary" @click.native="step = 5">Continue</v-btn>
-                        </v-card-actions>
-                    </v-card>
-                </v-stepper-content>
-                <v-stepper-content step="5">
-                    <v-card flat>
-                        <v-layout row wrap>
-                            <v-flex v-bind="{[`xs${allDay ? 12 : 6}`]: true}">
-                                <date-input v-model="startDate"
-                                            :disabled="connecting"
-                                            placeholder="Starting date "
-                                            :allowedDates="allowedDates">
-                                </date-input>
-                            </v-flex>
-                            <v-flex xs6 v-if="!allDay" class="pl-5">
-                                <time-input v-model="startTime"
-                                            :disabled="connecting"
-                                            placeholder="Starting time"
-                                            :allowedTimes="allowedTimes">
-                                </time-input>
-                            </v-flex>
-                            <v-flex v-bind="{[`xs${allDay ? 12 : 6}`]: true}">
-                                <date-input v-model="endDate"
-                                            :disabled="connecting"
-                                            placeholder="Ending date"
-                                            :allowedDates="allowedDates">
-                                </date-input>
-                            </v-flex>
-                            <v-flex xs6 v-if="!allDay" class="pl-5">
-                                <time-input v-model="endTime"
-                                            :disabled="connecting"
-                                            placeholder="Ending time"
-                                            :allowedTimes="allowedTimes">
-                                </time-input>
-                            </v-flex>
-
-                            <v-flex xs10 offset-xs1>
-                                <v-checkbox label="All day" hide-details :disabled="connecting"
-                                            v-model="allDay"></v-checkbox>
                             </v-flex>
                         </v-layout>
-                        <v-card-actions>
-                            <v-btn flat @click.native="step = 4">
-                                <v-icon left>arrow_back</v-icon>
-                                Back
+                    </template>
+
+                    <v-btn block flat color="primary" @click.native="addExternalParticipant"
+                           :disabled="connecting">
+                        <v-icon left dark>add</v-icon>
+                        Add participant
+                    </v-btn>
+                    <v-card-actions>
+                        <v-btn flat @click.native="step = 2">
+                            <v-icon left>arrow_back</v-icon>
+                            Back
+                        </v-btn>
+                        <v-spacer></v-spacer>
+                        <v-btn @click.native="onCancel" color="red" flat>Cancel</v-btn>
+                        <v-btn color="primary" :disabled="!externalParticipantsValidate"
+                               @click.native="step = 4">
+                            Continue
+                        </v-btn>
+                    </v-card-actions>
+                </v-card>
+            </v-stepper-content>
+            <v-stepper-step step="4" :complete="step > 4">Meeting Details</v-stepper-step>
+            <v-stepper-content step="4">
+                <v-card flat>
+                    <v-text-field
+                            label="Enter meeting title/subject"
+                            :disabled="connecting"
+                            placeholder="Title/Subject e.g Website development progress meeting"
+                            v-model="title"
+                            required
+                            prepend-icon="title">
+                    </v-text-field>
+                    <v-slide-y-transition>
+                        <div v-if="title">
+                            <template v-for="(itemToDiscuss, index) in itemsToDiscuss">
+                                <v-layout row wrap>
+                                    <v-flex xs11>
+                                        <v-text-field
+                                                :disabled="connecting"
+                                                placeholder="An item to discuss"
+                                                label="Enter item to discuss"
+                                                v-model="itemToDiscuss.text"
+                                                :error-messages="itemToDiscuss.error"
+                                                prepend-icon="note">
+                                        </v-text-field>
+                                    </v-flex>
+                                    <v-flex xs1>
+                                        <v-btn icon :disabled="connecting"
+                                               @click.native="removeItemToDiscuss(itemToDiscuss)">
+                                            <v-icon>close</v-icon>
+                                        </v-btn>
+                                    </v-flex>
+                                </v-layout>
+                            </template>
+
+                            <v-btn block flat color="primary" @click.native="addItemToDiscuss"
+                                   :disabled="connecting">
+                                <v-icon left dark>add</v-icon>
+                                Add item to discuss
                             </v-btn>
-                            <v-spacer></v-spacer>
-                            <v-btn @click.native="onCancel" color="red" flat>Cancel</v-btn>
-                            <v-btn color="primary" @click.native="step = 1">Continue</v-btn>
-                        </v-card-actions>
-                    </v-card>
-                </v-stepper-content>
-            </v-stepper-items>
+                        </div>
+                    </v-slide-y-transition>
+                    <v-card-actions>
+                        <v-btn flat @click.native="step = 3">
+                            <v-icon left>arrow_back</v-icon>
+                            Back
+                        </v-btn>
+                        <v-spacer></v-spacer>
+                        <v-btn @click.native="onCancel" color="red" flat>Cancel</v-btn>
+                        <v-btn color="primary" :disabled="!title || connecting || !itemsToDiscussValidate"
+                               @click.native="step = 5">Continue
+                        </v-btn>
+                    </v-card-actions>
+                </v-card>
+            </v-stepper-content>
+            <v-stepper-step step="5">Meeting Time</v-stepper-step>
+            <v-stepper-content step="5">
+                <v-card flat>
+                    <v-layout row wrap>
+                        <v-flex v-bind="{[`xs${allDay ? 12 : 6}`]: true}">
+                            <date-input v-model="startDate"
+                                        :disabled="connecting"
+                                        placeholder="Starting date "
+                                        :allowedDates="allowedDates">
+                            </date-input>
+                        </v-flex>
+                        <v-flex xs6 v-if="!allDay" class="pl-5">
+                            <time-input v-model="startTime"
+                                        :disabled="connecting"
+                                        placeholder="Starting time"
+                                        :allowedTimes="allowedTimes">
+                            </time-input>
+                        </v-flex>
+                        <v-flex v-bind="{[`xs${allDay ? 12 : 6}`]: true}">
+                            <date-input v-model="endDate"
+                                        :disabled="connecting"
+                                        placeholder="Ending date"
+                                        :allowedDates="allowedDates">
+                            </date-input>
+                        </v-flex>
+                        <v-flex xs6 v-if="!allDay" class="pl-5">
+                            <time-input v-model="endTime"
+                                        :disabled="connecting"
+                                        placeholder="Ending time"
+                                        :allowedTimes="allowedTimes">
+                            </time-input>
+                        </v-flex>
+
+                        <v-flex xs10 offset-xs1>
+                            <v-checkbox label="All day" hide-details :disabled="connecting"
+                                        v-model="allDay"></v-checkbox>
+                        </v-flex>
+                        <v-flex xs12>
+                            <connection-manager ref="connectionManager" v-model="connecting"></connection-manager>
+                        </v-flex>
+                    </v-layout>
+                    <v-card-actions>
+                        <v-btn flat @click.native="step = 4">
+                            <v-icon left>arrow_back</v-icon>
+                            Back
+                        </v-btn>
+                        <v-spacer></v-spacer>
+                        <v-btn @click.native="onCancel" color="red" flat>Cancel</v-btn>
+                        <v-btn color="primary" @click.native="submit">Finish</v-btn>
+                    </v-card-actions>
+                </v-card>
+            </v-stepper-content>
         </v-stepper>
     </v-dialog>
 </template>
@@ -271,6 +269,8 @@
   import ConnectionManager from './ConnectionManager'
   import DateInput from './DateInput'
   import TimeInput from './TimeInput'
+  import moment from 'moment'
+  import EventBus from '../event-bus'
 
   export default {
     extends: BaseDialog,
@@ -351,7 +351,7 @@
     },
     computed: {
       maxWidth () {
-        return (this.$vuetify.breakpoint.width * 0.65) + 'px'
+        return (this.$vuetify.breakpoint.width * 0.50) + 'px'
       },
       externalParticipantsValidate () {
         let pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
@@ -378,6 +378,21 @@
         }
 
         return validParticipants === this.externalParticipants.length
+      },
+      itemsToDiscussValidate () {
+
+        let validItems = 0
+
+        for (let itemToDiscuss of this.itemsToDiscuss) {
+          if (!itemToDiscuss.text) {
+            itemToDiscuss.error = ['This field can not be empty']
+          } else {
+            itemToDiscuss.error = []
+            validItems++
+          }
+        }
+
+        return validItems === this.itemsToDiscuss.length
       }
     },
     methods: {
@@ -389,9 +404,7 @@
           }
         }).then(response => {
           this.users = []
-          for (let item of response.data.data) {
-            this.users.push(item.name)
-          }
+          this.users = this.users.concat(response.data.data)
           this.loadingUsers = false
         })
           .catch(error => {
@@ -399,11 +412,11 @@
             this.$utils.log(error)
           })
       },
-      onCancel () {
+      onCancel (successful) {
         this.venueType = null
         this.venue = null
         this.step = 0
-        this.$emit('onClose')
+        this.$emit('onClose', successful)
       },
       onLocationEntered (addressData, placeResultData) {
         this.addressData = addressData
@@ -430,9 +443,46 @@
       },
       addItemToDiscuss () {
         this.itemsToDiscuss.push({
-          error: null,
+          error: [],
           text: null
         })
+      },
+      submit () {
+        let appointment = {
+          venue: this.venue,
+          title: this.title,
+          startDate: this.startDate,
+          startTime: this.startTime,
+          endDate: this.endDate,
+          endTime: this.endTime,
+          allDay: this.allDay,
+          internalParticipants: [],
+          externalParticipants: [],
+          itemsToDiscuss: [],
+        }
+
+        for (let itemToDiscuss of this.itemsToDiscuss) {
+          appointment.itemsToDiscuss.push(itemToDiscuss.text)
+        }
+
+        for (let participant of this.internalParticipants) {
+          appointment.internalParticipants.push(participant.id)
+        }
+
+        for (let participant of this.externalParticipants) {
+          appointment.externalParticipants.push({
+            email: participant.email,
+            phone: participant.phone,
+          })
+        }
+        this.$utils.log(appointment)
+        let that = this
+        this.$refs.connectionManager.post('appointments', {
+          onSuccess (response) {
+            that.onCancel(true)
+            EventBus.$emit(that.$actions.addedAppointment)
+          }
+        }, appointment)
       }
     }
   }

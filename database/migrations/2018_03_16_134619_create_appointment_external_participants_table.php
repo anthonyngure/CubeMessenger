@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateAppointmentParticipantsTable extends Migration
+class CreateAppointmentExternalParticipantsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -12,12 +12,12 @@ class CreateAppointmentParticipantsTable extends Migration
      */
     public function up()
     {
-        Schema::create('appointment_participants', function (Blueprint $table) {
+        Schema::create('appointment_external_participants', function (Blueprint $table) {
             $table->increments('id');
 	        $table->unsignedInteger('appointment_id', false);
 	        $table->foreign('appointment_id')->references('id')->on('appointments');
-            $table->string('email');
-            $table->string('phone');
+	        $table->string('email');
+	        $table->string('phone');
             $table->timestamps();
         });
     }
@@ -29,6 +29,6 @@ class CreateAppointmentParticipantsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('appointment_participants');
+        Schema::dropIfExists('appointment_external_participants');
     }
 }

@@ -6,7 +6,6 @@
             v-model="menu"
             transition="scale-transition"
             offset-y
-            full-width
             :no-title="noTitle"
             :disabled="disabled"
             :nudge-right="40"
@@ -25,7 +24,6 @@
                 readonly
         ></v-text-field>
         <v-date-picker v-model="date" @change="onChange"
-                       format="24hr"
                        :allowed-dates="allowedDates.dates">
         </v-date-picker>
     </v-menu>
