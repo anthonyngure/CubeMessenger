@@ -142,7 +142,7 @@
             that.appointments = []
             for (let appointment of response.data.data) {
               appointment.active = false
-              that.appointmentDates.push(appointment.startDate)
+              that.appointmentDates.push(appointment.startingAt)
               that.appointments.push(appointment)
             }
           }

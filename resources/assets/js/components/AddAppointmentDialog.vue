@@ -1,50 +1,52 @@
 <template>
-    <v-dialog v-model="dialog" :max-width="maxWidth" persistent>
+    <v-dialog v-model="dialog" :max-width="maxWidth" persistent lazy>
         <v-stepper v-model="step" vertical>
             <v-stepper-step step="1" :complete="step > 1">Venue</v-stepper-step>
             <v-stepper-content step="1">
                 <v-card flat>
-                    <v-select
-                            :items="venueTypes"
-                            v-model="venueType"
-                            :disabled="connecting"
-                            clearable
-                            item-text="text"
-                            item-value="value"
-                            label="Select appointment/meeting venue type venue type"
-                            validate-on-blur
-                            single-line>
-                    </v-select>
-                    <google-place-input
-                            :disabled="connecting"
-                            v-if="venueType === 2"
-                            id="destination"
-                            country="KE"
-                            :clearable="false"
-                            :enable-geolocation="true"
-                            label="Enter location"
-                            placeholder="Location"
-                            prepend-icon="edit_location"
-                            :required="true"
-                            :rules="[rules.required]"
-                            :load-google-api="false"
-                            :google-api-key="$utils.googleMapsKey"
-                            ref="locationInput"
-                            :hint="!placeResultData ? '' : placeResultData.formatted_address"
-                            persistent-hint
-                            :hide-details="false"
-                            types="establishment"
-                            v-on:placechanged="onLocationEntered">
-                    </google-place-input>
-                    <v-text-field
-                            v-if="venueType === 1"
-                            :disabled="connecting"
-                            required
-                            label="Enter appointment/Meeting venue"
-                            placeholder="Appointment/Meeting venue e.g Office, Boardroom or Room 10"
-                            v-model="venue"
-                            prepend-icon="edit_location">
-                    </v-text-field>
+                    <v-card-text>
+                        <v-select
+                                :items="venueTypes"
+                                v-model="venueType"
+                                :disabled="connecting"
+                                clearable
+                                item-text="text"
+                                item-value="value"
+                                label="Select appointment/meeting venue type venue type"
+                                validate-on-blur
+                                single-line>
+                        </v-select>
+                        <google-place-input
+                                :disabled="connecting"
+                                v-show="venueType === 2"
+                                id="destination"
+                                country="KE"
+                                :clearable="false"
+                                :enable-geolocation="true"
+                                label="Enter location"
+                                placeholder="Location"
+                                prepend-icon="edit_location"
+                                :required="true"
+                                :rules="[rules.required]"
+                                :load-google-api="false"
+                                :google-api-key="$utils.googleMapsKey"
+                                ref="locationInput"
+                                :hint="!placeResultData ? '' : placeResultData.formatted_address"
+                                persistent-hint
+                                :hide-details="false"
+                                types="establishment"
+                                v-on:placechanged="onLocationEntered">
+                        </google-place-input>
+                        <v-text-field
+                                v-show="venueType === 1"
+                                :disabled="connecting"
+                                required
+                                label="Enter appointment/Meeting venue"
+                                placeholder="Appointment/Meeting venue e.g Office, Boardroom or Room 10"
+                                v-model="venue"
+                                prepend-icon="edit_location">
+                        </v-text-field>
+                    </v-card-text>
                     <v-card-actions>
                         <v-spacer></v-spacer>
                         <v-btn color="red" @click.native="onCancel" flat>Cancel</v-btn>
@@ -489,11 +491,6 @@
           return []
         }
       },
-
-      //Check the last step on date and time validation
-      canFinish () {
-        return false
-      },
       maxWidth () {
         return (this.$vuetify.breakpoint.width * 0.50) + 'px'
       },
@@ -565,7 +562,7 @@
         this.startTime = null
         this.endDate = null
         this.endTime = null
-        this.allDay = null
+        this.allDay = false
         this.internalParticipants = []
         this.externalParticipants = []
         this.itemsToDiscuss = []

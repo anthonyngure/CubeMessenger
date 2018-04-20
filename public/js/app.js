@@ -3764,6 +3764,8 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 //
 //
 //
+//
+//
 
 
 
@@ -3951,12 +3953,6 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
         return [];
       }
     },
-
-
-    //Check the last step on date and time validation
-    canFinish: function canFinish() {
-      return false;
-    },
     maxWidth: function maxWidth() {
       return this.$vuetify.breakpoint.width * 0.50 + 'px';
     },
@@ -4071,7 +4067,7 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
       this.startTime = null;
       this.endDate = null;
       this.endTime = null;
-      this.allDay = null;
+      this.allDay = false;
       this.internalParticipants = [];
       this.externalParticipants = [];
       this.itemsToDiscuss = [];
@@ -5732,7 +5728,7 @@ var moment = Object(__WEBPACK_IMPORTED_MODULE_3_moment_range__["extendMoment"])(
               var appointment = _step.value;
 
               appointment.active = false;
-              that.appointmentDates.push(appointment.startDate);
+              that.appointmentDates.push(appointment.startingAt);
               that.appointments.push(appointment);
             }
           } catch (err) {
@@ -10905,7 +10901,7 @@ exports = module.exports = __webpack_require__("./node_modules/css-loader/lib/cs
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -25906,8 +25902,6 @@ var map = {
 	"./mk.js": "./node_modules/moment/locale/mk.js",
 	"./ml": "./node_modules/moment/locale/ml.js",
 	"./ml.js": "./node_modules/moment/locale/ml.js",
-	"./mn": "./node_modules/moment/locale/mn.js",
-	"./mn.js": "./node_modules/moment/locale/mn.js",
 	"./mr": "./node_modules/moment/locale/mr.js",
 	"./mr.js": "./node_modules/moment/locale/mr.js",
 	"./ms": "./node_modules/moment/locale/ms.js",
@@ -33016,115 +33010,6 @@ var ml = moment.defineLocale('ml', {
 });
 
 return ml;
-
-})));
-
-
-/***/ }),
-
-/***/ "./node_modules/moment/locale/mn.js":
-/***/ (function(module, exports, __webpack_require__) {
-
-//! moment.js locale configuration
-
-;(function (global, factory) {
-    true ? factory(__webpack_require__("./node_modules/moment/moment.js")) :
-   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
-   factory(global.moment)
-}(this, (function (moment) { 'use strict';
-
-
-    function translate(number, withoutSuffix, key, isFuture) {
-        switch (key) {
-            case 's':
-                return withoutSuffix ? 'хэдхэн секунд' : 'хэдхэн секундын';
-            case 'ss':
-                return number + (withoutSuffix ? ' секунд' : ' секундын');
-            case 'm':
-            case 'mm':
-                return number + (withoutSuffix ? ' минут' : ' минутын');
-            case 'h':
-            case 'hh':
-                return number + (withoutSuffix ? ' цаг' : ' цагийн');
-            case 'd':
-            case 'dd':
-                return number + (withoutSuffix ? ' өдөр' : ' өдрийн');
-            case 'M':
-            case 'MM':
-                return number + (withoutSuffix ? ' сар' : ' сарын');
-            case 'y':
-            case 'yy':
-                return number + (withoutSuffix ? ' жил' : ' жилийн');
-            default:
-                return number;
-        }
-    }
-
-    var mn = moment.defineLocale('mn', {
-        months : 'Нэгдүгээр сар_Хоёрдугаар сар_Гуравдугаар сар_Дөрөвдүгээр сар_Тавдугаар сар_Зургадугаар сар_Долдугаар сар_Наймдугаар сар_Есдүгээр сар_Аравдугаар сар_Арван нэгдүгээр сар_Арван хоёрдугаар сар'.split('_'),
-        monthsShort : '1 сар_2 сар_3 сар_4 сар_5 сар_6 сар_7 сар_8 сар_9 сар_10 сар_11 сар_12 сар'.split('_'),
-        monthsParseExact : true,
-        weekdays : 'Ням_Даваа_Мягмар_Лхагва_Пүрэв_Баасан_Бямба'.split('_'),
-        weekdaysShort : 'Ням_Дав_Мяг_Лха_Пүр_Баа_Бям'.split('_'),
-        weekdaysMin : 'Ня_Да_Мя_Лх_Пү_Ба_Бя'.split('_'),
-        weekdaysParseExact : true,
-        longDateFormat : {
-            LT : 'HH:mm',
-            LTS : 'HH:mm:ss',
-            L : 'YYYY-MM-DD',
-            LL : 'YYYY оны MMMMын D',
-            LLL : 'YYYY оны MMMMын D HH:mm',
-            LLLL : 'dddd, YYYY оны MMMMын D HH:mm'
-        },
-        meridiemParse: /ҮӨ|ҮХ/i,
-        isPM : function (input) {
-            return input === 'ҮХ';
-        },
-        meridiem : function (hour, minute, isLower) {
-            if (hour < 12) {
-                return 'ҮӨ';
-            } else {
-                return 'ҮХ';
-            }
-        },
-        calendar : {
-            sameDay : '[Өнөөдөр] LT',
-            nextDay : '[Маргааш] LT',
-            nextWeek : '[Ирэх] dddd LT',
-            lastDay : '[Өчигдөр] LT',
-            lastWeek : '[Өнгөрсөн] dddd LT',
-            sameElse : 'L'
-        },
-        relativeTime : {
-            future : '%s дараа',
-            past : '%s өмнө',
-            s : translate,
-            ss : translate,
-            m : translate,
-            mm : translate,
-            h : translate,
-            hh : translate,
-            d : translate,
-            dd : translate,
-            M : translate,
-            MM : translate,
-            y : translate,
-            yy : translate
-        },
-        dayOfMonthOrdinalParse: /\d{1,2} өдөр/,
-        ordinal : function (number, period) {
-            switch (period) {
-                case 'd':
-                case 'D':
-                case 'DDD':
-                    return number + ' өдөр';
-                default:
-                    return number;
-            }
-        }
-    });
-
-    return mn;
 
 })));
 
@@ -47371,7 +47256,7 @@ var render = function() {
   return _c(
     "v-dialog",
     {
-      attrs: { "max-width": _vm.maxWidth, persistent: "" },
+      attrs: { "max-width": _vm.maxWidth, persistent: "", lazy: "" },
       model: {
         value: _vm.dialog,
         callback: function($$v) {
@@ -47408,28 +47293,39 @@ var render = function() {
                 "v-card",
                 { attrs: { flat: "" } },
                 [
-                  _c("v-select", {
-                    attrs: {
-                      items: _vm.venueTypes,
-                      disabled: _vm.connecting,
-                      clearable: "",
-                      "item-text": "text",
-                      "item-value": "value",
-                      label: "Select appointment/meeting venue type venue type",
-                      "validate-on-blur": "",
-                      "single-line": ""
-                    },
-                    model: {
-                      value: _vm.venueType,
-                      callback: function($$v) {
-                        _vm.venueType = $$v
-                      },
-                      expression: "venueType"
-                    }
-                  }),
-                  _vm._v(" "),
-                  _vm.venueType === 2
-                    ? _c("google-place-input", {
+                  _c(
+                    "v-card-text",
+                    [
+                      _c("v-select", {
+                        attrs: {
+                          items: _vm.venueTypes,
+                          disabled: _vm.connecting,
+                          clearable: "",
+                          "item-text": "text",
+                          "item-value": "value",
+                          label:
+                            "Select appointment/meeting venue type venue type",
+                          "validate-on-blur": "",
+                          "single-line": ""
+                        },
+                        model: {
+                          value: _vm.venueType,
+                          callback: function($$v) {
+                            _vm.venueType = $$v
+                          },
+                          expression: "venueType"
+                        }
+                      }),
+                      _vm._v(" "),
+                      _c("google-place-input", {
+                        directives: [
+                          {
+                            name: "show",
+                            rawName: "v-show",
+                            value: _vm.venueType === 2,
+                            expression: "venueType === 2"
+                          }
+                        ],
                         ref: "locationInput",
                         attrs: {
                           disabled: _vm.connecting,
@@ -47452,11 +47348,17 @@ var render = function() {
                           types: "establishment"
                         },
                         on: { placechanged: _vm.onLocationEntered }
-                      })
-                    : _vm._e(),
-                  _vm._v(" "),
-                  _vm.venueType === 1
-                    ? _c("v-text-field", {
+                      }),
+                      _vm._v(" "),
+                      _c("v-text-field", {
+                        directives: [
+                          {
+                            name: "show",
+                            rawName: "v-show",
+                            value: _vm.venueType === 1,
+                            expression: "venueType === 1"
+                          }
+                        ],
                         attrs: {
                           disabled: _vm.connecting,
                           required: "",
@@ -47473,7 +47375,9 @@ var render = function() {
                           expression: "venue"
                         }
                       })
-                    : _vm._e(),
+                    ],
+                    1
+                  ),
                   _vm._v(" "),
                   _c(
                     "v-card-actions",
