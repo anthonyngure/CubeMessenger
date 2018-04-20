@@ -7,6 +7,8 @@
 	use App\AppointmentInternalParticipant;
 	use App\AppointmentItem;
 	use Auth;
+	use Carbon\Carbon;
+	use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 	use Illuminate\Http\Request;
 	
 	class AppointmentController extends Controller
@@ -28,10 +30,9 @@
 			$date = empty($request->date) ? date("Y-m-d") : $request->date;
 			
 			$appointments = Appointment::whereIn('user_id', $client->users->pluck('id'))
-				->where('start_date', $date)
+				->whereDate('starting_at', Carbon::parse($date)->toDateString())
 				->with('internalParticipants', 'externalParticipants', 'items')
-				->orderBy('start_date')
-				->orderBy('start_time')
+				->orderBy('starting_at')
 				->get();
 			
 			//dd(Appointment::firstOrFail()->internalParticipants()->toSql());
@@ -54,30 +55,33 @@
 				'venue'                => 'required',
 				'internalParticipants' => 'required',
 				'title'                => 'required',
-				'startDate'            => 'required',
+				'startDate'            => 'required|date',
 				'startTime'            => 'required_if:allDay,false',
-				'endDate'              => 'required',
+				'endDate'              => 'required|date',
 				'endTime'              => 'required_if:allDay,false',
 				'allDay'               => 'required',
 			]);
 			
+			/** @var Carbon $startingAt */
+			$startingAt = $request->allDay ? Carbon::parse($request->startDate) : Carbon::parse($request->startDate . ' ' . $request->startTime);
+			/** @var Carbon $endingAt */
+			$endingAt = $request->allDay ? Carbon::parse($request->endDate) : Carbon::parse($request->endDate . ' ' . $request->endTime);
+			
 			$appointment = Appointment::create([
-				'user_id'    => Auth::user()->getKey(),
-				'venue'      => $request->venue,
-				'title'      => $request->title,
-				'start_date' => $request->startDate,
-				'start_time' => $request->startTime,
-				'end_date'   => $request->endDate,
-				'end_time'   => $request->endTime,
-				'all_day'    => $request->allDay,
+				'user_id'     => Auth::user()->getKey(),
+				'venue'       => $request->venue,
+				'title'       => $request->title,
+				'starting_at' => $startingAt->toDateTimeString(),
+				'ending_at'   => $endingAt->toDateTimeString(),
+				'all_day'     => $request->allDay,
 			]);
 			
 			$internalParticipants = $request->internalParticipants;
 			if (!empty($internalParticipants)) {
 				foreach ($internalParticipants as $participant) {
 					AppointmentInternalParticipant::create([
-						'appointment_id'=> $appointment->id,
-						'user_id' => $participant,
+						'appointment_id' => $appointment->id,
+						'user_id'        => $participant,
 					]);
 				}
 			}
@@ -127,5 +131,39 @@
 		public function destroy($id)
 		{
 			//
+		}
+		
+		/**
+		 * @param \Illuminate\Http\Request $request
+		 * @return \Illuminate\Http\Response
+		 * @throws \App\Exceptions\WrappedException
+		 */
+		public function userSuggestions(Request $request)
+		{
+			$client = Auth::user()->getClient();
+			
+			$this->validate($request, [
+				'search' => 'required',
+			]);
+			
+			$query = $request->search . '';
+			//dd($query);
+			
+			//dd(Auth::user()->appointments()->toSql());
+			
+			$suggestions = $client->users()
+				->with(['appointments' => function (BelongsToMany $belongsToMany) {
+					/**
+					 * start_date has to be >= to today so as to return pending appointments
+					 * used for validation when adding an appointment
+					 */
+					$belongsToMany->whereDate('starting_at', '>=', Carbon::now()->toDateString());
+					//->select(['id','start_date','start_time','end_date','end_time']);
+				}])
+				->where('name', 'LIKE', '%' . $query . '%')
+				->where('email', 'LIKE', '%' . $query . '%')
+				->get();
+			
+			return $this->collectionResponse($suggestions);
 		}
 	}

@@ -55,14 +55,16 @@
 			Route::get('auth/user', 'AuthController@user');
 			Route::get('drawerItems', 'UIController@drawerItems');
 			Route::get('balance', 'UIController@balance');
-			Route::get('userSuggestions', 'UIController@userSuggestions');
 			Route::apiResource('users', 'UserController');
 			Route::apiResource('departments', 'DepartmentController');
 			Route::apiResource('deliveries', 'DeliveryController');
 			Route::apiResource('deliveries.items', 'DeliveryItemController');
 			Route::apiResource('subscriptionOptions', 'SubscriptionOptionController')->only(['index']);
 			Route::apiResource('subscriptions', 'SubscriptionController');
+			
+			Route::get('appointments/userSuggestions', 'AppointmentController@userSuggestions');
 			Route::apiResource('appointments', 'AppointmentController');
+			
 			Route::apiResource('shopProducts', 'ShopProductController');
 			Route::apiResource('shopCategories', 'ShopCategoryController');
 			Route::apiResource('serviceRequests', 'ServiceRequestController');

@@ -174,11 +174,11 @@
 		}
 		
 		/**
-		 * @return \Illuminate\Database\Eloquent\Relations\HasMany
+		 * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
 		 */
 		public function appointments()
 		{
-			return $this->hasMany(Appointment::class);
+			return $this->belongsToMany(Appointment::class, 'appointment_internal_participants');
 		}
 		
 		/**
@@ -188,4 +188,5 @@
 		{
 			return $this->hasMany(Delivery::class);
 		}
+		
 	}

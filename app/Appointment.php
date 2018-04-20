@@ -56,7 +56,8 @@
 		];
 		
 		protected $hidden = [
-			'client_id',
+			'user_id',
+			'pivot'
 		];
 		
 		/**

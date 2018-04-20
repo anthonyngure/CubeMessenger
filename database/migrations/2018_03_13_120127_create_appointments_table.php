@@ -16,13 +16,11 @@
 				$table->increments('id');
 				$table->unsignedInteger('user_id', false);
 				$table->foreign('user_id')->references('id')->on('users');
-				$table->date('start_date');
-				$table->time('start_time')->nullable();
-				$table->date('end_date');
-				$table->time('end_time')->nullable();
+				$table->timestamp('starting_at')->nullable();
+				$table->timestamp('ending_at')->nullable();
+				$table->boolean('all_day')->default(false);
 				$table->string('venue');
 				$table->string('title');
-				$table->boolean('all_day')->default(false);
 				$table->timestamps();
 			});
 		}

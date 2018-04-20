@@ -213,32 +213,34 @@
                         <v-flex v-bind="{[`xs${allDay ? 12 : 6}`]: true}">
                             <date-input v-model="startDate"
                                         :disabled="connecting"
-                                        placeholder="Starting date "
-                                        :allowedDates="allowedDates">
+                                        placeholder="Starting date"
+                                        :error-messages="startDateErrors"
+                                        :allowedDates="allowedStartDates">
                             </date-input>
                         </v-flex>
-                        <v-flex xs6 v-if="!allDay" class="pl-5">
+                        <v-flex xs6 v-show="!allDay" class="pl-5">
                             <time-input v-model="startTime"
                                         :disabled="connecting"
                                         placeholder="Starting time"
-                                        :allowedTimes="allowedTimes">
+                                        :allowedTimes="allowedStartTimes">
                             </time-input>
                         </v-flex>
                         <v-flex v-bind="{[`xs${allDay ? 12 : 6}`]: true}">
                             <date-input v-model="endDate"
-                                        :disabled="connecting"
+                                        :disabled="connecting || !startDate"
                                         placeholder="Ending date"
-                                        :allowedDates="allowedDates">
+                                        ref="endDate"
+                                        :allowedDates="allowedEndDates">
                             </date-input>
                         </v-flex>
                         <v-flex xs6 v-if="!allDay" class="pl-5">
                             <time-input v-model="endTime"
                                         :disabled="connecting"
+                                        ref="endTime"
                                         placeholder="Ending time"
-                                        :allowedTimes="allowedTimes">
+                                        :allowedTimes="allowedEndTimes">
                             </time-input>
                         </v-flex>
-
                         <v-flex xs10 offset-xs1>
                             <v-checkbox label="All day" hide-details :disabled="connecting"
                                         v-model="allDay"></v-checkbox>
@@ -247,6 +249,18 @@
                             <connection-manager ref="connectionManager" v-model="connecting"></connection-manager>
                         </v-flex>
                     </v-layout>
+
+                    <v-alert type="error" :value="invalidInternalParticipants.length > 0">
+                        <v-list>
+                            <v-list-tile v-for="participant in invalidInternalParticipants" :key="participant.id">
+                                <v-list-tile-content>
+                                    <v-list-tile-title>{{participant.name}}</v-list-tile-title>
+                                    <v-list-tile-sub-title>has another appointment/meeting on the selected timing</v-list-tile-sub-title>
+                                </v-list-tile-content>
+                            </v-list-tile>
+                        </v-list>
+                    </v-alert>
+
                     <v-card-actions>
                         <v-btn flat @click.native="step = 4">
                             <v-icon left>arrow_back</v-icon>
@@ -254,7 +268,9 @@
                         </v-btn>
                         <v-spacer></v-spacer>
                         <v-btn @click.native="onCancel" color="red" flat>Cancel</v-btn>
-                        <v-btn color="primary" @click.native="submit">Finish</v-btn>
+                        <v-btn color="primary" :disabled="invalidInternalParticipants.length > 0"
+                               @click.native="submit">Finish
+                        </v-btn>
                     </v-card-actions>
                 </v-card>
             </v-stepper-content>
@@ -309,6 +325,7 @@
         placeResultData: null,
         title: null,
         internalParticipants: [],
+        invalidatingAppointments: [],
         search: null,
         loadingUsers: false,
         users: [],
@@ -316,24 +333,26 @@
         itemsToDiscuss: [],
         allDay: false,
         startDate: null,
+        //Hold an array of startDate Errors
+        startDateErrors: [],
         startTime: null,
         endDate: null,
         endTime: null,
-        allowedDates: {
+        allowedStartDates: {
           dates: function (date) {
             //YYYY/MM/DD
-            let givenDate = moment(date, 'YYYY/MM/DD')
+            let givenDate = moment(date)
             return moment().diff(givenDate, 'days') <= 0
             //const [, , day] = date.split('-')
             //return parseInt(day, 10) % 2 === 0
           }
         },
-        allowedTimes: {
+        allowedStartTimes: {
           hours: function (value) {
             return value >= moment().hour() && value <= 22
           },
           minutes: function (value) {
-            return value % 30 === 0
+            return true
           }
         }
       }
@@ -347,9 +366,134 @@
       },
       search (val) {
         val && this.queryUsers(val)
+      },
+      startDate (val) {
+        this.$refs.endDate.onChange(null)
+      },
+      startTime (val) {
+        this.$refs.endTime.onChange(null)
+      },
+      invalidatingAppointments(val){
+        this.$utils.log(val)
       }
     },
     computed: {
+      allowedEndDates () {
+        let that = this
+        return {
+          dates: function (date) {
+            //YYYY/MM/DD
+            return moment(moment(date)).isSameOrAfter(moment(that.startDate, 'YYYY-MM-DD'))
+            //const [, , day] = date.split('-')
+            //return parseInt(day, 10) % 2 === 0
+          }
+        }
+      },
+      allowedEndTimes () {
+        let that = this
+        return {
+          hours: function (value) {
+            return value > moment(that.startTime, 'HH:mm:ss').hour() && value <= 22
+          },
+          minutes: function (value) {
+            return value > moment(that.startTime, 'HH:mm:ss').minute()
+          }
+        }
+      },
+      invalidInternalParticipants () {
+        if (this.startDate && (this.startTime || this.allDay) && this.endDate && (this.endTime || this.allDay)) {
+          //Find invalid selected internal participants based on dates
+          let that = this
+          this.invalidatingAppointments = []
+          return this.internalParticipants.filter(function (participant) {
+            //Check if participant has a meeting in the selected duration
+            //Find all appointments with a startingAt and endingAt within the selection
+            let appointments = participant.appointments.filter(function (appointment) {
+
+              that.$utils.log(appointment)
+
+              let startDateIsInThisAppointment = moment(that.startDate, 'YYYY-MM-DD').isBetween(
+                moment(appointment.startingAt, 'YYYY-MM-DD'),
+                moment(appointment.endingAt, 'YYYY-MM-DD'),
+                null,
+                '[]'
+              )
+
+              let endDateIsInThisAppointment = moment(that.endDate, 'YYYY-MM-DD').isBetween(
+                moment(appointment.startingAt, 'YYYY-MM-DD'),
+                moment(appointment.endingAt, 'YYYY-MM-DD'),
+                null,
+                '[]'
+              )
+
+              if (that.allDay) {
+
+                //Check selected startDate and endDate are within
+                return startDateIsInThisAppointment || endDateIsInThisAppointment
+
+              } else if (startDateIsInThisAppointment || endDateIsInThisAppointment) {
+
+                //If selected startDate or endDate are within this appointment
+                //Check if selected times are within
+
+                let appointmentStartingAtHour = moment(appointment.startingAt).hour()
+                that.$utils.log('appointmentStartingAtHour = ' + appointmentStartingAtHour)
+                let appointmentStartingAtMin = moment(appointment.startingAt).minute()
+                that.$utils.log('appointmentStartingAtMin = ' + appointmentStartingAtMin)
+
+                let appointmentEndingAtHour = moment(appointment.endingAt).hour()
+                that.$utils.log('appointmentEndingAtHour = ' + appointmentEndingAtHour)
+                let appointmentEndingAtMin = moment(appointment.endingAt).minute()
+                that.$utils.log('appointmentEndingAtMin = ' + appointmentEndingAtMin)
+
+                let selectedStartingAtHour = moment(that.startTime, 'HH:mm:ss').hour()
+                that.$utils.log('selectedStartingAtHour = ' + selectedStartingAtHour)
+                let selectedStartingAtMin = moment(that.startTime, 'HH:mm:ss').minute()
+                that.$utils.log('selectedStartingAtMin = ' + selectedStartingAtMin)
+
+                let selectedEndingAtHour = moment(that.endTime, 'HH:mm:ss').hour()
+                that.$utils.log('selectedEndingAtHour = ' + selectedEndingAtHour)
+                let selectedEndingAtMin = moment(that.endTime, 'HH:mm:ss').minute()
+                that.$utils.log('selectedEndingAtMin = ' + selectedEndingAtMin)
+
+                let startTimeIsInThisAppointment = moment().hour(selectedStartingAtHour).minute(selectedStartingAtMin)
+                  .isBetween(
+                    moment().hour(appointmentStartingAtHour).minute(appointmentStartingAtMin),
+                    moment().hour(appointmentEndingAtHour).minute(appointmentEndingAtMin),
+                    null,
+                    '[]'
+                  )
+                let endTimeIsInThisAppointment = moment().hour(selectedEndingAtHour).minute(selectedEndingAtMin)
+                  .isBetween(
+                    moment().hour(appointmentStartingAtHour).minute(appointmentStartingAtMin),
+                    moment().hour(appointmentEndingAtHour).minute(appointmentEndingAtMin),
+                    null,
+                    '[]'
+                  )
+
+                return startTimeIsInThisAppointment || endTimeIsInThisAppointment
+
+              } else {
+                return false
+              }
+            })
+
+            that.invalidatingAppointments = that.invalidatingAppointments.concat({
+              participant: participant,
+              appointments: appointments
+            })
+            //The participant is invalid if has an appointment on the selected startDate
+            return appointments.length > 0
+          })
+        } else {
+          return []
+        }
+      },
+
+      //Check the last step on date and time validation
+      canFinish () {
+        return false
+      },
       maxWidth () {
         return (this.$vuetify.breakpoint.width * 0.50) + 'px'
       },
@@ -398,7 +542,7 @@
     methods: {
       queryUsers (val) {
         this.loadingUsers = true
-        this.axios.get('userSuggestions', {
+        this.axios.get('appointments/userSuggestions', {
           params: {
             search: val,
           }
@@ -493,6 +637,13 @@
           }
         }, appointment)
       }
+    },
+    mounted () {
+      var offset = new Date().getTimezoneOffset()
+      let appointmentStartingAt = moment('2018-04-20 14:00:00')
+      let selectedStartingAt = moment('14:00', 'HH:mm')
+      this.$utils.log('appointmentStartingAt Hour ' + appointmentStartingAt.hour())
+      this.$utils.log('selectedStartingAt Hour ' + selectedStartingAt.hour())
     }
   }
 </script>

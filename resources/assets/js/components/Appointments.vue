@@ -25,7 +25,7 @@
                                     <v-chip label small color="accent" text-color="white">
                                         <v-icon left>access_time</v-icon>
                                         {{props.item.allDay ? 'All day'
-                                        : props.item.startTime+' -'+props.item.endTime}}
+                                        : props.item.startingAt+' -'+props.item.endingAt}}
                                     </v-chip>
                                 </v-list-tile-action>
                                 <v-list-tile-content>
@@ -98,7 +98,6 @@
 
 <script>
 
-  import FullCalendar from 'vue-fullcalendar/src/fullCalendar'
   import Moment from 'moment'
   import AddAppointmentFullDialog from './AddAppointmentFullDialog'
   import Base from './Base.vue'
@@ -114,8 +113,7 @@
     components: {
       AddAppointmentDialog,
       ConnectionManager,
-      AddAppointmentFullDialog,
-      FullCalendar
+      AddAppointmentFullDialog
     },
     name: 'appointments',
     data () {
