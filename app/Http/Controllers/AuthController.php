@@ -32,6 +32,7 @@
 			$user = User::with(['client' => function (BelongsTo $belongsTo) {
 				$belongsTo->with(['users' => function (HasMany $hasMany) {
 					$hasMany->with('role');
+				}, 'departments'          => function (HasMany $hasMany) {
 				}]);
 			}, 'role'])->findOrFail($user->getKey());
 			$token = JWTAuth::fromUser($user);
@@ -77,6 +78,7 @@
 			$user = User::with(['client' => function (BelongsTo $belongsTo) {
 				$belongsTo->with(['users' => function (HasMany $hasMany) {
 					$hasMany->with('role');
+				}, 'departments'          => function (HasMany $hasMany) {
 				}]);
 			}, 'role'])->findOrFail(Auth::user()->getKey());
 			
@@ -88,6 +90,7 @@
 			$user = User::with(['client' => function (BelongsTo $belongsTo) {
 				$belongsTo->with(['users' => function (HasMany $hasMany) {
 					$hasMany->with('role');
+				}, 'departments'          => function (HasMany $hasMany) {
 				}]);
 			}, 'role'])->findOrFail(Auth::user()->getKey());
 			

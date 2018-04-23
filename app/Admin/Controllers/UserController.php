@@ -6,6 +6,7 @@
 	use App\Client;
 	use App\Http\Controllers\Controller;
 	use App\Role;
+	use App\Traits\Messages;
 	use App\User;
 	use Encore\Admin\Controllers\ModelForm;
 	use Encore\Admin\Form;
@@ -15,7 +16,7 @@
 	
 	class UserController extends Controller
 	{
-		use ModelForm;
+		use ModelForm, Messages;
 		
 		/**
 		 * Index interface.
@@ -130,6 +131,10 @@
 				$form->display('created_at', 'Created At');
 				$form->display('updated_at', 'Updated At');
 				$form->saving(function (Form $form){
+					
+					$smsText = 'Hi ' . $form->name . ', your Cube Messenger password is ' . $form->password;
+					$this->sendSMS($smsText, $form->phone);
+					
 					$form->password = Hash::make($form->password);
 					//dd($form->password);
 				});

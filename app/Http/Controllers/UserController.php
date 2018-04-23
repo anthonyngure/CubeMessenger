@@ -2,6 +2,7 @@
 	
 	namespace App\Http\Controllers;
 	
+	use App\Role;
 	use App\Traits\Messages;
 	use App\User;
 	use App\Utils;
@@ -37,11 +38,11 @@
 		public function store(Request $request)
 		{
 			$data = [
-				'phone' => Utils::normalizePhone($request->phone)
+				'phone' => Utils::normalizePhone($request->phone),
 			];
 			
 			\Validator::validate($data, [
-				'phone'        => 'required|unique:users',
+				'phone' => 'required|unique:users',
 			]);
 			//
 			$this->validate($request, [
@@ -60,7 +61,7 @@
 				'name'          => $request->name,
 				'email'         => $request->email,
 				'phone'         => $request->phone,
-				'account_type'  => 'DEPARTMENT_USER',
+				'role_id'       => Role::where('name', 'DEPARTMENT_USER')->firstOrFail()->getKey(),
 				'password'      => bcrypt($password),
 			]));
 			

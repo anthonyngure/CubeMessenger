@@ -89462,7 +89462,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 
-var DEBUG = false;
+var DEBUG = true;
 
 var GOOGLE_MAPS_KEY = 'AIzaSyAS_9BsQpqTP8EVuMZ7rQ9gMCl0wmqhm7k';
 var PRIMARY_COLOR = '#1A75BA';
