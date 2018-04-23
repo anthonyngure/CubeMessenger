@@ -101,8 +101,8 @@
 				$form->email('email')->rules('required|unique:users,email');
 				$form->select('account_type')->options(['POST_PAID' => 'POST_PAID', 'PRE_PAID' => 'PRE_PAID'])
 					->rules('required|in:POST_PAID,PRE_PAID');
-				$form->currency('limit')->symbol('KSH')->rules('required|numeric');
-				$form->image('logo')->removable()->rules('required');
+				$form->currency('limit')->symbol('KSH')->rules('numeric');
+				$form->image('logo')->removable();
 				$form->display('created_at', 'Created At');
 				$form->display('updated_at', 'Updated At');
 			});
