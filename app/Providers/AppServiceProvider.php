@@ -48,7 +48,7 @@
 			
 			Schema::defaultStringLength(191);
 			
-			Config::load();
+			//Config::load();
 		}
 		
 		/**
