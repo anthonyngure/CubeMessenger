@@ -2,6 +2,7 @@
 	
 	namespace App\Exceptions;
 	
+	use Encore\Admin\Reporter\Reporter;
 	use Exception;
 	use Illuminate\Auth\AuthenticationException;
 	use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -35,6 +36,7 @@
 		 */
 		public function report(Exception $exception)
 		{
+			Reporter::report($exception);
 			parent::report($exception);
 		}
 		

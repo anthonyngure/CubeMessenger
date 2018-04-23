@@ -48,6 +48,12 @@ return [
             'root' => storage_path('app'),
         ],
 
+        /*'admin' => [
+	        'driver' => 'local',
+	        'root'   => public_path('admin'),
+	        'url'    => env('APP_URL') . '/admin',
+        ],*/
+
         'public' => [
             'driver' => 'local',
             'root' => storage_path('app/public'),

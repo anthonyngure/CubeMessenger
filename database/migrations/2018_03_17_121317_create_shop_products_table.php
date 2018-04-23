@@ -17,7 +17,7 @@ class CreateShopProductsTable extends Migration
 	        $table->unsignedInteger('shop_category_id', false);
 	        $table->foreign('shop_category_id')->references('id')->on('shop_categories');
 	        $table->string('name');
-	        $table->string('image')->default('shop_products/default.jpg');
+	        $table->string('image')->default('images/shop_product_default.jpg');
 	        $table->string('slug')->nullable()->unique();
 	        $table->double('price', null, 2);
 	        $table->double('old_price', null, 2)->default(0);

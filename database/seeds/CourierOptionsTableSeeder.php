@@ -16,20 +16,20 @@
 			\App\CourierOption::create([
 				'name'        => 'Envelope',
 				'plural_name' => 'Envelopes',
-				'icon'        => 'courier_options/envelope.png',
+				'icon'        => 'images/envelope.png',
 				'description' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
 			]);
 			\App\CourierOption::create([
 				'name'        => 'Box',
 				'plural_name' => 'Boxes',
-				'icon'        => 'courier_options/box.jpg',
+				'icon'        => 'images/box.jpg',
 				'description' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
 			]);
 			
 			\App\CourierOption::create([
 				'name'        => 'Errand',
 				'plural_name' => 'Errands',
-				'icon'        => 'courier_options/errand.gif',
+				'icon'        => 'images/errand.gif',
 				'active'      => false,
 				'description' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
 			]);

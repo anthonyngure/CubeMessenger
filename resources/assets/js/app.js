@@ -111,8 +111,6 @@ Vue.prototype.$actions = {
   rejected: 'rejected',
 }
 
-Vue.prototype.$systemVariables = []
-
 Vue.prototype.$utils = {
   //url: DEBUG ? 'http://localhost:3000' : 'https://cube-messenger.com',
   url: DEBUG ? 'http://localhost:3000' : 'http://35.192.81.247',
@@ -120,7 +118,9 @@ Vue.prototype.$utils = {
   googleGeocodeUrl: 'https://maps.googleapis.com/maps/api/geocode/json',
   googleDirectionsUrl: 'https://maps.googleapis.com/maps/api/directions/json',
   log: function (logData) {
-    console.info(logData)
+    if (DEBUG) {
+      console.info(logData)
+    }
   },
   imageUrl (relativePath) {
     return '/storage/' + relativePath

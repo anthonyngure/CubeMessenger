@@ -2,13 +2,16 @@
 
 namespace App\Admin\Controllers;
 
+use App\ServiceRequestQuote;
+
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
+use Encore\Admin\Facades\Admin;
 use Encore\Admin\Layout\Content;
 use App\Http\Controllers\Controller;
 use Encore\Admin\Controllers\ModelForm;
 
-class ExampleController extends Controller
+class ServiceRequestQuoteController extends Controller
 {
     use ModelForm;
 
@@ -68,7 +71,7 @@ class ExampleController extends Controller
      */
     protected function grid()
     {
-        return Admin::grid(YourModel::class, function (Grid $grid) {
+        return Admin::grid(ServiceRequestQuote::class, function (Grid $grid) {
 
             $grid->id('ID')->sortable();
 
@@ -84,7 +87,7 @@ class ExampleController extends Controller
      */
     protected function form()
     {
-        return Admin::form(YourModel::class, function (Form $form) {
+        return Admin::form(ServiceRequestQuote::class, function (Form $form) {
 
             $form->display('id', 'ID');
 

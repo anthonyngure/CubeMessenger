@@ -16,7 +16,7 @@
 				$table->increments('id');
 				$table->string('name')->unique();
 				$table->string('plural_name')->unique();
-				$table->string('icon')->default('icons/default.png');
+				$table->string('icon');
 				$table->boolean('active')->default(true);
 				$table->mediumText('description')->nullable();
 				$table->timestamps();

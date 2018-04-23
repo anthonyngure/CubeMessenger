@@ -41,7 +41,7 @@
 		/**
 		 * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
 		 */
-		public function category()
+		public function shopCategory()
 		{
 			return $this->belongsTo(ShopCategory::class);
 		}

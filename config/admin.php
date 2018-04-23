@@ -5,12 +5,12 @@
 		/*
 		 * Laravel-admin name.
 		 */
-		'name'          => 'Cube Messenger-admin',
+		'name'          => 'Cube Messenger-Admin',
 		
 		/*
 		 * Logo in admin panel header.
 		 */
-		'logo'          => '<b>Cube Messenger</b> admin',
+		'logo'          => '<b>Cube Messenger</b> Admin',
 		
 		/*
 		 * Mini-logo in admin panel header.
@@ -68,7 +68,7 @@
 		 */
 		'upload'        => [
 			
-			'disk' => 'admin',
+			'disk' => 'public',
 			
 			'directory' => [
 				'image' => 'images',
@@ -168,7 +168,7 @@
 			'media-manager' => [
 				
 				// Select a local disk that you configured in `config/filesystem.php`
-				'disk' => 'local',
+				'disk' => 'public',
 			],
 		],
 	];

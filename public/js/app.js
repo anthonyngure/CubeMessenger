@@ -89561,8 +89561,6 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.prototype.$actions = {
   rejected: 'rejected'
 };
 
-__WEBPACK_IMPORTED_MODULE_0_vue___default.a.prototype.$systemVariables = [];
-
 __WEBPACK_IMPORTED_MODULE_0_vue___default.a.prototype.$utils = {
   //url: DEBUG ? 'http://localhost:3000' : 'https://cube-messenger.com',
   url: DEBUG ? 'http://localhost:3000' : 'http://35.192.81.247',
@@ -89570,7 +89568,9 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.prototype.$utils = {
   googleGeocodeUrl: 'https://maps.googleapis.com/maps/api/geocode/json',
   googleDirectionsUrl: 'https://maps.googleapis.com/maps/api/directions/json',
   log: function log(logData) {
-    console.info(logData);
+    if (DEBUG) {
+      console.info(logData);
+    }
   },
   imageUrl: function imageUrl(relativePath) {
     return '/storage/' + relativePath;

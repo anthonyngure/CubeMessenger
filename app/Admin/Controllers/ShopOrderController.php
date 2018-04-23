@@ -2,13 +2,16 @@
 
 namespace App\Admin\Controllers;
 
+use Admin;
+use App\ShopOrder;
+
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Layout\Content;
 use App\Http\Controllers\Controller;
 use Encore\Admin\Controllers\ModelForm;
 
-class ExampleController extends Controller
+class ShopOrderController extends Controller
 {
     use ModelForm;
 
@@ -21,8 +24,8 @@ class ExampleController extends Controller
     {
         return Admin::content(function (Content $content) {
 
-            $content->header('header');
-            $content->description('description');
+            $content->header('Orders');
+            $content->description('List');
 
             $content->body($this->grid());
         });
@@ -38,7 +41,7 @@ class ExampleController extends Controller
     {
         return Admin::content(function (Content $content) use ($id) {
 
-            $content->header('header');
+            $content->header('Orders');
             $content->description('description');
 
             $content->body($this->form()->edit($id));
@@ -68,12 +71,21 @@ class ExampleController extends Controller
      */
     protected function grid()
     {
-        return Admin::grid(YourModel::class, function (Grid $grid) {
+        return Admin::grid(ShopOrder::class, function (Grid $grid) {
 
             $grid->id('ID')->sortable();
-
+            $grid->column('shopProduct.name', 'Product');
+            $grid->column('shopProduct.price', 'Price/Item');
+            $grid->column('quantity');
+	        /*$grid->column('total', 'Total')->display(function () {
+		        return $this->shopProduct()->firstOrFail()->price * $this->quantity;
+	        });*/
+            $grid->column('status');
             $grid->created_at();
-            $grid->updated_at();
+            $grid->delivered_at();
+            //$grid->updated_at();
+            $grid->disableActions();
+            $grid->disableCreateButton();
         });
     }
 
@@ -84,7 +96,7 @@ class ExampleController extends Controller
      */
     protected function form()
     {
-        return Admin::form(YourModel::class, function (Form $form) {
+        return Admin::form(ShopOrder::class, function (Form $form) {
 
             $form->display('id', 'ID');
 

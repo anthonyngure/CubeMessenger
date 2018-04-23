@@ -20,6 +20,7 @@
 	use App\Subscription;
 	use App\TopUp;
 	use App\User;
+	use Encore\Admin\Config\Config;
 	use Illuminate\Support\ServiceProvider;
 	use Schema;
 	
@@ -46,6 +47,8 @@
 			ServiceRequest::observe(ServiceRequestObserver::class);
 			
 			Schema::defaultStringLength(191);
+			
+			Config::load();
 		}
 		
 		/**

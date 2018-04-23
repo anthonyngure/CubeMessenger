@@ -15,7 +15,7 @@
 			Schema::create('clients', function (Blueprint $table) {
 				$table->increments('id');
 				$table->string('name');
-				$table->string('logo')->default('clients/default.png');
+				$table->string('logo')->default('images/client_default.png');
 				$table->string('email')->unique();
 				$table->string('phone')->unique();
 				$table->enum('account_type', ['POST_PAID', 'PRE_PAID'])->default('PRE_PAID');
