@@ -1,6 +1,5 @@
 <?php
-	
-	use App\Role;
+	use TCG\Voyager\Models\Role;
 	use App\User;
 	use Illuminate\Database\Seeder;
 	
