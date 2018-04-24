@@ -18,6 +18,7 @@ class CreateSmsMessagesTable extends Migration
 	        $table->string('message_id');
 	        $table->string('destination');
 	        $table->timestamps();
+	        $table->softDeletes();
         });
     }
 

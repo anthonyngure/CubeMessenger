@@ -41,6 +41,7 @@
 				$table->double('received_latitude', 8, 5)->nullable();
 				$table->double('received_longitude', 8, 5)->nullable();
 				$table->timestamps();
+				$table->softDeletes();
 			});
 		}
 		

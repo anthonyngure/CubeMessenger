@@ -20,6 +20,7 @@
 				$table->double('diagnosis_cost', 8, 2);
 				$table->double('labour_cost', 8, 2);
 				$table->timestamps();
+				$table->softDeletes();
 			});
 		}
 		

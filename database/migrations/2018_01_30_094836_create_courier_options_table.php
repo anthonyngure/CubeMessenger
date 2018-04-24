@@ -20,6 +20,7 @@
 				$table->boolean('active')->default(true);
 				$table->mediumText('description')->nullable();
 				$table->timestamps();
+				$table->softDeletes();
 			});
 		}
 		

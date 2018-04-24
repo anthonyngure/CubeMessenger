@@ -18,6 +18,7 @@
 				$table->double('value', 8, 2);
 				$table->boolean('public')->default(true);
 				$table->timestamps();
+				$table->softDeletes();
 			});
 		}
 		

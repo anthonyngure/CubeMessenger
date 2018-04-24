@@ -28,7 +28,6 @@
 	class CourierOption extends Model
 	{
 		
-		
 		protected $casts = [
 			'active' => 'boolean',
 		];

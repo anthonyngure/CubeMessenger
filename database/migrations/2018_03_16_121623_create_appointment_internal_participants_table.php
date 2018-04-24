@@ -19,6 +19,7 @@ class CreateAppointmentInternalParticipantsTable extends Migration
 	        $table->unsignedInteger('appointment_id', false);
 	        $table->foreign('appointment_id')->references('id')->on('appointments');
             $table->timestamps();
+	        $table->softDeletes();
         });
     }
 

@@ -33,6 +33,7 @@
 				$table->double('pickup_latitude', 8, 5)->nullable();
 				$table->double('pickup_longitude', 8, 5)->nullable();
 				$table->timestamps();
+				$table->softDeletes();
 			});
 		}
 		

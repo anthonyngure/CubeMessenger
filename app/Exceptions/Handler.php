@@ -36,7 +36,6 @@
 		 */
 		public function report(Exception $exception)
 		{
-			Reporter::report($exception);
 			parent::report($exception);
 		}
 		

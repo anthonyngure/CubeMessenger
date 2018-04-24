@@ -20,6 +20,7 @@
 				$table->unsignedSmallInteger('price')
 					->comment('Current retail price of the item');
 				$table->timestamps();
+				$table->softDeletes();
 			});
 		}
 		

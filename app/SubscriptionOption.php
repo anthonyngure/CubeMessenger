@@ -29,7 +29,6 @@
 	{
 		//
 		
-		
 		/**
 		 * @return \Illuminate\Database\Eloquent\Relations\HasMany
 		 */

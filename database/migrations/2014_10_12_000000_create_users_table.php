@@ -18,14 +18,12 @@
 				$table->foreign('client_id')->references('id')->on('users');
 				$table->unsignedInteger('department_id', false)->nullable();
 				$table->foreign('department_id')->references('id')->on('departments');
-				$table->unsignedInteger('role_id', false);
-				$table->foreign('role_id')->references('id')->on('roles');
 				$table->string('name');
-				$table->string('avatar')->default('images/user_default.png');
 				$table->string('email')->nullable()->unique();
 				$table->string('phone')->nullable()->unique();
 				$table->string('password')->nullable();
 				$table->string('password_recovery_code')->nullable();
+				$table->rememberToken();
 				$table->timestamps();
 				$table->softDeletes();
 			});

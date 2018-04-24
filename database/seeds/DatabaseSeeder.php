@@ -11,7 +11,18 @@
 		 */
 		public function run()
 		{
-			$this->call(RolesTableSeeder::class);
+			//$this->call(RolesTableSeeder::class);
+			
+			$this->call('DataTypesTableSeeder');
+			$this->call('DataRowsTableSeeder');
+			$this->call('MenusTableSeeder');
+			$this->call('MenuItemsTableSeeder');
+			$this->call('RolesTableSeeder');
+			$this->call('PermissionsTableSeeder');
+			$this->call('PermissionRoleTableSeeder');
+			$this->call('SettingsTableSeeder');
+			
+			
 			$this->call(CostVariablesTableSeeder::class);
 			$this->call(ClientsTableSeeder::class);
 			$this->call(TopUpsTableSeeder::class);

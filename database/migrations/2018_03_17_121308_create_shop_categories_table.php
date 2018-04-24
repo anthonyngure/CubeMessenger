@@ -18,6 +18,7 @@
 				$table->unsignedSmallInteger('order')->default(1);
 				$table->string('slug')->nullable()->unique();
 				$table->timestamps();
+				$table->softDeletes();
 			});
 		}
 		

@@ -14,6 +14,18 @@
 		public function run()
 		{
 			
+			$adminRole = Role::where('name', 'admin')->firstOrFail();
+			
+			//Admin
+			User::create([
+				'name'           => 'Administrator',
+				'email'          => 'admin@cube-messenger.com',
+				'phone'          => '254700000000',
+				'password'       => bcrypt('admin2018'),
+				'remember_token' => str_random(60),
+				'role_id'        => $adminRole->getKey(),
+			]);
+			
 			$testClient = \App\Client::where('name', 'Test Client')->firstOrFail();
 			$testDepartment = \App\Department::where('name', 'Test Department')->firstOrFail();
 			
@@ -24,6 +36,7 @@
 				'email'     => 'testadmin@cube-messenger.com',
 				'role_id'   => Role::where('name', 'CLIENT_ADMIN')->firstOrFail()->getKey(),
 				'password'  => bcrypt('testadmin'),
+				'remember_token' => str_random(60),
 			]);
 			
 			//Test Purchasing Head
@@ -33,6 +46,7 @@
 				'email'     => 'testpurchasinghead@cube-messenger.com',
 				'role_id'   => Role::where('name', 'PURCHASING_HEAD')->firstOrFail()->getKey(),
 				'password'  => bcrypt('testpurchasinghead'),
+				'remember_token' => str_random(60),
 			]);
 			
 			//Test Department Head
@@ -43,6 +57,7 @@
 				'email'         => 'testdepartmenthead@cube-messenger.com',
 				'role_id'       => Role::where('name', 'DEPARTMENT_HEAD')->firstOrFail()->getKey(),
 				'password'      => bcrypt('testdepartmenthead'),
+				'remember_token' => str_random(60),
 			]);
 			
 			//Test Department User
@@ -53,6 +68,7 @@
 				'email'         => 'testdepartmentuser@cube-messenger.com',
 				'role_id'       => Role::where('name', 'DEPARTMENT_USER')->firstOrFail()->getKey(),
 				'password'      => bcrypt('testdepartmentuser'),
+				'remember_token' => str_random(60),
 			]);
 			
 			$faker = Faker\Factory::create();
@@ -74,6 +90,7 @@
 				'phone'     => $faker->phoneNumber,
 				'password'  => bcrypt('testrider' . $i),
 				'role_id'   => Role::where('name', 'RIDER')->firstOrFail()->getKey(),
+				'remember_token' => str_random(60),
 			]);
 		}
 	}

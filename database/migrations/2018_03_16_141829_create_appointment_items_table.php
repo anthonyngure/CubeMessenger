@@ -18,6 +18,7 @@ class CreateAppointmentItemsTable extends Migration
 	        $table->foreign('appointment_id')->references('id')->on('appointments');
             $table->text('details');
             $table->timestamps();
+	        $table->softDeletes();
         });
     }
 

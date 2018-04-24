@@ -26,7 +26,6 @@
 	class ServiceRequestItem extends Model
 	{
 		//
-		
 		protected $guarded = ['id', 'created_at', 'updated_at'];
 		
 		protected $hidden = ['service_request_quote_id'];

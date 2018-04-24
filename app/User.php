@@ -27,7 +27,6 @@
  * @property-read \App\Client|null $client
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Delivery[] $deliveries
  * @property-read \Illuminate\Notifications\DatabaseNotificationCollection|\Illuminate\Notifications\DatabaseNotification[] $notifications
- * @property-read \App\Role $role
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\ServiceRequest[] $serviceRequests
  * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereAvatar($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereClientId($value)
@@ -44,9 +43,10 @@
  * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereUpdatedAt($value)
  * @mixin \Eloquent
  */
-	class User extends Authenticatable implements JWTSubject
+	class User extends \TCG\Voyager\Models\User implements JWTSubject
 	{
 		use Notifiable;
+		
 		
 		protected $guarded = ['id', 'created_at', 'updated_at'];
 		
@@ -116,14 +116,6 @@
 			return $this->belongsTo(Department::class);
 		}
 		
-		
-		/**
-		 * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-		 */
-		public function role()
-		{
-			return $this->belongsTo(Role::class);
-		}
 		
 		/**
 		 * @return bool

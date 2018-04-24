@@ -18,6 +18,7 @@ class CreateSubscriptionOptionsTable extends Migration
 	        $table->unsignedSmallInteger('delivery_cost')->comment('Base cost for delivering the item to the client');
 	        $table->string('description')->nullable();
             $table->timestamps();
+	        $table->softDeletes();
         });
     }
 

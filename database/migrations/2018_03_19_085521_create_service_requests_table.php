@@ -37,6 +37,7 @@
 				$table->timestamp('attended_at')->nullable();
 				$table->timestamp('completed_at')->nullable();
 				$table->timestamps();
+				$table->softDeletes();
 			});
 		}
 		

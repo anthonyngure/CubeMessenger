@@ -20,6 +20,7 @@ class CreateServiceRequestItemsTable extends Migration
             $table->double('price', 8, 2);
 	        $table->string('note')->nullable();
             $table->timestamps();
+	        $table->softDeletes();
         });
     }
 

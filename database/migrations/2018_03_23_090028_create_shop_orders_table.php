@@ -27,6 +27,7 @@
 				$table->timestamp('purchasing_head_acted_at')->nullable();
 				$table->timestamp('delivered_at')->nullable();
 				$table->timestamps();
+				$table->softDeletes();
 			});
 		}
 		

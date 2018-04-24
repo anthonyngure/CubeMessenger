@@ -18,6 +18,7 @@ class CreateDepartmentsTable extends Migration
 	        $table->foreign('client_id')->references('id')->on('clients');
 	        $table->string('name');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

@@ -17,6 +17,7 @@
 				$table->enum('type', ['IT', 'REPAIR']);
 				$table->string('description');
 				$table->timestamps();
+				$table->softDeletes();
 			});
 		}
 		

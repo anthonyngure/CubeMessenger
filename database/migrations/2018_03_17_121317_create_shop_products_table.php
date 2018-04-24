@@ -23,6 +23,7 @@ class CreateShopProductsTable extends Migration
 	        $table->double('old_price', null, 2)->default(0);
 	        $table->text('description');
             $table->timestamps();
+	        $table->softDeletes();
         });
     }
 

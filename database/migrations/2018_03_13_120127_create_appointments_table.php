@@ -22,6 +22,7 @@
 				$table->string('venue');
 				$table->string('title');
 				$table->timestamps();
+				$table->softDeletes();
 			});
 		}
 		
