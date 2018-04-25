@@ -2,11 +2,11 @@
 	
 	namespace App\Http\Controllers;
 	
-	use App\Role;
 	use App\Traits\Messages;
 	use App\User;
 	use App\Utils;
 	use Illuminate\Http\Request;
+	use TCG\Voyager\Models\Role;
 	
 	class UserController extends Controller
 	{
@@ -54,6 +54,7 @@
 			$password = str_random(6);
 			
 			$client = $this->getClient();
+			
 			
 			/** @var User $user */
 			$user = $client->users()->save(new User([
