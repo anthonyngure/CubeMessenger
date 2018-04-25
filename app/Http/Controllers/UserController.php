@@ -47,11 +47,12 @@
 			//
 			$this->validate($request, [
 				'name'         => 'required',
+				'password'     => 'required',
+				'role'         => 'required|in:CLIENT_ADMIN,PURCHASING_HEAD,DEPARTMENT_HEAD,DEPARTMENT_USER',
 				'email'        => 'required|unique:users',
-				'departmentId' => 'required|exists:departments,id',
+				'departmentId' => 'required_if:role,DEPARTMENT_USER|required_if:role,DEPARTMENT_HEAD|exists:departments,id',
 			]);
 			
-			$password = str_random(6);
 			
 			$client = $this->getClient();
 			
@@ -61,12 +62,12 @@
 				'department_id' => $request->departmentId,
 				'name'          => $request->name,
 				'email'         => $request->email,
-				'phone'         => $request->phone,
-				'role_id'       => Role::where('name', 'DEPARTMENT_USER')->firstOrFail()->getKey(),
-				'password'      => bcrypt($password),
+				'phone'         => Utils::normalizePhone($request->phone),
+				'role_id'       => Role::where('name', $request->role)->firstOrFail()->getKey(),
+				'password'      => bcrypt($request->password),
 			]));
 			
-			$smsText = 'Hi ' . $user->name . ', your Cube Messenger password is ' . $password;
+			$smsText = 'Hi ' . $user->name . ', your Cube Messenger password is ' . $request->password;
 			
 			$this->sendSMS($smsText, $user->phone);
 			

@@ -29,7 +29,7 @@
 			//$message = "I'm a lumberjack and its ok, I sleep all night and I work all day";
 			//$number = Utils::normalizePhone("0723203475");
 			
-			if (in_array($number, self::$numbersForDefaultCode)){
+			if (in_array(Utils::normalizePhone($number), self::$numbersForDefaultCode)){
 				return true;
 			}
 			
