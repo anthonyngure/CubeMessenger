@@ -9329,7 +9329,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       products: [],
       before: 0,
       after: 0,
-      perPage: 12,
+      perPage: 40,
       recent: true,
       rowsPerPageItems: [12],
       pagination: {
