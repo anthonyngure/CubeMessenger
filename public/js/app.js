@@ -9901,6 +9901,19 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -11387,7 +11400,7 @@ exports = module.exports = __webpack_require__("./node_modules/css-loader/lib/cs
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -54493,6 +54506,39 @@ var render = function() {
                       _c(
                         "v-list-tile",
                         [
+                          _c("v-list-tile-avatar", [
+                            _c("img", {
+                              attrs: {
+                                src: _vm.$utils.imageUrl(
+                                  _vm.$auth.user().client.logo
+                                ),
+                                alt: ""
+                              }
+                            })
+                          ]),
+                          _vm._v(" "),
+                          _c(
+                            "v-list-tile-content",
+                            [
+                              _c("v-list-tile-sub-title", [
+                                _vm._v(_vm._s(_vm.$auth.user().client.name))
+                              ]),
+                              _vm._v(" "),
+                              _c("v-list-tile-sub-title", [
+                                _vm._v(_vm._s(_vm.$auth.user().client.email))
+                              ])
+                            ],
+                            1
+                          )
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c("v-divider", { staticClass: "my-2" }),
+                      _vm._v(" "),
+                      _c(
+                        "v-list-tile",
+                        [
                           _c(
                             "v-list-tile-content",
                             [
@@ -54517,7 +54563,7 @@ var render = function() {
                                 { staticClass: "caption text--accent" },
                                 [
                                   _vm._v(
-                                    "\n                            Description here\n                        "
+                                    "\n                            Actual amount in your account incl. blocked\n                        "
                                   )
                                 ]
                               )
@@ -54555,7 +54601,7 @@ var render = function() {
                                 { staticClass: "caption text--accent" },
                                 [
                                   _vm._v(
-                                    "\n                            Description here\n                        "
+                                    "\n                            Maximum amount you can spend with a zero balance\n                        "
                                   )
                                 ]
                               )
@@ -54595,7 +54641,7 @@ var render = function() {
                                 { staticClass: "caption text--accent-1" },
                                 [
                                   _vm._v(
-                                    "Description here\n                        "
+                                    "\n                            Actual amount spent\n                        "
                                   )
                                 ]
                               )
@@ -54631,7 +54677,11 @@ var render = function() {
                               _c(
                                 "v-list-tile-sub-title",
                                 { staticClass: "caption text--accent" },
-                                [_vm._v("Description here")]
+                                [
+                                  _vm._v(
+                                    "\n                            Amount charged pending service completion\n                        "
+                                  )
+                                ]
                               )
                             ],
                             1
