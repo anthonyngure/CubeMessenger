@@ -59,7 +59,7 @@
             <v-card-actions>
                 <v-spacer></v-spacer>
                 <v-btn color="red" flat @click="$emit('onClose', false)">Cancel</v-btn>
-                <v-btn color="primary" :disabled="connecting || !formIsValid" @click="submit">Add Department</v-btn>
+                <v-btn color="primary" :disabled="connecting || !formIsValid" @click="submit">Add User</v-btn>
             </v-card-actions>
         </v-card>
     </v-dialog>
