@@ -50,7 +50,7 @@
 				'password'     => 'required',
 				'role'         => 'required|in:CLIENT_ADMIN,PURCHASING_HEAD,DEPARTMENT_HEAD,DEPARTMENT_USER',
 				'email'        => 'required|unique:users',
-				'departmentId' => 'required_if:role,DEPARTMENT_USER|required_if:role,DEPARTMENT_HEAD|exists:departments,id',
+				'departmentId' => 'required_if:role,DEPARTMENT_USER|required_if:role,DEPARTMENT_HEAD',
 			]);
 			
 			
