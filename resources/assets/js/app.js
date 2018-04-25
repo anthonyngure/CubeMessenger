@@ -109,6 +109,7 @@ Vue.prototype.$actions = {
   addedAppointment: 'addedAppointment',
   approved: 'approved',
   rejected: 'rejected',
+  signedIn: 'rejected',
 }
 
 Vue.prototype.$utils = {

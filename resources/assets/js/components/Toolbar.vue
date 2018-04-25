@@ -106,9 +106,11 @@
       },
       refreshBalance () {
         this.balance = 0
-        this.axios.get('balance').then(response => {
-          this.balance = response.data.data
-        })
+        if (this.$auth.check()) {
+          this.axios.get('balance').then(response => {
+            this.balance = response.data.data
+          })
+        }
       }
     },
     mounted () {
@@ -121,6 +123,9 @@
         that.refreshBalance()
       })
       EventBus.$on(this.$actions.addedSubscription, function () {
+        that.refreshBalance()
+      })
+      EventBus.$on(this.$actions.signedIn, function () {
         that.refreshBalance()
       })
       this.refreshBalance()

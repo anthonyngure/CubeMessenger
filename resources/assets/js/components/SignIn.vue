@@ -58,6 +58,8 @@
 </style>
 <script type="text/javascript">
 
+    import EventBus from '../event-bus'
+
   export default {
     name: 'Blank',
     data () {
@@ -94,10 +96,9 @@
           },
           rememberMe: true,
           success (response) {
-            this.$utils.log(response.data.data)
-            this.$systemVariables = []
-            this.$systemVariables = this.$systemVariables.concat(response.data.variables)
+            //this.$utils.log(response.data.data)
             this.connecting = false
+            EventBus.$emit(this.$actions.signedIn)
           },
           error (error) {
             this.error = true
