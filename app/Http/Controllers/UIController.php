@@ -2,15 +2,13 @@
 	
 	namespace App\Http\Controllers;
 	
+	use App\Appointment;
 	use App\Delivery;
 	use App\ServiceRequest;
 	use App\ShopOrder;
 	use App\Subscription;
-	use Auth;
 	use Carbon\Carbon;
 	use Illuminate\Database\Eloquent\Builder;
-	use Illuminate\Database\Eloquent\Relations\HasMany;
-	use Illuminate\Http\Request;
 	
 	class UIController extends Controller
 	{
@@ -47,10 +45,13 @@
 				->where('status', '!=', 'REJECTED')
 				->whereType('REPAIR')->count();
 			
+			$appointmentsToday = Appointment::whereIn('user_id', $client->users->pluck('id'))
+				->whereDate('starting_at', Carbon::now()->toDateString())->count();
+			
 			$items = [
 				['icon' => 'dashboard', 'title' => 'Dashboard', 'route' => 'dashboard', 'pendingApprovals' => 0],
 				['icon' => 'schedule', 'title' => 'Subscriptions', 'route' => 'subscriptions', 'pendingApprovals' => $pendingSubscriptions],
-				['icon' => 'date_range', 'title' => 'Appointments', 'route' => 'appointments', 'pendingApprovals' => 0],
+				['icon' => 'date_range', 'title' => 'Appointments', 'route' => 'appointments', 'pendingApprovals' => $appointmentsToday],
 				['icon' => 'shopping_cart', 'title' => 'Shopping', 'route' => 'shopping', 'pendingApprovals' => 0],
 				['icon' => 'shopping_basket', 'title' => 'Orders', 'route' => 'orders', 'pendingApprovals' => $pendingShopOrders],
 				['icon' => 'computer', 'title' => 'IT Services', 'route' => 'it', 'pendingApprovals' => $pendingITServiceRequests],
