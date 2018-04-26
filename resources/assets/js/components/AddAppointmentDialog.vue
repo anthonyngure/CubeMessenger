@@ -154,7 +154,7 @@
                     </v-card-actions>
                 </v-card>
             </v-stepper-content>
-            <v-stepper-step step="4" :complete="step > 4">Meeting Details</v-stepper-step>
+            <v-stepper-step step="4" :complete="step > 4">Title/Topic</v-stepper-step>
             <v-stepper-content step="4">
                 <v-card flat>
                     <v-text-field
@@ -165,36 +165,6 @@
                             required
                             prepend-icon="title">
                     </v-text-field>
-                    <v-slide-y-transition>
-                        <div v-if="title">
-                            <template v-for="(itemToDiscuss, index) in itemsToDiscuss">
-                                <v-layout row wrap>
-                                    <v-flex xs11>
-                                        <v-text-field
-                                                :disabled="connecting"
-                                                placeholder="An item to discuss"
-                                                label="Enter item to discuss"
-                                                v-model="itemToDiscuss.text"
-                                                :error-messages="itemToDiscuss.error"
-                                                prepend-icon="note">
-                                        </v-text-field>
-                                    </v-flex>
-                                    <v-flex xs1>
-                                        <v-btn icon :disabled="connecting"
-                                               @click.native="removeItemToDiscuss(itemToDiscuss)">
-                                            <v-icon>close</v-icon>
-                                        </v-btn>
-                                    </v-flex>
-                                </v-layout>
-                            </template>
-
-                            <v-btn block flat color="primary" @click.native="addItemToDiscuss"
-                                   :disabled="connecting">
-                                <v-icon left dark>add</v-icon>
-                                Add item to discuss
-                            </v-btn>
-                        </div>
-                    </v-slide-y-transition>
                     <v-card-actions>
                         <v-btn flat @click.native="step = 3">
                             <v-icon left>arrow_back</v-icon>
@@ -202,14 +172,56 @@
                         </v-btn>
                         <v-spacer></v-spacer>
                         <v-btn @click.native="onCancel" color="red" flat>Cancel</v-btn>
-                        <v-btn color="primary" :disabled="!title || connecting || !itemsToDiscussValidate"
+                        <v-btn color="primary" :disabled="!title || connecting"
                                @click.native="step = 5">Continue
                         </v-btn>
                     </v-card-actions>
                 </v-card>
             </v-stepper-content>
-            <v-stepper-step step="5">Meeting Time</v-stepper-step>
+            <v-stepper-step step="5">Issues/Items/Agenda</v-stepper-step>
             <v-stepper-content step="5">
+                <v-card flat>
+                    <template v-for="(itemToDiscuss, index) in itemsToDiscuss">
+                        <v-layout row wrap>
+                            <v-flex xs11>
+                                <v-text-field
+                                        :disabled="connecting"
+                                        placeholder="An item to discuss"
+                                        label="Enter item to discuss"
+                                        v-model="itemToDiscuss.text"
+                                        :error-messages="itemToDiscuss.error"
+                                        prepend-icon="note">
+                                </v-text-field>
+                            </v-flex>
+                            <v-flex xs1>
+                                <v-btn icon :disabled="connecting"
+                                       @click.native="removeItemToDiscuss(itemToDiscuss)">
+                                    <v-icon>close</v-icon>
+                                </v-btn>
+                            </v-flex>
+                        </v-layout>
+                    </template>
+                    <v-btn block flat color="primary" @click.native="addItemToDiscuss"
+                           :disabled="connecting">
+                        <v-icon left dark>add</v-icon>
+                        Add item to discuss
+                    </v-btn>
+
+                    <v-card-actions>
+                        <v-btn flat @click.native="step = 4">
+                            <v-icon left>arrow_back</v-icon>
+                            Back
+                        </v-btn>
+                        <v-spacer></v-spacer>
+                        <v-btn @click.native="onCancel" color="red" flat>Cancel</v-btn>
+                        <v-btn color="primary" :disabled="connecting || !itemsToDiscussValidate"
+                               @click.native="step = 6">Continue
+                        </v-btn>
+                    </v-card-actions>
+                </v-card>
+            </v-stepper-content>
+            <v-stepper-step step="6">Meeting Time</v-stepper-step>
+            <v-stepper-content step="6">
                 <v-card flat>
                     <v-layout row wrap>
                         <v-flex v-bind="{[`xs${allDay ? 12 : 6}`]: true}">
@@ -257,7 +269,8 @@
                             <v-list-tile v-for="participant in invalidInternalParticipants" :key="participant.id">
                                 <v-list-tile-content>
                                     <v-list-tile-title>{{participant.name}}</v-list-tile-title>
-                                    <v-list-tile-sub-title>has another appointment/meeting on the selected timing</v-list-tile-sub-title>
+                                    <v-list-tile-sub-title>has another appointment/meeting on the selected timing
+                                    </v-list-tile-sub-title>
                                 </v-list-tile-content>
                             </v-list-tile>
                         </v-list>
@@ -375,7 +388,7 @@
       startTime (val) {
         this.$refs.endTime.onChange(null)
       },
-      invalidatingAppointments(val){
+      invalidatingAppointments (val) {
         this.$utils.log(val)
       }
     },

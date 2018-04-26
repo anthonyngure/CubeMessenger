@@ -3766,6 +3766,19 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -10512,7 +10525,7 @@ exports = module.exports = __webpack_require__("./node_modules/css-loader/lib/cs
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -47367,7 +47380,7 @@ var render = function() {
           _c(
             "v-stepper-step",
             { attrs: { step: "4", complete: _vm.step > 4 } },
-            [_vm._v("Meeting Details")]
+            [_vm._v("Title/Topic")]
           ),
           _vm._v(" "),
           _c(
@@ -47395,113 +47408,6 @@ var render = function() {
                       expression: "title"
                     }
                   }),
-                  _vm._v(" "),
-                  _c("v-slide-y-transition", [
-                    _vm.title
-                      ? _c(
-                          "div",
-                          [
-                            _vm._l(_vm.itemsToDiscuss, function(
-                              itemToDiscuss,
-                              index
-                            ) {
-                              return [
-                                _c(
-                                  "v-layout",
-                                  { attrs: { row: "", wrap: "" } },
-                                  [
-                                    _c(
-                                      "v-flex",
-                                      { attrs: { xs11: "" } },
-                                      [
-                                        _c("v-text-field", {
-                                          attrs: {
-                                            disabled: _vm.connecting,
-                                            placeholder: "An item to discuss",
-                                            label: "Enter item to discuss",
-                                            "error-messages":
-                                              itemToDiscuss.error,
-                                            "prepend-icon": "note"
-                                          },
-                                          model: {
-                                            value: itemToDiscuss.text,
-                                            callback: function($$v) {
-                                              _vm.$set(
-                                                itemToDiscuss,
-                                                "text",
-                                                $$v
-                                              )
-                                            },
-                                            expression: "itemToDiscuss.text"
-                                          }
-                                        })
-                                      ],
-                                      1
-                                    ),
-                                    _vm._v(" "),
-                                    _c(
-                                      "v-flex",
-                                      { attrs: { xs1: "" } },
-                                      [
-                                        _c(
-                                          "v-btn",
-                                          {
-                                            attrs: {
-                                              icon: "",
-                                              disabled: _vm.connecting
-                                            },
-                                            nativeOn: {
-                                              click: function($event) {
-                                                _vm.removeItemToDiscuss(
-                                                  itemToDiscuss
-                                                )
-                                              }
-                                            }
-                                          },
-                                          [_c("v-icon", [_vm._v("close")])],
-                                          1
-                                        )
-                                      ],
-                                      1
-                                    )
-                                  ],
-                                  1
-                                )
-                              ]
-                            }),
-                            _vm._v(" "),
-                            _c(
-                              "v-btn",
-                              {
-                                attrs: {
-                                  block: "",
-                                  flat: "",
-                                  color: "primary",
-                                  disabled: _vm.connecting
-                                },
-                                nativeOn: {
-                                  click: function($event) {
-                                    return _vm.addItemToDiscuss($event)
-                                  }
-                                }
-                              },
-                              [
-                                _c(
-                                  "v-icon",
-                                  { attrs: { left: "", dark: "" } },
-                                  [_vm._v("add")]
-                                ),
-                                _vm._v(
-                                  "\n                            Add item to discuss\n                        "
-                                )
-                              ],
-                              1
-                            )
-                          ],
-                          2
-                        )
-                      : _vm._e()
-                  ]),
                   _vm._v(" "),
                   _c(
                     "v-card-actions",
@@ -47547,10 +47453,7 @@ var render = function() {
                         {
                           attrs: {
                             color: "primary",
-                            disabled:
-                              !_vm.title ||
-                              _vm.connecting ||
-                              !_vm.itemsToDiscussValidate
+                            disabled: !_vm.title || _vm.connecting
                           },
                           nativeOn: {
                             click: function($event) {
@@ -47571,12 +47474,171 @@ var render = function() {
           ),
           _vm._v(" "),
           _c("v-stepper-step", { attrs: { step: "5" } }, [
-            _vm._v("Meeting Time")
+            _vm._v("Issues/Items/Agenda")
           ]),
           _vm._v(" "),
           _c(
             "v-stepper-content",
             { attrs: { step: "5" } },
+            [
+              _c(
+                "v-card",
+                { attrs: { flat: "" } },
+                [
+                  _vm._l(_vm.itemsToDiscuss, function(itemToDiscuss, index) {
+                    return [
+                      _c(
+                        "v-layout",
+                        { attrs: { row: "", wrap: "" } },
+                        [
+                          _c(
+                            "v-flex",
+                            { attrs: { xs11: "" } },
+                            [
+                              _c("v-text-field", {
+                                attrs: {
+                                  disabled: _vm.connecting,
+                                  placeholder: "An item to discuss",
+                                  label: "Enter item to discuss",
+                                  "error-messages": itemToDiscuss.error,
+                                  "prepend-icon": "note"
+                                },
+                                model: {
+                                  value: itemToDiscuss.text,
+                                  callback: function($$v) {
+                                    _vm.$set(itemToDiscuss, "text", $$v)
+                                  },
+                                  expression: "itemToDiscuss.text"
+                                }
+                              })
+                            ],
+                            1
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "v-flex",
+                            { attrs: { xs1: "" } },
+                            [
+                              _c(
+                                "v-btn",
+                                {
+                                  attrs: { icon: "", disabled: _vm.connecting },
+                                  nativeOn: {
+                                    click: function($event) {
+                                      _vm.removeItemToDiscuss(itemToDiscuss)
+                                    }
+                                  }
+                                },
+                                [_c("v-icon", [_vm._v("close")])],
+                                1
+                              )
+                            ],
+                            1
+                          )
+                        ],
+                        1
+                      )
+                    ]
+                  }),
+                  _vm._v(" "),
+                  _c(
+                    "v-btn",
+                    {
+                      attrs: {
+                        block: "",
+                        flat: "",
+                        color: "primary",
+                        disabled: _vm.connecting
+                      },
+                      nativeOn: {
+                        click: function($event) {
+                          return _vm.addItemToDiscuss($event)
+                        }
+                      }
+                    },
+                    [
+                      _c("v-icon", { attrs: { left: "", dark: "" } }, [
+                        _vm._v("add")
+                      ]),
+                      _vm._v(
+                        "\n                    Add item to discuss\n                "
+                      )
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "v-card-actions",
+                    [
+                      _c(
+                        "v-btn",
+                        {
+                          attrs: { flat: "" },
+                          nativeOn: {
+                            click: function($event) {
+                              _vm.step = 4
+                            }
+                          }
+                        },
+                        [
+                          _c("v-icon", { attrs: { left: "" } }, [
+                            _vm._v("arrow_back")
+                          ]),
+                          _vm._v(
+                            "\n                        Back\n                    "
+                          )
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c("v-spacer"),
+                      _vm._v(" "),
+                      _c(
+                        "v-btn",
+                        {
+                          attrs: { color: "red", flat: "" },
+                          nativeOn: {
+                            click: function($event) {
+                              return _vm.onCancel($event)
+                            }
+                          }
+                        },
+                        [_vm._v("Cancel")]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "v-btn",
+                        {
+                          attrs: {
+                            color: "primary",
+                            disabled:
+                              _vm.connecting || !_vm.itemsToDiscussValidate
+                          },
+                          nativeOn: {
+                            click: function($event) {
+                              _vm.step = 6
+                            }
+                          }
+                        },
+                        [_vm._v("Continue\n                    ")]
+                      )
+                    ],
+                    1
+                  )
+                ],
+                2
+              )
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c("v-stepper-step", { attrs: { step: "6" } }, [
+            _vm._v("Meeting Time")
+          ]),
+          _vm._v(" "),
+          _c(
+            "v-stepper-content",
+            { attrs: { step: "6" } },
             [
               _c(
                 "v-card",
@@ -47774,7 +47836,7 @@ var render = function() {
                                   _vm._v(" "),
                                   _c("v-list-tile-sub-title", [
                                     _vm._v(
-                                      "has another appointment/meeting on the selected timing"
+                                      "has another appointment/meeting on the selected timing\n                                "
                                     )
                                   ])
                                 ],
