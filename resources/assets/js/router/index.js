@@ -9,6 +9,7 @@ import ItServices from '../components/ItServices'
 import RepairServices from '../components/RepairServices'
 import Orders from '../components/Orders'
 import Users from '../components/Users'
+import Settings from '../components/Settings'
 import Departments from '../components/Departments'
 import Vue from 'vue'
 import Router from 'vue-router'
@@ -81,7 +82,7 @@ export default new Router({
       meta: {auth: true},
       path: '/settings',
       name: 'settings',
-      component: ComingSoon
+      component: Settings
     }, {
       meta: {auth: true},
       path: '/repairs',

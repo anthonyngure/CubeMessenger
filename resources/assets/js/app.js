@@ -5,6 +5,10 @@
 import Vue from 'vue'
 import VueAxios from 'vue-axios'
 import axios from 'axios'
+import {loadProgressBar} from 'axios-progress-bar'
+import Notifications from 'vue-notification'
+Vue.use(Notifications)
+import 'axios-progress-bar/dist/nprogress.css'
 import App from './App.vue'
 import router from './router'
 import Vuetify from 'vuetify'
@@ -19,6 +23,7 @@ const ACCENT_COLOR = '#FFC908'
 
 
 Vue.router = router
+
 
 Vue.use(VueAxios, axios)
 //Vue.axios.defaults.baseURL = DEBUG ? 'http://localhost:3000/api/v1' : 'https://cube-messenger.com/api/v1'
@@ -109,7 +114,7 @@ Vue.prototype.$actions = {
   addedAppointment: 'addedAppointment',
   approved: 'approved',
   rejected: 'rejected',
-  signedIn: 'rejected',
+  signedIn: 'rejected'
 }
 
 Vue.prototype.$utils = {
@@ -133,9 +138,9 @@ Vue.prototype.$utils = {
     let opts = {format: '%s%v', symbol: 'KES '}
     return formatCurrency(estimatedCost, opts)
   },
-
+  
   primaryColor: PRIMARY_COLOR,
-  accentColor: ACCENT_COLOR,
+  accentColor: ACCENT_COLOR
 }
 
 /* eslint-disable no-new */
@@ -152,5 +157,8 @@ new Vue({
     return {
       test: 'This is a test in the app'
     }
+  },
+  mounted () {
+    loadProgressBar()
   }
 })

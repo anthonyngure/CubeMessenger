@@ -155,6 +155,25 @@
                          @onClose="onCloseAddingDelivery" >
     </add-delivery-dialog >
     
+    <!--<v-dialog
+            v-model="addingDelivery"
+            fullscreen
+            transition="dialog-bottom-transition"
+            :overlay="false"
+            lazy>
+        <delivery-form @onClose="onCloseAddingDelivery">
+        </delivery-form>
+    </v-dialog>-->
+    <v-dialog
+      v-model="trackingItem"
+      fullscreen
+      transition="dialog-bottom-transition"
+      :overlay="false"
+      scrollable >
+      <tracking-dialog-content @onClose="trackingItem = null"
+                               :item="trackingItem" >
+      </tracking-dialog-content >
+    </v-dialog >
     <delivery-item-q-r-dialog :item="printingItem"
                               @onClose="printingItem = null" ></delivery-item-q-r-dialog >
     
@@ -175,9 +194,12 @@
 </template >
 
 <script >
+import PickPackMap from './PickPackMap'
 import Base from './Base.vue'
 import EventBus from '../event-bus'
+import DeliveryForm from './DeliveryForm'
 import moment from 'moment'
+import TrackingDialogContent from './TrackingDialogContent'
 import DeliveryItemQRDialog from './DeliveryItemQRDialog'
 import ConnectionManager from './ConnectionManager'
 import AddDeliveryDialog from './AddDeliveryDialog'
@@ -188,6 +210,9 @@ export default {
     AddDeliveryDialog,
     ConnectionManager,
     DeliveryItemQRDialog,
+    TrackingDialogContent,
+    DeliveryForm,
+    PickPackMap
   },
   name: 'courier',
   data () {
@@ -256,6 +281,11 @@ export default {
       this.addingDelivery = false
       if (refresh) {
         this.refresh()
+        this.$notify({
+          group: 'all',
+          title: 'Delivery added',
+          text: 'Your delivery has been added successfully!'
+        })
       }
     },
     refresh () {

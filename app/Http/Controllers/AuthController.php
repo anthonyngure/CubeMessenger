@@ -31,10 +31,10 @@
 		{
 			$user = User::with(['client' => function (BelongsTo $belongsTo) {
 				$belongsTo->with(['users' => function (HasMany $hasMany) {
-					$hasMany->with('role');
+					$hasMany->with(['role', 'department']);
 				}, 'departments'          => function (HasMany $hasMany) {
 				}]);
-			}, 'role'])->findOrFail($user->getKey());
+			}, 'role','department'])->findOrFail($user->getKey());
 			$token = JWTAuth::fromUser($user);
 			
 			$user->token = $token;
@@ -77,10 +77,10 @@
 		{
 			$user = User::with(['client' => function (BelongsTo $belongsTo) {
 				$belongsTo->with(['users' => function (HasMany $hasMany) {
-					$hasMany->with('role');
+					$hasMany->with(['role', 'department']);
 				}, 'departments'          => function (HasMany $hasMany) {
 				}]);
-			}, 'role'])->findOrFail(Auth::user()->getKey());
+			}, 'role','department'])->findOrFail(Auth::user()->getKey());
 			
 			return $this->itemResponse($user);
 		}

@@ -71,7 +71,9 @@
     methods: {
       showItem (item) {
         //this.$utils.log(this.isClientAdmin())
-        if (item.route === 'dashboard' || item.route === 'subscriptions') {
+        if (item.route === 'dashboard'
+          || item.route === 'subscriptions'
+          || item.route === 'settings') {
           return true
         } else if (item.route === 'users' || item.route === 'departments') {
           return this.isClientAdmin()

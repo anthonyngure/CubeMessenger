@@ -30,6 +30,7 @@
                             </v-flex>
                         </v-layout>
                         <router-view v-else></router-view>
+                        <notifications group="all" />
                     </v-container>
                 </v-content>
                 <v-footer app color="primary" dark :fixed="false">
