@@ -162,7 +162,7 @@ export default {
   computed: {
     quantityHint: function () {
       if (this.courierOption) {
-        return 'Number of ' + this.courierOption.name + 's'
+        return 'Number of ' + this.courierOption.pluralName
       } else {
         return 'Number of items'
       }

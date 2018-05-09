@@ -64,7 +64,7 @@
           {icon: 'local_shipping', title: 'Courier', route: 'courier', pendingApprovals: 0},
           {icon: 'group', title: 'Users', route: 'users', pendingApprovals: 0},
           {icon: 'group_work', title: 'Departments', route: 'departments', pendingApprovals: 0},
-          {icon: 'settings', title: 'Settings', route: 'settings', pendingApprovals: 0}
+          {icon: 'person', title: 'My Profile', route: 'profile', pendingApprovals: 0}
         ]
       }
     },

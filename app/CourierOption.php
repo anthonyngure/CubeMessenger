@@ -24,6 +24,8 @@
  * @method static \Illuminate\Database\Eloquent\Builder|\App\CourierOption wherePluralName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\CourierOption whereUpdatedAt($value)
  * @mixin \Eloquent
+ * @property string|null $deleted_at
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\CourierOption whereDeletedAt($value)
  */
 	class CourierOption extends Model
 	{

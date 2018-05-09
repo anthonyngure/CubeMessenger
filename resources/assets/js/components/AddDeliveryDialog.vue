@@ -61,8 +61,9 @@
                      color="red" >Cancel
               </v-btn >
               <v-btn color="primary"
-                     :disabled="!originPosition"
-                     @click.native="step = 2" >
+                     :loading="connecting && !courierOptions.length"
+                     :disabled="!originPosition || connecting"
+                     @click.native="goStepTwo" >
                 Continue
               </v-btn >
             </v-card-actions >
@@ -162,6 +163,7 @@
                         wrap >
                 <v-flex xs8
                         offset-xs2 >
+                  <v-subheader >Optional scheduling</v-subheader >
                   <date-input v-model="scheduleDate"
                               :disabled="connecting"
                               placeholder="Pick up date"
@@ -343,18 +345,13 @@ export default {
           timeCost = this.costVariables.NON_URGENT_COST_PER_MIN * (this.itemWithLongestDistance.duration / 60)
           baseCost = this.costVariables.NON_URGENT_BASE_COST
         }
-  
-        this.$utils.log("distanceCost: "+distanceCost)
-        this.$utils.log("timeCost: "+timeCost)
-        this.$utils.log("baseCost: "+baseCost)
-        let totalCost = baseCost + timeCost + distanceCost
-        this.$utils.log("Total cost: "+totalCost)
-        let profitMargin = 0.16 * totalCost
-        this.$utils.log("profitMargin: "+profitMargin)
-        let valueAddedTax = 0.16 * (totalCost + profitMargin)
-        this.$utils.log("valueAddedTax: "+valueAddedTax)
         
-        return totalCost + profitMargin + valueAddedTax
+        let totalCost = baseCost + timeCost + distanceCost
+        let totalInclusiveProfitMargin = 1.6 * totalCost
+        let valueAddedTax = 0.16 * totalInclusiveProfitMargin
+        this.$utils.log('valueAddedTax: ' + valueAddedTax)
+        
+        return totalInclusiveProfitMargin + valueAddedTax
       }
       
       return 0
@@ -456,24 +453,32 @@ export default {
         originLongitude: this.originPosition.lng,
         scheduleDate: this.scheduleDate,
         scheduleTime: this.scheduleTime,
-        estimatedCost: this.estimatedCost,
+        estimatedCost: Math.ceil(this.estimatedCost),
         estimatedMaxDistance: this.itemWithLongestDistance.distance,
         estimatedMaxDuration: this.itemWithLongestDistance.duration,
         items: deliveryItems
       })
+    },
+    goStepTwo () {
+      if (!this.courierOptions.length) {
+        let that = this
+        //Load courier options
+        this.$refs.connectionManager.get('/courierOptions', {
+          onSuccess (response) {
+            that.$utils.log(response.data.data)
+            that.$utils.log(response.data.variables)
+            that.costVariables = response.data.costVariables
+            that.courierOptions = that.courierOptions.concat(response.data.data)
+            that.step = 2
+          }
+        }, {withCostVariables: true})
+      } else {
+        this.step = 2
+      }
     }
   },
   mounted () {
-    let that = this
-    //Load courier options
-    this.$refs.connectionManager.get('/courierOptions', {
-      onSuccess (response) {
-        that.$utils.log(response.data.data)
-        that.$utils.log(response.data.variables)
-        that.costVariables = response.data.costVariables
-        that.courierOptions = that.courierOptions.concat(response.data.data)
-      }
-    }, {withCostVariables: true})
+  
   }
   
 }

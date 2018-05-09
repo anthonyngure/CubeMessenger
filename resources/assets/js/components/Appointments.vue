@@ -21,7 +21,7 @@
                         </span>
                     <v-flex slot="item"
                             slot-scope="props"
-                            md6>
+                            md8 offset-md2>
                         <v-card :style="'height: '+cardHeight">
                             <div :style="'max-height: '+cardHeight" class="scroll-y pa-3">
                                 <h2>{{ props.item.title }}</h2>
@@ -72,64 +72,6 @@
                     </v-flex>
                 </v-data-iterator>
             </v-container>
-            <v-card>
-                <!--<v-data-iterator
-                        content-tag="v-list"
-                        :items="appointments"
-                        :rows-per-page-items="rowsPerPageItems"
-                        :pagination.sync="pagination">
-                        <span slot="no-data" class="pa-5">
-                            <p>No appointments or meetings found for {{date}}</p>
-                        </span>
-                    <template slot="item" slot-scope="props">
-                        <v-list-group no-action :key="props.item.id" v-model="props.item.active">
-                            <v-list-tile slot="activator" avatar>
-                                <v-list-tile-action>
-                                    <v-chip label small color="accent" text-color="white">
-                                        <v-icon left>access_time</v-icon>
-                                        {{props.item.allDay ? 'All day'
-                                        : props.item.startingAt+' -'+props.item.endingAt}}
-                                    </v-chip>
-                                </v-list-tile-action>
-                                <v-list-tile-content>
-                                    <v-list-tile-title>
-                                        <span class="caption">{{ props.item.title }}</span>
-                                    </v-list-tile-title>
-                                    <v-list-tile-sub-title>
-                                        {{ props.item.venue }} -
-                                        <strong>
-                                            {{ props.item.internalParticipants.length }} Internal Participants
-                                        </strong>
-                                        ,
-                                        <strong>
-                                            {{ props.item.externalParticipants.length }} External Participants
-                                        </strong>
-                                    </v-list-tile-sub-title>
-                                </v-list-tile-content>
-                            </v-list-tile>
-
-                            <v-list-tile v-for="participant in props.item.internalParticipants" :key="participant.id">
-                                <v-list-tile-action>
-                                    <v-icon color="primary">person</v-icon>
-                                </v-list-tile-action>
-                                <v-list-tile-content>
-                                    <v-list-tile-title>{{ participant.email }}</v-list-tile-title>
-                                    <v-list-tile-sub-title>{{participant.phone}}</v-list-tile-sub-title>
-                                </v-list-tile-content>
-                                <v-list-tile-action class="hidden-lg-and-down">
-                                    <v-btn icon @click.native="">
-                                        <v-icon color="red">close</v-icon>
-                                    </v-btn>
-                                </v-list-tile-action>
-                            </v-list-tile>
-
-                        </v-list-group>
-                        <v-divider :key="'div_'+props.item.id"></v-divider>
-                    </template>
-
-                </v-data-iterator>-->
-            </v-card>
-
         </v-flex>
 
         <add-appointment-dialog :show="addingAppointment"
@@ -137,31 +79,31 @@
         </add-appointment-dialog>
 
         <v-fab-transition>
-            <v-btn class="ma-5"
-                   color="accent"
-                   fab
-                   dark
-                   fixed
-                   bottom
-                   @click.native="addingAppointment = true"
-                   right>
-                <v-icon>add</v-icon>
-            </v-btn>
+          <v-btn style="margin-bottom: 100px"
+                 color="accent"
+                 fab
+                 dark
+                 fixed
+                 bottom
+                 @click.native="addingAppointment = true"
+                 right >
+            <v-icon >add</v-icon >
+          </v-btn >
         </v-fab-transition>
 
     </v-layout>
 </template>
 
-<script>
+<script >
 
-  import Moment from 'moment'
-  import Base from './Base.vue'
+import Moment from 'moment'
+import Base from './Base.vue'
 
-  import {extendMoment} from 'moment-range'
-  import ConnectionManager from './ConnectionManager'
-  import AddAppointmentDialog from './AddAppointmentDialog'
+import {extendMoment} from 'moment-range'
+import ConnectionManager from './ConnectionManager'
+import AddAppointmentDialog from './AddAppointmentDialog'
 
-  const moment = extendMoment(Moment)
+const moment = extendMoment(Moment)
 
   export default {
     extends: Base,
@@ -173,9 +115,9 @@
     data () {
       return {
         date: null,
-        rowsPerPageItems: [5, 10, 15],
+        rowsPerPageItems: [1],
         pagination: {
-          rowsPerPage: 5
+          rowsPerPage: 1
         },
         addingAppointment: false,
         appointments: [],

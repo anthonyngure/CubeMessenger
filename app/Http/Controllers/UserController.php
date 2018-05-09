@@ -2,9 +2,14 @@
 	
 	namespace App\Http\Controllers;
 	
+	use App\Appointment;
+	use App\Exceptions\WrappedException;
 	use App\Traits\Messages;
 	use App\User;
 	use App\Utils;
+	use Auth;
+	use Hash;
+	use Illuminate\Database\Eloquent\Builder;
 	use Illuminate\Http\Request;
 	use TCG\Voyager\Models\Role;
 	
@@ -20,7 +25,7 @@
 		 */
 		public function index()
 		{
-			$client = $this->getClient();
+			$client = Auth::user()->getClient();
 			$users = $client->users()->get();
 			
 			return $this->collectionResponse($users);
@@ -54,7 +59,7 @@
 			]);
 			
 			
-			$client = $this->getClient();
+			$client = Auth::user()->getClient();
 			
 			
 			/** @var User $user */
@@ -109,5 +114,52 @@
 		public function destroy($id)
 		{
 			//
+		}
+		
+		/**
+		 * @throws \App\Exceptions\WrappedException
+		 */
+		public function appointments()
+		{
+			$client = Auth::user()->getClient();
+			$appointments = Appointment::whereIn('user_id', $client->users->pluck('id'))
+				->whereHas('internalParticipants', function (Builder $builder) {
+					$builder->where('user_id', Auth::user()->getKey());
+				})
+				->whereDate('starting_at', '>=', now()->toDateString())
+				->with('items')
+				->orderBy('starting_at')
+				->get();
+			
+			return $this->collectionResponse($appointments);
+		}
+		
+		/**
+		 * @param \Illuminate\Http\Request $request
+		 * @throws \App\Exceptions\WrappedException
+		 */
+		public function changePassword(Request $request)
+		{
+			$this->validate($request, [
+				'currentPassword' => 'required',
+				'newPassword'     => 'required',
+				'confirmPassword' => 'required',
+			]);
+			
+			/** @var User $user */
+			$user = Auth::user();
+			
+			if (!Hash::check($request->currentPassword, $user->password)) {
+				throw new WrappedException("You entered a wrong current password");
+			}
+			
+			if ($request->newPassword != $request->confirmPassword) {
+				throw new WrappedException("Your new password and password confirmation don't match!");
+			}
+			
+			$user->password = Hash::make($request->newPassword);
+			$user->save();
+			
+			return $this->arrayResponse([]);
 		}
 	}

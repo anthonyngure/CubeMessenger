@@ -78,9 +78,19 @@
 		public function checkBalance($amount)
 		{
 			$client = Auth::user()->getClient();
+			
+			//In the case of post paid accounts, balance could be -ve
 			$balance = $client->getBalance();
-			if ($balance < $amount) {
-				throw new WrappedException("Insufficient balance");
+			if ($client->isPostPaid()) {
+				//Since balance can be negative add the limit to the available balance
+				if (($balance + $client->limit) < $amount) {
+					$message = "You have insufficient balance and spending limit!";
+					throw new WrappedException($message);
+				}
+			} else if ($balance < $amount) {
+				if ($balance < $amount) {
+					throw new WrappedException("You have insufficient balance!");
+				}
 			}
 		}
 		

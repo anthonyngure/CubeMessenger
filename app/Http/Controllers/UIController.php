@@ -7,6 +7,7 @@
 	use App\ServiceRequest;
 	use App\ShopOrder;
 	use App\Subscription;
+	use Auth;
 	use Carbon\Carbon;
 	use Illuminate\Database\Eloquent\Builder;
 	
@@ -18,7 +19,7 @@
 		 */
 		public function drawerItems()
 		{
-			$client = $this->getClient();
+			$client = Auth::user()->getClient();
 			$pendingShopOrders = ShopOrder::whereIn('user_id', $client->users->pluck('id'))
 				->where('status', '!=', 'DELIVERED')
 				->where('status', '!=', 'REJECTED')
@@ -59,7 +60,7 @@
 				['icon' => 'local_shipping', 'title' => 'Courier', 'route' => 'courier', 'pendingApprovals' => $pendingDeliveries],
 				['icon' => 'group', 'title' => 'Users', 'route' => 'users', 'pendingApprovals' => 0],
 				['icon' => 'group_work', 'title' => 'Departments', 'route' => 'departments', 'pendingApprovals' => 0],
-				['icon' => 'settings', 'title' => 'Settings', 'route' => 'settings', 'pendingApprovals' => 0],
+				['icon' => 'person', 'title' => 'My Profile', 'profile' => 'settings', 'pendingApprovals' => 0],
 			];
 			
 			return $this->arrayResponse($items);
@@ -72,7 +73,7 @@
 		 */
 		public function balance()
 		{
-			$client = $this->getClient();
+			$client = Auth::user()->getClient();
 			
 			$data = [
 				'actual'  => $client->getBalance(),

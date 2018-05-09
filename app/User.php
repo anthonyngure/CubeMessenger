@@ -3,52 +3,19 @@
 	namespace App;
 	
 	use App\Exceptions\WrappedException;
-	use Illuminate\Foundation\Auth\User as Authenticatable;
 	use Illuminate\Notifications\Notifiable;
 	use Tymon\JWTAuth\Contracts\JWTSubject;
 	
 	/**
- * App\User
- *
- * @property int $id
- * @property int|null $client_id
- * @property int|null $department_id
- * @property int $role_id
- * @property string $name
- * @property string $avatar
- * @property string|null $email
- * @property string|null $phone
- * @property string|null $password
- * @property string|null $password_recovery_code
- * @property \Carbon\Carbon|null $created_at
- * @property \Carbon\Carbon|null $updated_at
- * @property string|null $deleted_at
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Appointment[] $appointments
- * @property-read \App\Client|null $client
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Delivery[] $deliveries
- * @property-read \Illuminate\Notifications\DatabaseNotificationCollection|\Illuminate\Notifications\DatabaseNotification[] $notifications
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\ServiceRequest[] $serviceRequests
- * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereAvatar($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereClientId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereDeletedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereDepartmentId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereEmail($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereName($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\User wherePassword($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\User wherePasswordRecoveryCode($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\User wherePhone($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereRoleId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereUpdatedAt($value)
- * @mixin \Eloquent
- */
+	 * App\User
+	 */
 	class User extends \TCG\Voyager\Models\User implements JWTSubject
 	{
 		use Notifiable;
 		
 		
 		protected $guarded = ['id', 'created_at', 'updated_at'];
+		private $lazyLoadedClient = null;
 		
 		/**
 		 * The attributes excluded from the model's JSON form.
@@ -66,7 +33,7 @@
 			'email_verification_code',
 			'phone_verification_code',
 			'remember_token',
-			'pivot'
+			'pivot',
 		];
 		
 		/**
@@ -131,13 +98,14 @@
 		 */
 		public function getClient()
 		{
-			/** @var \App\Client $client */
-			$client = Client::with('users')->find($this->client_id);
-			if (is_null($client)) {
-				throw new WrappedException("Sorry, you are not associated to any client.");
+			if (!$this->lazyLoadedClient) {
+				/** @var \App\Client $client */
+				$this->lazyLoadedClient = Client::with('users')->find($this->client_id);
+				if (is_null($this->lazyLoadedClient)) {
+					throw new WrappedException("Sorry, you are not associated to any client.");
+				}
 			}
-			
-			return $client;
+			return $this->lazyLoadedClient;
 		}
 		
 		/**

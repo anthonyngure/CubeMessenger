@@ -62,6 +62,8 @@
  * @property string|null $purchasing_head_acted_at
  * @method static \Illuminate\Database\Eloquent\Builder|\App\DeliveryItem whereDepartmentHeadActedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\DeliveryItem wherePurchasingHeadActedAt($value)
+ * @property string|null $deleted_at
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DeliveryItem whereDeletedAt($value)
  */
 	class DeliveryItem extends Model
 	{

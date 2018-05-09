@@ -104,4 +104,12 @@
 				->whereStatus('BLOCKING')
 				->sum('amount');
 		}
+		
+		/**
+		 * @return bool
+		 */
+		public function isPostPaid()
+		{
+			return $this->account_type == 'POST_PAID';
+		}
 	}

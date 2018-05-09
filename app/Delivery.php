@@ -51,6 +51,8 @@
  * @mixin \Eloquent
  * @property-read mixed $stats
  * @property-read \App\Charge $charge
+ * @property string|null $deleted_at
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Delivery whereDeletedAt($value)
  */
 	class Delivery extends Model
 	{

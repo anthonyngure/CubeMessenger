@@ -86,7 +86,7 @@
 		 */
 		public function store(Request $request)
 		{
-			$client = $this->getClient();
+			$client = Auth::user()->getClient();
 			
 			if (is_null($client)) {
 				throw new WrappedException("Sorry, you are not associated to any client.");

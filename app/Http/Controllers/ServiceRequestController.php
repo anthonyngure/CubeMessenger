@@ -3,6 +3,7 @@
 	namespace App\Http\Controllers;
 	
 	use App\ServiceRequest;
+	use Auth;
 	use Illuminate\Http\Request;
 	
 	class ServiceRequestController extends Controller
@@ -25,7 +26,7 @@
 			if ($request->filter == 'rider') {
 				$services = ServiceRequest::where('status', 'PENDING_QUOTE')->get();
 			} else if ($request->filter === 'pendingApproval') {
-				$client = $this->getClient();
+				$client = Auth::user()->getClient();
 				$services = ServiceRequest::whereIn('user_id', $client->users->pluck('id'))
 					->where(function ($query) {
 						$query->where('status', 'AT_DEPARTMENT_HEAD')
@@ -33,7 +34,7 @@
 					})
 					->whereType(strtoupper($request->type))->get();
 			} else if ($request->filter === 'pendingQuotes') {
-				$client = $this->getClient();
+				$client = Auth::user()->getClient();
 				$services = ServiceRequest::whereIn('user_id', $client->users->pluck('id'))
 					->where(function ($query) {
 						$query->where('status', 'PENDING_QUOTE')
@@ -42,17 +43,17 @@
 					})
 					->whereType(strtoupper($request->type))->get();
 			} else if ($request->filter === 'pendingAttendance') {
-				$client = $this->getClient();
+				$client = Auth::user()->getClient();
 				$services = ServiceRequest::whereIn('user_id', $client->users->pluck('id'))
 					->where('status', 'PENDING_ATTENDANCE')
 					->whereType(strtoupper($request->type))->get();
 			} else if ($request->filter === 'attended') {
-				$client = $this->getClient();
+				$client = Auth::user()->getClient();
 				$services = ServiceRequest::whereIn('user_id', $client->users->pluck('id'))
 					->where('status', 'ATTENDED')
 					->whereType(strtoupper($request->type))->get();
 			} else {
-				$client = $this->getClient();
+				$client = Auth::user()->getClient();
 				$services = ServiceRequest::whereIn('user_id', $client->users->pluck('id'))
 					->where('status', 'REJECTED')
 					->whereType(strtoupper($request->type))
@@ -80,7 +81,7 @@
 				'type'    => 'required|in:it,repair',
 			]);
 			
-			$client = $this->getClient();
+			$client = Auth::user()->getClient();
 			
 			$serviceRequest = ServiceRequest::create([
 				'user_id'       => \Auth::user()->getKey(),
@@ -117,7 +118,7 @@
 		public function update(Request $request, $id)
 		{
 			$serviceRequest = ServiceRequest::findOrFail($id);
-			$client = $this->getClient();
+			$client = Auth::user()->getClient();
 			
 			$this->validate($request, [
 				'action' => 'required|in:approve,reject',

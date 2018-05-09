@@ -98,7 +98,7 @@
 		 */
 		public function show($id)
 		{
-			$client = $this->getClient();
+			$client = Auth::user()->getClient();
 			$subscriptionItem = SubscriptionOptionItem::with(['clientSubscription' => function (HasOne $hasOne) use ($client) {
 				$hasOne->where('client_id', $client->getKey())->with('subscriptionSchedules');
 			}])->findOrFail($id);

@@ -127,7 +127,21 @@ export default {
         error (error) {
           this.error = true
           this.connecting = false
-          this.errorText = 'An error occurred ' + error.message
+          if (error.response) {
+            if (error.response.status === 422) {
+              switch (error.response.data.meta.code) {
+                case 'VALIDATION':
+                  this.errorText = error.response.data.data
+                  break
+                default:
+                  this.errorText = error.response.data.meta.message
+              }
+            } else {
+              this.errorText = error.response.data
+            }
+          } else {
+            this.errorText = 'An error occurred ' + error.message
+          }
         }
       })
     }

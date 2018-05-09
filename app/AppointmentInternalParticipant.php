@@ -22,6 +22,8 @@
  * @mixin \Eloquent
  * @property int $user_id
  * @method static \Illuminate\Database\Eloquent\Builder|\App\AppointmentInternalParticipant whereUserId($value)
+ * @property string|null $deleted_at
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\AppointmentInternalParticipant whereDeletedAt($value)
  */
 	class AppointmentInternalParticipant extends Model
 	{

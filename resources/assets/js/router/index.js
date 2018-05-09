@@ -1,5 +1,4 @@
 import Courier from '../components/Courier.vue'
-import ComingSoon from '../components/ComingSoon.vue'
 import Appointments from '../components/Appointments.vue'
 import Subscriptions from '../components/Subscriptions.vue'
 import SignIn from '../components/SignIn.vue'
@@ -9,7 +8,7 @@ import ItServices from '../components/ItServices'
 import RepairServices from '../components/RepairServices'
 import Orders from '../components/Orders'
 import Users from '../components/Users'
-import Settings from '../components/Settings'
+import Profile from '../components/Profile'
 import Departments from '../components/Departments'
 import Vue from 'vue'
 import Router from 'vue-router'
@@ -80,9 +79,9 @@ export default new Router({
     },
     {
       meta: {auth: true},
-      path: '/settings',
-      name: 'settings',
-      component: Settings
+      path: '/profile',
+      name: 'profile',
+      component: Profile
     }, {
       meta: {auth: true},
       path: '/repairs',

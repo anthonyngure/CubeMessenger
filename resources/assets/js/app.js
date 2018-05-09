@@ -134,9 +134,9 @@ Vue.prototype.$utils = {
   dummyImage () {
     return `https://unsplash.it/150/300?image=${Math.floor(Math.random() * 100) + 1}`
   },
-  formatMoney: function (estimatedCost) {
+  formatMoney: function (val) {
     let opts = {format: '%s%v', symbol: 'KES '}
-    return formatCurrency(estimatedCost, opts)
+    return formatCurrency(Math.ceil(val), opts)
   },
   
   primaryColor: PRIMARY_COLOR,

@@ -22,6 +22,8 @@
  * @method static \Illuminate\Database\Eloquent\Builder|\App\CostVariable whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\CostVariable whereValue($value)
  * @mixin \Eloquent
+ * @property string|null $deleted_at
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\CostVariable whereDeletedAt($value)
  */
 	class CostVariable extends Model
 	{

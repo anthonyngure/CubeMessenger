@@ -55,7 +55,11 @@
 			Route::get('auth/user', 'AuthController@user');
 			Route::get('drawerItems', 'UIController@drawerItems');
 			Route::get('balance', 'UIController@balance');
+			
+			Route::get('user/appointments', 'UserController@appointments');
+			Route::post('user/changePassword', 'UserController@changePassword');
 			Route::apiResource('users', 'UserController');
+			
 			Route::apiResource('departments', 'DepartmentController');
 			Route::apiResource('deliveries', 'DeliveryController');
 			Route::apiResource('deliveries.items', 'DeliveryItemController');

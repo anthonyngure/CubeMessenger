@@ -108,7 +108,7 @@
 		public function update(Request $request, $id)
 		{
 			$order = ShopOrder::findOrFail($id);
-			$client = $this->getClient();
+			$client = Auth::user()->getClient();
 			
 			$this->validate($request, [
 				'action' => 'required|in:approve,reject',

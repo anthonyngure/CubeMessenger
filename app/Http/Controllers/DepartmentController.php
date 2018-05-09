@@ -3,6 +3,7 @@
 	namespace App\Http\Controllers;
 	
 	use App\Department;
+	use Auth;
 	use Illuminate\Http\Request;
 	
 	class DepartmentController extends Controller
@@ -16,7 +17,7 @@
 		public function index()
 		{
 			//
-			$client = $this->getClient();
+			$client = Auth::user()->getClient();
 			$departments = $client->departments()->with('users')->get();
 			
 			return $this->collectionResponse($departments);
@@ -36,7 +37,7 @@
 				'name' => 'required|unique:departments',
 			]);
 			
-			$client = $this->getClient();
+			$client = Auth::user()->getClient();
 			
 			$department = $client->departments()->save(new Department([
 				'name' => $request->name,

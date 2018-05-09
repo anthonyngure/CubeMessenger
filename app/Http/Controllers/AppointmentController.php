@@ -25,7 +25,7 @@
 				'publish_at' => 'nullable|date',
 			]);
 			
-			$client = $this->getClient();
+			$client = Auth::user()->getClient();
 			
 			$date = empty($request->date) ? date("Y-m-d") : $request->date;
 			

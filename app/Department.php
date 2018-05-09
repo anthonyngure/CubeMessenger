@@ -21,6 +21,8 @@
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Department whereUpdatedAt($value)
  * @mixin \Eloquent
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\User[] $users
+ * @property string|null $deleted_at
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Department whereDeletedAt($value)
  */
 	class Department extends Model
 	{

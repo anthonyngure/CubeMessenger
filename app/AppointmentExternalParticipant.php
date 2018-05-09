@@ -20,6 +20,8 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\AppointmentExternalParticipant wherePhone($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\AppointmentExternalParticipant whereUpdatedAt($value)
  * @mixin \Eloquent
+ * @property string|null $deleted_at
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\AppointmentExternalParticipant whereDeletedAt($value)
  */
 class AppointmentExternalParticipant extends Model
 {
