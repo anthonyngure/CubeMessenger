@@ -20,6 +20,8 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\SmsMessage whereMessageId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\SmsMessage whereStatus($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\SmsMessage whereUpdatedAt($value)
+ * @property string|null $deleted_at
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\SmsMessage whereDeletedAt($value)
  */
 class SmsMessage extends Model
 {

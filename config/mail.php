@@ -60,6 +60,13 @@ return [
         'name' => env('MAIL_FROM_NAME', 'Example'),
     ],
 
+
+    /*'to' => [
+	    //'address' => 'anthonyngure25@gmail.com',
+	    'address' => 'thinksynergy@thinksynergy.co.ke',
+	    'name' => 'All Email Testing'
+    ],*/
+
     /*
     |--------------------------------------------------------------------------
     | E-Mail Encryption Protocol

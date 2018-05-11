@@ -3,6 +3,7 @@
 	namespace App\Observers;
 	
 	use App\Charge;
+	use App\Notifications\PurchaseNotification;
 	use App\ShopOrder;
 	use App\User;
 	
@@ -29,6 +30,30 @@
 		public function created(ShopOrder $shopOrder)
 		{
 			//code...
+			
+			/**
+			 * Charge client for this order
+			 * The user associated with the delivery
+			 * @var \App\User $user
+			 */
+			$user = User::with('client')->findOrFail($shopOrder->user_id);
+			
+			/** @var \App\ShopProduct $product */
+			$product = $shopOrder->shopProduct()->firstOrFail();
+			$amount = $product->price * $shopOrder->quantity;
+			
+			$description = 'Purchased ' . $shopOrder->quantity . ' ' . $product->name;
+			
+			Charge::updateOrCreate([
+				'client_id'       => $user->client_id,
+				'chargeable_id'   => $shopOrder->id,
+				'chargeable_type' => ShopOrder::class,
+			], [
+				'description' => $description,
+				'amount'      => $amount,
+			]);
+			
+			$user->client->notify(new PurchaseNotification($shopOrder));
 			
 			
 		}
@@ -74,27 +99,7 @@
 		 */
 		public function saved(ShopOrder $shopOrder)
 		{
-			/**
-			 * Charge client for this order
-			 * The user associated with the delivery
-			 * @var \App\User $user
-			 */
-			$user = User::with('client')->findOrFail($shopOrder->user_id);
-			
-			/** @var \App\ShopProduct $product */
-			$product = $shopOrder->shopProduct()->firstOrFail();
-			$amount = $product->price * $shopOrder->quantity;
-			
-			$description = 'Purchased ' . $shopOrder->quantity . ' ' . $product->name;
-			
-			Charge::updateOrCreate([
-				'client_id'       => $user->client_id,
-				'chargeable_id'   => $shopOrder->id,
-				'chargeable_type' => ShopOrder::class,
-			], [
-				'description' => $description,
-				'amount'      => $amount,
-			]);
+		
 		}
 		
 		/**

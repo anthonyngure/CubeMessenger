@@ -23,6 +23,8 @@
  * @method static \Illuminate\Database\Eloquent\Builder|\App\ServiceRequestQuote whereUpdatedAt($value)
  * @mixin \Eloquent
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\ServiceRequestItem[] $items
+ * @property string|null $deleted_at
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\ServiceRequestQuote whereDeletedAt($value)
  */
 	class ServiceRequestQuote extends Model
 	{

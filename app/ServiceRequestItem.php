@@ -22,6 +22,8 @@
  * @method static \Illuminate\Database\Eloquent\Builder|\App\ServiceRequestItem whereServiceRequestQuoteId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\ServiceRequestItem whereUpdatedAt($value)
  * @mixin \Eloquent
+ * @property string|null $deleted_at
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\ServiceRequestItem whereDeletedAt($value)
  */
 	class ServiceRequestItem extends Model
 	{

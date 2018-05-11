@@ -40,6 +40,8 @@
  * @property string|null $purchasing_head_acted_at
  * @method static \Illuminate\Database\Eloquent\Builder|\App\ShopOrder whereDepartmentHeadActedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\ShopOrder wherePurchasingHeadActedAt($value)
+ * @property string|null $deleted_at
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\ShopOrder whereDeletedAt($value)
  */
 	class ShopOrder extends Model
 	{

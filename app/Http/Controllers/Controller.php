@@ -4,6 +4,10 @@
 	
 	use App\Client;
 	use App\Exceptions\WrappedException;
+	use App\Notifications\InsufficientBalance;
+	use App\Notifications\PurchaseApprovedNotification;
+	use App\Notifications\PurchaseRejectedNotification;
+	use App\User;
 	use Auth;
 	use Carbon\Carbon;
 	use Fractal;
@@ -28,22 +32,30 @@
 		 */
 		public function handleApprovals(Request $request, Model $approval, $statusAfterPurchasingHeadApproval)
 		{
+			/** @var User $authorOfTheApproval */
+			$authorOfTheApproval = User::with('role')->findOrFail($approval->user_id);
+			
 			$user = Auth::user();
 			if ($request->action == 'reject') {
+				$authorOfTheApproval->notify(new PurchaseRejectedNotification($approval, $user));
 				$approval->rejected_by_id = $user->getKey();
 			}
 			
 			if (($approval->status == 'AT_DEPARTMENT_HEAD' && $user->isDepartmentHead())) {
 				$approval->status = $request->action == 'approve' ? 'AT_PURCHASING_HEAD' : 'REJECTED';
 				$approval->department_head_acted_at = Carbon::now()->toDateTimeString();
+				$authorOfTheApproval->notify(new PurchaseApprovedNotification($approval, $user));
 				$approval->save();
 			} else if (($approval->status == 'AT_PURCHASING_HEAD' && $user->isPurchasingHead())) {
 				$approval->status = $request->action == 'approve' ? $statusAfterPurchasingHeadApproval : 'REJECTED';
 				$approval->purchasing_head_acted_at = Carbon::now()->toDateTimeString();
+				$authorOfTheApproval->notify(new PurchaseApprovedNotification($approval, $user));
 				$approval->save();
 			} else {
 				throw new WrappedException("You are not allowed to perform the requested operation");
 			}
+			
+			//$approval
 		}
 		
 		/**
@@ -85,11 +97,16 @@
 				//Since balance can be negative add the limit to the available balance
 				if (($balance + $client->limit) < $amount) {
 					$message = "You have insufficient balance and spending limit!";
+					$client->notify(new InsufficientBalance($message));
+					//$client->getPurchasingHead()->notify(new InsufficientBalance($message));
 					throw new WrappedException($message);
 				}
 			} else if ($balance < $amount) {
 				if ($balance < $amount) {
-					throw new WrappedException("You have insufficient balance!");
+					$message = "You have insufficient balance!";
+					$client->notify(new InsufficientBalance($message));
+					//$client->getPurchasingHead()->notify(new InsufficientBalance($message));
+					throw new WrappedException($message);
 				}
 			}
 		}

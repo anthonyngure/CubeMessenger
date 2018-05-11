@@ -24,6 +24,8 @@
  * @property string|null $description
  * @method static \Illuminate\Database\Eloquent\Builder|\App\SubscriptionOption whereDeliveryCost($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\SubscriptionOption whereDescription($value)
+ * @property string|null $deleted_at
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\SubscriptionOption whereDeletedAt($value)
  */
 	class SubscriptionOption extends Model
 	{

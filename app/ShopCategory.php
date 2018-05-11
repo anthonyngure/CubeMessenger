@@ -21,6 +21,8 @@
  * @property int $order
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\ShopProduct[] $products
  * @method static \Illuminate\Database\Eloquent\Builder|\App\ShopCategory whereOrder($value)
+ * @property string|null $deleted_at
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\ShopCategory whereDeletedAt($value)
  */
 	class ShopCategory extends Model
 	{

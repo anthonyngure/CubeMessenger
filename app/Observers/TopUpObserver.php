@@ -2,6 +2,7 @@
 	
 	namespace App\Observers;
 	
+	use App\Notifications\TopUpNotification;
 	use App\TopUp;
 	use App\Utils;
 	
@@ -71,9 +72,9 @@
 		 */
 		public function saved(TopUp $topUp)
 		{
-			//code...
-			$context = 'Account topped up with KSH ' . $topUp->amount;
-			Utils::sendDemoEmail($context);
+			/** @var \App\Client $client */
+			$client = $topUp->client()->firstOrFail();
+			$client->notify(new TopUpNotification($topUp));
 		}
 		
 		/**

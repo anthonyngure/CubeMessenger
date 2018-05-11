@@ -26,6 +26,8 @@
  *         whereSubscriptionOptionId($value)
  * @property int                    $price     Current retail price of the item
  * @method static \Illuminate\Database\Eloquent\Builder|\App\SubscriptionOptionItem wherePrice($value)
+ * @property string|null $deleted_at
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\SubscriptionOptionItem whereDeletedAt($value)
  */
 	class SubscriptionOptionItem extends Model
 	{

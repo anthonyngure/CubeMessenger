@@ -43,6 +43,8 @@
  * @method static \Illuminate\Database\Eloquent\Builder|\App\ServiceRequest whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\ServiceRequest whereUserId($value)
  * @mixin \Eloquent
+ * @property string|null $deleted_at
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\ServiceRequest whereDeletedAt($value)
  */
 	class ServiceRequest extends Model
 	{

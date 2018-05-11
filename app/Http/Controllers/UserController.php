@@ -4,6 +4,7 @@
 	
 	use App\Appointment;
 	use App\Exceptions\WrappedException;
+	use App\Notifications\PasswordChanged;
 	use App\Traits\Messages;
 	use App\User;
 	use App\Utils;
@@ -136,6 +137,7 @@
 		
 		/**
 		 * @param \Illuminate\Http\Request $request
+		 * @return \Illuminate\Http\Response
 		 * @throws \App\Exceptions\WrappedException
 		 */
 		public function changePassword(Request $request)
@@ -159,6 +161,8 @@
 			
 			$user->password = Hash::make($request->newPassword);
 			$user->save();
+			
+			$user->notify(new PasswordChanged());
 			
 			return $this->arrayResponse([]);
 		}

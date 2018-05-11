@@ -4,6 +4,7 @@
 	
 	use App\Appointment;
 	use App\Delivery;
+	use App\Notifications\InsufficientBalance;
 	use App\ServiceRequest;
 	use App\ShopOrder;
 	use App\Subscription;

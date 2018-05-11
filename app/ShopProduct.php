@@ -31,6 +31,9 @@
  * @method static \Illuminate\Database\Eloquent\Builder|\App\ShopProduct whereUpdatedAt($value)
  * @mixin \Eloquent
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\ShopOrder[] $clientOrders
+ * @property string|null $deleted_at
+ * @property-read \App\ShopCategory $shopCategory
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\ShopProduct whereDeletedAt($value)
  */
 	class ShopProduct extends Model
 	{
