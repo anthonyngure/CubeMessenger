@@ -91,8 +91,13 @@
                       text-color="white" >
                 You are on {{$auth.user().client.accountType}} account
               </v-chip >
-            
             </v-list-tile-content >
+            <v-list-tile-action>
+              <v-btn small color="primary" @click.native="refreshBalance">
+                <v-icon left>refresh</v-icon>
+                Refresh
+              </v-btn>
+            </v-list-tile-action>
           </v-list-tile >
         </v-list >
       </v-menu >
@@ -179,6 +184,15 @@ export default {
       that.refreshBalance()
     })
     EventBus.$on(this.$actions.signedIn, function () {
+      that.refreshBalance()
+    })
+    EventBus.$on(this.$actions.approved, function () {
+      that.refreshBalance()
+    })
+    EventBus.$on(this.$actions.rejected, function () {
+      that.refreshBalance()
+    })
+    EventBus.$on(this.$actions.addedSubscription, function () {
       that.refreshBalance()
     })
     this.refreshBalance()

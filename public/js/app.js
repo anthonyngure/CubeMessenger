@@ -10272,6 +10272,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
 
 
 
@@ -10340,6 +10345,15 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       that.refreshBalance();
     });
     __WEBPACK_IMPORTED_MODULE_0__event_bus__["a" /* default */].$on(this.$actions.signedIn, function () {
+      that.refreshBalance();
+    });
+    __WEBPACK_IMPORTED_MODULE_0__event_bus__["a" /* default */].$on(this.$actions.approved, function () {
+      that.refreshBalance();
+    });
+    __WEBPACK_IMPORTED_MODULE_0__event_bus__["a" /* default */].$on(this.$actions.rejected, function () {
+      that.refreshBalance();
+    });
+    __WEBPACK_IMPORTED_MODULE_0__event_bus__["a" /* default */].$on(this.$actions.addedSubscription, function () {
       that.refreshBalance();
     });
     this.refreshBalance();
@@ -10928,7 +10942,7 @@ exports = module.exports = __webpack_require__("./node_modules/css-loader/lib/cs
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -46476,6 +46490,33 @@ var render = function() {
                               )
                             ],
                             1
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "v-list-tile-action",
+                            [
+                              _c(
+                                "v-btn",
+                                {
+                                  attrs: { small: "", color: "primary" },
+                                  nativeOn: {
+                                    click: function($event) {
+                                      return _vm.refreshBalance($event)
+                                    }
+                                  }
+                                },
+                                [
+                                  _c("v-icon", { attrs: { left: "" } }, [
+                                    _vm._v("refresh")
+                                  ]),
+                                  _vm._v(
+                                    "\n              Refresh\n            "
+                                  )
+                                ],
+                                1
+                              )
+                            ],
+                            1
                           )
                         ],
                         1
@@ -80622,7 +80663,7 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_4_vue_
 
 
 
-var DEBUG = true;
+var DEBUG = false;
 
 var GOOGLE_MAPS_KEY = 'AIzaSyAS_9BsQpqTP8EVuMZ7rQ9gMCl0wmqhm7k';
 var PRIMARY_COLOR = '#1A75BA';

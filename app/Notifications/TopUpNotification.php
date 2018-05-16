@@ -56,12 +56,10 @@
 				->greeting('Account top up!')
 				->line('You account for ' . $notifiable->name .
 					' has been topped up with KES ' . number_format($this->topUp->amount, 2))
-				->line('New account status is :')
 				->line('Actual balance: KES ' . number_format($actual, 2))
 				->line('Spending limit: KES ' . number_format($limit, 2))
 				->line('Amount settled: KES ' . number_format($spent, 2))
 				->line('Amount blocked: KES ' . number_format($blocked, 2))
-				->line('The introduction to the notification.')
 				->action('View your spending', url('/#/dashboard'))
 				->line('Thank you for using our application!');
 		}

@@ -46,12 +46,20 @@
 		 */
 		public function toMail($notifiable)
 		{
+			$actual = $notifiable->getBalance();
+			$limit = $notifiable->limit;
+			$spent = $notifiable->getSpent();
+			$blocked = $notifiable->getBlocked();
+			
 			return (new MailMessage)
 				->subject('Purchase')
 				->greeting('New purchase!')
 				->line('A new order for ' . $this->shopOrder->quantity . ' '
 					. $this->shopOrder->shopProduct->name . ' has been added.')
-				->line('Click "View Orders" button below to view and track your order')
+				->line('Actual balance: KES ' . number_format($actual, 2))
+				->line('Spending limit: KES ' . number_format($limit, 2))
+				->line('Amount settled: KES ' . number_format($spent, 2))
+				->line('Amount blocked: KES ' . number_format($blocked, 2))
 				->action('View Orders', url('/#/orders'))
 				->line('Thank you for using our application!');
 		}
