@@ -25,6 +25,7 @@
 	
 	Route::get('acceptServiceRequestQuote/{id}', 'ServiceRequestQuoteController@acceptQuote');
 	Route::get('rejectServiceRequestQuote/{id}', 'ServiceRequestQuoteController@rejectQuote');
+	
 
 
 Route::group(['prefix' => 'admin'], function () {

@@ -3,11 +3,11 @@
 	namespace App\Providers;
 	
 	use App\Category;
-	use App\Charge;
+	use App\Bill;
 	use App\Delivery;
 	use App\Item;
 	use App\Observers\CategoryObserver;
-	use App\Observers\ChargeObserver;
+	use App\Observers\BillObserver;
 	use App\Observers\DeliveryObserver;
 	use App\Observers\ProductObserver;
 	use App\Observers\ServiceRequestObserver;
@@ -40,7 +40,7 @@
 			
 			User::observe(UserObserver::class);
 			TopUp::observe(TopUpObserver::class);
-			Charge::observe(ChargeObserver::class);
+			Bill::observe(BillObserver::class);
 			Delivery::observe(DeliveryObserver::class);
 			ShopOrder::observe(ShopOrderObserver::class);
 			Subscription::observe(SubscriptionObserver::class);

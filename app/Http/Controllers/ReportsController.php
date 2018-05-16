@@ -2,7 +2,6 @@
 	
 	namespace App\Http\Controllers;
 	
-	use App\DeliveryItem;
 	use Illuminate\Http\Request;
 	
 	class ReportsController extends Controller
@@ -18,13 +17,13 @@
 		{
 			$client = \Auth::user()->getClient();
 			$this->validate($request, [
-				'filter' => 'required|in:charges',
+				'filter' => 'required|in:bills,subscriptions,shopping,it,repairs,courier',
 			]);
 			
-			if ($request->filter == 'charges') {
-				$data = $client->charges()->get();
+			if ($request->filter == 'bills') {
+				$data = $client->bills()->get();
 			} else {
-				$data = DeliveryItem::all();
+				return $this->arrayResponse([]);
 			}
 			
 			return $this->collectionResponse($data);

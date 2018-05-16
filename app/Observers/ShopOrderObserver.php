@@ -2,7 +2,7 @@
 	
 	namespace App\Observers;
 	
-	use App\Charge;
+	use App\Bill;
 	use App\Notifications\PurchaseNotification;
 	use App\ShopOrder;
 	use App\User;
@@ -42,12 +42,12 @@
 			$product = $shopOrder->shopProduct()->firstOrFail();
 			$amount = $product->price * $shopOrder->quantity;
 			
-			$description = 'Purchased ' . $shopOrder->quantity . ' ' . $product->name;
+			$description = 'Purchase of ' . $shopOrder->quantity . ' ' . $product->name;
 			
-			Charge::updateOrCreate([
+			Bill::updateOrCreate([
 				'client_id'       => $user->client_id,
-				'chargeable_id'   => $shopOrder->id,
-				'chargeable_type' => ShopOrder::class,
+				'billable_id'   => $shopOrder->id,
+				'billable_type' => ShopOrder::class,
 			], [
 				'description' => $description,
 				'amount'      => $amount,

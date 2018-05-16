@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * App\SmsMessage
@@ -25,6 +26,7 @@ use Illuminate\Database\Eloquent\Model;
  */
 class SmsMessage extends Model
 {
+	use SoftDeletes;
     //
 	protected $guarded = ['id', 'created_at', 'updated_at'];
 }

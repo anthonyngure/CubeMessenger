@@ -3,6 +3,7 @@
 	namespace App;
 	
 	use Illuminate\Database\Eloquent\Model;
+	use Illuminate\Database\Eloquent\SoftDeletes;
 	
 	/**
  * App\CourierOption
@@ -29,6 +30,8 @@
  */
 	class CourierOption extends Model
 	{
+		
+		use SoftDeletes;
 		
 		protected $casts = [
 			'active' => 'boolean',

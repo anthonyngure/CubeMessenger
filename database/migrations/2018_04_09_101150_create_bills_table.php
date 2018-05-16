@@ -3,7 +3,7 @@
 	use Illuminate\Database\Migrations\Migration;
 	use Illuminate\Database\Schema\Blueprint;
 	
-	class CreateChargesTable extends Migration
+	class CreateBillsTable extends Migration
 	{
 		/**
 		 * Run the migrations.
@@ -12,14 +12,14 @@
 		 */
 		public function up()
 		{
-			Schema::create('charges', function (Blueprint $table) {
+			Schema::create('bills', function (Blueprint $table) {
 				$table->increments('id');
 				$table->unsignedInteger('client_id', false);
 				$table->foreign('client_id')->references('id')->on('clients');
-				$table->unsignedInteger('chargeable_id', false);
-				$table->string('chargeable_type', false);
+				$table->unsignedInteger('billable_id', false);
+				$table->string('billable_type', false);
 				$table->double('amount', null, 2);
-				$table->enum('status', ['BLOCKING', 'SETTLED'])->default('BLOCKING');
+				$table->enum('status', ['BLOCKED', 'SETTLED'])->default('BLOCKED');
 				$table->text('description')->nullable();
 				$table->timestamps();
 				$table->softDeletes();
@@ -33,6 +33,6 @@
 		 */
 		public function down()
 		{
-			Schema::dropIfExists('charges');
+			Schema::dropIfExists('bills');
 		}
 	}

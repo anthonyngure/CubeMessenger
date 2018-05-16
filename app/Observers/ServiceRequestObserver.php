@@ -2,7 +2,7 @@
 	
 	namespace App\Observers;
 	
-	use App\Charge;
+	use App\Bill;
 	use App\Mail\ServiceRequestQuote;
 	use App\ServiceRequest;
 	use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -80,10 +80,10 @@
 				
 				$description = $serviceRequest->type . ' service request';
 				
-				Charge::updateOrCreate([
+				Bill::updateOrCreate([
 					'client_id'       => $serviceRequest->user->client->id,
-					'chargeable_id'   => $serviceRequest->id,
-					'chargeable_type' => ServiceRequest::class,
+					'billable_id'   => $serviceRequest->id,
+					'billable_type' => ServiceRequest::class,
 				], [
 					'description' => $description,
 					'amount'      => $amount,

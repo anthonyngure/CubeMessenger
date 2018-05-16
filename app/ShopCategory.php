@@ -3,6 +3,7 @@
 	namespace App;
 	
 	use Illuminate\Database\Eloquent\Model;
+	use Illuminate\Database\Eloquent\SoftDeletes;
 	
 	/**
  * App\ShopCategory
@@ -27,6 +28,7 @@
 	class ShopCategory extends Model
 	{
 		//
+		use SoftDeletes;
 		
 		/**
 		 * @return \Illuminate\Database\Eloquent\Relations\HasMany

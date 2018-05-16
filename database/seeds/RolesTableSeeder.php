@@ -1,62 +1,80 @@
 <?php
 
 use Illuminate\Database\Seeder;
-use TCG\Voyager\Models\Role;
 
 class RolesTableSeeder extends Seeder
 {
+
     /**
-     * Auto generated seed file.
+     * Auto generated seed file
+     *
+     * @return void
      */
     public function run()
     {
-        $role = Role::firstOrNew(['name' => 'admin']);
-        if (!$role->exists) {
-            $role->fill([
-                    'display_name' => __('voyager::seeders.roles.admin'),
-                ])->save();
-        }
+        
 
-        $role = Role::firstOrNew(['name' => 'user']);
-        if (!$role->exists) {
-            $role->fill([
-                    'display_name' => __('voyager::seeders.roles.user'),
-                ])->save();
-        }
-	
-	    $role = Role::firstOrNew(['name' => 'CLIENT_ADMIN']);
-	    if (!$role->exists) {
-		    $role->fill([
-			    'display_name' => 'CLIENT_ADMIN',
-		    ])->save();
-	    }
-	    $role = Role::firstOrNew(['name' => 'PURCHASING_HEAD']);
-	    if (!$role->exists) {
-		    $role->fill([
-			    'display_name' => 'PURCHASING_HEAD',
-		    ])->save();
-	    }
-	
-	    $role = Role::firstOrNew(['name' => 'DEPARTMENT_HEAD']);
-	    if (!$role->exists) {
-		    $role->fill([
-			    'display_name' => 'DEPARTMENT_HEAD',
-		    ])->save();
-	    }
-	
-	    $role = Role::firstOrNew(['name' => 'DEPARTMENT_USER']);
-	    if (!$role->exists) {
-		    $role->fill([
-			    'display_name' => 'DEPARTMENT_USER',
-		    ])->save();
-	    }
-	
-	    $role = Role::firstOrNew(['name' => 'RIDER']);
-	    if (!$role->exists) {
-		    $role->fill([
-			    'display_name' => 'RIDER',
-		    ])->save();
-	    }
-	    
+        \DB::table('roles')->delete();
+        
+        \DB::table('roles')->insert(array (
+            
+            array (
+                'id' => 1,
+                'name' => 'admin',
+                'display_name' => 'Administrator',
+                'created_at' => '2018-04-24 16:18:59',
+                'updated_at' => '2018-04-24 16:18:59',
+            ),
+            
+            array (
+                'id' => 2,
+                'name' => 'user',
+                'display_name' => 'Normal User',
+                'created_at' => '2018-04-24 16:18:59',
+                'updated_at' => '2018-04-24 16:18:59',
+            ),
+            
+            array (
+                'id' => 3,
+                'name' => 'CLIENT_ADMIN',
+                'display_name' => 'CLIENT_ADMIN',
+                'created_at' => '2018-04-24 16:18:59',
+                'updated_at' => '2018-04-24 16:18:59',
+            ),
+            
+            array (
+                'id' => 4,
+                'name' => 'PURCHASING_HEAD',
+                'display_name' => 'PURCHASING_HEAD',
+                'created_at' => '2018-04-24 16:18:59',
+                'updated_at' => '2018-04-24 16:18:59',
+            ),
+            
+            array (
+                'id' => 5,
+                'name' => 'DEPARTMENT_HEAD',
+                'display_name' => 'DEPARTMENT_HEAD',
+                'created_at' => '2018-04-24 16:18:59',
+                'updated_at' => '2018-04-24 16:18:59',
+            ),
+            
+            array (
+                'id' => 6,
+                'name' => 'DEPARTMENT_USER',
+                'display_name' => 'DEPARTMENT_USER',
+                'created_at' => '2018-04-24 16:18:59',
+                'updated_at' => '2018-04-24 16:18:59',
+            ),
+            
+            array (
+                'id' => 7,
+                'name' => 'RIDER',
+                'display_name' => 'RIDER',
+                'created_at' => '2018-04-24 16:18:59',
+                'updated_at' => '2018-04-24 16:18:59',
+            ),
+        ));
+        
+        
     }
 }

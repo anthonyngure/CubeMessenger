@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * App\ClientSubscriptionDelivery
@@ -30,4 +31,5 @@ use Illuminate\Database\Eloquent\Model;
 class SubscriptionDelivery extends Model
 {
     //
+	use SoftDeletes;
 }

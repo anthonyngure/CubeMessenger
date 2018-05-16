@@ -22,18 +22,19 @@
 			$client = \Auth::user()->getClient();
 			
 			/**
-			 * Get all client subscriptions
+			 * Get all client subscriptions that are ctive
 			 */
-			$subscriptions = Subscription::whereIn('user_id', $client->users->pluck('id'))
+			$activeSubscriptions = Subscription::whereIn('user_id', $client->users->pluck('id'))
+				->where('status', 'ACTIVE')
 				->with(['optionItem'])
 				->get();
 			/**
 			 * Get an array of client subscription option item ids
 			 */
-			$subscriptionOptionItemIds = $subscriptions->pluck('subscription_option_item_id');
+			$subscriptionOptionItemIds = $activeSubscriptions->pluck('subscription_option_item_id');
 			
 			/**
-			 * Exlude items with id in $subscriptionOptionItemIds
+			 * Exlude items with id in $subscriptionOptionItemIds that are ACTIVE
 			 */
 			$data = SubscriptionOption::with(['items' => function (HasMany $hasMany) use ($subscriptionOptionItemIds) {
 				$hasMany->whereNotIn('id', $subscriptionOptionItemIds);

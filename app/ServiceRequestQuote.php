@@ -2,7 +2,9 @@
 	
 	namespace App;
 	
+	use App\Traits\Billable;
 	use Illuminate\Database\Eloquent\Model;
+	use Illuminate\Database\Eloquent\SoftDeletes;
 	
 	/**
  * App\ServiceRequestQuote
@@ -29,6 +31,8 @@
 	class ServiceRequestQuote extends Model
 	{
 		//
+		
+		use SoftDeletes, Billable;
 		
 		protected $guarded = ['id', 'created_at', 'updated_at'];
 		

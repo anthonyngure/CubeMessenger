@@ -2,7 +2,9 @@
 	
 	namespace App;
 	
+	use App\Traits\Billable;
 	use Illuminate\Database\Eloquent\Model;
+	use Illuminate\Database\Eloquent\SoftDeletes;
 	
 	/**
  * App\Service
@@ -49,6 +51,7 @@
 	class ServiceRequest extends Model
 	{
 		//
+		use SoftDeletes, Billable;
 		protected $guarded = ['id', 'created_at', 'updated_at'];
 		
 		protected $hidden = ['user_id', 'assigned_to', 'rejected_by_id'];

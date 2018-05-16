@@ -2,23 +2,30 @@
 	
 	namespace App\Notifications;
 	
+	use App\Bill;
+	use App\Utils;
 	use Illuminate\Bus\Queueable;
 	use Illuminate\Contracts\Queue\ShouldQueue;
 	use Illuminate\Notifications\Messages\MailMessage;
 	use Illuminate\Notifications\Notification;
 	
-	class DeliveryRequest extends Notification implements ShouldQueue
+	class BillNotification extends Notification implements ShouldQueue
 	{
 		use Queueable;
+		/**
+		 * @var \App\Bill
+		 */
+		private $bill;
 		
 		/**
 		 * Create a new notification instance.
 		 *
-		 * @return void
+		 * @param \App\Bill $bill
 		 */
-		public function __construct()
+		public function __construct(Bill $bill)
 		{
 			//
+			$this->bill = $bill;
 		}
 		
 		/**
@@ -35,14 +42,26 @@
 		/**
 		 * Get the mail representation of the notification.
 		 *
-		 * @param  mixed $notifiable
+		 * @param  mixed|\App\Client $notifiable
 		 * @return \Illuminate\Notifications\Messages\MailMessage
 		 */
 		public function toMail($notifiable)
 		{
+			$actual = $notifiable->getBalance();
+			$limit = $notifiable->limit;
+			$spent = $notifiable->getSpent();
+			$blocked = $notifiable->getBlocked();
+			
 			return (new MailMessage)
-				->line('The introduction to the notification.')
-				->action('Notification Action', url('/'))
+				->subject('Bill')
+				->greeting(Utils::toCurrencyText($this->bill->amount) . ' - ' . $this->bill->status)
+				->line($this->bill->description)
+				->line('')
+				->line('Actual balance: KES ' . number_format($actual, 2))
+				->line('Spending limit: KES ' . number_format($limit, 2))
+				->line('Amount settled: KES ' . number_format($spent, 2))
+				->line('Amount blocked: KES ' . number_format($blocked, 2))
+				->action('View your spending', url('/#/dashboard'))
 				->line('Thank you for using our application!');
 		}
 		

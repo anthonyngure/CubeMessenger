@@ -89,10 +89,11 @@
       return {
         tabItems: [
           {
-            icon: 'data_usage', title: 'Charges', id: 'charges',
+            icon: 'data_usage', title: 'Bills', id: 'bills',
             headers: [
               {text: 'Id', sortable: false, value: 'id'},
               {text: 'Amount', sortable: false, value: 'amount', isMoney: true},
+              {text: 'Status', sortable: false, value: 'status'},
               {text: 'Description', sortable: false, value: 'description'},
               {text: 'Date/Time', sortable: false, value: 'createdAt'},
             ],
@@ -216,7 +217,7 @@
         todayMonth = '0' + todayMonth
       }
       this.month = today.year() + '-' + todayMonth
-      this.currentTab = 'charges'
+      this.currentTab = 'bills'
     }
 
   }

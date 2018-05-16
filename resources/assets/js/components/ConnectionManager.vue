@@ -51,6 +51,8 @@ export default {
             default:
               this.errorText = error.response.data.meta.message
           }
+        } else if (error.response.data.message) {
+          this.errorText = error.response.data.message
         } else {
           this.errorText = error.response.data
         }

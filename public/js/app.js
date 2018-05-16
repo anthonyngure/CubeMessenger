@@ -5246,6 +5246,15 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -5362,6 +5371,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       this.originFormattedAddress = null;
       this.originVicinity = null;
       this.note = null;
+      this.urgent = false;
       this.scheduleDate = null;
       this.scheduleTime = null;
       this.items = [];
@@ -7127,6 +7137,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             default:
               this.errorText = error.response.data.meta.message;
           }
+        } else if (error.response.data.message) {
+          this.errorText = error.response.data.message;
         } else {
           this.errorText = error.response.data;
         }
@@ -7385,8 +7397,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
-//
 
 
 
@@ -7437,10 +7447,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     showApprovalActions: function showApprovalActions(item) {
       return this.currentTab === 'pendingApproval' && (this.isPurchasingHead() && item.status === 'AT_PURCHASING_HEAD' || this.isDepartmentHead() && item.status === 'AT_DEPARTMENT_HEAD');
     },
-    confirm: function confirm(delivery, item) {
+    confirm: function confirm(delivery) {
       this.items = [];
       var that = this;
-      this.$refs.connectionManager.patch('deliveries/' + delivery.id + '/items/' + item.id, {
+      this.$refs.connectionManager.patch('deliveries/' + delivery.id, {
         onSuccess: function onSuccess(response) {
           that.items = [];
           that.items = that.items.concat(response.data.data);
@@ -7450,10 +7460,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         action: 'approve'
       });
     },
-    reject: function reject(delivery, item) {
+    reject: function reject(delivery) {
       this.items = [];
       var that = this;
-      this.$refs.connectionManager.patch('deliveries/' + delivery.id + '/items/' + item.id, {
+      this.$refs.connectionManager.patch('deliveries/' + delivery.id, {
         onSuccess: function onSuccess(response) {
           that.items = [];
           that.items = that.items.concat(response.data.data);
@@ -7602,8 +7612,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
   data: function data() {
     return {
       tabItems: [{
-        icon: 'data_usage', title: 'Charges', id: 'charges',
-        headers: [{ text: 'Id', sortable: false, value: 'id' }, { text: 'Amount', sortable: false, value: 'amount', isMoney: true }, { text: 'Description', sortable: false, value: 'description' }, { text: 'Date/Time', sortable: false, value: 'createdAt' }]
+        icon: 'data_usage', title: 'Bills', id: 'bills',
+        headers: [{ text: 'Id', sortable: false, value: 'id' }, { text: 'Amount', sortable: false, value: 'amount', isMoney: true }, { text: 'Status', sortable: false, value: 'status' }, { text: 'Description', sortable: false, value: 'description' }, { text: 'Date/Time', sortable: false, value: 'createdAt' }]
       }, {
         icon: 'schedule', title: 'Subscriptions', id: 'subscriptions',
         headers: [{ text: 'Item', sortable: false, value: 'item' }, { text: 'Quantity', sortable: false, value: 'quantity' }, { text: 'Cost', sortable: false, value: 'quantity' }, { text: 'Delivery Date/Time', sortable: false, value: 'quantity' }, { text: 'Received By', sortable: false, value: 'quantity' }]
@@ -7673,7 +7683,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       todayMonth = '0' + todayMonth;
     }
     this.month = today.year() + '-' + todayMonth;
-    this.currentTab = 'charges';
+    this.currentTab = 'bills';
   }
 });
 
@@ -10468,7 +10478,7 @@ exports = module.exports = __webpack_require__("./node_modules/css-loader/lib/cs
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -10603,7 +10613,7 @@ exports = module.exports = __webpack_require__("./node_modules/css-loader/lib/cs
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -10813,7 +10823,7 @@ exports = module.exports = __webpack_require__("./node_modules/css-loader/lib/cs
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -10828,7 +10838,7 @@ exports = module.exports = __webpack_require__("./node_modules/css-loader/lib/cs
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -37809,7 +37819,127 @@ var render = function() {
                                   ],
                                   1
                                 )
-                              })
+                              }),
+                              _vm._v(" "),
+                              props.item.status === "REJECTED"
+                                ? _c(
+                                    "v-chip",
+                                    {
+                                      attrs: {
+                                        label: "",
+                                        outline: "",
+                                        color: "red",
+                                        small: ""
+                                      }
+                                    },
+                                    [
+                                      _c("v-icon", { attrs: { left: "" } }, [
+                                        _vm._v("info")
+                                      ]),
+                                      _vm._v(
+                                        "\n              Rejected by " +
+                                          _vm._s(
+                                            props.item.rejectedBy.accountType
+                                          ) +
+                                          " - " +
+                                          _vm._s(props.item.rejectedBy.name) +
+                                          "\n            "
+                                      )
+                                    ],
+                                    1
+                                  )
+                                : _vm._e(),
+                              _vm._v(" "),
+                              props.item.status === "AT_DEPARTMENT_HEAD" ||
+                              props.item.status === "AT_PURCHASING_HEAD"
+                                ? _c(
+                                    "v-chip",
+                                    {
+                                      attrs: {
+                                        label: "",
+                                        outline: "",
+                                        color: "info",
+                                        small: ""
+                                      }
+                                    },
+                                    [
+                                      _c("v-icon", { attrs: { left: "" } }, [
+                                        _vm._v("info")
+                                      ]),
+                                      _vm._v(
+                                        "\n              Pending " +
+                                          _vm._s(
+                                            props.item.status ===
+                                            "AT_DEPARTMENT_HEAD"
+                                              ? " Department "
+                                              : " Purchasing "
+                                          ) +
+                                          " Head approval\n            "
+                                      )
+                                    ],
+                                    1
+                                  )
+                                : _vm._e(),
+                              _vm._v(" "),
+                              _vm.showApprovalActions(props.item)
+                                ? _c(
+                                    "v-btn",
+                                    {
+                                      attrs: {
+                                        flat: "",
+                                        color: "red",
+                                        small: "",
+                                        outline: ""
+                                      },
+                                      nativeOn: {
+                                        click: function($event) {
+                                          _vm.reject(props.item)
+                                        }
+                                      }
+                                    },
+                                    [
+                                      _c(
+                                        "v-icon",
+                                        { attrs: { left: "", small: "" } },
+                                        [_vm._v("close\n              ")]
+                                      ),
+                                      _vm._v(
+                                        "\n              Reject\n            "
+                                      )
+                                    ],
+                                    1
+                                  )
+                                : _vm._e(),
+                              _vm._v(" "),
+                              _vm.showApprovalActions(props.item)
+                                ? _c(
+                                    "v-btn",
+                                    {
+                                      attrs: {
+                                        flat: "",
+                                        color: "success",
+                                        small: "",
+                                        outline: ""
+                                      },
+                                      nativeOn: {
+                                        click: function($event) {
+                                          _vm.confirm(props.item)
+                                        }
+                                      }
+                                    },
+                                    [
+                                      _c(
+                                        "v-icon",
+                                        { attrs: { left: "", small: "" } },
+                                        [_vm._v("check_circle\n              ")]
+                                      ),
+                                      _vm._v(
+                                        "\n              Approve\n            "
+                                      )
+                                    ],
+                                    1
+                                  )
+                                : _vm._e()
                             ],
                             2
                           ),
@@ -37853,11 +37983,14 @@ var render = function() {
                                                   ) + "\n                    "
                                                 )
                                               ]),
-                                              _vm._v(
-                                                "\n                    - " +
-                                                  _vm._s(item.status) +
-                                                  "\n                  "
-                                              )
+                                              _vm._v(" "),
+                                              item.status
+                                                ? _c("span", [
+                                                    _vm._v(
+                                                      "- " + _vm._s(item.status)
+                                                    )
+                                                  ])
+                                                : _vm._e()
                                             ]
                                           ),
                                           _vm._v(" "),
@@ -37874,169 +38007,6 @@ var render = function() {
                                                   "\n                  "
                                               )
                                             ]
-                                          ),
-                                          _vm._v(" "),
-                                          _c(
-                                            "div",
-                                            [
-                                              item.status === "REJECTED"
-                                                ? _c(
-                                                    "v-chip",
-                                                    {
-                                                      attrs: {
-                                                        label: "",
-                                                        outline: "",
-                                                        color: "red",
-                                                        small: ""
-                                                      }
-                                                    },
-                                                    [
-                                                      _c(
-                                                        "v-icon",
-                                                        { attrs: { left: "" } },
-                                                        [_vm._v("info")]
-                                                      ),
-                                                      _vm._v(
-                                                        "\n                      Rejected by " +
-                                                          _vm._s(
-                                                            item.rejectedBy
-                                                              .accountType
-                                                          ) +
-                                                          " - " +
-                                                          _vm._s(
-                                                            item.rejectedBy.name
-                                                          ) +
-                                                          "\n                    "
-                                                      )
-                                                    ],
-                                                    1
-                                                  )
-                                                : _vm._e(),
-                                              _vm._v(" "),
-                                              item.status ===
-                                                "AT_DEPARTMENT_HEAD" ||
-                                              item.status ===
-                                                "AT_PURCHASING_HEAD"
-                                                ? _c(
-                                                    "v-chip",
-                                                    {
-                                                      attrs: {
-                                                        label: "",
-                                                        outline: "",
-                                                        color: "info",
-                                                        small: ""
-                                                      }
-                                                    },
-                                                    [
-                                                      _c(
-                                                        "v-icon",
-                                                        { attrs: { left: "" } },
-                                                        [_vm._v("info")]
-                                                      ),
-                                                      _vm._v(
-                                                        "\n                      Pending " +
-                                                          _vm._s(
-                                                            item.status ===
-                                                            "AT_DEPARTMENT_HEAD"
-                                                              ? " Department "
-                                                              : " Purchasing "
-                                                          ) +
-                                                          " Head approval\n                    "
-                                                      )
-                                                    ],
-                                                    1
-                                                  )
-                                                : _vm._e(),
-                                              _vm._v(" "),
-                                              _vm.showApprovalActions(item)
-                                                ? _c(
-                                                    "v-btn",
-                                                    {
-                                                      attrs: {
-                                                        flat: "",
-                                                        color: "red",
-                                                        small: "",
-                                                        outline: ""
-                                                      },
-                                                      nativeOn: {
-                                                        click: function(
-                                                          $event
-                                                        ) {
-                                                          _vm.reject(
-                                                            props.item,
-                                                            item
-                                                          )
-                                                        }
-                                                      }
-                                                    },
-                                                    [
-                                                      _c(
-                                                        "v-icon",
-                                                        {
-                                                          attrs: {
-                                                            left: "",
-                                                            small: ""
-                                                          }
-                                                        },
-                                                        [
-                                                          _vm._v(
-                                                            "close\n                      "
-                                                          )
-                                                        ]
-                                                      ),
-                                                      _vm._v(
-                                                        "\n                      Reject\n                    "
-                                                      )
-                                                    ],
-                                                    1
-                                                  )
-                                                : _vm._e(),
-                                              _vm._v(" "),
-                                              _vm.showApprovalActions(item)
-                                                ? _c(
-                                                    "v-btn",
-                                                    {
-                                                      attrs: {
-                                                        flat: "",
-                                                        color: "success",
-                                                        small: "",
-                                                        outline: ""
-                                                      },
-                                                      nativeOn: {
-                                                        click: function(
-                                                          $event
-                                                        ) {
-                                                          _vm.confirm(
-                                                            props.item,
-                                                            item
-                                                          )
-                                                        }
-                                                      }
-                                                    },
-                                                    [
-                                                      _c(
-                                                        "v-icon",
-                                                        {
-                                                          attrs: {
-                                                            left: "",
-                                                            small: ""
-                                                          }
-                                                        },
-                                                        [
-                                                          _vm._v(
-                                                            "check_circle\n                      "
-                                                          )
-                                                        ]
-                                                      ),
-                                                      _vm._v(
-                                                        "\n                      Approve\n                    "
-                                                      )
-                                                    ],
-                                                    1
-                                                  )
-                                                : _vm._e()
-                                            ],
-                                            1
                                           )
                                         ],
                                         1
@@ -41950,7 +41920,7 @@ var render = function() {
                           _c(
                             "v-btn",
                             {
-                              attrs: { flat: "" },
+                              attrs: { flat: "", disabled: _vm.connecting },
                               nativeOn: {
                                 click: function($event) {
                                   _vm.step = 1
@@ -41971,7 +41941,11 @@ var render = function() {
                           _c(
                             "v-btn",
                             {
-                              attrs: { flat: "", color: "red" },
+                              attrs: {
+                                flat: "",
+                                disabled: _vm.connecting,
+                                color: "red"
+                              },
                               nativeOn: {
                                 click: function($event) {
                                   _vm.onClose(false)
@@ -42073,7 +42047,7 @@ var render = function() {
                           _c(
                             "v-btn",
                             {
-                              attrs: { flat: "" },
+                              attrs: { flat: "", disabled: _vm.connecting },
                               nativeOn: {
                                 click: function($event) {
                                   _vm.step = 2
@@ -42094,7 +42068,11 @@ var render = function() {
                           _c(
                             "v-btn",
                             {
-                              attrs: { flat: "", color: "red" },
+                              attrs: {
+                                flat: "",
+                                disabled: _vm.connecting,
+                                color: "red"
+                              },
                               nativeOn: {
                                 click: function($event) {
                                   _vm.onClose(false)
@@ -42107,7 +42085,10 @@ var render = function() {
                           _c(
                             "v-btn",
                             {
-                              attrs: { color: "primary" },
+                              attrs: {
+                                color: "primary",
+                                disabled: _vm.connecting
+                              },
                               nativeOn: {
                                 click: function($event) {
                                   _vm.step = 4
@@ -42266,6 +42247,7 @@ var render = function() {
                                   _c("v-checkbox", {
                                     staticClass: "mt-3",
                                     attrs: {
+                                      disabled: _vm.connecting,
                                       label: "This is an urgent delivery"
                                     },
                                     model: {
@@ -42322,7 +42304,7 @@ var render = function() {
                           _c(
                             "v-btn",
                             {
-                              attrs: { flat: "" },
+                              attrs: { flat: "", disabled: _vm.connecting },
                               nativeOn: {
                                 click: function($event) {
                                   _vm.step = 3
@@ -42343,7 +42325,11 @@ var render = function() {
                           _c(
                             "v-btn",
                             {
-                              attrs: { flat: "", color: "red" },
+                              attrs: {
+                                flat: "",
+                                disabled: _vm.connecting,
+                                color: "red"
+                              },
                               nativeOn: {
                                 click: function($event) {
                                   _vm.onClose(false)
@@ -42356,7 +42342,10 @@ var render = function() {
                           _c(
                             "v-btn",
                             {
-                              attrs: { color: "primary" },
+                              attrs: {
+                                color: "primary",
+                                disabled: _vm.connecting
+                              },
                               nativeOn: {
                                 click: function($event) {
                                   return _vm.submit($event)

@@ -3,6 +3,7 @@
 	namespace App;
 	
 	use Illuminate\Database\Eloquent\Model;
+	use Illuminate\Database\Eloquent\SoftDeletes;
 	
 	/**
  * App\SubscriptionItem
@@ -31,7 +32,9 @@
  */
 	class SubscriptionOptionItem extends Model
 	{
-		//
+		
+		use SoftDeletes;
+		
 		protected $hidden = ['option_id', 'created_at', 'updated_at'];
 		
 	}

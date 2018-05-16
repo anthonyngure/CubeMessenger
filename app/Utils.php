@@ -16,7 +16,6 @@
 	{
 		
 		
-		
 		/**
 		 * @param $phone
 		 * @return string
@@ -38,5 +37,10 @@
 		{
 			$testClient = Client::where('name', 'Test Client')->firstOrFail();
 			Mail::to($testClient)->send(new Demo($context));
+		}
+		
+		public static function toCurrencyText($amount)
+		{
+			return 'KSH ' . number_format($amount, 2);
 		}
 	}

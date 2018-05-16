@@ -12,7 +12,6 @@
 	use Hash;
 	use Illuminate\Database\Eloquent\Builder;
 	use Illuminate\Http\Request;
-	use TCG\Voyager\Models\Role;
 	
 	class UserController extends Controller
 	{

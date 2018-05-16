@@ -139,12 +139,14 @@
           <v-card >
             <v-card-actions >
               <v-btn flat
+                     :disabled="connecting"
                      @click.native="step = 1" >
                 <v-icon left >arrow_back</v-icon >
                 Back
               </v-btn >
               <v-spacer ></v-spacer >
               <v-btn flat
+                     :disabled="connecting"
                      @click.native="onClose(false)"
                      color="red" >Cancel
               </v-btn >
@@ -180,16 +182,19 @@
             
             <v-card-actions >
               <v-btn flat
+                     :disabled="connecting"
                      @click.native="step = 2" >
                 <v-icon left >arrow_back</v-icon >
                 Back
               </v-btn >
               <v-spacer ></v-spacer >
               <v-btn flat
+                     :disabled="connecting"
                      @click.native="onClose(false)"
                      color="red" >Cancel
               </v-btn >
               <v-btn color="primary"
+                     :disabled="connecting"
                      @click.native="step = 4" >
                 Continue
               </v-btn >
@@ -230,6 +235,7 @@
                   </v-tooltip >
                   <v-checkbox v-model="urgent"
                               class="mt-3"
+                              :disabled="connecting"
                               label="This is an urgent delivery" >
                   </v-checkbox >
                   <span v-if="itemWithLongestDistance" >Estimated Max Distance: {{itemWithLongestDistance
@@ -243,16 +249,19 @@
             </v-card-text >
             <v-card-actions >
               <v-btn flat
+                     :disabled="connecting"
                      @click.native="step = 3" >
                 <v-icon left >arrow_back</v-icon >
                 Back
               </v-btn >
               <v-spacer ></v-spacer >
               <v-btn flat
+                     :disabled="connecting"
                      @click.native="onClose(false)"
                      color="red" >Cancel
               </v-btn >
               <v-btn color="primary"
+                     :disabled="connecting"
                      @click.native="submit" >
                 Continue
               </v-btn >
@@ -379,6 +388,7 @@ export default {
       this.originFormattedAddress = null
       this.originVicinity = null
       this.note = null
+      this.urgent = false
       this.scheduleDate = null
       this.scheduleTime = null
       this.items = []

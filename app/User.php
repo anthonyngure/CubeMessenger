@@ -2,8 +2,10 @@
 	
 	namespace App;
 	
+	use Illuminate\Foundation\Auth\User as Authenticatable;
 	use App\Exceptions\WrappedException;
 	use Illuminate\Notifications\Notifiable;
+	use TCG\Voyager\Models\Role;
 	use Tymon\JWTAuth\Contracts\JWTSubject;
 	
 	/**
@@ -28,7 +30,6 @@
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Delivery[] $deliveries
  * @property-read \App\Department|null $department
  * @property-read \Illuminate\Notifications\DatabaseNotificationCollection|\Illuminate\Notifications\DatabaseNotification[] $notifications
- * @property-read \TCG\Voyager\Models\Role|null $role
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\ServiceRequest[] $serviceRequests
  * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereAvatar($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereClientId($value)
@@ -192,6 +193,14 @@
 		public function deliveries()
 		{
 			return $this->hasMany(Delivery::class);
+		}
+		
+		/**
+		 * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+		 */
+		public function role()
+		{
+			return $this->belongsTo(Role::class);
 		}
 		
 	}

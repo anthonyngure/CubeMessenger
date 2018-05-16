@@ -2,7 +2,7 @@
 	
 	namespace App\Observers;
 	
-	use App\Charge;
+	use App\Bill;
 	use App\Subscription;
 	use App\User;
 	
@@ -29,6 +29,29 @@
 		public function created(Subscription $subscription)
 		{
 			//code...
+			/**
+			 * Charge client for this subscription
+			 * The user associated with the delivery
+			 * @var \App\User $user
+			 */
+			$user = User::with('client')->findOrFail($subscription->user_id);
+			
+			$amount = $subscription->item_cost + $subscription->delivery_fee;
+			
+			$description = 'Subscription for ' . $subscription->quantity . ' '
+				. $subscription->optionItem()->firstOrFail(['name'])->name . ', '
+				. ($subscription->renew_every_month ? ' renewable every month ' : ' until '
+					. $subscription->termination_date);
+			
+			
+			Bill::updateOrCreate([
+				'client_id'     => $user->client_id,
+				'billable_id'   => $subscription->id,
+				'billable_type' => Subscription::class,
+			], [
+				'description' => $description,
+				'amount'      => $amount,
+			]);
 		}
 		
 		/**
@@ -40,6 +63,13 @@
 		public function updating(Subscription $subscription)
 		{
 			//code...
+			if ($subscription->status == 'REJECTED') {
+				$subscription->bill()->delete();
+			} else if ($subscription->status == 'ACTIVE') {
+				$subscription->bill()->update([
+					'status' => 'SETTLED',
+				]);
+			}
 		}
 		
 		/**
@@ -50,14 +80,7 @@
 		 */
 		public function updated(Subscription $subscription)
 		{
-			//code...
-			if ($subscription->status === 'REJECTED') {
-				$subscription->charge()->delete();
-			} else if ($subscription->status === 'ACTIVE') {
-				$subscription->charge()->update([
-					'status' => 'SETTLED',
-				]);
-			}
+		
 		}
 		
 		/**
@@ -81,26 +104,7 @@
 		{
 			//code...
 			
-			/**
-			 * Charge client for this subscription
-			 * The user associated with the delivery
-			 * @var \App\User $user
-			 */
-			$user = User::with('client')->findOrFail($subscription->user_id);
 			
-			$amount = $subscription->item_cost + $subscription->delivery_fee;
-			
-			$description = 'Subscription for ' . $subscription->optionItem()->firstOrFail(['name'])->name;
-			
-			
-			Charge::updateOrCreate([
-				'client_id'       => $user->client_id,
-				'chargeable_id'   => $subscription->id,
-				'chargeable_type' => Subscription::class,
-			], [
-				'description' => $description,
-				'amount'      => $amount,
-			]);
 		}
 		
 		/**

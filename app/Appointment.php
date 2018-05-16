@@ -3,6 +3,7 @@
 	namespace App;
 	
 	use Illuminate\Database\Eloquent\Model;
+	use Illuminate\Database\Eloquent\SoftDeletes;
 	
 	/**
  * App\Appointment
@@ -52,6 +53,8 @@
  */
 	class Appointment extends Model
 	{
+		
+		use SoftDeletes;
 		
 		protected $casts = [
 			'all_day' => 'boolean',

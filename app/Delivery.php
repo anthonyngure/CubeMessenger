@@ -2,7 +2,9 @@
 	
 	namespace App;
 	
+	use App\Traits\Billable;
 	use Illuminate\Database\Eloquent\Model;
+	use Illuminate\Database\Eloquent\SoftDeletes;
 	
 	/**
  * App\Delivery
@@ -14,21 +16,21 @@
  * @property string $origin_vicinity
  * @property string $origin_formatted_address
  * @property float $origin_latitude
- * @property float $origin_longitude
- * @property string $schedule_date
- * @property string $schedule_time
- * @property float $estimated_cost
- * @property float $estimated_max_distance
- * @property float $estimated_max_duration
- * @property int|null $rider_id
- * @property string|null $pickup_time
- * @property float|null $pickup_latitude
- * @property float|null $pickup_longitude
- * @property \Carbon\Carbon|null $created_at
- * @property \Carbon\Carbon|null $updated_at
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Charge[] $charges
+ * @property float                                                             $origin_longitude
+ * @property string                                                            $schedule_date
+ * @property string                                                            $schedule_time
+ * @property float                                                             $estimated_cost
+ * @property float                                                             $estimated_max_distance
+ * @property float                                                             $estimated_max_duration
+ * @property int|null                                                          $rider_id
+ * @property string|null                                                       $pickup_time
+ * @property float|null                                                        $pickup_latitude
+ * @property float|null                                                        $pickup_longitude
+ * @property \Carbon\Carbon|null                                               $created_at
+ * @property \Carbon\Carbon|null                                               $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Bill[]         $charges
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\DeliveryItem[] $items
- * @property-read \App\User $user
+ * @property-read \App\User                                                    $user
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Delivery whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Delivery whereEstimatedCost($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Delivery whereEstimatedMaxDistance($value)
@@ -49,13 +51,14 @@
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Delivery whereUrgent($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Delivery whereUserId($value)
  * @mixin \Eloquent
- * @property-read mixed $stats
- * @property-read \App\Charge $charge
- * @property string|null $deleted_at
+ * @property-read mixed                                                        $stats
+ * @property-read \App\Bill                                                    $charge
+ * @property string|null                                                       $deleted_at
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Delivery whereDeletedAt($value)
  */
 	class Delivery extends Model
 	{
+		use Billable, SoftDeletes;
 		
 		protected $appends = ['stats'];
 		
@@ -88,13 +91,7 @@
 			return $this->belongsTo(User::class);
 		}
 		
-		/**
-		 * @return \Illuminate\Database\Eloquent\Relations\MorphOne
-		 */
-		public function charge()
-		{
-			return $this->morphOne(Charge::class, 'chargeable');
-		}
+		
 		
 		public function getStatsAttribute()
 		{

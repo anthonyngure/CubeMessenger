@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * App\AppointmentExternalParticipant
@@ -26,6 +27,8 @@ use Illuminate\Database\Eloquent\Model;
 class AppointmentExternalParticipant extends Model
 {
     //
+	
+	use SoftDeletes;
 	
 	protected $guarded = [
 		'id', 'created_at', 'updated_at',

@@ -4,10 +4,10 @@
 	
 	use App\Client;
 	use App\Exceptions\WrappedException;
+	use App\Notifications\BillCanceledNotification;
 	use App\Notifications\InsufficientBalance;
-	use App\Notifications\PurchaseApprovedNotification;
-	use App\Notifications\PurchaseRejectedNotification;
-	use App\User;
+	use App\Traits\Billable;
+	use App\Utils;
 	use Auth;
 	use Carbon\Carbon;
 	use Fractal;
@@ -26,30 +26,32 @@
 		
 		
 		/**
-		 * @param \Illuminate\Http\Request            $request
-		 * @param \Illuminate\Database\Eloquent\Model $approval
+		 * @param \Illuminate\Http\Request                     $request
+		 * @param \Illuminate\Database\Eloquent\Model|Billable $approval
 		 * @throws \App\Exceptions\WrappedException
+		 * @throws \Exception
 		 */
 		public function handleApprovals(Request $request, Model $approval, $statusAfterPurchasingHeadApproval)
 		{
-			/** @var User $authorOfTheApproval */
-			$authorOfTheApproval = User::with('role')->findOrFail($approval->user_id);
 			
 			$user = Auth::user();
 			if ($request->action == 'reject') {
-				$authorOfTheApproval->notify(new PurchaseRejectedNotification($approval, $user));
 				$approval->rejected_by_id = $user->getKey();
+				/** @var \App\Bill $bill */
+				$bill = $approval->bill()->firstOrFail();
+				$bill->delete();
+				/** @var \App\Client $client */
+				$client = $bill->client()->firstOrFail();
+				$client->notify(new BillCanceledNotification($bill));
 			}
 			
 			if (($approval->status == 'AT_DEPARTMENT_HEAD' && $user->isDepartmentHead())) {
 				$approval->status = $request->action == 'approve' ? 'AT_PURCHASING_HEAD' : 'REJECTED';
 				$approval->department_head_acted_at = Carbon::now()->toDateTimeString();
-				$authorOfTheApproval->notify(new PurchaseApprovedNotification($approval, $user));
 				$approval->save();
 			} else if (($approval->status == 'AT_PURCHASING_HEAD' && $user->isPurchasingHead())) {
 				$approval->status = $request->action == 'approve' ? $statusAfterPurchasingHeadApproval : 'REJECTED';
 				$approval->purchasing_head_acted_at = Carbon::now()->toDateTimeString();
-				$authorOfTheApproval->notify(new PurchaseApprovedNotification($approval, $user));
 				$approval->save();
 			} else {
 				throw new WrappedException("You are not allowed to perform the requested operation");
@@ -84,10 +86,11 @@
 		}
 		
 		/**
-		 * @param $amount
+		 * @param      $amount
+		 * @param null $errorMessage
 		 * @throws \App\Exceptions\WrappedException
 		 */
-		public function checkBalance($amount)
+		public function checkBalance($amount, $errorMessage = null)
 		{
 			$client = Auth::user()->getClient();
 			
@@ -96,14 +99,14 @@
 			if ($client->isPostPaid()) {
 				//Since balance can be negative add the limit to the available balance
 				if (($balance + $client->limit) < $amount) {
-					$message = "You have insufficient balance and spending limit!";
+					$message = is_null($errorMessage) ? 'A request that required ' . Utils::toCurrencyText($amount) . ' could not be completed!' : $errorMessage;
 					$client->notify(new InsufficientBalance($message));
 					//$client->getPurchasingHead()->notify(new InsufficientBalance($message));
 					throw new WrappedException($message);
 				}
 			} else if ($balance < $amount) {
 				if ($balance < $amount) {
-					$message = "You have insufficient balance!";
+					$message = is_null($errorMessage) ? "You have insufficient balance!" : $errorMessage;
 					$client->notify(new InsufficientBalance($message));
 					//$client->getPurchasingHead()->notify(new InsufficientBalance($message));
 					throw new WrappedException($message);

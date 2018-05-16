@@ -2,7 +2,9 @@
 	
 	namespace App;
 	
+	use App\Traits\Billable;
 	use Illuminate\Database\Eloquent\Model;
+	use Illuminate\Database\Eloquent\SoftDeletes;
 	
 	/**
  * App\ShopOrder
@@ -46,6 +48,9 @@
 	class ShopOrder extends Model
 	{
 		//
+		
+		use SoftDeletes, Billable;
+		
 		protected $guarded = ['id', 'created_at', 'updated_at'];
 		
 		
@@ -67,11 +72,4 @@
 			return $this->belongsTo(User::class);
 		}
 		
-		/**
-		 * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-		 */
-		public function rejectedBy()
-		{
-			return $this->belongsTo(User::class, 'rejected_by_id');
-		}
 	}

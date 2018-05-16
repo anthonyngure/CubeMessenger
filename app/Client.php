@@ -2,14 +2,14 @@
 	
 	namespace App;
 	
-	use Illuminate\Database\Eloquent\Builder;
 	use Illuminate\Database\Eloquent\Model;
+	use Illuminate\Database\Eloquent\SoftDeletes;
 	use Illuminate\Notifications\Notifiable;
 	
 	/**
 	 * App\Client
 	 *
-	 * @property-read \Illuminate\Database\Eloquent\Collection|\App\Charge[]
+	 * @property-read \Illuminate\Database\Eloquent\Collection|\App\Bill[]
 	 *                        $charges
 	 * @property-read \Illuminate\Database\Eloquent\Collection|\App\Department[]
 	 *                        $departments
@@ -57,7 +57,7 @@
 	 */
 	class Client extends Model
 	{
-		use Notifiable;
+		use Notifiable, SoftDeletes;
 		
 		public function subscriptions()
 		{
@@ -88,9 +88,9 @@
 			return $this->hasMany(TopUp::class);
 		}
 		
-		public function charges()
+		public function bills()
 		{
-			return $this->hasMany(Charge::class);
+			return $this->hasMany(Bill::class);
 		}
 		
 		
@@ -101,15 +101,15 @@
 			 */
 			
 			$sumTopUps = round($this->topUps()->sum('amount'), 0);
-			$sumCharges = round($this->charges()->sum('amount'));
+			$sumBills = round($this->bills()->sum('amount'));
 			
-			return $sumTopUps - $sumCharges;
+			return $sumTopUps - $sumBills;
 		}
 		
 		public function getSpent()
 		{
-			$amountSpent = $this->charges()
-				->whereMonth('created_at', date('m'))
+			$amountSpent = $this->bills()
+				//->whereMonth('created_at', date('m'))
 				->whereStatus('SETTLED')
 				->sum('amount');
 			
@@ -122,9 +122,9 @@
 			/**
 			 * Return all charges for this month that have status blocking
 			 */
-			$amountBlocked = $this->charges()
+			$amountBlocked = $this->bills()
 				->whereMonth('created_at', date('m'))
-				->whereStatus('BLOCKING')
+				->whereStatus('BLOCKED')
 				->sum('amount');
 			
 			return round($amountBlocked, 0);

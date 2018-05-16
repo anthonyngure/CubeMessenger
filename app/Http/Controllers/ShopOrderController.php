@@ -2,9 +2,9 @@
 	
 	namespace App\Http\Controllers;
 	
-	use App\Exceptions\WrappedException;
 	use App\ShopOrder;
 	use App\ShopProduct;
+	use App\Utils;
 	use Auth;
 	use Illuminate\Database\Eloquent\Relations\BelongsTo;
 	use Illuminate\Http\Request;
@@ -46,7 +46,7 @@
 				$orders = ShopOrder::whereIn('user_id', $client->users->pluck('id'))
 					->where('status', 'REJECTED')
 					->with(['shopProduct', 'user'])
-					->with(['rejectedBy'=>function(BelongsTo $belongsTo){
+					->with(['rejectedBy' => function (BelongsTo $belongsTo) {
 						$belongsTo->with('role');
 					}])
 					->get();
@@ -72,9 +72,14 @@
 				'quantity'      => 'required|numeric',
 			]);
 			
-			$product = ShopProduct::findOrFail($request->shopProductId, ['price']);
+			/** @var ShopProduct $product */
+			$product = ShopProduct::findOrFail($request->shopProductId, ['price','name']);
 			$amount = $product->price * $request->quantity;
-			$this->checkBalance($amount);
+			
+			$insufficientBalanceMessage = 'You have insufficient balance to purchase '
+				. $request->quantity . ' ' . $product->name . ' for ' . Utils::toCurrencyText($amount);
+			
+			$this->checkBalance($amount, $insufficientBalanceMessage);
 			
 			$shopOrder = ShopOrder::create([
 				'user_id'         => $user->getKey(),

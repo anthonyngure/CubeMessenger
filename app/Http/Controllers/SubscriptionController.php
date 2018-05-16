@@ -4,6 +4,7 @@
 	
 	use App\Subscription;
 	use App\SubscriptionOptionItem;
+	use App\Utils;
 	use Auth;
 	use Illuminate\Database\Eloquent\Relations\BelongsTo;
 	use Illuminate\Database\Eloquent\Relations\HasOne;
@@ -73,7 +74,14 @@
 			
 			$amountToCharge = $request->json('itemCost') + $request->json('deliveryCost');
 			
-			$this->checkBalance($amountToCharge);
+			/** @var SubscriptionOptionItem $subscriptionOptionItem */
+			$subscriptionOptionItem = SubscriptionOptionItem::findOrFail($request->json('optionItemId'));
+			
+			$insufficientBalanceMessage = 'You have insufficient balance to subscribe for '
+				. $request->json('quantity') . ' ' . $subscriptionOptionItem->name .
+				' at a cost of  ' . Utils::toCurrencyText($amountToCharge);
+			
+			$this->checkBalance($amountToCharge, $insufficientBalanceMessage);
 			
 			$subscription = Subscription::create([
 				'user_id'                     => \Auth::user()->getKey(),
@@ -122,9 +130,10 @@
 				'action' => 'required|in:approve,reject',
 			]);
 			
+			/** @var \App\Subscription $subscription */
 			$subscription = Subscription::findOrFail($id);
 			
-			$this->handleApprovals($request, $subscription,'ACTIVE');
+			$this->handleApprovals($request, $subscription, 'ACTIVE');
 			
 			$subscriptions = Subscription::whereIn('user_id',
 				Auth::user()->getClient()->users->pluck('id'))

@@ -3,6 +3,7 @@
 	namespace App;
 	
 	use Illuminate\Database\Eloquent\Model;
+	use Illuminate\Database\Eloquent\SoftDeletes;
 	
 	/**
  * App\ShopProduct
@@ -38,6 +39,7 @@
 	class ShopProduct extends Model
 	{
 		//
+		use SoftDeletes;
 		
 		protected $hidden = ['shop_category_id'];
 		
