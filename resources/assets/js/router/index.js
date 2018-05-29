@@ -10,6 +10,10 @@ import Orders from '../components/Orders'
 import Users from '../components/Users'
 import Profile from '../components/Profile'
 import Departments from '../components/Departments'
+import Clients from '../components/Clients'
+import Roles from '../components/Roles'
+import TopUps from '../components/TopUps'
+import Products from '../components/Products'
 import Vue from 'vue'
 import Router from 'vue-router'
 
@@ -29,6 +33,24 @@ export default new Router({
       path: '/auth/signIn',
       name: 'signIn',
       component: SignIn
+    },
+    {
+      meta: {auth: true},
+      path: '/clients',
+      name: 'clients',
+      component: Clients
+    },
+    {
+      meta: {auth: true},
+      path: '/roles',
+      name: 'roles',
+      component: Roles
+    },
+    {
+      meta: {auth: true},
+      path: '/topUps',
+      name: 'topUps',
+      component: TopUps
     },
     {
       meta: {auth: true},
@@ -70,6 +92,12 @@ export default new Router({
       path: '/users',
       name: 'users',
       component: Users
+    },
+    {
+      meta: {auth: true},
+      path: '/products',
+      name: 'products',
+      component: Products
     },
     {
       meta: {auth: true},

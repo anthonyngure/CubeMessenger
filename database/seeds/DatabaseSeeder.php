@@ -21,8 +21,9 @@
 			$this->call(CourierOptionsTableSeeder::class);
 			$this->call(SubscriptionOptionsTableSeeder::class);
 			$this->call(SubscriptionOptionItemsTableSeeder::class);
-			$this->call(ShopCategoriesTableSeeder::class);
-			$this->call(ShopProductsTableSeeder::class);
+			$this->call(CategoriesTableSeeder::class);
+			$this->call(ProductsTableSeeder::class);
 			$this->call(ServiceRequestOptionsTableSeeder::class);
+			$this->call(CrudHeadersTableSeeder::class);
 		}
 	}

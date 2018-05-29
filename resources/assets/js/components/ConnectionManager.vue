@@ -35,6 +35,13 @@ export default {
     }
   },
   methods: {
+    
+    reset(){
+      this.connecting = false
+      this.error = false
+      this.errorText = null
+    },
+    
     onFailure (error, callbacks) {
       this.error = true
       this.connecting = false

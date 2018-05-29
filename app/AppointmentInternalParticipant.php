@@ -25,6 +25,11 @@
  * @method static \Illuminate\Database\Eloquent\Builder|\App\AppointmentInternalParticipant whereUserId($value)
  * @property string|null $deleted_at
  * @method static \Illuminate\Database\Eloquent\Builder|\App\AppointmentInternalParticipant whereDeletedAt($value)
+ * @method static bool|null forceDelete()
+ * @method static \Illuminate\Database\Query\Builder|\App\AppointmentInternalParticipant onlyTrashed()
+ * @method static bool|null restore()
+ * @method static \Illuminate\Database\Query\Builder|\App\AppointmentInternalParticipant withTrashed()
+ * @method static \Illuminate\Database\Query\Builder|\App\AppointmentInternalParticipant withoutTrashed()
  */
 	class AppointmentInternalParticipant extends Model
 	{

@@ -47,6 +47,12 @@
  * @mixin \Eloquent
  * @property string|null $deleted_at
  * @method static \Illuminate\Database\Eloquent\Builder|\App\ServiceRequest whereDeletedAt($value)
+ * @property-read \App\Bill $bill
+ * @method static bool|null forceDelete()
+ * @method static \Illuminate\Database\Query\Builder|\App\ServiceRequest onlyTrashed()
+ * @method static bool|null restore()
+ * @method static \Illuminate\Database\Query\Builder|\App\ServiceRequest withTrashed()
+ * @method static \Illuminate\Database\Query\Builder|\App\ServiceRequest withoutTrashed()
  */
 	class ServiceRequest extends Model
 	{

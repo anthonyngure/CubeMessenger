@@ -25,6 +25,11 @@
  * @mixin \Eloquent
  * @property string|null $deleted_at
  * @method static \Illuminate\Database\Eloquent\Builder|\App\CostVariable whereDeletedAt($value)
+ * @method static bool|null forceDelete()
+ * @method static \Illuminate\Database\Query\Builder|\App\CostVariable onlyTrashed()
+ * @method static bool|null restore()
+ * @method static \Illuminate\Database\Query\Builder|\App\CostVariable withTrashed()
+ * @method static \Illuminate\Database\Query\Builder|\App\CostVariable withoutTrashed()
  */
 	class CostVariable extends Model
 	{

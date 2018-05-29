@@ -1,198 +1,171 @@
-<template>
-    <v-layout row wrap>
-        <v-flex xs12>
-            <v-tabs fixed-tabs
-                    v-model="currentTab"
-                    slider-color="accent"
-                    lazy
-                    grow>
-                <v-tab href="#pendingApproval">Pending Approval</v-tab>
-                <v-tab href="#pendingDelivery">Pending Delivery</v-tab>
-                <v-tab href="#delivered">Delivered</v-tab>
-                <v-tab href="#rejected">Rejected</v-tab>
-            </v-tabs>
-            <v-card>
-                <v-container fluid grid-list-md>
-                    <connection-manager ref="connectionManager" v-model="loading">
-                    </connection-manager>
-                    <v-data-iterator
-                            content-tag="v-layout"
-                            row
-                            wrap
-                            :no-data-text="loading ? '' : 'No data available'"
-                            :items="orders"
-                            :rows-per-page-items="rowsPerPageItems"
-                            :pagination.sync="pagination">
-                        <v-flex xs3 slot="item"
-                                slot-scope="props">
-                            <v-card>
-                                <v-card-media
-                                        :src="$utils.imageUrl(props.item.shopProduct.image)"
-                                        height="150px">
-                                    <v-container fill-height fluid>
-                                        <v-layout fill-height>
-                                            <v-flex xs12 align-end flexbox>
-                                                <span class="subheading white--text">{{props.item.shopProduct.name}}</span>
-                                            </v-flex>
-                                        </v-layout>
-                                    </v-container>
-                                </v-card-media>
+<template >
+  <v-layout row
+            wrap >
+    <v-flex xs12 >
+      <crud resource="orders"
+            ref="crud"
+            :manager="manager"
+            :filters="filters"
+            :custom-view-dialog="true" ></crud >
+    </v-flex >
+    
+    <v-dialog v-model="viewDialogHere"
+              max-width="800px"
+              persistent >
+      <v-card v-if="item" >
+        <v-card-text >
+          
+          <connection-manager ref="connectionManager"
+                              v-model="connecting" ></connection-manager >
+          
+          <v-data-table
+            hide-headers
+            hide-actions
+            :headers="viewItemHeaders"
+            :items="viewableHeaders" >
+            <template slot="items"
+                      slot-scope="props" >
+              <td >{{props.item.text}}</td >
+              <td >{{manager.toValue(props.item, item)}}</td >
+            </template >
+          </v-data-table >
+          
+          <guide text="Check the items you want to approve or reject in this order"
+                 v-if="showApprovalActions(item.items[0])">
+          </guide >
+          <v-data-table
+            :items="item.items"
+            v-model="selected"
+            hide-actions
+            item-key="name"
+            :style="'max-height: '+($vuetify.breakpoint.height * 0.30)+'px;'"
+            class="scroll-y"
+            :select-all="showApprovalActions(item.items[0])"
+            :headers="productHeaders" >
+            <template slot="items"
+                      slot-scope="props" >
+              <td v-if="showApprovalActions(props.item)">
+                <v-checkbox
+                  v-model="props.selected"
+                  primary
+                  hide-details >
+                </v-checkbox >
+              </td >
+              <td >{{props.item.product.name}}</td >
+              <td >{{props.item.product.price}}</td >
+              <td >{{props.item.quantity}}</td >
+              <td >{{$utils.formatMoney(props.item.product.price*props.item.quantity)}}</td >
+              <td >{{props.item.status}}</td >
+            </template >
+          </v-data-table >
+        </v-card-text >
+        <v-card-actions >
+          <v-btn :color="selected.length ? 'primary' : 'accent'"
+                 :disabled="connecting"
+                 v-if="showApprovalActions(item.items[0])"
+                 @click.native="approve" >{{getActionText}}
+          </v-btn >
+          
+          <v-spacer ></v-spacer >
+          <v-btn color="red darken-1"
+                 flat
+                 @click.native="close" >Close
+          </v-btn >
+        </v-card-actions >
+      </v-card >
+    </v-dialog >
+  
+  </v-layout >
+</template >
 
-                                <v-tooltip top lazy max-width="200px">
-                                    <v-btn flat block slot="activator" class="mt-0 mb-0">
-                                        Ksh. {{props.item.shopProduct.price}}
-                                        <v-icon small right>info</v-icon>
-                                    </v-btn>
-                                    <span>{{props.item.shopProduct.description}}</span>
-                                </v-tooltip>
+<script >
+import Crud from './Crud'
+import CrudBase from './CrudBase'
+import Guide from './Guide'
+import ConnectionManager from './ConnectionManager'
 
-                                <v-chip v-if="props.item.status === 'AT_DEPARTMENT_HEAD' || props.item.status === 'AT_PURCHASING_HEAD'"
-                                        label outline color="red" small>
-                                    <v-icon left>info</v-icon>
-                                    Pending {{props.item.status === 'AT_DEPARTMENT_HEAD' ? ' Department ' :
-                                    ' Purchasing '}} Head approval
-                                </v-chip>
-
-                                <v-alert type="error" :value="true" v-if="props.item.status === 'REJECTED'" outline>
-                                    Rejected by {{props.item.rejectedBy.role.name}} <br/>
-                                    {{props.item.rejectedBy.name}}
-                                </v-alert>
-
-                                <div class="mx-3">
-                                    <span class="grey--text">Quantity: {{props.item.quantity}}</span><br>
-                                    <span>Total: {{$utils.formatMoney(props.item.shopProduct.price * props.item.quantity)}}</span><br/>
-                                    <span>Ordered At:
-                                        <timeago class="accent--text"
-                                                 :since="props.item.createdAt">
-                                        </timeago>
-                                    </span><br/>
-                                    <span v-if="currentTab === 'delivered'">Delivered At:
-                                        <timeago class="accent--text"
-                                                 :since="props.item.deliveredAt">
-                                        </timeago>
-                                        <br/>
-                                    </span>
-                                    <span>Ordered By: {{props.item.user.name}}</span>
-                                </div>
-
-                                <v-card-actions v-if="showApprovalActions(props.item)">
-                                    <v-spacer></v-spacer>
-                                    <v-btn flat color="red" small outline
-                                           @click.native="reject(props.item)">
-                                        <v-icon left small>close</v-icon>
-                                        Reject
-                                    </v-btn>
-                                    <v-btn flat color="success" small outline
-                                           @click.native="confirm(props.item)">
-                                        <v-icon left small>check_circle</v-icon>
-                                        Confirm
-                                    </v-btn>
-                                </v-card-actions>
-                            </v-card>
-                        </v-flex>
-                    </v-data-iterator>
-                </v-container>
-            </v-card>
-        </v-flex>
-
-        <v-fab-transition v-if="isDepartmentUser()">
-            <v-btn class="ma-5"
-                   color="accent"
-                   fab
-                   dark
-                   fixed
-                   bottom
-                   :value="false"
-                   to="shopping"
-                   right>
-                <v-icon>add</v-icon>
-            </v-btn>
-        </v-fab-transition>
-    </v-layout>
-</template>
-
-<script>
-  import ConnectionManager from './ConnectionManager'
-  import Base from './Base.vue'
-  import EventBus from '../event-bus'
-
-  export default {
-    extends: Base,
-    components: {ConnectionManager},
-    name: 'orders',
-    data () {
-      return {
-        purchasingHeadApproval: false,
-        departmentHeadApproval: false,
-        currentTab: null,
-        loading: false,
-        selectedProduct: null,
-        orders: [],
-        rowsPerPageItems: [8],
-        pagination: {
-          rowsPerPage: 8
-        },
-      }
-    },
-    methods: {
-      showApprovalActions (order) {
-        return this.currentTab === 'pendingApproval' && (
-          (this.isPurchasingHead() && order.status === 'AT_PURCHASING_HEAD')
-          || (this.isDepartmentHead() && order.status === 'AT_DEPARTMENT_HEAD')
-        )
-      },
-      refresh () {
-        let that = this
-        this.$refs.connectionManager.get('shopOrders', {
-          onSuccess (response) {
-            that.orders = []
-            that.orders = that.orders.concat(response.data.data)
-          }
-        }, {
-          filter: this.currentTab
-        })
-      },
-      confirm (order) {
-        this.orders = []
-        let that = this
-        this.$refs.connectionManager.patch('shopOrders/' + order.id, {
-          onSuccess (response) {
-            that.orders = []
-            that.orders = that.orders.concat(response.data.data)
-            EventBus.$emit(that.$actions.approved)
-          }
-        }, {
-          action: 'approve'
-        })
-      },
-      reject (order) {
-        this.orders = []
-        let that = this
-        this.$refs.connectionManager.patch('shopOrders/' + order.id, {
-          onSuccess (response) {
-            that.orders = []
-            that.orders = that.orders.concat(response.data.data)
-            EventBus.$emit(that.$actions.approved)
-          }
-        }, {
-          action: 'reject'
-        })
-      }
-    },
-    watch: {
-      currentTab (val) {
-        if (val) {
-          this.orders = []
-          this.refresh()
-        }
-      }
-    },
-    mounted () {
-      this.currentTab = 'pendingApproval'
+export default {
+  extends: CrudBase,
+  components: {ConnectionManager, Guide, Crud},
+  name: 'Orders',
+  data () {
+    return {
+      item: null,
+      viewDialogHere: false,
+      connecting: false,
+      viewableHeaders: [],
+      viewItemHeaders: [],
+      selected: [],
+      filters: [
+        'pendingApproval', 'pendingDelivery', 'delivered', 'rejected'
+      ],
+      productHeaders: [
+        {text: 'Name', value: 'product.name'},
+        {text: 'Price', value: 'product.price'},
+        {text: 'Quantity', value: 'quantity'},
+        {text: 'Total', value: 'total'},
+        {text: 'Status', value: 'status'}
+      ]
     }
+  },
+  computed: {
+    getActionText () {
+      if (this.selected.length === 0) {
+        return 'Reject all un selected items'
+      } else if (this.selected.length !== this.item.items.length) {
+        return 'Accept all selected items and reject items un selected'
+      } else {
+        return 'Accept all selected items'
+      }
+    }
+  },
+  methods: {
+    close () {
+      this.item = null
+      this.viewDialogHere = false
+    },
+    initialize () {
+      let that = this
+      this.manager.editable = (item) => {
+        return false
+      }
+      this.manager.creatable = () => {
+        return false
+      }
+      this.manager.nameOnDelete = (item) => {
+        return 'this order.'
+      }
+      this.manager.hasCustomView = (item, viewableHeaders, viewItemHeaders) => {
+        that.item = item
+        that.viewDialogHere = true
+        that.viewableHeaders = viewableHeaders
+        that.viewItemHeaders = viewItemHeaders
+        return true
+      }
+    },
+    approve () {
+      let that = this
+      this.item.items.forEach(product => {
+        let selected = that.selected.find(selected => selected.id === product.id)
+        product.approved = !!selected
+      })
+      this.$refs.connectionManager.patch('orders/' + this.item.id, {
+        onSuccess (response) {
+          that.item = null
+          that.selected = []
+          that.viewDialogHere = false
+          that.$refs.crud.updateItem(response.data.data)
+        }
+      }, this.item.items)
+    },
+    showApprovalActions (item) {
+      return (this.isPurchasingHead() && item.status === 'AT_PURCHASING_HEAD')
+        || (this.isDepartmentHead() && item.status === 'AT_DEPARTMENT_HEAD')
+    },
   }
-</script>
+}
+</script >
 
-<style scoped>
+<style scoped >
 
-</style>
+</style >

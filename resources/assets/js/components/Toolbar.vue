@@ -9,7 +9,20 @@
          height="32px"
          width="200px" />
     <v-spacer ></v-spacer >
+    <v-toolbar-items v-if="$route.name === 'shopping'" >
+      <v-btn icon
+             @click.stop="onToolbarCartIconClicked" >
+        <v-badge overlap
+                 small
+                 color="accent" >
+          <span slot="badge" >{{cartProductsCount}}</span >
+          <v-icon color="primary" >shopping_cart</v-icon >
+        </v-badge >
+      </v-btn >
+    </v-toolbar-items >
+    <v-spacer ></v-spacer >
     <v-toolbar-items >
+      
       <v-btn to="signIn"
              flat
              v-if="!$auth.check()" >
@@ -26,7 +39,7 @@
       </v-btn >
       <v-menu offset-y
               bottom
-              v-if="$auth.check()" >
+              v-if="$auth.check() && $auth.user().client" >
         <v-btn flat
                :color="accountButtonColor"
                slot="activator" >
@@ -92,12 +105,14 @@
                 You are on {{$auth.user().client.accountType}} account
               </v-chip >
             </v-list-tile-content >
-            <v-list-tile-action>
-              <v-btn small color="primary" @click.native="refreshBalance">
-                <v-icon left>refresh</v-icon>
+            <v-list-tile-action >
+              <v-btn small
+                     color="primary"
+                     @click.native="refreshBalance" >
+                <v-icon left >refresh</v-icon >
                 Refresh
-              </v-btn>
-            </v-list-tile-action>
+              </v-btn >
+            </v-list-tile-action >
           </v-list-tile >
         </v-list >
       </v-menu >
@@ -121,9 +136,12 @@
 
 <script >
 import EventBus from '../event-bus'
+import Base from './Base.vue'
+import {mapActions, mapGetters} from 'vuex'
 
 export default {
   name: 'toolbar',
+  extends: Base,
   data () {
     return {
       darkTheme: false,
@@ -142,7 +160,10 @@ export default {
       } else {
         return ((this.balance.actual + this.$auth.user().client.limit) > 200 || this.balance.actual === 0) ? 'primary' : 'error'
       }
-    }
+    },
+    ...mapGetters({
+      cartProductsCount: 'cartProductsTotal'
+    })
   },
   methods: {
     signOut () {
@@ -160,15 +181,18 @@ export default {
       })
     },
     onToolbarSideIconClick () {
-      EventBus.$emit('onToolbarSideIconClick')
+      EventBus.$emit(his.$actions.clickedToolbarCartIcon)
     },
     refreshBalance () {
       this.balance = 0
-      if (this.$auth.check()) {
+      if (this.$auth.check() && this.isAdmin()) {
         this.axios.get('balance').then(response => {
           this.balance = response.data.data
         })
       }
+    },
+    onToolbarCartIconClicked () {
+      EventBus.$emit(this.$actions.clickedToolbarCartIcon)
     }
   },
   mounted () {

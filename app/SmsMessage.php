@@ -23,6 +23,11 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\SmsMessage whereUpdatedAt($value)
  * @property string|null $deleted_at
  * @method static \Illuminate\Database\Eloquent\Builder|\App\SmsMessage whereDeletedAt($value)
+ * @method static bool|null forceDelete()
+ * @method static \Illuminate\Database\Query\Builder|\App\SmsMessage onlyTrashed()
+ * @method static bool|null restore()
+ * @method static \Illuminate\Database\Query\Builder|\App\SmsMessage withTrashed()
+ * @method static \Illuminate\Database\Query\Builder|\App\SmsMessage withoutTrashed()
  */
 class SmsMessage extends Model
 {

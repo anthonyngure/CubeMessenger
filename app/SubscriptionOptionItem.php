@@ -29,6 +29,11 @@
  * @method static \Illuminate\Database\Eloquent\Builder|\App\SubscriptionOptionItem wherePrice($value)
  * @property string|null $deleted_at
  * @method static \Illuminate\Database\Eloquent\Builder|\App\SubscriptionOptionItem whereDeletedAt($value)
+ * @method static bool|null forceDelete()
+ * @method static \Illuminate\Database\Query\Builder|\App\SubscriptionOptionItem onlyTrashed()
+ * @method static bool|null restore()
+ * @method static \Illuminate\Database\Query\Builder|\App\SubscriptionOptionItem withTrashed()
+ * @method static \Illuminate\Database\Query\Builder|\App\SubscriptionOptionItem withoutTrashed()
  */
 	class SubscriptionOptionItem extends Model
 	{

@@ -11,8 +11,6 @@
         <v-icon >shopping_cart</v-icon >
         <v-toolbar-title >Add to cart</v-toolbar-title >
       </v-toolbar >
-      <connection-manager ref="connectionManager"
-                          v-model="connecting" ></connection-manager >
       <v-card-media :src="$utils.imageUrl(product.image)"
                     height="150px" >
         <v-container fill-height
@@ -49,9 +47,10 @@
             <v-text-field
               v-model="quantity"
               required
-              :disabled="connecting"
               label="Enter quantity"
-              mask="###"
+              mask="##"
+              :rules="[rules.required]"
+              @keyup.enter="quantity > 0 ? onConfirm() : ()=>{}"
               placeholder="Quantity" >
             </v-text-field >
           </v-flex >
@@ -64,13 +63,12 @@
         <v-spacer ></v-spacer >
         <v-btn flat
                color="red"
-               :disabled="connecting"
-               @click.native="onCancel" >
+               @click.native="onCancel()" >
           Cancel
         </v-btn >
         <v-btn color="primary"
-               @click.native="submit"
-               :disabled="!quantity || connecting" >
+               @click.native="onConfirm()"
+               :disabled="!quantity || quantity < 1" >
           <v-icon left >check</v-icon >
           Confirm
         </v-btn >
@@ -81,12 +79,12 @@
 
 <script >
 
+import {mapActions} from 'vuex'
+import Base from './Base'
 
-import ConnectionManager from './ConnectionManager'
-import EventBus from '../event-bus'
 
 export default {
-  components: {ConnectionManager},
+  extends: Base,
   name: 'add-to-cart-dialog',
   props: {
     product: {
@@ -100,30 +98,22 @@ export default {
   },
   methods: {
     onCancel () {
-      //this.quantity = null
-      //this.connecting = false
-      this.$emit('onClose')
+      this.$emit('onCancel')
+      this.quantity = 1
     },
-    submit () {
-      let that = this
-      this.$refs.connectionManager.post('shopOrders', {
-        onSuccess (response) {
-          that.connecting = false
-          that.quantity = null
-          EventBus.$emit(that.$actions.placedOrder)
-          that.$emit('onClose', true)
-        }
-      }, {
-        quantity: this.quantity,
-        shopProductId: this.product.id
-      })
-    }
+    onConfirm () {
+      this.$store.dispatch('addProductToCart', {product: this.product, quantity: parseInt(this.quantity)})
+      this.quantity = 1
+      this.$emit('onCancel')
+    },
+    ...mapActions([
+      'addProductToCart'
+    ])
   },
   data () {
     return {
       dialog: false,
-      quantity: null,
-      connecting: false
+      quantity: 1
     }
   }
 }

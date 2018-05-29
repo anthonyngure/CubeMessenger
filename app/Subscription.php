@@ -49,6 +49,12 @@
  * @property-read \App\Bill      $charge
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Subscription whereDepartmentHeadActedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Subscription wherePurchasingHeadActedAt($value)
+ * @property-read \App\Bill $bill
+ * @method static bool|null forceDelete()
+ * @method static \Illuminate\Database\Query\Builder|\App\Subscription onlyTrashed()
+ * @method static bool|null restore()
+ * @method static \Illuminate\Database\Query\Builder|\App\Subscription withTrashed()
+ * @method static \Illuminate\Database\Query\Builder|\App\Subscription withoutTrashed()
  */
 	class Subscription extends Model
 	{

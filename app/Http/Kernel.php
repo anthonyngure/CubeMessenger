@@ -21,6 +21,7 @@
 			\App\Http\Middleware\TrustProxies::class,
 			\Barryvdh\Cors\HandleCors::class,
 			\App\Http\Middleware\AddVariables::class,
+			\App\Http\Middleware\NormalizePhone::class,
 		];
 		
 		/**
@@ -53,11 +54,13 @@
 		 * @var array
 		 */
 		protected $routeMiddleware = [
-			'auth'       => \Illuminate\Auth\Middleware\Authenticate::class,
-			'auth.basic' => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
-			'bindings'   => \Illuminate\Routing\Middleware\SubstituteBindings::class,
-			'can'        => \Illuminate\Auth\Middleware\Authorize::class,
-			'guest'      => \App\Http\Middleware\RedirectIfAuthenticated::class,
-			'throttle'   => \Illuminate\Routing\Middleware\ThrottleRequests::class,
+			'auth'         => \Illuminate\Auth\Middleware\Authenticate::class,
+			'auth.basic'   => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
+			'bindings'     => \Illuminate\Routing\Middleware\SubstituteBindings::class,
+			'can'          => \Illuminate\Auth\Middleware\Authorize::class,
+			'guest'        => \App\Http\Middleware\RedirectIfAuthenticated::class,
+			'throttle'     => \Illuminate\Routing\Middleware\ThrottleRequests::class,
+			'admin'        => \App\Http\Middleware\CheckAdmin::class,
+			'admin.client' => \App\Http\Middleware\CheckClientAdmin::class,
 		];
 	}

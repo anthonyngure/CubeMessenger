@@ -27,6 +27,11 @@
  * @mixin \Eloquent
  * @property string|null $deleted_at
  * @method static \Illuminate\Database\Eloquent\Builder|\App\CourierOption whereDeletedAt($value)
+ * @method static bool|null forceDelete()
+ * @method static \Illuminate\Database\Query\Builder|\App\CourierOption onlyTrashed()
+ * @method static bool|null restore()
+ * @method static \Illuminate\Database\Query\Builder|\App\CourierOption withTrashed()
+ * @method static \Illuminate\Database\Query\Builder|\App\CourierOption withoutTrashed()
  */
 	class CourierOption extends Model
 	{

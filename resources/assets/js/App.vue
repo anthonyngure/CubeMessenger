@@ -2,13 +2,13 @@
   <div >
     <div v-if="$auth.ready()" >
       <v-app :dark="darkTheme" >
-        <drawer v-if="$auth.check() && $auth.user().client" ></drawer >
+        <drawer v-if="$auth.check()" ></drawer >
         <toolbar ></toolbar >
         <v-content >
           <v-container grid-list-xs
                        fluid
                        fill-height >
-            <v-layout v-if="$route.name !== 'signIn' && $auth.check() && !$auth.user().client"
+            <v-layout v-if="$route.name !== 'signIn' && $auth.check() && !$auth.user().client && !isAdmin()"
                       align-center
                       justify-center >
               <v-flex xs12
@@ -65,22 +65,11 @@
             <v-flex xs6
                     py-3 >
               Powered By — <strong ><a target="_blank"
-                                       class="accent"
+                                       class="accent-4"
                                        href="http://thinksynergy.co.ke/" >Think Synergy Limited</a ></strong >
             </v-flex >
           </v-layout >
         </v-footer >
-        <v-snackbar :timeout="0"
-                    top
-                    left
-                    multi-line
-                    v-model="snackbarNotification" >
-          {{snackbarNotificationMessage}}
-          <v-btn flat
-                 color="pink"
-                 @click.native="snackbarNotification = false" >Close
-          </v-btn >
-        </v-snackbar >
       </v-app >
     </div >
     <div v-else >
@@ -94,9 +83,11 @@ import Loader from './components/Loader'
 import Toolbar from './components/Toolbar'
 import EventBus from './event-bus'
 import Drawer from './components/Drawer'
+import Base from './components/Base'
 
 export default {
   name: 'app',
+  extends: Base,
   components: {
     Drawer,
     Toolbar,

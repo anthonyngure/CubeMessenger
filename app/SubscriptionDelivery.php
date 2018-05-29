@@ -27,6 +27,11 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\SubscriptionDelivery whereDeletedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\SubscriptionDelivery whereReceivedById($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\SubscriptionDelivery whereSubscriptionId($value)
+ * @method static bool|null forceDelete()
+ * @method static \Illuminate\Database\Query\Builder|\App\SubscriptionDelivery onlyTrashed()
+ * @method static bool|null restore()
+ * @method static \Illuminate\Database\Query\Builder|\App\SubscriptionDelivery withTrashed()
+ * @method static \Illuminate\Database\Query\Builder|\App\SubscriptionDelivery withoutTrashed()
  */
 class SubscriptionDelivery extends Model
 {

@@ -24,6 +24,11 @@
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\User[] $users
  * @property string|null $deleted_at
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Department whereDeletedAt($value)
+ * @method static bool|null forceDelete()
+ * @method static \Illuminate\Database\Query\Builder|\App\Department onlyTrashed()
+ * @method static bool|null restore()
+ * @method static \Illuminate\Database\Query\Builder|\App\Department withTrashed()
+ * @method static \Illuminate\Database\Query\Builder|\App\Department withoutTrashed()
  */
 	class Department extends Model
 	{

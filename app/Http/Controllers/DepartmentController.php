@@ -2,9 +2,11 @@
 	
 	namespace App\Http\Controllers;
 	
+	use App\CrudHeader;
 	use App\Department;
 	use Auth;
 	use Illuminate\Http\Request;
+	use Illuminate\Validation\Rule;
 	
 	class DepartmentController extends Controller
 	{
@@ -16,11 +18,11 @@
 		 */
 		public function index()
 		{
-			//
+			$headers = CrudHeader::whereModel(Department::class)->get();
 			$client = Auth::user()->getClient();
-			$departments = $client->departments()->with('users')->get();
+			$departments = $client->departments()->get();
 			
-			return $this->collectionResponse($departments);
+			return $this->collectionResponse($departments, ['headers' => $headers]);
 		}
 		
 		/**
@@ -40,7 +42,7 @@
 			$client = Auth::user()->getClient();
 			
 			$department = $client->departments()->save(new Department([
-				'name' => $request->name,
+				'name' => $request->input('name'),
 			]));
 			
 			return $this->itemCreatedResponse($department);
@@ -54,18 +56,9 @@
 		 */
 		public function show($id)
 		{
-			//
-		}
-		
-		/**
-		 * Show the form for editing the specified resource.
-		 *
-		 * @param  int $id
-		 * @return \Illuminate\Http\Response
-		 */
-		public function edit($id)
-		{
-			//
+			$department = Department::findOrFail($id);
+			
+			return $this->itemResponse($department);
 		}
 		
 		/**
@@ -74,10 +67,22 @@
 		 * @param  \Illuminate\Http\Request $request
 		 * @param  int                      $id
 		 * @return \Illuminate\Http\Response
+		 * @throws \App\Exceptions\WrappedException
 		 */
 		public function update(Request $request, $id)
 		{
-			//
+			
+			$this->validate($request, [
+				'name' => ['required', Rule::unique('departments')->ignore($id)],
+			]);
+			
+			$client = Auth::user()->getClient();
+			
+			$department = $client->departments()->save(new Department([
+				'name' => $request->input('name'),
+			]));
+			
+			return $this->itemUpdatedResponse($department);
 		}
 		
 		/**

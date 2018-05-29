@@ -1,19 +1,17 @@
-// The Vue build version to load with the `import` command
-// (runtime-only or standalone) has been set in webpack.base.conf with an alias.
-
-
 import Vue from 'vue'
 import VueAxios from 'vue-axios'
 import axios from 'axios'
 import {loadProgressBar} from 'axios-progress-bar'
 import Notifications from 'vue-notification'
-Vue.use(Notifications)
 import 'axios-progress-bar/dist/nprogress.css'
 import App from './App.vue'
 import router from './router'
+import store from './store'
 import Vuetify from 'vuetify'
 import VueTimeago from 'vue-timeago'
 import formatCurrency from 'format-currency'
+
+Vue.use(Notifications)
 
 const DEBUG = false
 
@@ -23,6 +21,7 @@ const ACCENT_COLOR = '#FFC908'
 
 
 Vue.router = router
+//Vue.store = store
 
 
 Vue.use(VueAxios, axios)
@@ -70,7 +69,7 @@ Vue.use(require('@websanova/vue-auth'), {
   auth: require('@websanova/vue-auth/drivers/auth/bearer.js'),
   http: require('@websanova/vue-auth/drivers/http/axios.1.x.js'),
   router: require('@websanova/vue-auth/drivers/router/vue-router.2.x.js'),
-  fetchData: {url: 'auth/user', method: 'GET', enabled: true},
+  fetchData: {url: 'auth', method: 'GET', enabled: true},
   registerData: {url: 'auth/signUp', method: 'POST', redirect: {name: 'dashboard'}},
   loginData: {url: 'auth/signIn', method: 'POST', redirect: {name: 'dashboard'}, fetchUser: true},
   logoutData: {url: 'auth/signOut', method: 'POST', redirect: {name: 'signIn'}, makeRequest: true},
@@ -109,6 +108,7 @@ Vue.prototype.$actions = {
   addedSubscription: 'addedSubscription',
   collapsedDrawer: 'collapsedDrawer',
   clickedToolbarSideIcon: 'clickedToolbarSideIcon',
+  clickedToolbarCartIcon: 'clickedToolbarCartIcon',
   placedOrder: 'placedOrder',
   requestedService: 'requestedService',
   addedAppointment: 'addedAppointment',
@@ -143,10 +143,16 @@ Vue.prototype.$utils = {
   accentColor: ACCENT_COLOR
 }
 
+
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
+  // provide the router using the "router" option.
+  // this will inject the router instance to all child components.
   router,
+  // provide the store using the "store" option.
+  // this will inject the store instance to all child components.
+  store,
   http: {
     emulateJSON: true,
     emulateHTTP: true
@@ -160,5 +166,6 @@ new Vue({
   },
   mounted () {
     loadProgressBar()
+    this.$utils.log('Counter: ' + this.$store.state.count)
   }
 })

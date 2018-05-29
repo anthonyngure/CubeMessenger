@@ -50,6 +50,11 @@
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Appointment whereDeletedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Appointment whereEndingAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Appointment whereStartingAt($value)
+ * @method static bool|null forceDelete()
+ * @method static \Illuminate\Database\Query\Builder|\App\Appointment onlyTrashed()
+ * @method static bool|null restore()
+ * @method static \Illuminate\Database\Query\Builder|\App\Appointment withTrashed()
+ * @method static \Illuminate\Database\Query\Builder|\App\Appointment withoutTrashed()
  */
 	class Appointment extends Model
 	{

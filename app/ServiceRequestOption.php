@@ -23,6 +23,11 @@
  * @mixin \Eloquent
  * @property string|null $deleted_at
  * @method static \Illuminate\Database\Eloquent\Builder|\App\ServiceRequestOption whereDeletedAt($value)
+ * @method static bool|null forceDelete()
+ * @method static \Illuminate\Database\Query\Builder|\App\ServiceRequestOption onlyTrashed()
+ * @method static bool|null restore()
+ * @method static \Illuminate\Database\Query\Builder|\App\ServiceRequestOption withTrashed()
+ * @method static \Illuminate\Database\Query\Builder|\App\ServiceRequestOption withoutTrashed()
  */
 	class ServiceRequestOption extends Model
 	{

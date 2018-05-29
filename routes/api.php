@@ -52,13 +52,24 @@
 			Route::resource('courierOptions', 'CourierOptionController');
 			Route::post('auth/signOut', 'AuthController@signOut');
 			Route::get('auth/refresh', 'AuthController@refresh');
-			Route::get('auth/user', 'AuthController@user');
+			Route::get('auth', 'AuthController@user');
 			Route::get('drawerItems', 'UIController@drawerItems');
 			Route::get('balance', 'UIController@balance');
 			
 			Route::get('user/appointments', 'UserController@appointments');
 			Route::post('user/changePassword', 'UserController@changePassword');
-			Route::apiResource('users', 'UserController');
+			
+			Route::apiResource('users', 'UserController')
+				->middleware(\App\Http\Middleware\CheckAdminOrClientAdmin::class);
+			
+			Route::get('clients/search', 'ClientController@search')
+				->middleware(\App\Http\Middleware\CheckAdmin::class);
+			Route::apiResource('clients', 'ClientController')
+				->middleware(\App\Http\Middleware\CheckAdmin::class);
+			
+			
+			Route::apiResource('topUps', 'TopUpController')
+				->middleware(\App\Http\Middleware\CheckAdmin::class);
 			
 			Route::apiResource('departments', 'DepartmentController');
 			Route::apiResource('deliveries', 'DeliveryController');
@@ -66,15 +77,22 @@
 			Route::apiResource('subscriptionOptions', 'SubscriptionOptionController')->only(['index']);
 			Route::apiResource('subscriptions', 'SubscriptionController');
 			
+			
+			Route::get('roles/search', 'RoleController@search')
+				->middleware(\App\Http\Middleware\CheckAdmin::class);
+			Route::apiResource('roles', 'RoleController')
+				->middleware(\App\Http\Middleware\CheckAdmin::class);
+			
 			Route::get('appointments/userSuggestions', 'AppointmentController@userSuggestions');
 			Route::apiResource('appointments', 'AppointmentController');
 			
-			Route::apiResource('shopProducts', 'ShopProductController');
-			Route::apiResource('shopCategories', 'ShopCategoryController');
+			Route::apiResource('products', 'ProductController');
+			Route::apiResource('categories', 'CategoryController');
 			Route::apiResource('serviceRequests', 'ServiceRequestController');
 			Route::apiResource('serviceRequestQuotes', 'ServiceRequestQuoteController');
 			Route::apiResource('serviceRequestOptions', 'ServiceRequestOptionController');
-			Route::apiResource('shopOrders', 'ShopOrderController');
+			Route::apiResource('orders', 'OrderController');
+			Route::apiResource('orders.products', 'OrderProductController');
 			Route::apiResource('reports', 'ReportsController')->only(['index']);
 		});
 		

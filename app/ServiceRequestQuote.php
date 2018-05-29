@@ -27,6 +27,13 @@
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\ServiceRequestItem[] $items
  * @property string|null $deleted_at
  * @method static \Illuminate\Database\Eloquent\Builder|\App\ServiceRequestQuote whereDeletedAt($value)
+ * @property-read \App\Bill $bill
+ * @property-read \App\User $rejectedBy
+ * @method static bool|null forceDelete()
+ * @method static \Illuminate\Database\Query\Builder|\App\ServiceRequestQuote onlyTrashed()
+ * @method static bool|null restore()
+ * @method static \Illuminate\Database\Query\Builder|\App\ServiceRequestQuote withTrashed()
+ * @method static \Illuminate\Database\Query\Builder|\App\ServiceRequestQuote withoutTrashed()
  */
 	class ServiceRequestQuote extends Model
 	{

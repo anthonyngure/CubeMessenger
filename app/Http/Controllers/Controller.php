@@ -115,102 +115,63 @@
 		}
 		
 		/**
-		 * @param Model               $item
-		 * @param TransformerAbstract $transformer
-		 * @param array               $meta
-		 * @return \Illuminate\Http\Response
-		 */
-		protected function itemResponse(Model $item, TransformerAbstract $transformer = null, array $meta = ['message' => 'Request successful.'])
-		{
-			if (!is_null($transformer)) {
-				
-				$data = Fractal::item($item, $transformer)->toArray();
-				
-				return response()->json(array('meta' => $meta, 'data' => $data['data']), 200);
-			} else {
-				
-				return response()->json(array('meta' => $meta, 'data' => $item), 200);
-			}
-		}
-		
-		/**
-		 * @param Collection          $collection
-		 * @param TransformerAbstract $transformer
-		 * @param array               $meta
-		 * @return \Illuminate\Http\Response
-		 */
-		protected function collectionResponse(Collection $collection, TransformerAbstract $transformer = null,
-		                                      array $meta = ['message' => 'Request successful.'])
-		{
-			if (!is_null($transformer)) {
-				$data = Fractal::collection($collection, $transformer)->toArray();
-				
-				return response()->json(array('meta' => $meta, 'data' => $data['data']), 200);
-			} else {
-				return response()->json(array('meta' => $meta, 'data' => $collection), 200);
-			}
-		}
-		
-		
-		/**
-		 * @param       $data
+		 * @param Model $item
 		 * @param array $meta
 		 * @return \Illuminate\Http\Response
 		 */
-		public function itemCreatedResponse($data, $meta = ['message' => 'Request successful.'])
+		protected function itemResponse(Model $item, array $meta = ['message' => 'Request successful.'])
 		{
-			if (empty($data)) {
-				$data = (object)array();
-			}
-			
-			return response()->json(array('meta' => $meta, 'data' => $data), 200);
+			return response()->json(array('meta' => $meta, 'data' => $item));
 		}
 		
 		/**
-		 * @param       $data
+		 * @param Collection $collection
+		 * @param array      $meta
+		 * @return \Illuminate\Http\Response
+		 */
+		protected function collectionResponse(Collection $collection, array $meta = ['message' => 'Request successful.'])
+		{
+			return response()->json(array('meta' => $meta, 'data' => $collection));
+		}
+		
+		
+		/**
+		 * @param \Illuminate\Database\Eloquent\Model $item
+		 * @param array                               $meta
+		 * @return \Illuminate\Http\Response
+		 */
+		public function itemCreatedResponse(Model $item, array $meta = ['message' => 'Request successful.'])
+		{
+			return response()->json(array('meta' => $meta, 'data' => $item));
+		}
+		
+		/**
+		 * @param \Illuminate\Database\Eloquent\Model $item
+		 * @param array                               $meta
+		 * @return \Illuminate\Http\Response
+		 */
+		public function itemUpdatedResponse(Model $item, array $meta = ['message' => 'Request successful.'])
+		{
+			return response()->json(array('meta' => $meta, 'data' => $item));
+		}
+		
+		/**
+		 * @param \Illuminate\Database\Eloquent\Model $item
+		 * @param array                               $meta
+		 * @return \Illuminate\Http\Response
+		 */
+		public function itemDeletedResponse(Model $item, array $meta = ['message' => 'Request successful.'])
+		{
+			return response()->json(array('meta' => $meta, 'data' => $item));
+		}
+		
+		/**
+		 * @param array $data
 		 * @param array $meta
 		 * @return \Illuminate\Http\Response
 		 */
-		public function itemUpdatedResponse($data = array(), $meta = ['message' => 'Request successful.'])
+		public function arrayResponse(array $data, array $meta = ['message' => 'Request successful.'])
 		{
-			
-			if (empty($data)) {
-				$data = (object)array();
-			}
-			
-			return response()->json(array('meta' => $meta, 'data' => $data), 200);
-		}
-		
-		/**
-		 * @param       $data
-		 * @param array $meta
-		 * @return \Illuminate\Http\Response
-		 */
-		public function itemDeletedResponse($data, $meta = ['message' => 'Request successful.'])
-		{
-			if (empty($data)) {
-				$data = (object)array();
-			}
-			
-			return response()->json(array('meta' => $meta, 'data' => $data), 200);
-		}
-		
-		/**
-		 * @param array                                    $data
-		 * @param \League\Fractal\TransformerAbstract|null $transformer
-		 * @param array                                    $meta
-		 * @return \Illuminate\Http\Response
-		 */
-		public function arrayResponse(array $data, TransformerAbstract $transformer = null, array $meta = ['message' => 'Request successful.'])
-		{
-			
-			if (!is_null($transformer)) {
-				
-				$data = Fractal::collection($data, $transformer)->toArray();
-				
-				return response()->json(array('meta' => $meta, 'data' => $data['data']), 200);
-			} else {
-				return response()->json(array('meta' => $meta, 'data' => $data), 200);
-			}
+			return response()->json(array('meta' => $meta, 'data' => $data));
 		}
 	}

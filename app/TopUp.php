@@ -22,6 +22,11 @@
  * @method static \Illuminate\Database\Eloquent\Builder|\App\TopUp whereDeletedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\TopUp whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\TopUp whereUpdatedAt($value)
+ * @method static bool|null forceDelete()
+ * @method static \Illuminate\Database\Query\Builder|\App\TopUp onlyTrashed()
+ * @method static bool|null restore()
+ * @method static \Illuminate\Database\Query\Builder|\App\TopUp withTrashed()
+ * @method static \Illuminate\Database\Query\Builder|\App\TopUp withoutTrashed()
  */
 	class TopUp extends Model
 	{

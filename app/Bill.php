@@ -30,6 +30,15 @@
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Bill whereStatus($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Bill whereUpdatedAt($value)
  * @mixin \Eloquent
+ * @property-read \Illuminate\Database\Eloquent\Model|\Eloquent $billable
+ * @property-read \App\Client $client
+ * @method static bool|null forceDelete()
+ * @method static \Illuminate\Database\Query\Builder|\App\Bill onlyTrashed()
+ * @method static bool|null restore()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Bill whereBillableId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Bill whereBillableType($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Bill withTrashed()
+ * @method static \Illuminate\Database\Query\Builder|\App\Bill withoutTrashed()
  */
 	class Bill extends Model
 	{

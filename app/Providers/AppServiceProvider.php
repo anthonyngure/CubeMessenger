@@ -11,12 +11,12 @@
 	use App\Observers\DeliveryObserver;
 	use App\Observers\ProductObserver;
 	use App\Observers\ServiceRequestObserver;
-	use App\Observers\ShopOrderObserver;
+	use App\Observers\OrderObserver;
 	use App\Observers\SubscriptionObserver;
 	use App\Observers\TopUpObserver;
 	use App\Observers\UserObserver;
 	use App\ServiceRequest;
-	use App\ShopOrder;
+	use App\Order;
 	use App\Subscription;
 	use App\TopUp;
 	use App\User;
@@ -42,7 +42,7 @@
 			TopUp::observe(TopUpObserver::class);
 			Bill::observe(BillObserver::class);
 			Delivery::observe(DeliveryObserver::class);
-			ShopOrder::observe(ShopOrderObserver::class);
+			Order::observe(OrderObserver::class);
 			Subscription::observe(SubscriptionObserver::class);
 			ServiceRequest::observe(ServiceRequestObserver::class);
 			

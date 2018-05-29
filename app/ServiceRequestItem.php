@@ -25,6 +25,11 @@
  * @mixin \Eloquent
  * @property string|null $deleted_at
  * @method static \Illuminate\Database\Eloquent\Builder|\App\ServiceRequestItem whereDeletedAt($value)
+ * @method static bool|null forceDelete()
+ * @method static \Illuminate\Database\Query\Builder|\App\ServiceRequestItem onlyTrashed()
+ * @method static bool|null restore()
+ * @method static \Illuminate\Database\Query\Builder|\App\ServiceRequestItem withTrashed()
+ * @method static \Illuminate\Database\Query\Builder|\App\ServiceRequestItem withoutTrashed()
  */
 	class ServiceRequestItem extends Model
 	{

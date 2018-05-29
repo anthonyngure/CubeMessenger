@@ -39,7 +39,7 @@
 			
 			$user->token = $token;
 			
-			return $this->itemResponse($user, null, $meta == null ? array() : $meta)
+			return $this->itemResponse($user, $meta == null ? array() : $meta)
 				->header('Authorization', $token);
 		}
 		
@@ -61,7 +61,7 @@
 			
 			if ($user == null) {
 				$errorMessage = $request->signInId . ' is not a registered email address or phone number. '
-					. 'Please use your correct Sign In details or create an account.';
+					. 'Please use your correct Sign In details.';
 				throw new WrappedException($errorMessage);
 			}
 			

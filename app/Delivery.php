@@ -55,6 +55,21 @@
  * @property-read \App\Bill                                                    $charge
  * @property string|null                                                       $deleted_at
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Delivery whereDeletedAt($value)
+ * @property string $status
+ * @property string|null $department_head_acted_at
+ * @property string|null $purchasing_head_acted_at
+ * @property int|null $rejected_by_id
+ * @property-read \App\Bill $bill
+ * @property-read \App\User|null $rejectedBy
+ * @method static bool|null forceDelete()
+ * @method static \Illuminate\Database\Query\Builder|\App\Delivery onlyTrashed()
+ * @method static bool|null restore()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Delivery whereDepartmentHeadActedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Delivery wherePurchasingHeadActedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Delivery whereRejectedById($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Delivery whereStatus($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Delivery withTrashed()
+ * @method static \Illuminate\Database\Query\Builder|\App\Delivery withoutTrashed()
  */
 	class Delivery extends Model
 	{

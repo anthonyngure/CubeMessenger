@@ -23,6 +23,11 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @mixin \Eloquent
  * @property string|null $deleted_at
  * @method static \Illuminate\Database\Eloquent\Builder|\App\AppointmentExternalParticipant whereDeletedAt($value)
+ * @method static bool|null forceDelete()
+ * @method static \Illuminate\Database\Query\Builder|\App\AppointmentExternalParticipant onlyTrashed()
+ * @method static bool|null restore()
+ * @method static \Illuminate\Database\Query\Builder|\App\AppointmentExternalParticipant withTrashed()
+ * @method static \Illuminate\Database\Query\Builder|\App\AppointmentExternalParticipant withoutTrashed()
  */
 class AppointmentExternalParticipant extends Model
 {

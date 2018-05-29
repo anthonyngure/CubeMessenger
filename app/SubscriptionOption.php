@@ -27,6 +27,11 @@
  * @method static \Illuminate\Database\Eloquent\Builder|\App\SubscriptionOption whereDescription($value)
  * @property string|null $deleted_at
  * @method static \Illuminate\Database\Eloquent\Builder|\App\SubscriptionOption whereDeletedAt($value)
+ * @method static bool|null forceDelete()
+ * @method static \Illuminate\Database\Query\Builder|\App\SubscriptionOption onlyTrashed()
+ * @method static bool|null restore()
+ * @method static \Illuminate\Database\Query\Builder|\App\SubscriptionOption withTrashed()
+ * @method static \Illuminate\Database\Query\Builder|\App\SubscriptionOption withoutTrashed()
  */
 	class SubscriptionOption extends Model
 	{

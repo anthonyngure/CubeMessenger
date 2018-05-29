@@ -1,8 +1,8 @@
 <?php
 	
+	use App\Role;
 	use App\User;
 	use Illuminate\Database\Seeder;
-	use TCG\Voyager\Models\Role;
 	
 	class UsersTableSeeder extends Seeder
 	{
@@ -38,6 +38,17 @@
 				'password'       => bcrypt('testadmin'),
 				'remember_token' => str_random(60),
 			]);
+			
+			
+			//Test Supplier
+			User::create([
+				'name'           => 'Test Supplier',
+				'email'          => 'testsupplier@cube-messenger.com',
+				'role_id'        => Role::where('name', 'SUPPLIER')->firstOrFail()->getKey(),
+				'password'       => bcrypt('testsupplier'),
+				'remember_token' => str_random(60),
+			]);
+			
 			
 			//Test Purchasing Head
 			User::create([
@@ -93,4 +104,7 @@
 				'remember_token' => str_random(60),
 			]);
 		}
+		
+		
+		
 	}
