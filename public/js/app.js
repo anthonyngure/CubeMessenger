@@ -8526,6 +8526,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       });
     },
     updateItem: function updateItem(updatedItem) {
+      this.$utils.log('updateItem');
       var itemToUpdate = this.items.find(function (item) {
         return item.id === updatedItem.id;
       });
@@ -9746,7 +9747,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__Guide___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__Guide__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__ConnectionManager__ = __webpack_require__("./resources/assets/js/components/ConnectionManager.vue");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__ConnectionManager___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3__ConnectionManager__);
-//
 //
 //
 //
@@ -11846,7 +11846,7 @@ exports = module.exports = __webpack_require__("./node_modules/css-loader/lib/cs
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -11876,7 +11876,7 @@ exports = module.exports = __webpack_require__("./node_modules/css-loader/lib/cs
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -44895,7 +44895,7 @@ var render = function() {
                         attrs: {
                           items: _vm.item.items,
                           "hide-actions": "",
-                          "item-key": "name",
+                          "item-key": "id",
                           "select-all": _vm.showApprovalActions(
                             _vm.item.items[0]
                           ),
@@ -44985,7 +44985,11 @@ var render = function() {
                                 }
                               }
                             },
-                            [_vm._v(_vm._s(_vm.getActionText) + "\n        ")]
+                            [
+                              _vm._v(
+                                _vm._s(_vm.getActionText) + "\n                "
+                              )
+                            ]
                           )
                         : _vm._e(),
                       _vm._v(" "),
@@ -45001,7 +45005,7 @@ var render = function() {
                             }
                           }
                         },
-                        [_vm._v("Close\n        ")]
+                        [_vm._v("Close\n                ")]
                       )
                     ],
                     1
@@ -45082,7 +45086,9 @@ var render = function() {
                 [
                   _c("v-toolbar-title", [
                     _vm._v(
-                      "\n          " + _vm._s(_vm.formTitle) + "\n        "
+                      "\n                    " +
+                        _vm._s(_vm.formTitle) +
+                        "\n                "
                     )
                   ])
                 ],
@@ -45258,7 +45264,7 @@ var render = function() {
                         }
                       }
                     },
-                    [_vm._v("Cancel\n        ")]
+                    [_vm._v("Cancel\n                ")]
                   ),
                   _vm._v(" "),
                   _c(
@@ -45275,7 +45281,7 @@ var render = function() {
                         }
                       }
                     },
-                    [_vm._v("Save\n        ")]
+                    [_vm._v("Save\n                ")]
                   )
                 ],
                 1
@@ -45355,7 +45361,7 @@ var render = function() {
                             }
                           }
                         },
-                        [_vm._v("Close\n        ")]
+                        [_vm._v("Close\n                ")]
                       )
                     ],
                     1
@@ -45428,7 +45434,7 @@ var render = function() {
                             }
                           }
                         },
-                        [_vm._v("Delete\n        ")]
+                        [_vm._v("Delete\n                ")]
                       ),
                       _vm._v(" "),
                       _c(
@@ -45445,7 +45451,7 @@ var render = function() {
                             }
                           }
                         },
-                        [_vm._v("Cancel\n        ")]
+                        [_vm._v("Cancel\n                ")]
                       )
                     ],
                     1
@@ -45491,7 +45497,9 @@ var render = function() {
                     },
                     [
                       _vm._v(
-                        "\n        Add " + _vm._s(_vm.resource) + "\n      "
+                        "\n                Add " +
+                          _vm._s(_vm.resource) +
+                          "\n            "
                       )
                     ]
                   )
@@ -45538,11 +45546,11 @@ var render = function() {
                         },
                         [
                           _vm._v(
-                            "\n          " +
+                            "\n                    " +
                               _vm._s(
                                 _vm.toFilterForDisplay(_vm.currentFilter)
                               ) +
-                              "\n          "
+                              "\n                    "
                           ),
                           _c("v-icon", { attrs: { right: "" } }, [
                             _vm._v("keyboard_arrow_down")
@@ -45608,8 +45616,9 @@ var render = function() {
                       {
                         on: {
                           click: function($event) {
-                            props.expanded =
-                              !props.expanded && _vm.manager.extraInlineActions
+                            _vm.manager.extraInlineActions.length
+                              ? (props.expanded = !props.expanded)
+                              : ""
                           }
                         }
                       },
@@ -45621,11 +45630,11 @@ var render = function() {
                                 { key: index, staticClass: "text-xs-left" },
                                 [
                                   _vm._v(
-                                    "\n            " +
+                                    "\n                        " +
                                       _vm._s(
                                         _vm.manager.toValue(header, props.item)
                                       ) +
-                                      "\n          "
+                                      "\n                    "
                                   )
                                 ]
                               )
@@ -45721,9 +45730,9 @@ var render = function() {
                                     function(action, index) {
                                       return _c("v-list-tile", { key: index }, [
                                         _vm._v(
-                                          "\n                  " +
+                                          "\n                                    " +
                                             _vm._s(action.name) +
-                                            "\n                "
+                                            "\n                                "
                                         )
                                       ])
                                     }
@@ -45767,9 +45776,9 @@ var render = function() {
                                 },
                                 [
                                   _vm._v(
-                                    "\n              " +
+                                    "\n                            " +
                                       _vm._s(action.name) +
-                                      "\n            "
+                                      "\n                        "
                                   )
                                 ]
                               )
@@ -83983,7 +83992,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 __WEBPACK_IMPORTED_MODULE_0_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_4_vue_notification___default.a);
 
-var DEBUG = false;
+var DEBUG = true;
 
 var GOOGLE_MAPS_KEY = 'AIzaSyAS_9BsQpqTP8EVuMZ7rQ9gMCl0wmqhm7k';
 var PRIMARY_COLOR = '#1A75BA';
