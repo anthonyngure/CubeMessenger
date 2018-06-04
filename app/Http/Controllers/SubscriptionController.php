@@ -122,6 +122,7 @@
 		 * @param  int                      $id
 		 * @return \Illuminate\Http\Response
 		 * @throws \App\Exceptions\WrappedException
+		 * @throws \Exception
 		 */
 		public function update(Request $request, $id)
 		{

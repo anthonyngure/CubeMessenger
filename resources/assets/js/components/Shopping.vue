@@ -7,7 +7,7 @@
               show-arrows
               lazy
               grow >
-        <v-tabs-slider color="yellow" ></v-tabs-slider >
+        <v-tabs-slider color="yellow"/>
         <v-tab v-for="category in categories"
                :key="category.id"
                :href="`#${category.id}`" >
@@ -91,8 +91,8 @@
     <add-to-cart-dialog :product="selectedProduct"
                         @onCancel="selectedProduct = null" >
     </add-to-cart-dialog >
-    
-    <cart-dialog ></cart-dialog >
+
+    <cart-dialog/>
   
   </v-layout >
 </template >

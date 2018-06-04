@@ -30,7 +30,7 @@
 			$headers = CrudHeader::whereModel(User::class)->get();
 			/** @var User $user */
 			$user = Auth::user();
-			if ($user->isAdmin()) {
+			if ($user->isAdmin() || $user->isOperations()) {
 				$users = User::with('role', 'client')->get();
 			} else {
 				$client = $user->getClient();

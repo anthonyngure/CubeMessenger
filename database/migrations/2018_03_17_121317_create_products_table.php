@@ -16,6 +16,8 @@ class CreateProductsTable extends Migration
 	        $table->increments('id');
 	        $table->unsignedInteger('category_id', false);
 	        $table->foreign('category_id')->references('id')->on('categories');
+	        $table->unsignedInteger('supplier_id', false);
+	        $table->foreign('supplier_id')->references('id')->on('users')->nullable();
 	        $table->string('name');
 	        $table->string('image')->default('images/product_default.jpg');
 	        $table->string('slug')->nullable()->unique();

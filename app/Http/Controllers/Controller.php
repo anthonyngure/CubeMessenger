@@ -10,7 +10,7 @@
 	use App\Utils;
 	use Auth;
 	use Carbon\Carbon;
-	use Fractal;
+	use Closure;
 	use Illuminate\Database\Eloquent\Collection;
 	use Illuminate\Database\Eloquent\Model;
 	use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
@@ -18,7 +18,6 @@
 	use Illuminate\Foundation\Validation\ValidatesRequests;
 	use Illuminate\Http\Request;
 	use Illuminate\Routing\Controller as BaseController;
-	use League\Fractal\TransformerAbstract;
 	
 	class Controller extends BaseController
 	{
@@ -28,34 +27,71 @@
 		/**
 		 * @param \Illuminate\Http\Request                     $request
 		 * @param \Illuminate\Database\Eloquent\Model|Billable $approval
+		 * @param                                              $statusAfterPurchasingHeadApproval
+		 * @param \Closure|null                                $afterPurchasingHeadApproval
 		 * @throws \App\Exceptions\WrappedException
 		 * @throws \Exception
 		 */
-		public function handleApprovals(Request $request, Model $approval, $statusAfterPurchasingHeadApproval)
+		public function handleApprovals(Request $request, Model $approval, $statusAfterPurchasingHeadApproval,
+		                                Closure $afterPurchasingHeadApproval = null)
 		{
 			
 			$user = Auth::user();
+			
+			/** @var \App\Bill $bill */
+			$bill = $approval->bill()->firstOrFail();
+			
 			if ($request->action == 'reject') {
 				$approval->rejected_by_id = $user->getKey();
-				/** @var \App\Bill $bill */
-				$bill = $approval->bill()->firstOrFail();
 				$bill->delete();
-				/** @var \App\Client $client */
-				$client = $bill->client()->firstOrFail();
-				$client->notify(new BillCanceledNotification($bill));
 			}
 			
+			//The item was earlier rejected and it is now being approved
+			//We have to restore the cancled bill
+			else if ($request->action == 'approve' && $approval->status == 'REJECTED' && $approval->rejectedBy->id == $user->id){
+				$approval->rejected_by_id = null;
+				$bill->restore();
+			}
+			
+			
+			//Department head is approving an item for the first time
 			if (($approval->status == 'AT_DEPARTMENT_HEAD' && $user->isDepartmentHead())) {
 				$approval->status = $request->action == 'approve' ? 'AT_PURCHASING_HEAD' : 'REJECTED';
 				$approval->department_head_acted_at = Carbon::now()->toDateTimeString();
 				$approval->save();
-			} else if (($approval->status == 'AT_PURCHASING_HEAD' && $user->isPurchasingHead())) {
+			}
+			
+			//Purchasing head is approving an item that has been approved by the department head
+			else if (($approval->status == 'AT_PURCHASING_HEAD' && $user->isPurchasingHead())) {
 				$approval->status = $request->action == 'approve' ? $statusAfterPurchasingHeadApproval : 'REJECTED';
 				$approval->purchasing_head_acted_at = Carbon::now()->toDateTimeString();
 				$approval->save();
-			} else {
+				if ($afterPurchasingHeadApproval){
+					$afterPurchasingHeadApproval($approval);
+				}
+			}
+			
+			//Department head is requesting to approve a rejected item
+			else if ($request->action == 'approve' && $approval->status == 'REJECTED'
+				&& $approval->rejectedBy->id == $user->id && $user->isDepartmentHead()) {
+				$approval->status = 'AT_PURCHASING_HEAD';
+				$approval->department_head_acted_at = Carbon::now()->toDateTimeString();
+				$approval->save();
+			}
+			
+			//Purchasing head is requesting to approve a rejected item
+			else if ($request->action == 'approve' && $approval->status == 'REJECTED'
+				&& $approval->rejectedBy->id == $user->id && $user->isPurchasingHead()) {
+				$approval->status = $statusAfterPurchasingHeadApproval;
+				$approval->purchasing_head_acted_at = Carbon::now()->toDateTimeString();
+				$approval->save();
+			}
+			
+			//We cannot really tell what is happening
+			else {
 				throw new WrappedException("You are not allowed to perform the requested operation");
 			}
+			
 			
 			//$approval
 		}

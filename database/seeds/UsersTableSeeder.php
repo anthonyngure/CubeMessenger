@@ -14,8 +14,6 @@
 		public function run()
 		{
 			
-			$adminRole = Role::where('name', 'admin')->firstOrFail();
-			
 			//Admin
 			User::create([
 				'name'           => 'Administrator',
@@ -23,7 +21,17 @@
 				'phone'          => '254700000000',
 				'password'       => bcrypt('admin2018'),
 				'remember_token' => str_random(60),
-				'role_id'        => $adminRole->getKey(),
+				'role_id'        => Role::where('name', 'ADMIN')->firstOrFail()->getKey(),
+			]);
+			
+			//Admin
+			User::create([
+				'name'           => 'Operations',
+				'email'          => 'operations@cube-messenger.com',
+				'phone'          => '254700000001',
+				'password'       => bcrypt('operations2018'),
+				'remember_token' => str_random(60),
+				'role_id'        => Role::where('name', 'OPERATIONS')->firstOrFail()->getKey(),
 			]);
 			
 			$testClient = \App\Client::where('name', 'Test Client')->firstOrFail();

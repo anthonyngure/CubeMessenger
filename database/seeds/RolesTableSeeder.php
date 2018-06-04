@@ -19,6 +19,11 @@
 			]);
 			
 			\App\Role::create([
+				'name'         => 'OPERATIONS',
+				'display_name' => 'Operations',
+			]);
+			
+			\App\Role::create([
 				'name'         => 'SUPPLIER',
 				'display_name' => 'Supplier',
 			]);

@@ -21,6 +21,9 @@ export default {
     isAdmin () {
       return this.$auth.user().role.name === 'ADMIN'
     },
+    isOperations(){
+      return this.$auth.user().role.name === 'OPERATIONS';
+    },
     isClientAdmin () {
       return this.$auth.user().role.name === 'CLIENT_ADMIN'
     },

@@ -8,7 +8,7 @@
           <v-container grid-list-xs
                        fluid
                        fill-height >
-            <v-layout v-if="$route.name !== 'signIn' && $auth.check() && !$auth.user().client && !isAdmin()"
+            <v-layout v-if="$route.name !== 'signIn' && $auth.check() && !$auth.user().client && !isAdmin() && !isOperations()"
                       align-center
                       justify-center >
               <v-flex xs12
@@ -18,7 +18,7 @@
                   <v-toolbar dark
                              flat
                              color="primary" >
-                    <v-toolbar-title >Client Authorization Required</v-toolbar-title >
+                    <v-toolbar-title >Authorization Required</v-toolbar-title >
                     <v-spacer ></v-spacer >
                     <v-btn icon >
                       <v-icon >more_vert</v-icon >
@@ -30,7 +30,7 @@
                              icon="warning"
                              :value="true"
                              class="headline" >
-                      Sorry! Your are not yet authorized to access any client account on <b >{{$appName}}</b >
+                      Sorry! Your are not yet authorized to access <b>{{$appName}}</b>
                     </v-alert >
                   </v-card-text >
                   <v-card-actions >
@@ -79,13 +79,13 @@
 </template >
 
 <script >
-import Loader from './components/Loader'
-import Toolbar from './components/Toolbar'
-import EventBus from './event-bus'
-import Drawer from './components/Drawer'
-import Base from './components/Base'
+  import Loader from './components/Loader'
+  import Toolbar from './components/Toolbar'
+  import EventBus from './event-bus'
+  import Drawer from './components/Drawer'
+  import Base from './components/Base'
 
-export default {
+  export default {
   name: 'app',
   extends: Base,
   components: {

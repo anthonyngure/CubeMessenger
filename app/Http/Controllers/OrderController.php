@@ -5,16 +5,12 @@
 	use App\Bill;
 	use App\CrudHeader;
 	use App\Exceptions\WrappedException;
-	use App\Notifications\BillCanceledNotification;
 	use App\Notifications\OrderNotification;
 	use App\Order;
-	use App\OrderProduct;
+	use App\OrderItem;
 	use App\Product;
 	use App\Utils;
 	use Auth;
-	use Carbon\Carbon;
-	use Illuminate\Database\Eloquent\Builder;
-	use Illuminate\Database\Eloquent\Relations\BelongsTo;
 	use Illuminate\Http\Request;
 	use Validator;
 	
@@ -33,7 +29,7 @@
 			
 			$headers = CrudHeader::whereModel(Order::class)->get();
 			
-			if (Auth::user()->isAdmin()) {
+			if (Auth::user()->isAdmin() || Auth::user()->isOperations()) {
 				$orders = Order::with('items.product')->get();
 			} else {
 				$client = Auth::user()->getClient();
@@ -43,29 +39,24 @@
 				
 				if ($request->filter === 'pendingApproval') {
 					$orders = Order::whereIn('user_id', $client->users->pluck('id'))
-						->whereHas('items', function (Builder $builder) {
-							$builder->where('status', 'AT_DEPARTMENT_HEAD')
-								->orWhere('status', 'AT_PURCHASING_HEAD');
-						})
-						->with(['items.product', 'user'])
+						->where('status', 'AT_DEPARTMENT_HEAD')
+						->orWhere('status', 'AT_PURCHASING_HEAD')
+						->with(['items.product'])
 						->get();
 				} else if ($request->filter === 'pendingDelivery') {
 					$orders = Order::whereIn('user_id', $client->users->pluck('id'))
 						->where('status', 'PENDING_DELIVERY')
-						->with(['shopProduct', 'user'])
+						->with(['items.product'])
 						->get();
 				} else if ($request->filter === 'delivered') {
 					$orders = Order::whereIn('user_id', $client->users->pluck('id'))
 						->where('status', 'DELIVERED')
-						->with(['shopProduct', 'user'])
+						->with(['items.product'])
 						->get();
 				} else {
 					$orders = Order::whereIn('user_id', $client->users->pluck('id'))
 						->where('status', 'REJECTED')
-						->with(['shopProduct', 'user'])
-						->with(['rejectedBy' => function (BelongsTo $belongsTo) {
-							$belongsTo->with('role');
-						}])
+						->with(['items.product', 'rejectedBy.role'])
 						->get();
 				}
 				
@@ -91,47 +82,42 @@
 			/** @var \App\Client $client */
 			$client = $user->getClient();
 			
-			$orders = $request->json()->all();
+			$submittedOrderItems = $request->json()->all();
 			
-			if (empty($orders)) {
-				throw new WrappedException("Order submitted is in correct!");
+			if (empty($submittedOrderItems)) {
+				throw new WrappedException("Order items cannot be empty!");
 			}
 			
-			$orderProducts = array();
-			$total = 0;
-			foreach ($orders as $order) {
-				Validator::validate($order, [
+			$orderItems = array();
+			foreach ($submittedOrderItems as $submittedOrderItem) {
+				Validator::validate($submittedOrderItem, [
 					'productId' => 'required|numeric|exists:products,id',
 					'quantity'  => 'required|numeric',
 				]);
 				
 				/** @var Product $product */
-				$product = Product::findOrFail($order['productId']);
-				$amount = $product->price * $order['quantity'];
-				$total += $amount;
-				array_push($orderProducts, new OrderProduct([
-					'product_id'        => $order['productId'],
-					'quantity'          => $order['quantity'],
+				$product = Product::findOrFail($submittedOrderItem['productId']);
+				array_push($orderItems, new OrderItem([
+					'product_id'        => $submittedOrderItem['productId'],
+					'quantity'          => $submittedOrderItem['quantity'],
 					'price_at_purchase' => $product->price,
-					'amount'            => $amount,
 				]));
 			}
 			
+			$totalCost = collect($orderItems)->sum(function (OrderItem $item) {
+				return ($item->price_at_purchase * $item->quantity);
+			});
 			
 			$insufficientBalanceMessage = 'You have insufficient balance to make an order for '
-				. Utils::toCurrencyText($total);
+				. Utils::toCurrencyText($totalCost);
 			
-			$this->checkBalance($total, $insufficientBalanceMessage);
+			$this->checkBalance($totalCost, $insufficientBalanceMessage);
 			
 			
 			/** @var \App\Order $order */
 			$order = $user->orders()->create([]);
+			$order->items()->saveMany($orderItems);
 			
-			/** @var OrderProduct $orderProduct */
-			foreach ($orderProducts as $orderProduct) {
-				$orderProduct->order_id = $order->id;
-				$orderProduct->save();
-			}
 			
 			/** @var \App\Order $order */
 			$order = Order::with('items.product')->findOrFail($order->id);
@@ -144,7 +130,9 @@
 				'billable_type' => Order::class,
 			], [
 				'description' => $description,
-				'amount'      => $order->items->sum('amount'),
+				'amount'      => $order->items->sum(function (OrderItem $item) {
+					return ($item->price_at_purchase * $item->quantity);
+				}),
 			]);
 			
 			$client->notify(new OrderNotification($order));
@@ -171,75 +159,30 @@
 		 * @param  int                      $id
 		 * @return \Illuminate\Http\Response
 		 * @throws \App\Exceptions\WrappedException
-		 * @throws \Illuminate\Validation\ValidationException
 		 * @throws \Exception
 		 */
 		public function update(Request $request, $id)
 		{
+			
+			$this->validate($request, [
+				'action' => 'required|in:approve,reject',
+			]);
+			
+			
 			/** @var \App\Order $order */
 			$order = Order::with('items.product')->findOrFail($id);
-			$client = Auth::user()->getClient();
 			
-			//Only products can be updated
-			$items = $request->json()->all();
-			if (count($items) != $order->items->count()) {
-				throw new WrappedException("The update can not proceed because the submitted products size are
-				not equal to thr existing products size");
-			}
+			$this->handleApprovals($request, $order, 'PENDING_DELIVERY', function (Order $order) {
+				if ($order->status == 'PENDING_DELIVERY') {
+					$order->items()->update(['status' => 'PENDING_LPO']);
+				}
+			});
 			
-			foreach ($items as $item) {
-				Validator::validate($item, [
-					'approved' => 'required|boolean',
-				]);
-				/** @var \App\OrderProduct $orderProduct */
-				$orderProduct = $order->items()->findOrFail($item['id']);
-				$this->handleProductApproval($item['approved'], $orderProduct);
-			}
+			//Reload the order after the necessary updates
+			$data = Order::with('items.product')->findOrFail($id);
 			
-			$order = Order::with('items.product')->findOrFail($id);
+			return $this->itemUpdatedResponse($data);
 			
-			$rejectedCount = $order->items()->where('status', 'REJECTED')->count();
-			if ($rejectedCount == $order->items->count()){
-				/** @var \App\Bill $bill */
-				$bill = $order->bill()->firstOrFail();
-				$bill->delete();
-				/** @var \App\Client $client */
-				$client = $bill->client()->firstOrFail();
-				$client->notify(new BillCanceledNotification($bill));
-			} else {
-				//Update the bill
-			}
-			
-			
-			
-			return $this->itemUpdatedResponse($order);
-			
-		}
-		
-		/**
-		 * @param bool $approved
-		 * @param      $orderProduct
-		 * @throws \App\Exceptions\WrappedException
-		 * @throws \Exception
-		 */
-		private function handleProductApproval(bool $approved, OrderProduct $orderProduct)
-		{
-			$user = Auth::user();
-			if ($approved) {
-				$orderProduct->rejected_by_id = $user->getKey();
-			}
-			
-			if (($orderProduct->status == 'AT_DEPARTMENT_HEAD' && $user->isDepartmentHead())) {
-				$orderProduct->status = $approved ? 'AT_PURCHASING_HEAD' : 'REJECTED';
-				$orderProduct->department_head_acted_at = Carbon::now()->toDateTimeString();
-				$orderProduct->save();
-			} else if (($orderProduct->status == 'AT_PURCHASING_HEAD' && $user->isPurchasingHead())) {
-				$orderProduct->status = $approved ? 'PENDING_DELIVERY' : 'REJECTED';
-				$orderProduct->purchasing_head_acted_at = Carbon::now()->toDateTimeString();
-				$orderProduct->save();
-			} else {
-				throw new WrappedException("You are not allowed to perform the requested operation");
-			}
 		}
 		
 		/**

@@ -3,6 +3,8 @@
 	namespace App\Http\Controllers;
 	
 	use App\Category;
+	use App\CrudHeader;
+	use Auth;
 	use Illuminate\Http\Request;
 	
 	class CategoryController extends Controller
@@ -14,10 +16,18 @@
 		 */
 		public function index()
 		{
-			//
-			$categories = Category::with('products')->orderBy('order')->get();
+			$user = Auth::user();
 			
-			return $this->collectionResponse($categories);
+			if ($user->isAdmin() || $user->isOperations()) {
+				$headers = CrudHeader::whereModel(Category::class)->get();
+				$categories = Category::all();
+				return $this->collectionResponse($categories, ['headers' => $headers]);
+			} else {
+				
+				$categories = Category::with('products')->orderBy('order')->get();
+				
+				return $this->collectionResponse($categories);
+			}
 		}
 		
 		/**

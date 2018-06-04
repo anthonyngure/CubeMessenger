@@ -30,14 +30,9 @@
 		{
 			//code...
 			
-			/**
-			 * The user associated with the chargeable
-			 * @var \App\User $user
-			 */
-			// $user = User::with('client')->findOrFail($bill->chargeable()->user_id);
-			
-			// $client = $user->client;
-			
+			/** @var \App\Client $client */
+			$client = $bill->client()->firstOrFail();
+			$client->notify(new BillNotification($bill));
 			
 		}
 		
@@ -86,9 +81,6 @@
 		{
 			//code...
 			
-			/** @var \App\Client $client */
-			$client = $bill->client()->firstOrFail();
-			$client->notify(new BillNotification($bill));
 			
 		}
 		
@@ -114,6 +106,10 @@
 			//code...
 			
 			
+			/** @var \App\Client $client */
+			$client = $bill->client()->firstOrFail();
+			$client->notify(new BillCanceledNotification($bill));
+			
 			
 		}
 		
@@ -136,6 +132,8 @@
 		 */
 		public function restored(Bill $bill)
 		{
-			//code...
+			/** @var \App\Client $client */
+			$client = $bill->client()->firstOrFail();
+			$client->notify(new BillNotification($bill));
 		}
 	}

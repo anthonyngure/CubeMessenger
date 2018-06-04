@@ -23,14 +23,16 @@
 			/** @var User $user */
 			$user = User::with('role')->findOrFail(Auth::user()->id);
 			
-			if ($user->isAdmin()) {
+			if ($user->isAdmin() || $user->isOperations()) {
 				$items = [
 					['icon' => 'dashboard', 'title' => 'Dashboard', 'route' => 'dashboard', 'pendingApprovals' => 0],
 					['icon' => 'work', 'title' => 'Clients', 'route' => 'clients', 'pendingApprovals' => 0],
 					['icon' => 'attach_money', 'title' => 'Top Ups', 'route' => 'topUps', 'pendingApprovals' => 0],
 					['icon' => 'group', 'title' => 'Users', 'route' => 'users', 'pendingApprovals' => 0],
 					['icon' => 'build', 'title' => 'Roles', 'route' => 'roles', 'pendingApprovals' => 0],
-					['icon' => 'shop', 'title' => 'Products', 'route' => 'products', 'pendingApprovals' => 0],
+					['icon' => 'shop', 'title' => 'All Products', 'route' => 'products', 'pendingApprovals' => 0],
+					['icon' => 'view_list', 'title' => 'Product Categories', 'route' => 'categories', 'pendingApprovals' => 0],
+					['icon' => 'shopping_cart', 'title' => 'Ordered Products', 'route' => 'orderItems', 'pendingApprovals' => 0],
 					['icon' => 'shopping_basket', 'title' => 'Orders', 'route' => 'orders', 'pendingApprovals' => 0],
 				];
 			} else {

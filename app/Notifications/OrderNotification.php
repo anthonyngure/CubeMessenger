@@ -3,12 +3,13 @@
 	namespace App\Notifications;
 	
 	use App\Order;
+	use App\OrderItem;
 	use Illuminate\Bus\Queueable;
 	use Illuminate\Contracts\Queue\ShouldQueue;
 	use Illuminate\Notifications\Messages\MailMessage;
 	use Illuminate\Notifications\Notification;
 	
-	class OrderNotification extends Notification  implements ShouldQueue
+	class OrderNotification extends Notification implements ShouldQueue
 	{
 		use Queueable;
 		/**
@@ -46,21 +47,20 @@
 		 */
 		public function toMail($notifiable)
 		{
-			$actual = $notifiable->getBalance();
-			$limit = $notifiable->limit;
-			$spent = $notifiable->getSpent();
-			$blocked = $notifiable->getBlocked();
+			$totalCost = $this->order->items->sum(function (OrderItem $item) {
+				return ($item->price_at_purchase * $item->quantity);
+			});
 			
 			return (new MailMessage)
-				->subject('Purchase')
-				->greeting('New purchase!')
-				->line('Purchase of ' . $this->order->items->count() . ' products')
-				->line('Actual balance: KES ' . number_format($actual, 2))
-				->line('Spending limit: KES ' . number_format($limit, 2))
-				->line('Amount settled: KES ' . number_format($spent, 2))
-				->line('Amount blocked: KES ' . number_format($blocked, 2))
-				->action('View Orders', url('/#/orders'))
-				->line('Thank you for using our application!');
+				->subject('New Purchase Order')
+				->markdown('mail.order', ['order' => $this->order, 'totalCost' => $totalCost, 'client' => $notifiable]);
+			//->line('Purchase of ' . $this->order->items->count() . ' products')
+			//->line('Actual balance: KES ' . number_format($actual, 2))
+			//->line('Spending limit: KES ' . number_format($limit, 2))
+			//->line('Amount settled: KES ' . number_format($spent, 2))
+			//->line('Amount blocked: KES ' . number_format($blocked, 2))
+			//->action('View Orders', url('/#/orders'))
+			//->line('Thank you for using our application!');
 		}
 		
 		/**

@@ -144,9 +144,17 @@
                        card>
                 <v-btn color="primary"
                        class="mx-5"
-                       v-if="manager.creatable"
+                       v-if="creatable"
                        @click.native="editDialog = true">
-                    Add {{resource}}
+                    Add
+                </v-btn>
+                <v-btn color="primary"
+                       class="mx-5"
+                       v-for="(action, index) in extraTopActions"
+                       :key="index"
+                       v-if="manager.showTopAction(action, items, currentFilter)"
+                       @click.native="manager.onTopAction(action, items, currentFilter)">
+                    {{action.name}}
                 </v-btn>
                 <v-text-field
                         append-icon="search"
@@ -165,14 +173,14 @@
                            flat
                            v-if="filters && filters.length"
                            class="purple">
-                        {{toFilterForDisplay(currentFilter)}}
+                        {{currentFilter ? currentFilter.name : 'Filters'}}
                         <v-icon right>keyboard_arrow_down</v-icon>
                     </v-btn>
                     <v-list>
                         <v-list-tile v-for="(filter, i) in filters"
                                      :key="i"
                                      @click="currentFilter = filter">
-                            <v-list-tile-title>{{ toFilterForDisplay(filter) }}</v-list-tile-title>
+                            <v-list-tile-title>{{ filter.name }}</v-list-tile-title>
                         </v-list-tile>
                     </v-list>
                 </v-menu>
@@ -190,14 +198,14 @@
                     class="elevation-1">
                 <template slot="items"
                           slot-scope="props">
-                    <tr @click="manager.extraInlineActions.length ? props.expanded = !props.expanded : ''">
+                    <tr @click="extraInlineActions.length ? props.expanded = !props.expanded : ''">
                         <td class="text-xs-left"
                             v-for="(header,index) in browsableHeaders"
                             :key="index"
                             v-if="header.value !== 'actions' ">
                             {{ manager.toValue(header, props.item) }}
                         </td>
-                        <td class="justify-end layout wrap px-0">
+                        <td class="justify-center layout wrap px-0">
                             <v-btn icon
                                    class="mx-0"
                                    @click="viewItem(props.item)">
@@ -219,11 +227,12 @@
                             <v-menu offset-y
                                     bottom>
                                 <v-btn icon
+                                       v-if="extraOverflowActions.length"
                                        slot="activator">
                                     <v-icon>more_vert</v-icon>
                                 </v-btn>
                                 <v-list dense>
-                                    <v-list-tile v-for="(action, index) in manager.extraOverflowActions"
+                                    <v-list-tile v-for="(action, index) in extraOverflowActions"
                                                  :key="index">
                                         {{action.name}}
                                     </v-list-tile>
@@ -237,7 +246,7 @@
                           slot-scope="props">
                     <v-card flat>
                         <v-card-actions>
-                            <v-spacer></v-spacer>
+                            <v-spacer/>
                             <v-btn v-for="(action, index) in manager.extraOverflowActions"
                                    :color="action.color"
                                    class="ml-0 mr-1"
@@ -266,6 +275,27 @@
         type: String,
         required: true
       },
+      extraTopActions: {
+        type: Array,
+        required: false,
+        default: function () {
+          return []
+        }
+      },
+      extraInlineActions: {
+        type: Array,
+        required: false,
+        default: function () {
+          return []
+        }
+      },
+      extraOverflowActions: {
+        type: Array,
+        required: false,
+        default: function () {
+          return []
+        }
+      },
       filters: {
         type: Array,
         required: false
@@ -273,6 +303,11 @@
       customViewDialog: {
         type: Boolean,
         required: false
+      },
+      creatable: {
+        type: Boolean,
+        required: false,
+        default: true
       },
       manager: {
         type: Object,
@@ -353,17 +388,11 @@
           return header.creatable
         }
       },
-      toFilterForDisplay (filter) {
-        if (!filter) {
-          return filter
-        }
-
-        return filter.replace(/([A-Z])/g, ' $1') // insert a space before all caps
-        // uppercase the first character
-          .replace(/^./, function (str) {
-            return str.toUpperCase()
-          })
-
+      clearItems () {
+        this.items = []
+      },
+      setItems (items) {
+        this.items = items
       },
       toPlaceholder (value) {
         return 'Enter ' + (value.toLowerCase())
@@ -395,7 +424,7 @@
               sortable: false
             })
           }
-        }, {filter: this.currentFilter})
+        }, {filter: this.currentFilter ? this.currentFilter.value : ''})
       },
       viewItem (item) {
         if (!this.manager.hasCustomView(item, this.viewableHeaders)) {
@@ -427,11 +456,15 @@
         })
       },
       updateItem (updatedItem) {
-        this.$utils.log('updateItem');
+        this.$utils.log('updateItem')
         let itemToUpdate = this.items.find(item => item.id === updatedItem.id)
-        if (itemToUpdate) {
-          itemToUpdate = updatedItem
-        }
+        let indexOfItemToUpdate = this.items.indexOf(itemToUpdate)
+        Object.assign(this.items[indexOfItemToUpdate], updatedItem)
+      },
+      removeItem (updatedItem) {
+        this.$utils.log('removeItem')
+        let itemToRemove = this.items.find(item => item.id === updatedItem.id)
+        this.items.splice(itemToRemove, 1)
       },
       close () {
         this.editDialog = false

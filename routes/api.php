@@ -59,17 +59,14 @@
 			Route::get('user/appointments', 'UserController@appointments');
 			Route::post('user/changePassword', 'UserController@changePassword');
 			
-			Route::apiResource('users', 'UserController')
-				->middleware(\App\Http\Middleware\CheckAdminOrClientAdmin::class);
+			Route::apiResource('users', 'UserController')->middleware('role:ADMIN,OPERATIONS,CLIENT_ADMIN');
 			
-			Route::get('clients/search', 'ClientController@search')
-				->middleware(\App\Http\Middleware\CheckAdmin::class);
-			Route::apiResource('clients', 'ClientController')
-				->middleware(\App\Http\Middleware\CheckAdmin::class);
+			Route::get('clients/search', 'ClientController@search')->middleware('role:ADMIN,OPERATIONS');
+			Route::apiResource('clients', 'ClientController')->middleware('role:ADMIN,OPERATIONS');
 			
 			
 			Route::apiResource('topUps', 'TopUpController')
-				->middleware(\App\Http\Middleware\CheckAdmin::class);
+				->middleware('role:ADMIN,OPERATIONS');
 			
 			Route::apiResource('departments', 'DepartmentController');
 			Route::apiResource('deliveries', 'DeliveryController');
@@ -78,21 +75,20 @@
 			Route::apiResource('subscriptions', 'SubscriptionController');
 			
 			
-			Route::get('roles/search', 'RoleController@search')
-				->middleware(\App\Http\Middleware\CheckAdmin::class);
-			Route::apiResource('roles', 'RoleController')
-				->middleware(\App\Http\Middleware\CheckAdmin::class);
+			Route::get('roles/search', 'RoleController@search')->middleware('role:ADMIN,OPERATIONS');
+			Route::apiResource('roles', 'RoleController')->middleware('role:ADMIN,OPERATIONS');
 			
 			Route::get('appointments/userSuggestions', 'AppointmentController@userSuggestions');
 			Route::apiResource('appointments', 'AppointmentController');
 			
-			Route::apiResource('products', 'ProductController');
+			Route::apiResource('products', 'ProductController')->middleware('role:ADMIN,OPERATIONS');
 			Route::apiResource('categories', 'CategoryController');
 			Route::apiResource('serviceRequests', 'ServiceRequestController');
 			Route::apiResource('serviceRequestQuotes', 'ServiceRequestQuoteController');
 			Route::apiResource('serviceRequestOptions', 'ServiceRequestOptionController');
 			Route::apiResource('orders', 'OrderController');
-			Route::apiResource('orders.products', 'OrderProductController');
+			Route::post('orderItems/sendLPO', 'OrderItemController@sendLPO')->middleware('role:ADMIN,OPERATIONS');
+			Route::apiResource('orderItems', 'OrderItemController')->middleware('role:ADMIN,OPERATIONS');
 			Route::apiResource('reports', 'ReportsController')->only(['index']);
 		});
 		

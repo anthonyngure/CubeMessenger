@@ -10,8 +10,7 @@
         </v-flex>
 
         <v-dialog v-model="viewDialogHere"
-                  max-width="800px"
-                  persistent>
+                  max-width="800px">
             <v-card v-if="item">
                 <v-card-text>
 
@@ -29,46 +28,51 @@
                             <td>{{manager.toValue(props.item, item)}}</td>
                         </template>
                     </v-data-table>
-
-                    <guide text="Check the items you want to approve or reject in this order"
-                           v-if="showApprovalActions(item.items[0])">
-                    </guide>
                     <v-data-table
                             :items="item.items"
-                            v-model="selected"
                             hide-actions
                             item-key="id"
                             :style="'max-height: '+($vuetify.breakpoint.height * 0.30)+'px;'"
                             class="scroll-y"
-                            :select-all="showApprovalActions(item.items[0])"
                             :headers="productHeaders">
                         <template slot="items" slot-scope="props">
-                            <td v-if="showApprovalActions(props.item)">
-                                <v-checkbox
-                                        v-model="props.selected"
-                                        primary
-                                        hide-details>
-                                </v-checkbox>
-                            </td>
                             <td>{{props.item.product.name}}</td>
                             <td>{{props.item.product.price}}</td>
                             <td>{{props.item.quantity}}</td>
                             <td>{{$utils.formatMoney(props.item.product.price*props.item.quantity)}}</td>
-                            <td>{{props.item.status}}</td>
                         </template>
                     </v-data-table>
                 </v-card-text>
                 <v-card-actions>
-                    <v-btn :color="selected.length ? 'primary' : 'accent'"
-                           :disabled="connecting"
-                           v-if="showApprovalActions(item.items[0])"
-                           @click.native="approve">{{getActionText}}
-                    </v-btn>
-
-                    <v-spacer/>
                     <v-btn color="red darken-1"
                            flat
+                           :disabled="connecting"
                            @click.native="close">Close
+                    </v-btn>
+                    <v-spacer/>
+                    <v-btn flat
+                           color="red"
+                           small
+                           outline
+                           :disabled="connecting"
+                           v-if="showRejectButton(item)"
+                           @click.native="approveOrReject('reject')">
+                        <v-icon left
+                                small>close
+                        </v-icon>
+                        Reject
+                    </v-btn>
+                    <v-btn flat
+                           color="success"
+                           small
+                           outline
+                           :disabled="connecting"
+                           v-if="showApproveButton(item)"
+                           @click.native="approveOrReject('approve')">
+                        <v-icon left
+                                small>check_circle
+                        </v-icon>
+                        Approve
                     </v-btn>
                 </v-card-actions>
             </v-card>
@@ -94,28 +98,18 @@
         connecting: false,
         viewableHeaders: [],
         viewItemHeaders: [],
-        selected: [],
         filters: [
-          'pendingApproval', 'pendingDelivery', 'delivered', 'rejected'
+          {value: 'pendingApproval', name: 'Pending Approval'},
+          {value: 'pendingDelivery', name: 'Pending Delivery'},
+          {value: 'delivered', name: 'Delivered'},
+          {value: 'rejected', name: 'Rejected'}
         ],
         productHeaders: [
           {text: 'Name', value: 'product.name'},
           {text: 'Price', value: 'product.price'},
           {text: 'Quantity', value: 'quantity'},
           {text: 'Total', value: 'total'},
-          {text: 'Status', value: 'status'}
         ]
-      }
-    },
-    computed: {
-      getActionText () {
-        if (this.selected.length === 0) {
-          return 'Reject all un selected items'
-        } else if (this.selected.length !== this.item.items.length) {
-          return 'Accept all selected items and reject items un selected'
-        } else {
-          return 'Accept all selected items'
-        }
       }
     },
     methods: {
@@ -128,8 +122,18 @@
         this.manager.editable = (item) => {
           return false
         }
+        this.manager.deletable = (item) => {
+          return false
+        }
         this.manager.creatable = () => {
           return false
+        }
+        this.manager.toValue = (header, item) => {
+          if (header.value === 'rejectedBy') {
+            return item.rejectedBy ? item.rejectedBy.name + ' - (' + item.rejectedBy.role.name + ')' : that.defaultValue
+          } else {
+            return item[header.value] ? item[header.value] : that.defaultValue
+          }
         }
         this.manager.nameOnDelete = (item) => {
           return 'this order.'
@@ -142,25 +146,34 @@
           return true
         }
       },
-      approve () {
+      approveOrReject (action) {
         let that = this
-        this.item.items.forEach(product => {
-          let selected = that.selected.find(selected => selected.id === product.id)
-          product.approved = !!selected
-        })
         this.$refs.connectionManager.patch('orders/' + this.item.id, {
           onSuccess (response) {
             that.item = null
+            that.connecting = false
             that.selected = []
             that.viewDialogHere = false
-            that.$refs.crud.updateItem(response.data.data)
+            const item = response.data.data
+            if ((item.status === 'REJECTED') || (item.status === 'PENDING_DELIVERY')) {
+              that.$refs.crud.removeItem(item)
+            } else {
+              that.$refs.crud.updateItem(item)
+            }
           }
-        }, this.item.items)
+        }, {action: action})
       },
-      showApprovalActions (item) {
+      showRejectButton (item) {
         return (this.isPurchasingHead() && item.status === 'AT_PURCHASING_HEAD')
           || (this.isDepartmentHead() && item.status === 'AT_DEPARTMENT_HEAD')
       },
+      showApproveButton (item) {
+        //Item is rejected
+        //The user who rejected is the authenticated user
+        return (item.status === 'REJECTED' && item.rejectedBy && item.rejectedBy.id === this.$auth.user().id)
+          || (this.isPurchasingHead() && item.status === 'AT_PURCHASING_HEAD')
+          || (this.isDepartmentHead() && item.status === 'AT_DEPARTMENT_HEAD')
+      }
     }
   }
 </script>

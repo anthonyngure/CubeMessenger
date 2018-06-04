@@ -3,7 +3,7 @@
 	use Illuminate\Database\Migrations\Migration;
 	use Illuminate\Database\Schema\Blueprint;
 	
-	class CreateOrderProductsTable extends Migration
+	class CreateOrderItemsTable extends Migration
 	{
 		/**
 		 * Run the migrations.
@@ -12,7 +12,7 @@
 		 */
 		public function up()
 		{
-			Schema::create('order_products', function (Blueprint $table) {
+			Schema::create('order_items', function (Blueprint $table) {
 				$table->increments('id');
 				$table->unsignedInteger('order_id', false);
 				$table->foreign('order_id')->references('id')->on('orders');
@@ -20,14 +20,8 @@
 				$table->foreign('product_id')->references('id')->on('products');
 				$table->unsignedInteger('quantity', false);
 				$table->double('price_at_purchase', null, 2);
-				$table->double('amount', null, 2);
-				$table->enum('status', ['AT_DEPARTMENT_HEAD', 'AT_PURCHASING_HEAD', 'REJECTED',
-					'PENDING_DELIVERY', 'DELIVERED'])->default('AT_DEPARTMENT_HEAD');
-				$table->unsignedInteger('rejected_by_id', false)->nullable();
-				$table->foreign('rejected_by_id')->references('id')->on('users');
-				$table->timestamp('department_head_acted_at')->nullable();
-				$table->timestamp('purchasing_head_acted_at')->nullable();
-				$table->timestamp('delivered_at')->nullable();
+				$table->enum('status', ['PENDING_LPO', 'SENT_LPO', 'ACCEPTED_LPO', 'RECEIVED_LPO', 'REJECTED_LPO'])
+					->nullable();
 				$table->timestamps();
 				$table->softDeletes();
 			});
@@ -40,6 +34,6 @@
 		 */
 		public function down()
 		{
-			Schema::dropIfExists('order_products');
+			Schema::dropIfExists('order_items');
 		}
 	}

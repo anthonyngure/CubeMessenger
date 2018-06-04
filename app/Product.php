@@ -8,11 +8,11 @@
 	/**
  * App\ShopProduct
  *
- * @property int                                                            $id
- * @property int                                                            $shop_category_id
- * @property string                                                         $name
- * @property string                                                         $image
- * @property string|null                                                    $slug
+ * @property int                                                        $id
+ * @property int                                                        $shop_category_id
+ * @property string                                                     $name
+ * @property string                                                     $image
+ * @property string|null                                                $slug
  * @property float                                                      $price
  * @property float                                                      $old_price
  * @property string                                                     $description
@@ -40,8 +40,11 @@
  * @method static bool|null restore()
  * @method static \Illuminate\Database\Query\Builder|\App\Product withTrashed()
  * @method static \Illuminate\Database\Query\Builder|\App\Product withoutTrashed()
- * @property int $category_id
+ * @property int                                                        $category_id
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Product whereCategoryId($value)
+ * @property int $supplier_id
+ * @property-read \App\User $supplier
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Product whereSupplierId($value)
  */
 	class Product extends Model
 	{
@@ -53,16 +56,16 @@
 		/**
 		 * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
 		 */
-		public function shopCategory()
+		public function category()
 		{
 			return $this->belongsTo(Category::class);
 		}
 		
 		/**
-		 * @return \Illuminate\Database\Eloquent\Relations\HasMany
+		 * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
 		 */
-		public function clientOrders()
+		public function supplier()
 		{
-			return $this->hasMany(Order::class);
+			return $this->belongsTo(User::class, 'supplier_id');
 		}
 	}

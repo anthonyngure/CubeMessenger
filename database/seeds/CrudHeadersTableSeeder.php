@@ -1,9 +1,11 @@
 <?php
 	
+	use App\Category;
 	use App\Client;
 	use App\CrudHeader;
 	use App\Department;
 	use App\Order;
+	use App\OrderItem;
 	use App\Product;
 	use App\Role;
 	use App\Supplier;
@@ -213,10 +215,12 @@
 			]);
 			
 			CrudHeader::create([
-				'model' => Role::class,
-				'text'  => 'Name',
-				'value' => 'name',
-				'type'  => 'text',
+				'model'     => Role::class,
+				'text'      => 'Name',
+				'value'     => 'name',
+				'type'      => 'text',
+				'editable'  => false,
+				'creatable' => false,
 			]);
 			
 			CrudHeader::create([
@@ -280,7 +284,6 @@
 			]);
 			//endregion
 			
-			
 			//region Headers for App\ShopProduct
 			CrudHeader::create([
 				'model'     => Product::class,
@@ -339,6 +342,7 @@
 			]);
 			//endregion
 			
+			//region Headers for App\Order
 			CrudHeader::create([
 				'model'     => Order::class,
 				'text'      => 'Id',
@@ -367,16 +371,161 @@
 			]);
 			CrudHeader::create([
 				'model'     => Order::class,
+				'text'      => 'Status',
+				'value'     => 'status',
+				'type'      => 'text',
+				'editable'  => false,
+				'creatable' => false,
+			]);
+			CrudHeader::create([
+				'model'     => Order::class,
+				'text'      => 'RejectedBy',
+				'value'     => 'rejectedBy',
+				'type'      => 'text',
+				'editable'  => false,
+				'creatable' => false,
+			]);
+			CrudHeader::create([
+				'model'     => Order::class,
 				'text'      => 'Created At',
 				'value'     => 'createdAt',
 				'type'      => 'date',
 				'editable'  => false,
 				'creatable' => false,
 				'browsable' => false,
-				'viewable' => false,
+				'viewable'  => false,
 			]);
 			CrudHeader::create([
 				'model'     => Order::class,
+				'text'      => 'Updated At',
+				'value'     => 'updatedAt',
+				'type'      => 'date',
+				'editable'  => false,
+				'creatable' => false,
+				'browsable' => false,
+				'viewable'  => false,
+			]);
+			//endregion
+			
+			//region Headers for App\OrderItem
+			CrudHeader::create([
+				'model'     => OrderItem::class,
+				'text'      => 'Id',
+				'value'     => 'id',
+				'type'      => 'number',
+				'editable'  => false,
+				'creatable' => false,
+			
+			]);
+			CrudHeader::create([
+				'model'     => OrderItem::class,
+				'text'      => 'Product',
+				'value'     => 'product',
+				'type'      => 'text',
+				'editable'  => false,
+				'creatable' => false,
+			]);
+			CrudHeader::create([
+				'model'     => OrderItem::class,
+				'text'      => 'Supplier',
+				'value'     => 'supplier',
+				'type'      => 'text',
+				'editable'  => false,
+				'creatable' => false,
+			]);
+			CrudHeader::create([
+				'model'     => OrderItem::class,
+				'text'      => 'Quantity',
+				'value'     => 'quantity',
+				'type'      => 'number',
+				'editable'  => false,
+				'creatable' => false,
+			]);
+			CrudHeader::create([
+				'model'     => OrderItem::class,
+				'text'      => 'Price at Purchase',
+				'value'     => 'priceAtPurchase',
+				'type'      => 'number',
+				'editable'  => false,
+				'creatable' => false,
+			]);
+			CrudHeader::create([
+				'model'     => OrderItem::class,
+				'text'      => 'Amount',
+				'value'     => 'amount',
+				'type'      => 'number',
+				'editable'  => false,
+				'creatable' => false,
+			]);
+			CrudHeader::create([
+				'model'     => OrderItem::class,
+				'text'      => 'Status',
+				'value'     => 'status',
+				'type'      => 'text',
+				'editable'  => false,
+				'creatable' => false,
+			]);
+			CrudHeader::create([
+				'model'     => OrderItem::class,
+				'text'      => 'Created At',
+				'value'     => 'createdAt',
+				'type'      => 'date',
+				'editable'  => false,
+				'creatable' => false,
+				'browsable' => false,
+				'viewable'  => false,
+			]);
+			CrudHeader::create([
+				'model'     => OrderItem::class,
+				'text'      => 'Updated At',
+				'value'     => 'updatedAt',
+				'type'      => 'date',
+				'editable'  => false,
+				'creatable' => false,
+				'browsable' => false,
+				'viewable'  => false,
+			]);
+			//endregion
+			
+			CrudHeader::create([
+				'model'     => Category::class,
+				'text'      => 'Id',
+				'value'     => 'id',
+				'type'      => 'number',
+				'editable'  => false,
+				'creatable' => false,
+			
+			]);
+			CrudHeader::create([
+				'model'     => Category::class,
+				'text'      => 'Name',
+				'value'     => 'name',
+				'type'      => 'text',
+			]);
+			CrudHeader::create([
+				'model'     => Category::class,
+				'text'      => 'Order',
+				'value'     => 'order',
+				'type'      => 'number',
+			]);
+			CrudHeader::create([
+				'model'     => Category::class,
+				'text'      => 'Items',
+				'value'     => 'itemCount',
+				'type'      => 'number',
+			]);
+			CrudHeader::create([
+				'model'     => Category::class,
+				'text'      => 'Created At',
+				'value'     => 'createdAt',
+				'type'      => 'date',
+				'editable'  => false,
+				'creatable' => false,
+				'browsable' => false,
+				'viewable'  => false,
+			]);
+			CrudHeader::create([
+				'model'     => Category::class,
 				'text'      => 'Updated At',
 				'value'     => 'updatedAt',
 				'type'      => 'date',
