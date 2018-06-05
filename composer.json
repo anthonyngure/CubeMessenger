@@ -19,6 +19,8 @@
         "intervention/image": "2.4.1",
         "laravel/framework": "5.5.*",
         "laravel/tinker": "~1.0",
+        "mpociot/laravel-apidoc-generator": "^2.0",
+        "nicksynev/make-observer-command": "^0.0.4",
         "orangehill/iseed": "dev-master",
         "spatie/laravel-fractal": "5.3.0",
         "tymon/jwt-auth": "1.0.0-rc.2"

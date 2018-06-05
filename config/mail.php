@@ -61,11 +61,11 @@ return [
     ],
 	
 	
-	'to' => [
+	/*'to' => [
 		//'address' => 'anthonyngure25@gmail.com',
 		'address' => 'thinksynergy@thinksynergy.co.ke',
 		'name' => 'Email Testing'
-	],
+	],*/
 
     /*
     |--------------------------------------------------------------------------
@@ -120,7 +120,7 @@ return [
     */
 
     'markdown' => [
-        'theme' => 'default',
+        'theme' => 'v3',
 
         'paths' => [
             resource_path('views/vendor/mail'),

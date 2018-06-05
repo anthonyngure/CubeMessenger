@@ -4,6 +4,7 @@
 	
 	use Illuminate\Database\Eloquent\Model;
 	use Illuminate\Database\Eloquent\SoftDeletes;
+	use Illuminate\Notifications\Notifiable;
 	
 	/**
  * App\AppointmentParticipant
@@ -30,11 +31,12 @@
  * @method static bool|null restore()
  * @method static \Illuminate\Database\Query\Builder|\App\AppointmentInternalParticipant withTrashed()
  * @method static \Illuminate\Database\Query\Builder|\App\AppointmentInternalParticipant withoutTrashed()
+ * @property-read \Illuminate\Notifications\DatabaseNotificationCollection|\Illuminate\Notifications\DatabaseNotification[] $notifications
  */
 	class AppointmentInternalParticipant extends Model
 	{
 		//
-		use SoftDeletes;
+		use SoftDeletes, Notifiable;
 		
 		protected $guarded = [
 			'id', 'created_at', 'updated_at','pivot'

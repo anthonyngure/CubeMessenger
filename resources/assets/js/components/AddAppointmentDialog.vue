@@ -105,7 +105,17 @@
                 <v-card flat>
                     <template v-for="(participant, index) in externalParticipants">
                         <v-layout row wrap :key="index">
-                            <v-flex xs6>
+                            <v-flex xs3>
+                                <v-text-field
+                                        :disabled="connecting"
+                                        placeholder="Participant name"
+                                        label="Enter participant name"
+                                        v-model="participant.name"
+                                        :error-messages="participant.errors.name"
+                                        prepend-icon="email">
+                                </v-text-field>
+                            </v-flex>
+                            <v-flex xs5 class="px-5">
                                 <v-text-field
                                         :disabled="connecting"
                                         placeholder="Participant email address"
@@ -115,7 +125,7 @@
                                         prepend-icon="email">
                                 </v-text-field>
                             </v-flex>
-                            <v-flex xs5 class="pl-5">
+                            <v-flex xs3>
                                 <v-text-field
                                         :disabled="connecting"
                                         placeholder="Participant phone number"
@@ -145,7 +155,7 @@
                             <v-icon left>arrow_back</v-icon>
                             Back
                         </v-btn>
-                        <v-spacer></v-spacer>
+                        <v-spacer/>
                         <v-btn @click.native="onCancel" color="red" flat>Cancel</v-btn>
                         <v-btn color="primary" :disabled="!externalParticipantsValidate"
                                @click.native="step = 4">
@@ -170,7 +180,7 @@
                             <v-icon left>arrow_back</v-icon>
                             Back
                         </v-btn>
-                        <v-spacer></v-spacer>
+                        <v-spacer/>
                         <v-btn @click.native="onCancel" color="red" flat>Cancel</v-btn>
                         <v-btn color="primary" :disabled="!title || connecting"
                                @click.native="step = 5">Continue
@@ -212,7 +222,7 @@
                             <v-icon left>arrow_back</v-icon>
                             Back
                         </v-btn>
-                        <v-spacer></v-spacer>
+                        <v-spacer/>
                         <v-btn @click.native="onCancel" color="red" flat>Cancel</v-btn>
                         <v-btn color="primary" :disabled="connecting || !itemsToDiscussValidate"
                                @click.native="step = 6">Continue
@@ -257,10 +267,10 @@
                         </v-flex>
                         <v-flex xs10 offset-xs1>
                             <v-checkbox label="All day" hide-details :disabled="connecting"
-                                        v-model="allDay"></v-checkbox>
+                                        v-model="allDay"/>
                         </v-flex>
                         <v-flex xs12>
-                            <connection-manager ref="connectionManager" v-model="connecting"></connection-manager>
+                            <connection-manager ref="connectionManager" v-model="connecting"/>
                         </v-flex>
                     </v-layout>
 
@@ -281,7 +291,7 @@
                             <v-icon left>arrow_back</v-icon>
                             Back
                         </v-btn>
-                        <v-spacer></v-spacer>
+                        <v-spacer/>
                         <v-btn @click.native="onCancel" color="red" flat>Cancel</v-btn>
                         <v-btn color="primary" :disabled="invalidInternalParticipants.length > 0"
                                @click.native="submit">Finish
@@ -505,7 +515,7 @@
         }
       },
       maxWidth () {
-        return (this.$vuetify.breakpoint.width * 0.50) + 'px'
+        return (this.$vuetify.breakpoint.width * 0.60) + 'px'
       },
       externalParticipantsValidate () {
         let pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
@@ -513,6 +523,12 @@
         let validParticipants = 0
 
         for (let participant of this.externalParticipants) {
+
+          if (participant.name) {
+            participant.errors.name = []
+          } else {
+            participant.errors.name = ['Enter a valid name']
+          }
 
           if (participant.email && pattern.test(participant.email)) {
             participant.errors.email = []
@@ -594,9 +610,11 @@
         this.externalParticipants.push({
           email: null,
           phone: null,
+          name: null,
           errors: {
             email: [],
-            phone: []
+            phone: [],
+            name: [],
           }
         })
       },
@@ -636,6 +654,7 @@
           appointment.externalParticipants.push({
             email: participant.email,
             phone: participant.phone,
+            name: participant.name,
           })
         }
         this.$utils.log(appointment)

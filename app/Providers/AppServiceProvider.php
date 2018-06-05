@@ -2,10 +2,16 @@
 	
 	namespace App\Providers;
 	
+	use App\Appointment;
+	use App\AppointmentExternalParticipant;
+	use App\AppointmentInternalParticipant;
 	use App\Category;
 	use App\Bill;
 	use App\Delivery;
 	use App\Item;
+	use App\Observers\AppointmentExternalParticipantObserver;
+	use App\Observers\AppointmentInternalParticipantObserver;
+	use App\Observers\AppointmentObserver;
 	use App\Observers\CategoryObserver;
 	use App\Observers\BillObserver;
 	use App\Observers\DeliveryObserver;

@@ -16,6 +16,7 @@ class CreateAppointmentExternalParticipantsTable extends Migration
             $table->increments('id');
 	        $table->unsignedInteger('appointment_id', false);
 	        $table->foreign('appointment_id')->references('id')->on('appointments');
+	        $table->string('name');
 	        $table->string('email');
 	        $table->string('phone');
             $table->timestamps();

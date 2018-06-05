@@ -9,7 +9,7 @@
                     :events="appointmentDates">
             </v-date-picker>
             <v-container fluid grid-list-md>
-                <connection-manager ref="connectionManager"></connection-manager>
+                <connection-manager ref="connectionManager"/>
                 <v-data-iterator content-tag="v-layout"
                                  row
                                  wrap
@@ -31,7 +31,7 @@
                                     {{props.item.allDay ? 'All day'
                                     : props.item.startingAt+' -'+props.item.endingAt}}
                                 </v-chip>
-                                <v-divider></v-divider>
+                                <v-divider/>
                                 <v-subheader>Internal Participants</v-subheader>
                                 <v-list avatar>
                                     <v-list-tile v-for="participant in props.item.internalParticipants"
@@ -60,12 +60,12 @@
                                         </v-list-tile-content>
                                     </v-list-tile>
                                 </v-list>
-                                <v-divider></v-divider>
+                                <v-divider/>
                                 <v-subheader>Issues/Items</v-subheader>
                                 <template v-for="(issue, index) in props.item.items">
                                     <p :key="issue.id">{{issue.details}}</p>
                                     <v-divider v-if="index !== props.item.items.length - 1"
-                                               :key="'div_'+issue.id"></v-divider>
+                                               :key="'div_'+issue.id"/>
                                 </template>
                             </div>
                         </v-card>

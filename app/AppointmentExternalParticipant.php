@@ -4,6 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Notifications\Notifiable;
 
 /**
  * App\AppointmentExternalParticipant
@@ -28,12 +29,13 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static bool|null restore()
  * @method static \Illuminate\Database\Query\Builder|\App\AppointmentExternalParticipant withTrashed()
  * @method static \Illuminate\Database\Query\Builder|\App\AppointmentExternalParticipant withoutTrashed()
+ * @property-read \Illuminate\Notifications\DatabaseNotificationCollection|\Illuminate\Notifications\DatabaseNotification[] $notifications
  */
 class AppointmentExternalParticipant extends Model
 {
     //
 	
-	use SoftDeletes;
+	use SoftDeletes, Notifiable;
 	
 	protected $guarded = [
 		'id', 'created_at', 'updated_at',

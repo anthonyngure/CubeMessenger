@@ -511,7 +511,7 @@
 			CrudHeader::create([
 				'model'     => Category::class,
 				'text'      => 'Items',
-				'value'     => 'itemCount',
+				'value'     => 'productsCount',
 				'type'      => 'number',
 			]);
 			CrudHeader::create([

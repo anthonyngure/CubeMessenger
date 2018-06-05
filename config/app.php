@@ -178,6 +178,7 @@ return [
         App\Providers\RouteServiceProvider::class,
 	
 	    Grohiro\LaravelCamelCaseJson\CamelCaseJsonResponseServiceProvider::class,
+	    Mpociot\ApiDoc\ApiDocGeneratorServiceProvider::class,
 
     ],
 

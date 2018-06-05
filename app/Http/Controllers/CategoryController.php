@@ -20,7 +20,8 @@
 			
 			if ($user->isAdmin() || $user->isOperations()) {
 				$headers = CrudHeader::whereModel(Category::class)->get();
-				$categories = Category::all();
+				$categories = Category::withCount('products')->get();
+				//dd($categories->toSql());
 				return $this->collectionResponse($categories, ['headers' => $headers]);
 			} else {
 				

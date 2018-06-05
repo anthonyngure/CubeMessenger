@@ -29,6 +29,7 @@
  * @method static bool|null restore()
  * @method static \Illuminate\Database\Query\Builder|\App\Category withTrashed()
  * @method static \Illuminate\Database\Query\Builder|\App\Category withoutTrashed()
+ * @property-read mixed $item_count
  */
 	class Category extends Model
 	{
@@ -43,5 +44,10 @@
 		public function products()
 		{
 			return $this->hasMany(Product::class);
+		}
+		
+		public function getItemCountAttribute()
+		{
+			return $this->products()->count();
 		}
 	}

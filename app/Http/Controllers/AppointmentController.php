@@ -6,6 +6,7 @@
 	use App\AppointmentExternalParticipant;
 	use App\AppointmentInternalParticipant;
 	use App\AppointmentItem;
+	use App\Notifications\AppointmentNotification;
 	use Auth;
 	use Carbon\Carbon;
 	use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -16,6 +17,7 @@
 		/**
 		 * Display a listing of the resource.
 		 *
+		 * @param \Illuminate\Http\Request $request
 		 * @return \Illuminate\Http\Response
 		 * @throws \App\Exceptions\WrappedException
 		 */
@@ -40,13 +42,24 @@
 			return $this->collectionResponse($appointments);
 		}
 		
+		
+		/**
+		 * Display the specified resource.
+		 *
+		 * @param  int $id
+		 * @return \Illuminate\Http\Response
+		 */
+		public function show($id)
+		{
+			//
+		}
+		
 		/**
 		 * Store a newly created resource in storage.
 		 *
 		 * @param  \Illuminate\Http\Request $request
 		 * @return \Illuminate\Http\Response
 		 * @throws \Illuminate\Validation\ValidationException
-		 * @throws \App\Exceptions\WrappedException
 		 */
 		public function store(Request $request)
 		{
@@ -63,20 +76,22 @@
 			]);
 			
 			/** @var Carbon $startingAt */
-			$startingAt = $request->allDay ? Carbon::parse($request->startDate) : Carbon::parse($request->startDate . ' ' . $request->startTime);
+			$startingAt = $request->input('allDay') ? Carbon::parse($request->input('startDate'))
+				: Carbon::parse($request->input('startDate') . ' ' . $request->input('startTime'));
 			/** @var Carbon $endingAt */
-			$endingAt = $request->allDay ? Carbon::parse($request->endDate) : Carbon::parse($request->endDate . ' ' . $request->endTime);
+			$endingAt = $request->input('allDay') ? Carbon::parse($request->input('endDate'))
+				: Carbon::parse($request->input('endDate') . ' ' . $request->input('endTime'));
 			
 			$appointment = Appointment::create([
 				'user_id'     => Auth::user()->getKey(),
-				'venue'       => $request->venue,
-				'title'       => $request->title,
+				'venue'       => $request->input('venue'),
+				'title'       => $request->input('title'),
 				'starting_at' => $startingAt->toDateTimeString(),
 				'ending_at'   => $endingAt->toDateTimeString(),
-				'all_day'     => $request->allDay,
+				'all_day'     => $request->input('allDay'),
 			]);
 			
-			$internalParticipants = $request->internalParticipants;
+			$internalParticipants = $request->input('internalParticipants');
 			if (!empty($internalParticipants)) {
 				foreach ($internalParticipants as $participant) {
 					AppointmentInternalParticipant::create([
@@ -86,17 +101,18 @@
 				}
 			}
 			
-			$externalParticipants = $request->externalParticipants;
+			$externalParticipants = $request->input('externalParticipants');
 			if (!empty($externalParticipants)) {
 				foreach ($externalParticipants as $participant) {
 					$appointment->externalParticipants()->save(new AppointmentExternalParticipant([
+						'name'  => $participant['name'],
 						'email' => $participant['email'],
 						'phone' => $participant['phone'],
 					]));
 				}
 			}
 			
-			$itemsToDiscuss = $request->itemsToDiscuss;
+			$itemsToDiscuss = $request->input('itemsToDiscuss');
 			if (!empty($itemsToDiscuss)) {
 				foreach ($itemsToDiscuss as $itemToDiscuss) {
 					$appointment->items()->save(new AppointmentItem([
@@ -104,10 +120,22 @@
 					]));
 				}
 			}
-			$data = Appointment::with('internalParticipants', 'externalParticipants', 'items')
+			
+			/** @var \App\Appointment $appointment */
+			$appointment = Appointment::with('internalParticipants', 'externalParticipants', 'items')
 				->findOrFail($appointment->id);
 			
-			return $this->itemCreatedResponse($data);
+			/** @var AppointmentInternalParticipant $internalParticipant */
+			foreach ($appointment->internalParticipants as $internalParticipant) {
+				$internalParticipant->notify(new AppointmentNotification($appointment));
+			}
+			
+			/** @var \App\AppointmentExternalParticipant $externalParticipant */
+			foreach ($appointment->externalParticipants as $externalParticipant) {
+				$externalParticipant->notify(new AppointmentNotification($appointment));
+			}
+			
+			return $this->itemCreatedResponse($appointment);
 		}
 		
 		/**
@@ -143,10 +171,10 @@
 			$client = Auth::user()->getClient();
 			
 			$this->validate($request, [
-				'search' => 'required',
+				'search' => 'required|string',
 			]);
 			
-			$query = $request->search . '';
+			$query = $request->input('search') . '';
 			//dd($query);
 			
 			//dd(Auth::user()->appointments()->toSql());

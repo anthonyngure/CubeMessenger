@@ -2,7 +2,7 @@
 ####{{Carbon\Carbon::now()->toDayDateTimeString()}}
 #### Dear {{$supplier->name}},
 
-### Your are requested to supply the following items to CubeMessenger
+Your are requested to supply the following items to CubeMessenger
 @component('mail::table')
     |Item| Quantity   |
     |:-------|:----------:|
