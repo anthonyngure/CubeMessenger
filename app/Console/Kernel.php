@@ -35,7 +35,7 @@
 			$schedule->call(function () {
 				ScheduledTasksManager::sendTestEmail();
 				ScheduledTasksManager::sendLPO();
-			})->everyFiveMinutes();
+			})->everyMinute();
 		}
 		
 		/**
