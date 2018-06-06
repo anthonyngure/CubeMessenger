@@ -34,8 +34,11 @@
 			
 			$schedule->call(function () {
 				ScheduledTasksManager::sendTestEmail();
+			})->hourly();
+			
+			$schedule->call(function () {
 				ScheduledTasksManager::sendLPO();
-			})->everyMinute();
+			})->dailyAt('16:00');
 		}
 		
 		/**
