@@ -21,6 +21,7 @@
 			if ($user->isAdmin() || $user->isOperations()) {
 				$headers = CrudHeader::whereModel(Category::class)->get();
 				$categories = Category::withCount('products')->get();
+				
 				//dd($categories->toSql());
 				return $this->collectionResponse($categories, ['headers' => $headers]);
 			} else {
@@ -39,7 +40,18 @@
 		 */
 		public function store(Request $request)
 		{
-			//
+			$this->validate($request, [
+				'name'  => 'required|string|unique,categories',
+				'order' => 'required|numeric|min:1|max:20',
+			]);
+			
+			$category = Category::firstOrCreate([
+				'name' => $request->input('name'),
+			], [
+				'order' => $request->input('order'),
+			]);
+			
+			return $this->itemCreatedResponse($category);
 		}
 		
 		/**

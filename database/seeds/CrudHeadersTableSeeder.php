@@ -507,12 +507,15 @@
 				'text'      => 'Order',
 				'value'     => 'order',
 				'type'      => 'number',
+				'mask'      => '#',
 			]);
 			CrudHeader::create([
 				'model'     => Category::class,
 				'text'      => 'Items',
 				'value'     => 'productsCount',
 				'type'      => 'number',
+				'editable'  => false,
+				'creatable' => false,
 			]);
 			CrudHeader::create([
 				'model'     => Category::class,
