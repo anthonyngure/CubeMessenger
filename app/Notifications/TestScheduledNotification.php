@@ -42,6 +42,7 @@
 			return (new MailMessage)
 				->subject('Task Scheduling Test')
 				->line('This is a test for task scheduling, sent every 15 minutes!')
+				
 				//->line('The introduction to the notification.')
 				//->action('Notification Action', url('/'))
 				->line('Thank you for using our application!');
