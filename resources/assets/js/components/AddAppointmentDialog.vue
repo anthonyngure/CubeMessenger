@@ -425,7 +425,10 @@
         let that = this
         return {
           hours: function (value) {
-            return value > moment(that.startTime, 'HH:mm:ss').hour() && value <= 22
+            //return value > moment(that.startTime, 'HH:mm:ss').hour() && value <= 22
+            return (that.endDate && moment().isSame(moment(that.endDate, 'YYYY-MM-DD')))
+              ? (value >= moment().hour() && value <= 22)
+              : true
           },
           minutes: function (value) {
             return value > moment(that.startTime, 'HH:mm:ss').minute()
