@@ -427,7 +427,8 @@
             return true
           },
           minutes: function (value) {
-            return value > moment(that.startTime, 'HH:mm:ss').minute()
+            //return value > moment(that.startTime, 'HH:mm:ss').minute()
+            return true
           }
         }
       },
