@@ -372,14 +372,6 @@
             //return parseInt(day, 10) % 2 === 0
           }
         },
-        allowedStartTimes: {
-          hours: function (value) {
-            return value >= moment().hour() && value <= 22
-          },
-          minutes: function (value) {
-            return true
-          }
-        }
       }
     },
     watch: {
@@ -403,6 +395,21 @@
       }
     },
     computed: {
+      allowedStartTimes () {
+        let that = this
+        return {
+          hours: function (value) {
+            //that.$utils.log(that.startDate)
+            //that.$utils.log((that.startDate && moment().isSame(moment(that.startDate, 'YYYY-MM-DD'), 'day')))
+            return (that.startDate && moment().isSame(moment(that.startDate, 'YYYY-MM-DD')))
+              ? (value >= moment().hour() && value <= 22)
+              : true
+          },
+          minutes: function (value) {
+            return true
+          }
+        }
+      },
       allowedEndDates () {
         let that = this
         return {
