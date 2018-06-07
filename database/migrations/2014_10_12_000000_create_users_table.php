@@ -15,7 +15,7 @@
 			Schema::create('users', function (Blueprint $table) {
 				$table->increments('id');
 				$table->unsignedInteger('client_id', false)->nullable();
-				$table->foreign('client_id')->references('id')->on('users');
+				$table->foreign('client_id')->references('id')->on('clients');
 				$table->unsignedInteger('department_id', false)->nullable();
 				$table->foreign('department_id')->references('id')->on('departments');
 				$table->unsignedInteger('role_id', false)->nullable();
