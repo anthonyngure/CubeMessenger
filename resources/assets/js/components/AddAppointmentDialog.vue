@@ -401,9 +401,7 @@
           hours: function (value) {
             //that.$utils.log(that.startDate)
             //that.$utils.log((that.startDate && moment().isSame(moment(that.startDate, 'YYYY-MM-DD'), 'day')))
-            return (that.startDate && moment().isSame(moment(that.startDate, 'YYYY-MM-DD')))
-              ? (value >= moment().hour() && value <= 22)
-              : true
+            return  true
           },
           minutes: function (value) {
             return true
@@ -426,9 +424,7 @@
         return {
           hours: function (value) {
             //return value > moment(that.startTime, 'HH:mm:ss').hour() && value <= 22
-            return (that.endDate && moment().isSame(moment(that.endDate, 'YYYY-MM-DD')))
-              ? (value >= moment().hour() && value <= 22)
-              : true
+            return true
           },
           minutes: function (value) {
             return value > moment(that.startTime, 'HH:mm:ss').minute()
