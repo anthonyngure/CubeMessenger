@@ -4,9 +4,9 @@
 
 You have been added to participate in the appointment/meeting below
 @component('mail::table')
-|Subject| Venue   |
-|:-------|:----------|
-|{{$appointment->title}}|{{$appointment->venue}}|
+Time and Date|Subject| Venue   |
+|:----------|:-------|:----------|
+|{{$appointment->all_day ? 'Starting '.$appointment->starting_at.' - all day' : $appointment->starting_at.' to '.$appointment->ending_at}}|{{$appointment->title}}|{{$appointment->venue}}|
 @endcomponent
 @if(count($appointment->items) > 0)
 ### Items to discuss are
