@@ -3,7 +3,9 @@
               wrap>
         <v-flex xs12>
             <crud resource="deliveries"
-                  :manager="manager"/>
+                  :manager="manager"
+                  :custom-view-dialog="true"
+                  :creatable="false"/>
         </v-flex>
     </v-layout>
 </template>
@@ -19,6 +21,17 @@
     methods: {
       initialize () {
         let that = this
+        this.manager.toValue = (header, item) => {
+          if (header.value === 'from') {
+            return item.originFormattedAddress ? item.originFormattedAddress : that.defaultValue
+          }
+          if (header.value === 'to') {
+            return item.originFormattedAddress ? item.originFormattedAddress : that.defaultValue
+          }
+          else {
+            return item[header.value] ? item[header.value] : that.defaultValue
+          }
+        }
       }
     }
 

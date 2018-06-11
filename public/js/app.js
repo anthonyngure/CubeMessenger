@@ -5274,6 +5274,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
 
 
 
@@ -9001,6 +9004,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
 
 
 
@@ -9012,6 +9017,16 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
   methods: {
     initialize: function initialize() {
       var that = this;
+      this.manager.toValue = function (header, item) {
+        if (header.value === 'from') {
+          return item.originFormattedAddress ? item.originFormattedAddress : that.defaultValue;
+        }
+        if (header.value === 'to') {
+          return item.originFormattedAddress ? item.originFormattedAddress : that.defaultValue;
+        } else {
+          return item[header.value] ? item[header.value] : that.defaultValue;
+        }
+      };
     }
   }
 
@@ -11887,7 +11902,7 @@ exports = module.exports = __webpack_require__("./node_modules/css-loader/lib/cs
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -12052,7 +12067,7 @@ exports = module.exports = __webpack_require__("./node_modules/css-loader/lib/cs
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -41272,7 +41287,12 @@ var render = function() {
         { attrs: { xs12: "" } },
         [
           _c("crud", {
-            attrs: { resource: "deliveries", manager: _vm.manager }
+            attrs: {
+              resource: "deliveries",
+              manager: _vm.manager,
+              "custom-view-dialog": true,
+              creatable: false
+            }
           })
         ],
         1
@@ -44315,109 +44335,30 @@ var render = function() {
                                   ),
                                   _vm._v(" "),
                                   _c(
-                                    "v-tooltip",
-                                    { attrs: { bottom: "" } },
+                                    "v-btn",
+                                    {
+                                      attrs: {
+                                        block: "",
+                                        color: "primary",
+                                        outline: "",
+                                        large: "",
+                                        flat: ""
+                                      }
+                                    },
                                     [
-                                      _c(
-                                        "v-btn",
-                                        {
-                                          attrs: {
-                                            slot: "activator",
-                                            block: "",
-                                            color: "primary",
-                                            outline: "",
-                                            large: "",
-                                            flat: ""
-                                          },
-                                          slot: "activator"
-                                        },
-                                        [
-                                          _vm._v(
-                                            "\n                    Total Cost Estimate: "
-                                          ),
-                                          _c("b", [
-                                            _vm._v(
-                                              _vm._s(
-                                                _vm.$utils.formatMoney(
-                                                  _vm.estimatedCost
-                                                )
-                                              )
-                                            )
-                                          ])
-                                        ]
+                                      _vm._v(
+                                        "\n                  Total Cost Estimate: "
                                       ),
-                                      _vm._v(" "),
-                                      _c("span", [
+                                      _c("b", [
                                         _vm._v(
-                                          "Urgent Cost Per Kilometer: KES " +
-                                            _vm._s(
-                                              _vm.costVariables
-                                                .URGENT_COST_PER_KM
+                                          _vm._s(
+                                            _vm.$utils.formatMoney(
+                                              _vm.estimatedCost
                                             )
-                                        )
-                                      ]),
-                                      _c("br"),
-                                      _vm._v(" "),
-                                      _c("span", [
-                                        _vm._v(
-                                          "Non Urgent Cost Per Kilometer: KES " +
-                                            _vm._s(
-                                              _vm.costVariables
-                                                .NON_URGENT_COST_PER_KM
-                                            )
-                                        )
-                                      ]),
-                                      _vm._v(" "),
-                                      _c("br"),
-                                      _vm._v(" "),
-                                      _c("br"),
-                                      _vm._v(" "),
-                                      _c("span", [
-                                        _vm._v(
-                                          "Urgent Cost Per Minute: KES " +
-                                            _vm._s(
-                                              _vm.costVariables
-                                                .URGENT_COST_PER_MIN
-                                            )
-                                        )
-                                      ]),
-                                      _c("br"),
-                                      _vm._v(" "),
-                                      _c("span", [
-                                        _vm._v(
-                                          "Non Cost Per Minute: KES " +
-                                            _vm._s(
-                                              _vm.costVariables
-                                                .NON_URGENT_COST_PER_MIN
-                                            )
-                                        )
-                                      ]),
-                                      _vm._v(" "),
-                                      _c("br"),
-                                      _vm._v(" "),
-                                      _c("br"),
-                                      _vm._v(" "),
-                                      _c("span", [
-                                        _vm._v(
-                                          "Urgent Base Cost: KES " +
-                                            _vm._s(
-                                              _vm.costVariables.URGENT_BASE_COST
-                                            )
-                                        )
-                                      ]),
-                                      _c("br"),
-                                      _vm._v(" "),
-                                      _c("span", [
-                                        _vm._v(
-                                          "Non Urgent Base Cost: KES " +
-                                            _vm._s(
-                                              _vm.costVariables
-                                                .NON_URGENT_BASE_COST
-                                            )
+                                          )
                                         )
                                       ])
-                                    ],
-                                    1
+                                    ]
                                   ),
                                   _vm._v(" "),
                                   _c("v-checkbox", {

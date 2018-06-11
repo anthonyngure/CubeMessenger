@@ -141,7 +141,7 @@
                 </v-list-tile >
                 <v-divider inset
                            v-if="index !== props.item.items.length-1"
-                           :key="index+props.item.items.length" ></v-divider >
+                           :key="index+props.item.items.length"/>
               </template >
             </v-list >
           </v-expansion-panel-content >
@@ -152,9 +152,9 @@
     <add-delivery-dialog :show="addingDelivery"
                          @onClose="onCloseAddingDelivery" >
     </add-delivery-dialog >
-    
+
     <delivery-item-q-r-dialog :item="printingItem"
-                              @onClose="printingItem = null" ></delivery-item-q-r-dialog >
+                              @onClose="printingItem = null"/>
     
     <v-fab-transition v-if="isDepartmentUser()" >
       <v-btn class="ma-5"

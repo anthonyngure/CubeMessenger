@@ -213,16 +213,17 @@
                           class="mb-3" >
                     account_balance_wallet
                   </v-icon >
-                  <v-tooltip bottom >
-                    <v-btn block
-                           color="primary"
-                           outline
-                           large
-                           flat
-                           slot="activator" >
-                      Total Cost Estimate: <b >{{$utils.formatMoney(estimatedCost)}}</b >
-                    </v-btn >
-                    <span >Urgent Cost Per Kilometer: KES {{costVariables.URGENT_COST_PER_KM}}</span ><br />
+
+                  <v-btn block
+                         color="primary"
+                         outline
+                         large
+                         flat >
+                    Total Cost Estimate: <b >{{$utils.formatMoney(estimatedCost)}}</b >
+                  </v-btn >
+
+                  <!--<v-tooltip bottom >
+                    <span class="hidden-lg-and-down" >Urgent Cost Per Kilometer: KES {{costVariables.URGENT_COST_PER_KM}}</span ><br />
                     <span >Non Urgent Cost Per Kilometer: KES {{costVariables.NON_URGENT_COST_PER_KM}}</span >
                     <br />
                     <br />
@@ -233,6 +234,8 @@
                     <span >Urgent Base Cost: KES {{costVariables.URGENT_BASE_COST}}</span ><br />
                     <span >Non Urgent Base Cost: KES {{costVariables.NON_URGENT_BASE_COST}}</span >
                   </v-tooltip >
+                  -->
+
                   <v-checkbox v-model="urgent"
                               class="mt-3"
                               :disabled="connecting"

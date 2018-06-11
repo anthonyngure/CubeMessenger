@@ -3,6 +3,7 @@
 	use App\Category;
 	use App\Client;
 	use App\CrudHeader;
+	use App\Delivery;
 	use App\Department;
 	use App\Order;
 	use App\OrderItem;
@@ -498,17 +499,17 @@
 			
 			]);
 			CrudHeader::create([
-				'model'     => Category::class,
-				'text'      => 'Name',
-				'value'     => 'name',
-				'type'      => 'text',
+				'model' => Category::class,
+				'text'  => 'Name',
+				'value' => 'name',
+				'type'  => 'text',
 			]);
 			CrudHeader::create([
-				'model'     => Category::class,
-				'text'      => 'Order',
-				'value'     => 'order',
-				'type'      => 'number',
-				'mask'      => '#',
+				'model' => Category::class,
+				'text'  => 'Order',
+				'value' => 'order',
+				'type'  => 'number',
+				'mask'  => '#',
 			]);
 			CrudHeader::create([
 				'model'     => Category::class,
@@ -542,7 +543,7 @@
 			
 			
 			CrudHeader::create([
-				'model'     => Category::class,
+				'model'     => Delivery::class,
 				'text'      => 'Id',
 				'value'     => 'id',
 				'type'      => 'number',
@@ -551,25 +552,49 @@
 			
 			]);
 			CrudHeader::create([
-				'model'     => Category::class,
-				'text'      => 'Name',
-				'value'     => 'name',
-				'type'      => 'text',
+				'model'    => Delivery::class,
+				'text'     => 'Client',
+				'value'    => 'client',
+				'type'     => 'text',
+				'editable' => false,
 			]);
 			CrudHeader::create([
-				'model'     => Category::class,
-				'text'      => 'Order',
-				'value'     => 'order',
-				'type'      => 'number',
-				'mask'      => '#',
-			]);
-			CrudHeader::create([
-				'model'     => Category::class,
-				'text'      => 'Items',
-				'value'     => 'productsCount',
-				'type'      => 'number',
-				'editable'  => false,
+				'model'     => Delivery::class,
+				'text'      => 'Rider',
+				'value'     => 'riderId',
+				'type'      => 'select_remote',
 				'creatable' => false,
+			]);
+			CrudHeader::create([
+				'model'    => Delivery::class,
+				'text'     => 'From',
+				'value'    => 'from',
+				'type'     => 'text',
+				'editable' => false,
+			]);
+			CrudHeader::create([
+				'model'    => Category::class,
+				'text'     => 'Items',
+				'value'    => 'itemCount',
+				'editable' => false,
+			]);
+			CrudHeader::create([
+				'model'    => Category::class,
+				'text'     => 'Date',
+				'value'    => 'date',
+				'editable' => false,
+			]);
+			CrudHeader::create([
+				'model'    => Category::class,
+				'text'     => 'Time',
+				'value'    => 'time',
+				'editable' => false,
+			]);
+			CrudHeader::create([
+				'model'    => Category::class,
+				'text'     => 'Status',
+				'value'    => 'status',
+				'editable' => false,
 			]);
 			CrudHeader::create([
 				'model'     => Category::class,

@@ -44,4 +44,10 @@ class AppointmentExternalParticipant extends Model
 	protected $hidden = [
 		'appointment_id',
 	];
+	
+	public function routeNotificationForSMSChannel()
+	{
+		return $this->phone;
+		//return '0740665211';
+	}
 }
