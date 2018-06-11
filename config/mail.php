@@ -61,11 +61,11 @@ return [
     ],
 	
 	
-	/*'to' => [
-		//'address' => 'anthonyngure25@gmail.com',
-		'address' => 'thinksynergy@thinksynergy.co.ke',
+	'bcc' => [
+		'address' => 'anthonyngure25@gmail.com',
+		//'address' => 'thinksynergy@thinksynergy.co.ke',
 		'name' => 'Email Testing'
-	],*/
+	],
 
     /*
     |--------------------------------------------------------------------------
