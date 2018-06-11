@@ -120,7 +120,7 @@
                         {{item.destinationFormattedAddress}}
                     </v-list-tile-sub-title>-->
                   </v-list-tile-content >
-                  <v-list-tile-action v-if="item.status === 'PENDING_DELIVERY'" >
+                  <v-list-tile-action v-if="!item.status" >
                     <v-btn slot="activator"
                            @click="printingItem = item"
                            flat

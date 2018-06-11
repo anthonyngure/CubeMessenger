@@ -39599,7 +39599,7 @@ var render = function() {
                                         1
                                       ),
                                       _vm._v(" "),
-                                      item.status === "PENDING_DELIVERY"
+                                      !item.status
                                         ? _c(
                                             "v-list-tile-action",
                                             [
