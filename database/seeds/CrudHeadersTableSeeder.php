@@ -573,31 +573,31 @@
 				'editable' => false,
 			]);
 			CrudHeader::create([
-				'model'    => Category::class,
+				'model'    => Delivery::class,
 				'text'     => 'Items',
-				'value'    => 'itemCount',
+				'value'    => 'itemsCount',
 				'editable' => false,
 			]);
 			CrudHeader::create([
-				'model'    => Category::class,
+				'model'    => Delivery::class,
 				'text'     => 'Date',
 				'value'    => 'date',
 				'editable' => false,
 			]);
 			CrudHeader::create([
-				'model'    => Category::class,
+				'model'    => Delivery::class,
 				'text'     => 'Time',
 				'value'    => 'time',
 				'editable' => false,
 			]);
 			CrudHeader::create([
-				'model'    => Category::class,
+				'model'    => Delivery::class,
 				'text'     => 'Status',
 				'value'    => 'status',
 				'editable' => false,
 			]);
 			CrudHeader::create([
-				'model'     => Category::class,
+				'model'     => Delivery::class,
 				'text'      => 'Created At',
 				'value'     => 'createdAt',
 				'type'      => 'date',
@@ -607,7 +607,7 @@
 				'viewable'  => false,
 			]);
 			CrudHeader::create([
-				'model'     => Category::class,
+				'model'     => Delivery::class,
 				'text'      => 'Updated At',
 				'value'     => 'updatedAt',
 				'type'      => 'date',

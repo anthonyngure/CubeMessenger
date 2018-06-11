@@ -39,7 +39,7 @@
 		{
 			//If appointment is in the next 30 minutes, send an sms
 			$appointmentStartingAt = Carbon::createFromTimeString($this->appointment->starting_at);
-			if ($appointmentStartingAt->between(now()->subMinute(), now()->addMinutes(5))) {
+			if ($appointmentStartingAt->between(now()->subMinute(), now()->addMinutes(30))) {
 				return ['mail', 'database', SMSChannel::class];
 			} else {
 				return ['mail', 'database'];

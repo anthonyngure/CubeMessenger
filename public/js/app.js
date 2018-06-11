@@ -9017,12 +9017,24 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
   methods: {
     initialize: function initialize() {
       var that = this;
+      this.manager.deletable = function (item) {
+        return false;
+      };
       this.manager.toValue = function (header, item) {
         if (header.value === 'from') {
           return item.originFormattedAddress ? item.originFormattedAddress : that.defaultValue;
         }
-        if (header.value === 'to') {
-          return item.originFormattedAddress ? item.originFormattedAddress : that.defaultValue;
+        if (header.value === 'client') {
+          return item.user && item.user.client ? item.user.client.name : that.defaultValue;
+        }
+        if (header.value === 'riderId') {
+          return item.rider ? item.rider.name : that.defaultValue;
+        }
+        if (header.value === 'date') {
+          return item.scheduleDate ? item.scheduleDate : that.defaultValue;
+        }
+        if (header.value === 'time') {
+          return item.scheduleTime ? item.scheduleTime : that.defaultValue;
         } else {
           return item[header.value] ? item[header.value] : that.defaultValue;
         }
@@ -10034,6 +10046,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__Guide___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__Guide__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__ConnectionManager__ = __webpack_require__("./resources/assets/js/components/ConnectionManager.vue");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__ConnectionManager___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3__ConnectionManager__);
+//
 //
 //
 //
@@ -11902,7 +11915,7 @@ exports = module.exports = __webpack_require__("./node_modules/css-loader/lib/cs
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -12187,7 +12200,7 @@ exports = module.exports = __webpack_require__("./node_modules/css-loader/lib/cs
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -45308,6 +45321,7 @@ var render = function() {
               resource: "orders",
               manager: _vm.manager,
               filters: _vm.filters,
+              creatable: false,
               "custom-view-dialog": true
             }
           })
@@ -84597,7 +84611,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 __WEBPACK_IMPORTED_MODULE_0_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_4_vue_notification___default.a);
 
-var DEBUG = true;
+var DEBUG = false;
 
 var GOOGLE_MAPS_KEY = 'AIzaSyAS_9BsQpqTP8EVuMZ7rQ9gMCl0wmqhm7k';
 var PRIMARY_COLOR = '#1A75BA';

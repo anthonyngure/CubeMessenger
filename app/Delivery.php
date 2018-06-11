@@ -107,6 +107,14 @@
 		}
 		
 		
+		/**
+		 * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+		 */
+		public function rider()
+		{
+			return $this->belongsTo(User::class, 'rider_id');
+		}
+		
 		
 		public function getStatsAttribute()
 		{

@@ -6,6 +6,7 @@
                   ref="crud"
                   :manager="manager"
                   :filters="filters"
+                  :creatable="false"
                   :custom-view-dialog="true"/>
         </v-flex>
 

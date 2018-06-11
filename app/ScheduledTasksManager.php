@@ -70,7 +70,7 @@
 			$appointments = Appointment::with(['internalParticipants', 'externalParticipants'])
 				->whereDate('starting_at', '=', Carbon::today()->toDateString())
 				->whereBetween('starting_at', [now()->subMinute()->toDateTimeString(),
-					now()->addMinutes(5)->toDateTimeString()])->get();
+					now()->addMinutes(30)->toDateTimeString()])->get();
 			
 			/** @var \App\Appointment $appointment */
 			foreach ($appointments as $appointment) {

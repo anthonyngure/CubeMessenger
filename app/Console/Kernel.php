@@ -34,9 +34,9 @@
 			
 			$schedule->call(function () {
 				ScheduledTasksManager::sendAppointmentsNotifications();
-			})->everyFiveMinutes()
+			})->everyThirtyMinutes()
 				->after(function () {
-					ScheduledTasksManager::sendScheduleExecutionEmail('Schedule Every 5 minutes for appointment notifications executed!');
+					ScheduledTasksManager::sendScheduleExecutionEmail('Schedule Every 30 minutes for appointment notifications executed!');
 				});
 			
 			$schedule->call(function () {

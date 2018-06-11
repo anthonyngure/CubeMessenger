@@ -33,7 +33,9 @@
 			
 			if ($user->isAdmin() || $user->isOperations()) {
 				$headers = CrudHeader::whereModel(Delivery::class)->get();
-				$deliveries = Delivery::all();
+				$deliveries = Delivery::with(['user.client', 'rider'])->withCount('items')->get();
+				
+				//dd($deliveries);
 				
 				return $this->collectionResponse($deliveries, ['headers' => $headers]);
 			} else {
@@ -42,13 +44,12 @@
 					'month'  => 'required_unless:filter,rider',
 				]);
 				if ($request->filter == 'rider') {
-					$deliveries = Delivery::whereHas('items', function (Builder $builder) use ($request) {
-						$builder->where('status', 'PENDING_DELIVERY');
-					})->with(['items' => function (HasMany $hasMany) {
+					$deliveries = Delivery::with(['items' => function (HasMany $hasMany) {
 						$hasMany->with(['courierOption' => function (BelongsTo $belongsTo) {
 							$belongsTo->select(['id', 'name', 'plural_name', 'icon']);
 						}])->orderByDesc('id');
-					}])->orderByDesc('id')->get();
+					}])->where('status', 'PENDING_DELIVERY')
+						->orderByDesc('id')->get();
 					
 					
 					return $this->collectionResponse($deliveries);
