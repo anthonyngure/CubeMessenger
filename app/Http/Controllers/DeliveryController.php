@@ -2,6 +2,7 @@
 	
 	namespace App\Http\Controllers;
 	
+	use App\CrudHeader;
 	use App\Delivery;
 	use App\DeliveryItem;
 	use App\Exceptions\WrappedException;
@@ -28,54 +29,63 @@
 		 */
 		public function index(Request $request)
 		{
-			$this->validate($request, [
-				'filter' => 'required|in:pendingApproval,pendingDelivery,delivered,rejected,rider',
-				'month'  => 'required_unless:filter,rider',
-			]);
+			$user = Auth::user();
 			
-			if ($request->filter == 'rider') {
-				$deliveries = Delivery::whereHas('items', function (Builder $builder) use ($request) {
-					$builder->where('status', 'PENDING_DELIVERY');
-				})->with(['items' => function (HasMany $hasMany) {
-					$hasMany->with(['courierOption' => function (BelongsTo $belongsTo) {
-						$belongsTo->select(['id', 'name', 'plural_name', 'icon']);
-					}])->orderByDesc('id');
-				}])->orderByDesc('id')->get();
+			if ($user->isAdmin() || $user->isOperations()) {
+				$headers = CrudHeader::whereModel(Delivery::class)->get();
+				$deliveries = Delivery::all();
 				
-				
-				return $this->collectionResponse($deliveries);
+				return $this->collectionResponse($deliveries, ['headers' => $headers]);
 			} else {
-				
-				$client = Auth::user()->getClient();
-				
-				$builder = Delivery::whereIn('user_id', $client->users->pluck('id'));
-				if ($request->filter == 'pendingApproval') {
-					$builder = $builder->where(function (Builder $builder) {
-						$builder->where('status', 'AT_DEPARTMENT_HEAD')
-							->orWhere('status', 'AT_PURCHASING_HEAD');
-					});
-				} else if ($request->filter == 'rejected') {
-					$builder = $builder->where('status', 'REJECTED');
-				} else if ($request->filter == 'pendingDelivery') {
-					$builder = $builder->where('status', 'PENDING_DELIVERY');
-				} else if ($request->filter == 'delivered') {
-					$builder = $builder->whereHas('items', function (Builder $builder) {
-						$builder->where('status', 'AT_DESTINATION');
-					});
+				$this->validate($request, [
+					'filter' => 'required|in:pendingApproval,pendingDelivery,delivered,rejected,rider',
+					'month'  => 'required_unless:filter,rider',
+				]);
+				if ($request->filter == 'rider') {
+					$deliveries = Delivery::whereHas('items', function (Builder $builder) use ($request) {
+						$builder->where('status', 'PENDING_DELIVERY');
+					})->with(['items' => function (HasMany $hasMany) {
+						$hasMany->with(['courierOption' => function (BelongsTo $belongsTo) {
+							$belongsTo->select(['id', 'name', 'plural_name', 'icon']);
+						}])->orderByDesc('id');
+					}])->orderByDesc('id')->get();
+					
+					
+					return $this->collectionResponse($deliveries);
+				} else {
+					
+					$client = Auth::user()->getClient();
+					
+					$builder = Delivery::whereIn('user_id', $client->users->pluck('id'));
+					if ($request->filter == 'pendingApproval') {
+						$builder = $builder->where(function (Builder $builder) {
+							$builder->where('status', 'AT_DEPARTMENT_HEAD')
+								->orWhere('status', 'AT_PURCHASING_HEAD');
+						});
+					} else if ($request->filter == 'rejected') {
+						$builder = $builder->where('status', 'REJECTED');
+					} else if ($request->filter == 'pendingDelivery') {
+						$builder = $builder->where('status', 'PENDING_DELIVERY');
+					} else if ($request->filter == 'delivered') {
+						$builder = $builder->whereHas('items', function (Builder $builder) {
+							$builder->where('status', 'AT_DESTINATION');
+						});
+					}
+					
+					$deliveries = $builder->with(['rejectedBy', 'items' => function (HasMany $hasMany) {
+						$hasMany->with(['courierOption' => function (BelongsTo $belongsTo) {
+							$belongsTo->select(['id', 'name', 'plural_name', 'icon']);
+						}])->orderByDesc('id');
+					}])->orderByDesc('id')
+						//->toSql();
+						->get();
+					
+					//dd($deliveries);
+					
+					return $this->collectionResponse($deliveries);
 				}
-				
-				$deliveries = $builder->with(['rejectedBy', 'items' => function (HasMany $hasMany) {
-					$hasMany->with(['courierOption' => function (BelongsTo $belongsTo) {
-						$belongsTo->select(['id', 'name', 'plural_name', 'icon']);
-					}])->orderByDesc('id');
-				}])->orderByDesc('id')
-					//->toSql();
-					->get();
-				
-				//dd($deliveries);
-				
-				return $this->collectionResponse($deliveries);
 			}
+			
 		}
 		
 		

@@ -487,6 +487,60 @@
 			]);
 			//endregion
 			
+			//region Headers for Category
+			CrudHeader::create([
+				'model'     => Category::class,
+				'text'      => 'Id',
+				'value'     => 'id',
+				'type'      => 'number',
+				'editable'  => false,
+				'creatable' => false,
+			
+			]);
+			CrudHeader::create([
+				'model'     => Category::class,
+				'text'      => 'Name',
+				'value'     => 'name',
+				'type'      => 'text',
+			]);
+			CrudHeader::create([
+				'model'     => Category::class,
+				'text'      => 'Order',
+				'value'     => 'order',
+				'type'      => 'number',
+				'mask'      => '#',
+			]);
+			CrudHeader::create([
+				'model'     => Category::class,
+				'text'      => 'Items',
+				'value'     => 'productsCount',
+				'type'      => 'number',
+				'editable'  => false,
+				'creatable' => false,
+			]);
+			CrudHeader::create([
+				'model'     => Category::class,
+				'text'      => 'Created At',
+				'value'     => 'createdAt',
+				'type'      => 'date',
+				'editable'  => false,
+				'creatable' => false,
+				'browsable' => false,
+				'viewable'  => false,
+			]);
+			CrudHeader::create([
+				'model'     => Category::class,
+				'text'      => 'Updated At',
+				'value'     => 'updatedAt',
+				'type'      => 'date',
+				'editable'  => false,
+				'creatable' => false,
+				'browsable' => false,
+				'viewable'  => false,
+			]);
+			//endregion
+			
+			
 			CrudHeader::create([
 				'model'     => Category::class,
 				'text'      => 'Id',

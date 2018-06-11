@@ -69,7 +69,7 @@
 		{
 			$appointments = Appointment::with(['internalParticipants', 'externalParticipants'])
 				->whereDate('starting_at', '=', Carbon::today()->toDateString())
-				->whereBetween('starting_at', [now()->subMinute()->toDateTimeString(), now()->addMinutes(10)->addMinute()
+				->whereBetween('starting_at', [now()->subMinute()->toDateTimeString(), now()->addMinutes(5)->addMinute()
 					->toDateTimeString()])->get();
 			
 			/** @var \App\Appointment $appointment */
@@ -83,6 +83,6 @@
 				}
 			}
 			//dd($appointments->getBindings());
-			//dd($appointments->count());
+			dd($appointments->count());
 		}
 	}

@@ -15,6 +15,7 @@ import Roles from '../components/Roles'
 import TopUps from '../components/TopUps'
 import Categories from '../components/Categories'
 import Products from '../components/Products'
+import Deliveries from '../components/Deliveries'
 import OrderedItems from '../components/OrderedItems'
 import Vue from 'vue'
 import Router from 'vue-router'
@@ -41,6 +42,12 @@ export default new Router({
       path: '/clients',
       name: 'clients',
       component: Clients
+    },
+    {
+      meta: {auth: true},
+      path: '/deliveries',
+      name: 'deliveries',
+      component: Deliveries
     },
     {
       meta: {auth: true},

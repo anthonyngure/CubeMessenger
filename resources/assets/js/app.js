@@ -13,7 +13,7 @@ import formatCurrency from 'format-currency'
 
 Vue.use(Notifications)
 
-const DEBUG = false
+const DEBUG = true
 
 const GOOGLE_MAPS_KEY = 'AIzaSyAS_9BsQpqTP8EVuMZ7rQ9gMCl0wmqhm7k'
 const PRIMARY_COLOR = '#1A75BA'
