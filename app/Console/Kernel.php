@@ -38,7 +38,7 @@
 			
 			$schedule->call(function () {
 				ScheduledTasksManager::sendAppointmentsNotifications();
-			})->everyThirtyMinutes();
+			})->everyTenMinutes();
 			
 			$schedule->call(function () {
 				ScheduledTasksManager::sendLPO();
