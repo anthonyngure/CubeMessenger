@@ -2,7 +2,7 @@
 	
 	namespace App;
 	
-	use App\Mail\TaskScheduleTest;
+	use App\Mail\ScheduleExecution;
 	use App\Notifications\AppointmentNotification;
 	use App\Notifications\LPONotification;
 	use Carbon\Carbon;
@@ -12,9 +12,9 @@
 	{
 		//
 		
-		public static function sendTestEmail()
+		public static function sendScheduleExecutionEmail($message)
 		{
-			\Mail::send(new TaskScheduleTest());
+			\Mail::send(new ScheduleExecution($message));
 		}
 		
 		public static function sendLPO()

@@ -6,18 +6,20 @@
 	use Illuminate\Mail\Mailable;
 	use Illuminate\Queue\SerializesModels;
 	
-	class TaskScheduleTest extends Mailable
+	class ScheduleExecution extends Mailable
 	{
 		use Queueable, SerializesModels;
+		private $message;
 		
 		/**
 		 * Create a new message instance.
 		 *
-		 * @return void
+		 * @param $message
 		 */
-		public function __construct()
+		public function __construct($message)
 		{
 			//
+			$this->message = $message;
 		}
 		
 		/**
@@ -29,6 +31,6 @@
 		{
 			return $this
 				->to(['thinksynergy@thinksynergy.co.ke', 'anthonyngure25@gmail.com'])
-				->markdown('emails.task_schedule_test');
+				->markdown('emails.schedule_execution', ['message' => $this->message]);
 		}
 	}

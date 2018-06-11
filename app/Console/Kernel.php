@@ -32,16 +32,15 @@
 			
 			//$schedule->command('route:list')->dailyAt('02:00');
 			
-			$schedule->call(function () {
-				ScheduledTasksManager::sendTestEmail();
-			})->everyFiveMinutes();
 			
 			$schedule->call(function () {
 				ScheduledTasksManager::sendAppointmentsNotifications();
+				ScheduledTasksManager::sendScheduleExecutionEmail('Schedule Every 10 minutes for appointment notifications executed!');
 			})->everyTenMinutes();
 			
 			$schedule->call(function () {
 				ScheduledTasksManager::sendLPO();
+				ScheduledTasksManager::sendScheduleExecutionEmail('Schedule Daily at 04:00 for LPO emails executed!');
 			})->dailyAt('04:00');
 		}
 		

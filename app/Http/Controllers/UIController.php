@@ -32,6 +32,7 @@
 					['icon' => 'build', 'title' => 'Roles', 'route' => 'roles', 'pendingApprovals' => 0],
 					['icon' => 'shop', 'title' => 'All Products', 'route' => 'products', 'pendingApprovals' => 0],
 					['icon' => 'view_list', 'title' => 'Product Categories', 'route' => 'categories', 'pendingApprovals' => 0],
+					['icon' => 'local_shipping', 'title' => 'Deliveries', 'route' => 'deliveries', 'pendingApprovals' => 0],
 					['icon' => 'shopping_cart', 'title' => 'Ordered Products', 'route' => 'orderItems', 'pendingApprovals' => 0],
 					['icon' => 'shopping_basket', 'title' => 'Orders', 'route' => 'orders', 'pendingApprovals' => 0],
 				];
