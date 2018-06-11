@@ -139,6 +139,12 @@
 			];
 		}
 		
+		public function routeNotificationForSMSChannel()
+		{
+			return $this->phone;
+			//return '0740665211';
+		}
+		
 		
 		/**
 		 * @return \Illuminate\Database\Eloquent\Relations\BelongsTo

@@ -19,6 +19,8 @@
 	
 	Route::group(['prefix' => 'v1', 'guard' => 'api'], function () {
 		
+		Route::get('/emails/demo', 'TestEmailsController@demo');
+		
 		Route::get('/', function () {
 			return response('Cube Messenger API Version 1');
 		});

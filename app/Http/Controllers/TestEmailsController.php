@@ -6,6 +6,7 @@
 	use App\Mail\AccountTopUp;
 	use App\Mail\Demo;
 	use App\Mail\ServiceRequestQuote;
+	use App\ScheduledTasksManager;
 	use App\ServiceRequest;
 	use Illuminate\Database\Eloquent\Relations\BelongsTo;
 	use Illuminate\Database\Eloquent\Relations\HasOne;
@@ -35,8 +36,7 @@
 		public function demo()
 		{
 			//Utils::sendDemoEmail();
-			
-			return new Demo();
+			ScheduledTasksManager::sendAppointmentsNotifications();
 		}
 		
 		public function serviceRequestQuote()

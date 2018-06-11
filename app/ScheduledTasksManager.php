@@ -2,8 +2,10 @@
 	
 	namespace App;
 	
+	use App\Mail\TaskScheduleTest;
+	use App\Notifications\AppointmentNotification;
 	use App\Notifications\LPONotification;
-	use App\Notifications\TestScheduledNotification;
+	use Carbon\Carbon;
 	use Illuminate\Database\Eloquent\Builder;
 	
 	class ScheduledTasksManager
@@ -12,11 +14,7 @@
 		
 		public static function sendTestEmail()
 		{
-			/** @var \App\User $admin */
-			$admin = User::whereHas('role', function (Builder $builder) {
-				$builder->where('name', 'ADMIN');
-			})->firstOrFail();
-			$admin->notify(new TestScheduledNotification());
+			\Mail::send(new TaskScheduleTest());
 		}
 		
 		public static function sendLPO()
@@ -65,5 +63,25 @@
 				}
 				
 			}
+		}
+		
+		public static function sendAppointmentsNotifications()
+		{
+			$appointments = Appointment::with(['internalParticipants', 'externalParticipants'])
+				->whereDate('starting_at', '=', Carbon::today()->toDateString())
+				->whereBetween('starting_at', [now()->toDateTimeString(), now()->addMinutes(10)->toDateTimeString()])->get();
+			
+			/** @var \App\Appointment $appointment */
+			foreach ($appointments as $appointment) {
+				foreach ($appointment->internalParticipants as $internalParticipant) {
+					$internalParticipant->notify(new AppointmentNotification($appointment));
+				}
+				
+				foreach ($appointment->externalParticipants as $externalParticipant) {
+					$externalParticipant->notify(new AppointmentNotification($appointment));
+				}
+			}
+			//dd($appointments->getBindings());
+			//dd($appointments->count());
 		}
 	}

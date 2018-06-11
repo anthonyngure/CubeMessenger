@@ -8,7 +8,7 @@
                 <v-divider></v-divider>
                 <v-stepper-step step="3">Quantity</v-stepper-step>
             </v-stepper-header>
-            <connection-manager ref="connectionManager" v-model="connecting"/>
+            <connection-manager ref="connectionManager" v-model="connecting"></connection-manager>
             <v-stepper-items>
                 <v-stepper-content step="1">
                     <v-select v-model="optionId"
@@ -53,28 +53,6 @@
                 </v-stepper-content>
                 <v-stepper-content step="2">
                     <v-slide-y-transition>
-
-                        <v-data-table
-                                v-model="selectedWeekdays"
-                                :headers="weekdaysHeaders"
-                                :items="weekdays"
-                                v-if="weekdays.length && step === 2"
-                                select-all
-                                hide-actions
-                                item-key="name">
-                            <template slot="items" slot-scope="props">
-                                <tr :active="props.selected" @click="props.selected = !props.selected">
-                                    <td>
-                                        <v-checkbox
-                                                :input-value="props.selected"
-                                                primary
-                                                hide-details/>
-                                    </td>
-                                    <td>{{ props.item.name }}</td>
-                                </tr>
-                            </template>
-                        </v-data-table>
-
                         <v-card v-if="weekdays.length && step === 2">
                             <v-list dense :style="'max-height: '+($vuetify.breakpoint.height * 0.45)+'px;'"
                                     class="scroll-y">
@@ -205,8 +183,10 @@
                         </v-card-actions>
                     </v-card>
                 </v-stepper-content>
+
             </v-stepper-items>
         </v-stepper>
+
     </v-dialog>
 </template>
 
@@ -236,10 +216,6 @@
         optionId: null,
         selectedOptionItem: null,
         weekdays: [],
-        weekdaysHeaders: [
-          {text: 'Name', value: 'name', sortable: false}
-        ],
-        selectedWeekdays: [],
         quantity: null,
         terminationDate: null,
         renewEveryMonth: true,
@@ -302,6 +278,15 @@
         return 'Above are costs '
           + (this.renewEveryMonth ? ' for this month' : ' between now and ' + this.terminationDate)
           + ' (' + this.daysToDeliver + ' days)'
+      },
+      selectedWeekdays () {
+        let selected = 0
+        for (let schedule of this.weekdays) {
+          if (schedule.selected) {
+            selected++
+          }
+        }
+        return selected
       },
       costs () {
 

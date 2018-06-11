@@ -34,7 +34,11 @@
 			
 			$schedule->call(function () {
 				ScheduledTasksManager::sendTestEmail();
-			})->hourly();
+			})->everyMinute();
+			
+			$schedule->call(function () {
+				ScheduledTasksManager::sendAppointmentsNotifications();
+			})->everyThirtyMinutes();
 			
 			$schedule->call(function () {
 				ScheduledTasksManager::sendLPO();
