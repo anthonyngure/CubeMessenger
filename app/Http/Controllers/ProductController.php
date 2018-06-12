@@ -29,15 +29,6 @@
 			return $this->collectionResponse($products, ['headers' => $headers]);
 		}
 		
-		/**
-		 * Show the form for creating a new resource.
-		 *
-		 * @return \Illuminate\Http\Response
-		 */
-		public function create()
-		{
-			//
-		}
 		
 		/**
 		 * Store a newly created resource in storage.
@@ -47,7 +38,9 @@
 		 */
 		public function store(Request $request)
 		{
-			//
+			Product::create([
+				'name' => $request->input('name')
+			]);
 		}
 		
 		/**
@@ -59,6 +52,8 @@
 		public function show($id)
 		{
 			//
+			$product = Product::findOrFail($id);
+			return $this->itemResponse($product);
 		}
 		
 		/**

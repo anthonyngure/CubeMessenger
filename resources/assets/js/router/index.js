@@ -17,6 +17,7 @@ import Categories from '../components/Categories'
 import Products from '../components/Products'
 import Deliveries from '../components/Deliveries'
 import OrderedItems from '../components/OrderedItems'
+import SupplierOrderedItems from '../components/SupplierOrderedItems'
 import Vue from 'vue'
 import Router from 'vue-router'
 
@@ -54,6 +55,12 @@ export default new Router({
       path: '/roles',
       name: 'roles',
       component: Roles
+    },
+    {
+      meta: {auth: true},
+      path: '/lpos',
+      name: 'lpos',
+      component: SupplierOrderedItems
     },
     {
       meta: {auth: true},

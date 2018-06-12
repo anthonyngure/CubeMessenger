@@ -61,10 +61,13 @@
 			Route::get('user/appointments', 'UserController@appointments');
 			Route::post('user/changePassword', 'UserController@changePassword');
 			
-			Route::apiResource('users', 'UserController')->middleware('role:ADMIN,OPERATIONS,CLIENT_ADMIN');
+			Route::apiResource('users', 'UserController')
+				->middleware('role:ADMIN,OPERATIONS,CLIENT_ADMIN');
 			
-			Route::get('clients/search', 'ClientController@search')->middleware('role:ADMIN,OPERATIONS');
-			Route::apiResource('clients', 'ClientController')->middleware('role:ADMIN,OPERATIONS');
+			Route::get('clients/search', 'ClientController@search')
+				->middleware('role:ADMIN,OPERATIONS');
+			Route::apiResource('clients', 'ClientController')
+				->middleware('role:ADMIN,OPERATIONS');
 			
 			
 			Route::apiResource('topUps', 'TopUpController')
@@ -77,21 +80,27 @@
 			Route::apiResource('subscriptions', 'SubscriptionController');
 			
 			
-			Route::get('roles/search', 'RoleController@search')->middleware('role:ADMIN,OPERATIONS');
-			Route::apiResource('roles', 'RoleController')->middleware('role:ADMIN,OPERATIONS');
+			Route::get('roles/search', 'RoleController@search')
+				->middleware('role:ADMIN,OPERATIONS');
+			Route::apiResource('roles', 'RoleController')
+				->middleware('role:ADMIN,OPERATIONS');
 			
 			Route::get('appointments/userSuggestions', 'AppointmentController@userSuggestions');
 			Route::apiResource('appointments', 'AppointmentController');
 			
-			Route::apiResource('products', 'ProductController')->middleware('role:ADMIN,OPERATIONS');
+			Route::apiResource('products', 'ProductController')
+				->middleware('role:ADMIN,OPERATIONS');
 			Route::apiResource('categories', 'CategoryController');
 			Route::apiResource('serviceRequests', 'ServiceRequestController');
 			Route::apiResource('serviceRequestQuotes', 'ServiceRequestQuoteController');
 			Route::apiResource('serviceRequestOptions', 'ServiceRequestOptionController');
 			Route::apiResource('orders', 'OrderController');
-			Route::post('orderItems/sendLPO', 'OrderItemController@sendLPO')->middleware('role:ADMIN,OPERATIONS');
-			Route::apiResource('orderItems', 'OrderItemController')->middleware('role:ADMIN,OPERATIONS');
-			Route::apiResource('reports', 'ReportsController')->only(['index']);
+			Route::post('orderItems/sendLPO', 'OrderItemController@sendLPO')
+				->middleware('role:ADMIN,OPERATIONS');
+			Route::apiResource('orderItems', 'OrderItemController')
+				->middleware('role:ADMIN,OPERATIONS,SUPPLIER');
+			Route::apiResource('reports', 'ReportsController')
+				->only(['index']);
 		});
 		
 	});

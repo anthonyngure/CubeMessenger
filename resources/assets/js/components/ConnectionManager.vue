@@ -3,7 +3,7 @@
           v-if="connecting || error" >
     <v-card-text >
       <v-progress-linear v-if="connecting"
-                         :indeterminate="true" ></v-progress-linear >
+                         :indeterminate="true"/>
       <p v-if="connecting"
          class="text-xs-center" >Please wait....</p >
       <v-alert v-model="error"

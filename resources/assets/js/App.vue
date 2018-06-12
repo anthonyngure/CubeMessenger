@@ -8,7 +8,7 @@
           <v-container grid-list-xs
                        fluid
                        fill-height >
-            <v-layout v-if="$route.name !== 'signIn' && $auth.check() && !$auth.user().client && !isAdmin() && !isOperations()"
+            <v-layout v-if="$route.name !== 'signIn' && $auth.check() && !$auth.user().client && !isAdmin() && !isOperations() && !isSupplier()"
                       align-center
                       justify-center >
               <v-flex xs12
@@ -19,7 +19,7 @@
                              flat
                              color="primary" >
                     <v-toolbar-title >Authorization Required</v-toolbar-title >
-                    <v-spacer ></v-spacer >
+                    <v-spacer/>
                     <v-btn icon >
                       <v-icon >more_vert</v-icon >
                     </v-btn >
@@ -46,7 +46,7 @@
                 </v-card >
               </v-flex >
             </v-layout >
-            <router-view v-else ></router-view >
+            <router-view v-else/>
             <notifications group="all" />
           </v-container >
         </v-content >

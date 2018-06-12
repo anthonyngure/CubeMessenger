@@ -44,6 +44,10 @@
 			})->dailyAt('04:00')->after(function () {
 				ScheduledTasksManager::sendScheduleExecutionEmail('Schedule Daily at 04:00 for LPO emails executed!');
 			});
+			
+			$schedule->call(function (){
+			
+			})->everyThirtyMinutes();
 		}
 		
 		/**

@@ -23,7 +23,12 @@
 			/** @var User $user */
 			$user = User::with('role')->findOrFail(Auth::user()->id);
 			
-			if ($user->isAdmin() || $user->isOperations()) {
+			if($user->isSupplier()){
+				$items = [
+					['icon' => 'dashboard', 'title' => 'Dashboard', 'route' => 'dashboard', 'pendingApprovals' => 0],
+					['icon' => 'work', 'title' => 'LPOs', 'route' => 'lpos', 'pendingApprovals' => 0],
+				];
+			} else if ($user->isAdmin() || $user->isOperations()) {
 				$items = [
 					['icon' => 'dashboard', 'title' => 'Dashboard', 'route' => 'dashboard', 'pendingApprovals' => 0],
 					['icon' => 'work', 'title' => 'Clients', 'route' => 'clients', 'pendingApprovals' => 0],

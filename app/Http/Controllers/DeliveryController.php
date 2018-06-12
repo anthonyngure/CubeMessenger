@@ -247,8 +247,8 @@
 				
 				$delivery->rider_id = Auth::user()->getKey();
 				$delivery->pickup_time = Carbon::now()->toDateTimeString();
-				$delivery->pickup_latitude = $request->pickupLatitude;
-				$delivery->pickup_longitude = $request->pickupLongitude;
+				$delivery->pickup_latitude = $request->input('pickupLatitude');
+				$delivery->pickup_longitude = $request->input('pickupLongitude');
 				$delivery->save();
 				
 				/** @var DeliveryItem $deliveryItem */
@@ -269,7 +269,7 @@
 						. $deliveryItem->estimated_arrival_time . '. Use CODE: ' . $deliveryItem->received_confirmation_code .
 						' to confirm you have received.';
 					
-					$this->sendSMS($smsText, $deliveryItem->recipient_contact);
+					//$this->sendSMS($smsText, $deliveryItem->recipient_contact);
 					
 					//dd($smsText);
 				}

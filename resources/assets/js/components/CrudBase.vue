@@ -9,9 +9,21 @@
         headers: [],
         manager: {},
         defaultValue: '_____',
-        extraInlineActions: [],
+        extraInlineActions: [
+          /*
+          Actions should be name,color objects e.g
+          {
+            name: 'Approve',
+            color: 'accent'
+          }, {
+            name: 'Reject',
+            color: 'primary'
+          }*/
+        ],
         extraOverflowActions: [
-          /*{
+          /*
+          Actions should be name,color objects e.g
+          {
             name: 'Approve',
             color: 'accent'
           }, {
@@ -21,7 +33,16 @@
 
         ],
         extraTopActions: [
-          {name: 'Test Action'}
+          /*
+          Actions should be name,color, key objects e.g
+          {
+            name: 'Approve',
+            color: 'accent',
+            key: 'ddd'
+          }, {
+            name: 'Reject',
+            color: 'primary'
+          }*/
         ]
       }
     },

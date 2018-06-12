@@ -7,7 +7,7 @@
                     lazy
                     grow
                     icons-and-text>
-                <v-tabs-slider color="yellow"></v-tabs-slider>
+                <v-tabs-slider color="yellow"/>
                 <v-tab v-for="(tab, index) in tabItems" :href="`#${tab.id}`" :key="index">
                     {{tab.title}}
                     <v-icon>{{tab.icon}}</v-icon>

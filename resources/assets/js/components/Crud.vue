@@ -475,7 +475,6 @@
           this.$refs.editConnectionManager.reset()
         }, 300)
       },
-
       save () {
         this.$utils.log('Saving item...')
         this.$utils.log(this.itemToEdit)
