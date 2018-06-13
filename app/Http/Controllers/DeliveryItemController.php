@@ -56,6 +56,7 @@
 		 * @param                           $itemId
 		 * @return \Illuminate\Http\Response
 		 * @throws \App\Exceptions\WrappedException
+		 * @throws \Exception
 		 */
 		public function update(Request $request, $deliveryId, $itemId)
 		{

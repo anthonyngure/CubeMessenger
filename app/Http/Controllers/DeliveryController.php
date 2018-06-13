@@ -44,7 +44,9 @@
 					'month'  => 'required_unless:filter,rider',
 				]);
 				if ($request->filter == 'rider') {
-					$deliveries = Delivery::with(['items' => function (HasMany $hasMany) {
+					$deliveries = Delivery::whereHas('items', function ($query) {
+						$query->whereNull('status');
+					})->with(['items' => function (HasMany $hasMany) {
 						$hasMany->with(['courierOption' => function (BelongsTo $belongsTo) {
 							$belongsTo->select(['id', 'name', 'plural_name', 'icon']);
 						}])->orderByDesc('id');
@@ -269,7 +271,7 @@
 						. $deliveryItem->estimated_arrival_time . '. Use CODE: ' . $deliveryItem->received_confirmation_code .
 						' to confirm you have received.';
 					
-					//$this->sendSMS($smsText, $deliveryItem->recipient_contact);
+					$this->sendSMS($smsText, $deliveryItem->recipient_contact);
 					
 					//dd($smsText);
 				}
