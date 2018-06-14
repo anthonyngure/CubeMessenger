@@ -78,6 +78,7 @@
 			Route::apiResource('deliveries', 'DeliveryController');
 			Route::apiResource('deliveries.items', 'DeliveryItemController');
 			Route::get('deliveries/{deliveryId}/items/{itemId}/token', 'DeliveryItemController@token');
+			Route::post('deliveries/{deliveryId}/items/{itemId}/received', 'DeliveryItemController@received');
 			Route::apiResource('subscriptionOptions', 'SubscriptionOptionController')->only(['index']);
 			Route::apiResource('subscriptions', 'SubscriptionController');
 			

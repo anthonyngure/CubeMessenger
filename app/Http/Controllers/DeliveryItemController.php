@@ -61,16 +61,6 @@
 		 */
 		public function update(Request $request, $deliveryId, $itemId)
 		{
-			
-			/**
-			 * action is required when we are updating from the Web
-			 * code, receivedLatitude & receivedLongitude are required when updating from the stuff app
-			 * code is the recipient confirmation code sent to the recipient of the delivery item
-			 * receivedLongitude & receivedLongitude are the coordinates of where the recipient
-			 * enters the code on receiving the item
-			 */
-			
-			
 			$this->validate($request, [
 				'code'              => 'required_with:receivedLatitude,receivedLongitude|digits:4',
 				'receivedLatitude'  => 'required_with:code,receivedLongitude|numeric',
@@ -81,53 +71,26 @@
 			/** @var DeliveryItem $deliveryItem */
 			$deliveryItem = DeliveryItem::whereDeliveryId($deliveryId)->findOrFail($itemId);
 			
-			/**
-			 * Make sure the status of this item is EN_ROUTE_TO_DESTINATION
-			 */
+			//It is an update from the web
 			
-			//$deliveryItem->checkEnRouteRoDestination();
+			$this->handleApprovals($request, $deliveryItem, 'PENDING_DELIVERY');
 			
-			if (!empty($request->action)) {
-				
-				//It is an update from the web
-				
-				$this->handleApprovals($request, $deliveryItem, 'PENDING_DELIVERY');
-				
-				$deliveries = Delivery::whereIn('user_id',
-					Auth::user()->getClient()->users->pluck('id'))
-					->whereHas('items', function (Builder $builder) use ($request) {
-						$builder->where('status', 'AT_DEPARTMENT_HEAD')
-							->orWhere('status', 'AT_PURCHASING_HEAD');
-					})
-					->with(['items' => function (HasMany $hasMany) {
-						$hasMany->with(['courierOption' => function (BelongsTo $belongsTo) {
-							$belongsTo->select(['id', 'name', 'plural_name', 'icon']);
-						}])->orderByDesc('id');
-					}])->orderByDesc('id')
-					//->toSql();
-					->get();
-				
-				//dd($deliveries);
-				return $this->collectionResponse($deliveries);
-				
-			} else {
-				
-				//This is an update from a stuff app
-				
-				$this->checkIfUserIsRider();
-				
-				if ($deliveryItem->received_confirmation_code != $request->code) {
-					throw new WrappedException("The code entered is invalid!");
-				}
-				
-				$deliveryItem->received_time = Carbon::now()->toDateTimeString();
-				$deliveryItem->received_latitude = $request->receivedLatitude;
-				$deliveryItem->received_longitude = $request->receivedLongitude;
-				$deliveryItem->status = 'AT_DESTINATION';
-				$deliveryItem->save();
-				
-				return $this->itemUpdatedResponse($deliveryItem);
-			}
+			$deliveries = Delivery::whereIn('user_id',
+				Auth::user()->getClient()->users->pluck('id'))
+				->whereHas('items', function (Builder $builder) use ($request) {
+					$builder->where('status', 'AT_DEPARTMENT_HEAD')
+						->orWhere('status', 'AT_PURCHASING_HEAD');
+				})
+				->with(['items' => function (HasMany $hasMany) {
+					$hasMany->with(['courierOption' => function (BelongsTo $belongsTo) {
+						$belongsTo->select(['id', 'name', 'plural_name', 'icon']);
+					}])->orderByDesc('id');
+				}])->orderByDesc('id')
+				//->toSql();
+				->get();
+			
+			//dd($deliveries);
+			return $this->collectionResponse($deliveries);
 			
 		}
 		
@@ -140,6 +103,42 @@
 		public function destroy($id)
 		{
 			//
+		}
+		
+		/**
+		 * @param \Illuminate\Http\Request $request
+		 * @param                          $deliveryId
+		 * @param                          $itemId
+		 * @return \Illuminate\Http\Response
+		 * @throws \App\Exceptions\WrappedException
+		 */
+		public function received(Request $request, $deliveryId, $itemId)
+		{
+			$this->validate($request, [
+				'code'              => 'required|digits:4',
+				'receivedLatitude'  => 'required|numeric',
+				'receivedLongitude' => 'required|numeric',
+			]);
+			
+			/** @var DeliveryItem $deliveryItem */
+			$deliveryItem = DeliveryItem::whereDeliveryId($deliveryId)->findOrFail($itemId);
+			
+			//This is an update from a stuff app
+			
+			$this->checkIfUserIsRider();
+			
+			if ($deliveryItem->received_confirmation_code != $request->input('code')) {
+				throw new WrappedException("The code entered is invalid!");
+			}
+			
+			$deliveryItem->received_time = Carbon::now()->toDateTimeString();
+			$deliveryItem->received_latitude = $request->input('receivedLatitude');
+			$deliveryItem->received_longitude = $request->input('receivedLongitude');
+			$deliveryItem->status = 'AT_DESTINATION';
+			$deliveryItem->save();
+			
+			return $this->itemUpdatedResponse($deliveryItem);
+			
 		}
 		
 		/**
