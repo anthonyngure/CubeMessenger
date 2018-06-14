@@ -47,9 +47,10 @@
 					$deliveries = Delivery::whereHas('items', function ($query) {
 						$query->whereNull('status');
 					})->with(['items' => function (HasMany $hasMany) {
-						$hasMany->with(['courierOption' => function (BelongsTo $belongsTo) {
-							$belongsTo->select(['id', 'name', 'plural_name', 'icon']);
-						}])->orderByDesc('id');
+						$hasMany->whereNull('status')
+							->with(['courierOption' => function (BelongsTo $belongsTo) {
+								$belongsTo->select(['id', 'name', 'plural_name', 'icon']);
+							}])->orderByDesc('id');
 					}])->where('status', 'PENDING_DELIVERY')
 						->orderByDesc('id')->get();
 					
@@ -202,16 +203,9 @@
 		 */
 		public function update(Request $request, $id)
 		{
-			/**
-			 * An update on deliveries will only come from the staff app with a rider
-			 */
-			
 			$this->validate($request, [
-				'pickupLatitude'  => 'required_with:pickupLongitude|numeric',
-				'pickupLongitude' => 'required_with:pickupLatitude|numeric',
-				'action'          => 'required_without:pickupLatitude,pickupLongitude|in:approve,reject',
+				'action' => 'required|in:approve,reject',
 			]);
-			
 			/** @var Delivery $delivery */
 			$delivery = Delivery::with(['items' => function (HasMany $hasMany) {
 				$hasMany->with('courierOption');
@@ -220,66 +214,27 @@
 			}])->findOrFail($id);
 			
 			
-			if (!empty($request->action)) {
-				
-				//It is an update from the web
-				
-				$this->handleApprovals($request, $delivery, 'PENDING_DELIVERY');
-				
-				$deliveries = Delivery::whereIn('user_id',
-					Auth::user()->getClient()->users->pluck('id'))
-					->whereHas('items', function (Builder $builder) use ($request) {
-						$builder->where('status', 'AT_DEPARTMENT_HEAD')
-							->orWhere('status', 'AT_PURCHASING_HEAD');
-					})
-					->with(['items' => function (HasMany $hasMany) {
-						$hasMany->with(['courierOption' => function (BelongsTo $belongsTo) {
-							$belongsTo->select(['id', 'name', 'plural_name', 'icon']);
-						}])->orderByDesc('id');
-					}])->orderByDesc('id')
-					//->toSql();
-					->get();
-				
-				//dd($deliveries);
-				return $this->collectionResponse($deliveries);
-				
-			} else {
-				
-				$this->checkIfUserIsRider();
-				
-				$delivery->rider_id = Auth::user()->getKey();
-				$delivery->pickup_time = Carbon::now()->toDateTimeString();
-				$delivery->pickup_latitude = $request->input('pickupLatitude');
-				$delivery->pickup_longitude = $request->input('pickupLongitude');
-				$delivery->save();
-				
-				/** @var DeliveryItem $deliveryItem */
-				foreach ($delivery->items as $deliveryItem) {
-					$deliveryItem->estimated_arrival_time = Carbon::now()
-						->addSeconds($deliveryItem->estimated_duration)
-						->toDateTimeString();
-					$deliveryItem->received_confirmation_code = Messages::code($deliveryItem->recipient_contact);
-					$deliveryItem->status = 'EN_ROUTE_TO_DESTINATION';
-					$deliveryItem->save();
-					
-					
-					//Send sms to the recipient of the item
-					$nameToUse = $deliveryItem->quantity > 1 ? $deliveryItem->courierOption->plural_name
-						: $deliveryItem->courierOption->name;
-					$smsText = 'Hi ' . $deliveryItem->recipient_name . ', ' . $deliveryItem->quantity . ' ' . $nameToUse .
-						' from ' . $delivery->user->client->name . ' will be delivered to you around '
-						. $deliveryItem->estimated_arrival_time . '. Use CODE: ' . $deliveryItem->received_confirmation_code .
-						' to confirm you have received.';
-					
-					$this->sendSMS($smsText, $deliveryItem->recipient_contact);
-					
-					//dd($smsText);
-				}
-				
-				$delivery->setHidden(['client']);
-				
-				return $this->itemUpdatedResponse($delivery);
-			}
+			//It is an update from the web
+			
+			$this->handleApprovals($request, $delivery, 'PENDING_DELIVERY');
+			
+			$deliveries = Delivery::whereIn('user_id',
+				Auth::user()->getClient()->users->pluck('id'))
+				->whereHas('items', function (Builder $builder) use ($request) {
+					$builder->where('status', 'AT_DEPARTMENT_HEAD')
+						->orWhere('status', 'AT_PURCHASING_HEAD');
+				})
+				->with(['items' => function (HasMany $hasMany) {
+					$hasMany->with(['courierOption' => function (BelongsTo $belongsTo) {
+						$belongsTo->select(['id', 'name', 'plural_name', 'icon']);
+					}])->orderByDesc('id');
+				}])->orderByDesc('id')
+				//->toSql();
+				->get();
+			
+			//dd($deliveries);
+			return $this->collectionResponse($deliveries);
+			
 		}
 		
 		/**
@@ -291,6 +246,64 @@
 		public function destroy($id)
 		{
 			//
+		}
+		
+		/**
+		 * @param \Illuminate\Http\Request $request
+		 * @param                          $id
+		 * @return \Illuminate\Http\Response
+		 * @throws \App\Exceptions\WrappedException
+		 */
+		public function start(Request $request, $id)
+		{
+			
+			$this->validate($request, [
+				'pickupLatitude'  => 'required:pickupLongitude|numeric',
+				'pickupLongitude' => 'required:pickupLatitude|numeric',
+			]);
+			
+			/** @var Delivery $delivery */
+			$delivery = Delivery::with(['items' => function (HasMany $hasMany) {
+				$hasMany->with('courierOption');
+			}, 'user'                           => function (BelongsTo $belongsTo) {
+				$belongsTo->with('client');
+			}])->findOrFail($id);
+			
+			$this->checkIfUserIsRider();
+			
+			$delivery->rider_id = Auth::user()->getKey();
+			$delivery->pickup_time = Carbon::now()->toDateTimeString();
+			$delivery->pickup_latitude = $request->input('pickupLatitude');
+			$delivery->pickup_longitude = $request->input('pickupLongitude');
+			$delivery->save();
+			
+			/** @var DeliveryItem $deliveryItem */
+			foreach ($delivery->items as $deliveryItem) {
+				$deliveryItem->estimated_arrival_time = Carbon::now()
+					->addSeconds($deliveryItem->estimated_duration)
+					->toDateTimeString();
+				$deliveryItem->received_confirmation_code = Messages::code($deliveryItem->recipient_contact);
+				$deliveryItem->status = 'EN_ROUTE_TO_DESTINATION';
+				$deliveryItem->save();
+				
+				
+				//Send sms to the recipient of the item
+				$nameToUse = $deliveryItem->quantity > 1 ? $deliveryItem->courierOption->plural_name
+					: $deliveryItem->courierOption->name;
+				$smsText = 'Hi ' . $deliveryItem->recipient_name . ', ' . $deliveryItem->quantity . ' ' . $nameToUse .
+					' from ' . $delivery->user->client->name . ' will be delivered to you around '
+					. $deliveryItem->estimated_arrival_time . '. Use CODE: ' . $deliveryItem->received_confirmation_code .
+					' to confirm you have received.';
+				
+				$this->sendSMS($smsText, $deliveryItem->recipient_contact);
+				
+				//dd($smsText);
+			}
+			
+			$delivery->setHidden(['client']);
+			
+			return $this->itemUpdatedResponse($delivery);
+			
 		}
 		
 		

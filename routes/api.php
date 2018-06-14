@@ -74,6 +74,7 @@
 				->middleware('role:ADMIN,OPERATIONS');
 			
 			Route::apiResource('departments', 'DepartmentController');
+			Route::post('deliveries/start/{id}', 'DeliveryController@start');
 			Route::apiResource('deliveries', 'DeliveryController');
 			Route::apiResource('deliveries.items', 'DeliveryItemController');
 			Route::apiResource('subscriptionOptions', 'SubscriptionOptionController')->only(['index']);
