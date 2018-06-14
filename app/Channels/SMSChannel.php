@@ -28,7 +28,7 @@
 			
 			$text = $notification->toSMS($notifiable);
 			
-			$recipient = $notifiable->routeNotificationForSMSChannel();
+			$recipient = $notifiable->routeNotificationForSMS();
 			
 			$url = "http://107.20.199.106/api/v3/sendsms/plain";
 			$client = new GuzzleHttp\Client();

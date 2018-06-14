@@ -6,6 +6,7 @@
 	use App\Delivery;
 	use App\DeliveryItem;
 	use App\Exceptions\WrappedException;
+	use App\Notifications\DeliveryItemRecipientNotification;
 	use App\Notifications\DeliveryRequestNotification;
 	use App\Traits\Messages;
 	use App\Utils;
@@ -287,15 +288,7 @@
 				$deliveryItem->save();
 				
 				
-				//Send sms to the recipient of the item
-				$nameToUse = $deliveryItem->quantity > 1 ? $deliveryItem->courierOption->plural_name
-					: $deliveryItem->courierOption->name;
-				$smsText = 'Hi ' . $deliveryItem->recipient_name . ', ' . $deliveryItem->quantity . ' ' . $nameToUse .
-					' from ' . $delivery->user->client->name . ' will be delivered to you around '
-					. $deliveryItem->estimated_arrival_time . '. Use CODE: ' . $deliveryItem->received_confirmation_code .
-					' to confirm you have received.';
-				
-				$this->sendSMS($smsText, $deliveryItem->recipient_contact);
+				$deliveryItem->notify(new DeliveryItemRecipientNotification());
 				
 				//dd($smsText);
 			}

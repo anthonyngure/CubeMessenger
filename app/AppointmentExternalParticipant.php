@@ -45,7 +45,7 @@ class AppointmentExternalParticipant extends Model
 		'appointment_id',
 	];
 	
-	public function routeNotificationForSMSChannel()
+	public function routeNotificationForSMS()
 	{
 		return $this->phone;
 		//return '0740665211';

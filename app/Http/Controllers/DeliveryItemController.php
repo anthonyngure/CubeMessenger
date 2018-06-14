@@ -5,6 +5,7 @@
 	use App\Delivery;
 	use App\DeliveryItem;
 	use App\Exceptions\WrappedException;
+	use App\Notifications\DeliveryItemRecipientNotification;
 	use Auth;
 	use Illuminate\Database\Eloquent\Builder;
 	use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -139,5 +140,20 @@
 		public function destroy($id)
 		{
 			//
+		}
+		
+		/**
+		 * @param $deliveryId
+		 * @param $itemId
+		 * @return \Illuminate\Http\Response
+		 */
+		public function token($deliveryId, $itemId)
+		{
+			/** @var DeliveryItem $deliveryItem */
+			$deliveryItem = DeliveryItem::whereDeliveryId($deliveryId)->findOrFail($itemId);
+			
+			$deliveryItem->notify(new DeliveryItemRecipientNotification());
+			
+			return $this->itemResponse($deliveryItem);
 		}
 	}
