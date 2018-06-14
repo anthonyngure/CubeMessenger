@@ -149,10 +149,12 @@
 		 */
 		public function token($deliveryId, $itemId)
 		{
+			/** @var Delivery $delivery */
+			$delivery = Delivery::findOrFail($deliveryId);
 			/** @var DeliveryItem $deliveryItem */
-			$deliveryItem = DeliveryItem::whereDeliveryId($deliveryId)->findOrFail($itemId);
+			$deliveryItem = $delivery->items()->findOrFail($itemId);
 			
-			$deliveryItem->notify(new DeliveryItemRecipientNotification());
+			$deliveryItem->notify(new DeliveryItemRecipientNotification($delivery));
 			
 			return $this->itemResponse($deliveryItem);
 		}

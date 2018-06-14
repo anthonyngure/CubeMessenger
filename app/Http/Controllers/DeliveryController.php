@@ -264,11 +264,7 @@
 			]);
 			
 			/** @var Delivery $delivery */
-			$delivery = Delivery::with(['items' => function (HasMany $hasMany) {
-				$hasMany->with('courierOption');
-			}, 'user'                           => function (BelongsTo $belongsTo) {
-				$belongsTo->with('client');
-			}])->findOrFail($id);
+			$delivery = Delivery::with(['items.courierOption', 'user.client'])->findOrFail($id);
 			
 			$this->checkIfUserIsRider();
 			
@@ -288,7 +284,7 @@
 				$deliveryItem->save();
 				
 				
-				$deliveryItem->notify(new DeliveryItemRecipientNotification());
+				$deliveryItem->notify(new DeliveryItemRecipientNotification($delivery));
 				
 				//dd($smsText);
 			}
